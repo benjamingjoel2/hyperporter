@@ -1,5 +1,8 @@
 ---
 import SEO from '../components/SEO.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
 
 interface Props {
   title: string;
@@ -8,9 +11,11 @@ interface Props {
   ogImage?: string;
   ogType?: 'website' | 'article';
   noindex?: boolean;
+  /** Which header nav item to mark active. See Header.astro. */
+  currentNav?: 'home' | 'autopilot' | 'horizon' | 'destinations' | 'how' | 'blog' | 'about';
 }
 
-const { title, description, canonical, ogImage, ogType, noindex } = Astro.props;
+const { title, description, canonical, ogImage, ogType, noindex, currentNav } = Astro.props;
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
@@ -25,6 +30,16 @@ const organizationJsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2307080A'/%3E%3Ccircle cx='50' cy='50' r='44' fill='none' stroke='%23EDF1F4' stroke-width='5' stroke-dasharray='54.1 15' stroke-dashoffset='61.6'/%3E%3Crect x='32.5' y='26' width='7.5' height='47' fill='%23EDF1F4'/%3E%3Crect x='60' y='26' width='7.5' height='47' fill='%23EDF1F4'/%3E%3Crect x='32.5' y='46.5' width='35' height='7.5' fill='%23EDF1F4'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <SEO
       title={title}
       description={description}
@@ -44,6 +59,38 @@ const organizationJsonLd = {
     </SEO>
   </head>
   <body>
-    <slot />
+    <Header current={currentNav} />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      // Reveal-on-scroll: elements with `.rv` fade/slide in once `.in` is
+      // added by the observer. Ported from hyperporter-3.html; there it
+      // re-armed on every client-side route change, which no longer
+      // applies now that each page is a real navigation and gets a fresh
+      // DOM. `prefers-reduced-motion` is handled in CSS (see global.css).
+      const io = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const target = entry.target as HTMLElement;
+            const siblings = [...(target.parentElement?.children ?? [])].filter((el) =>
+              el.classList.contains('rv')
+            );
+            target.style.transitionDelay = `${Math.min(siblings.indexOf(target), 5) * 70}ms`;
+            target.classList.add('in');
+            io.unobserve(target);
+          }),
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      );
+      document.querySelectorAll('.rv:not(.in)').forEach((el) => io.observe(el));
+
+      // Accordion (used by the destination-page guarantee section, and
+      // reusable anywhere else `.acc-i` shows up later, e.g. an FAQ page).
+      document.querySelectorAll<HTMLButtonElement>('.acc-i > button').forEach((btn) => {
+        btn.addEventListener('click', () => btn.parentElement?.classList.toggle('open'));
+      });
+    </script>
   </body>
 </html>
