@@ -1,0 +1,49 @@
+---
+import SEO from '../components/SEO.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const { title, description, canonical, ogImage, ogType, noindex } = Astro.props;
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Hyperporter',
+  url: Astro.site?.toString(),
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO
+      title={title}
+      description={description}
+      canonical={canonical}
+      ogImage={ogImage}
+      ogType={ogType}
+      noindex={noindex}
+    >
+      <Fragment slot="structured-data">
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(organizationJsonLd)}
+        />
+        <slot name="structured-data" />
+      </Fragment>
+    </SEO>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
