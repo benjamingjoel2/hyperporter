@@ -30,6 +30,11 @@ const indexableDestinations = indexableDestinationSlugs();
 // hyperporter.com.
 const site = process.env.SITE_URL ?? 'https://staging.hyperporter.pages.dev';
 
+// Pages that render a noindex robots tag and so must not be listed in the
+// sitemap either: About until the "Name pending" bios are real, Terms and
+// Privacy until counsel has reviewed the drafts.
+const noindexPaths = new Set(['/about/', '/terms/', '/privacy/']);
+
 export default defineConfig({
   site,
   integrations: [
@@ -37,6 +42,7 @@ export default defineConfig({
     sitemap({
       filter: (page) => {
         const { pathname } = new URL(page);
+        if (noindexPaths.has(pathname)) return false;
         const match = pathname.match(/^\/destinations\/([^/]+)\/?$/);
         if (!match) return true;
         return indexableDestinations.has(match[1]);

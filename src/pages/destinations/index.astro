@@ -10,6 +10,7 @@
  */
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import EmailCapture from '../../components/EmailCapture.astro';
 import { REGIONS } from '../../content.config';
 import { slugify } from '../../lib/slug';
 
@@ -98,11 +99,7 @@ const totalCountries = destinations.length;
     <p class="lede rv" style="margin:18px auto 0">
       Horizon adds operators where our agencies are quoting. Tell us the destination and we'll source it.
     </p>
-    <div class="iform rv" style="margin-top:30px">
-      <input type="email" placeholder="Work email" aria-label="Work email" id="e7" />
-      <button class="btn" data-capture-target="m7" data-capture-input="e7" type="button">Get started &rarr;</button>
-    </div>
-    <div class="msg" id="m7"></div>
+    <EmailCapture uid="dest-cta" marginTop="30px" />
   </div>
 </Base>
 
@@ -161,16 +158,4 @@ const totalCountries = destinations.length;
     filter();
   });
 
-  document.querySelectorAll<HTMLButtonElement>('[data-capture-target]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const input = document.getElementById(btn.dataset.captureInput ?? '') as HTMLInputElement | null;
-      const box = document.getElementById(btn.dataset.captureTarget ?? '');
-      if (!box) return;
-      box.textContent =
-        !input?.value || !input.value.includes('@')
-          ? '× Enter a valid email address.'
-          : '✓ Captured in the UI only — no backend connected yet.';
-      box.classList.add('show');
-    });
-  });
 </script>

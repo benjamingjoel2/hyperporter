@@ -1,0 +1,100 @@
+---
+/**
+ * Terms & Conditions. NOT ported — the prototype had no terms content at
+ * all, just dead footer buttons. This is a from-scratch draft of standard
+ * B2B terms matching how the product actually works (subscription software
+ * + network services, manual payment marking, no consumer relationship).
+ *
+ * DRAFT — must be reviewed by counsel before launch. noindex until then.
+ * Reuses the article (.art-*) styles rather than inventing a new layout.
+ */
+import Base from '../layouts/Base.astro';
+
+const updated = '20 August 2026';
+---
+
+<Base title="Terms & Conditions" description="The terms governing use of Hyperporter's Autopilot software and Horizon network services." noindex>
+  <div class="sec wrap">
+    <div class="art-top">
+      <div class="b-meta"><em>Legal</em><span>Last updated {updated}</span></div>
+      <h1 class="art-title">Terms &amp; Conditions</h1>
+      <p class="art-dek">
+        These terms govern your use of Hyperporter's services. They are a working draft pending legal review — if
+        you have questions, contact <a href="mailto:hello@hyperporter.com">hello@hyperporter.com</a>.
+      </p>
+    </div>
+    <div class="art-body">
+      <h2>1. Who we are</h2>
+      <p>
+        Hyperporter ("we", "us") provides travel operations infrastructure to travel businesses: <strong>Autopilot</strong>,
+        subscription software that coordinates trip workflows, and <strong>Horizon</strong>, a network of vetted
+        local ground operators through which we arrange trip services. Our registered office is Intelak Hub, Offices
+        4, One Central, Dubai World Trade Center, Dubai, UAE.
+      </p>
+
+      <h2>2. Who these terms apply to</h2>
+      <p>
+        Our services are provided to businesses — travel agencies, advisors, creators, and destination management
+        companies — not to consumers. By creating an account or engaging us, you confirm you are acting in the
+        course of business and are authorised to bind the business you represent.
+      </p>
+
+      <h2>3. Autopilot (software)</h2>
+      <p>
+        Autopilot is provided on a monthly subscription. We grant you a non-exclusive, non-transferable right to use
+        it for your own business operations during your subscription. You retain ownership of the data you put into
+        it; we retain ownership of the software. Fees, plan limits, and any trial arrangements are as stated at the
+        point of purchase.
+      </p>
+      <p>
+        Automated steps in Autopilot can be placed under manual control at any time. <strong>Payment marking is
+        always manual</strong>: the software does not move money or confirm receipt of funds on its own — a human
+        confirms every payment.
+      </p>
+
+      <h2>4. Horizon (network services)</h2>
+      <p>
+        Where you engage us to run a trip through Horizon, we arrange services with local operators on the terms
+        agreed per trip (itinerary, price, and inclusions as quoted). Quotes are valid as stated on the quote;
+        availability is only assured once re-verified and confirmed. Operator services are subject to the operator's
+        own conditions where these are notified to you in the quote.
+      </p>
+
+      <h2>5. Your responsibilities</h2>
+      <ul>
+        <li>Keep your account credentials secure and accurate.</li>
+        <li>Ensure information you supply about trips and travellers is accurate and lawfully shared with us.</li>
+        <li>Hold the licences and consents your own business requires to sell travel.</li>
+        <li>Not misuse the services, attempt unauthorised access, or resell access without our agreement.</li>
+      </ul>
+
+      <h2>6. Liability</h2>
+      <p>
+        Neither party excludes liability that cannot lawfully be excluded. Otherwise, our aggregate liability in any
+        twelve-month period is limited to the fees you paid us in that period, and neither party is liable for
+        indirect or consequential loss. We are not the supplier of underlying travel services (transport,
+        accommodation, activities); responsibility for their performance rests with the operator providing them,
+        without limiting any responsibility we have for our own arranging services.
+      </p>
+
+      <h2>7. Suspension and termination</h2>
+      <p>
+        You can cancel your subscription effective at the end of the current billing period. We may suspend or
+        terminate for material breach, non-payment, or unlawful use, with notice where practicable. On termination
+        we will make your data available for export for 30 days.
+      </p>
+
+      <h2>8. Changes</h2>
+      <p>
+        We may update these terms; material changes will be notified to account holders in advance. Continued use
+        after the effective date constitutes acceptance.
+      </p>
+
+      <h2>9. Governing law</h2>
+      <p>
+        These terms are governed by the laws of the Emirate of Dubai and the applicable federal laws of the United
+        Arab Emirates, and the courts of Dubai have exclusive jurisdiction.
+      </p>
+    </div>
+  </div>
+</Base>

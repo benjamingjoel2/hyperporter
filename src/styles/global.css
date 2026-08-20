@@ -34,6 +34,12 @@
   --mono:'IBM Plex Mono',ui-monospace,monospace;
   --pad:clamp(20px,5vw,72px);
   --max:1320px;
+  /* Hero-band photo (home / destinations-index / region pages). The
+     prototype inlined this as ~250KB of base64; it's a real static asset
+     now (public/hero.jpg, extracted byte-for-byte from that data URI).
+     Same placeholder status as the destination illustrations: stock image
+     standing in until real photography is licensed. */
+  --photo:url("/hero.jpg");
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--void)}
@@ -349,8 +355,8 @@ footer{border-top:1px solid var(--line);background:#090A0C;padding:clamp(56px,6v
 .f-pill:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,255,255,.14)}
 .f-legal{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px;margin-top:34px;padding-bottom:clamp(18px,4vw,40px)}
 .f-legal p{max-width:44ch;color:var(--dim);font-size:16px;margin:0}
-.f-legal button{background:none;border:0;color:var(--paper);font-size:16px;text-transform:uppercase;letter-spacing:.03em;padding:0;text-align:left}
-.f-legal button:hover{color:var(--dim)}
+.f-legal a,.f-legal button{background:none;border:0;color:var(--paper);font-size:16px;text-transform:uppercase;letter-spacing:.03em;padding:0;text-align:left}
+.f-legal a:hover,.f-legal button:hover{color:var(--dim)}
 .f-word{overflow:hidden;height:.56em;font-size:clamp(88px,18.5vw,250px);line-height:.78}
 .f-word .tr{display:flex;width:max-content;animation:march 60s linear infinite}
 .f-word span{font-family:var(--display);font-weight:500;letter-spacing:-.04em;color:rgba(255,255,255,.26);white-space:nowrap;padding-right:.1em}
@@ -549,7 +555,9 @@ footer{border-top:1px solid var(--line);background:#090A0C;padding:clamp(56px,6v
 
 /* 1. Underlines. */
 .links a,.drawer a,.f-col a,.cta-nav,.dp-back,.f-pill,.gua-cta,
-.dreg,.visit,.r-back,.feat,.prow,.back,.art-next,.btn,.d-cols a{text-decoration:none}
+.dreg,.visit,.r-back,.feat,.prow,.back,.art-next,.btn,.d-cols a,
+.plink,.rnode,.f-legal a,.rlist a{text-decoration:none}
+.rlist a{color:inherit}
 
 /* 2. Elements whose own rules set width or vertical margin, which an inline
       <a> would ignore: `.gua-cta` is width:100%, `.back` is margin-bottom:30px. */

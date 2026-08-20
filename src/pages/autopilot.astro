@@ -1,0 +1,91 @@
+---
+/**
+ * Autopilot product page. Ported from hyperporter-3.html's #view-autopilot.
+ * Autopilot is the SOFTWARE — never described as the contact network (that's
+ * Horizon). The nine-stage zigzag renders at build time from STAGES instead
+ * of client-side. Payment marking is manual by design; the callout keeps
+ * that wording exact.
+ */
+import Base from '../layouts/Base.astro';
+import EmailCapture from '../components/EmailCapture.astro';
+import { STAGES } from '../lib/stages';
+---
+
+<Base
+  title="Autopilot"
+  description="The software that runs inquiry, quoting, booking, and live trip support — automated by default, with a human only where a real decision is needed."
+  currentNav="autopilot"
+>
+  <div class="sec wrap">
+    <div class="tags rv"><span class="tag-p">Software</span><span class="tag-p">For travel agencies</span></div>
+    <h1 class="rv">Run your agency<br />on autopilot.</h1>
+    <p class="lede rv">
+      The software that runs inquiry, quoting, booking, and live trip support — automated by default, with a human
+      only where a real decision is needed. Subscribe monthly and run it on your own contacts, or add Horizon.
+    </p>
+    <a class="btn rv" href="/signup">Sign up →</a>
+  </div>
+
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">The full route</p>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap">
+      <h2 class="rv" style="margin:0">Nine stages, one thread.</h2>
+      <span class="hint rv">Scroll the timeline →</span>
+    </div>
+    <div class="zig">
+      <div class="ztrack">
+        {
+          STAGES.map((s) => (
+            <div class="zcard">
+              <div class="zh">
+                <span>{s.c}</span>
+                <em>{s.n}</em>
+              </div>
+              <h3>{s.name}</h3>
+              <div class="one">{s.one}</div>
+              <p>{s.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="sec wrap">
+    <p class="eyebrow rv">What you get</p>
+    <div class="fgrid rv">
+      <div class="fcell">
+        <div class="fi">01</div>
+        <h3>One link, always current</h3>
+        <p>The magic link a customer sees updates in place — no new PDF, no version confusion, ever.</p>
+      </div>
+      <div class="fcell">
+        <div class="fi">02</div>
+        <h3>Autopilot or manual, your call</h3>
+        <p>Every thread can run itself or be pulled under your control, per account or per trip.</p>
+      </div>
+      <div class="fcell">
+        <div class="fi">03</div>
+        <h3>It tells you what to do</h3>
+        <p>When a thread needs you, you get a specific action — not a vague alert.</p>
+      </div>
+      <div class="fcell">
+        <div class="fi">04</div>
+        <h3>Margin, handled</h3>
+        <p>Your markup applies automatically on every quote. Your DMC never sees what you charge.</p>
+      </div>
+    </div>
+    <div class="callout rv">
+      <div class="lock">Manual · always</div>
+      <p>
+        Payment marking stays manual, deliberately. Autopilot doesn't move money on its own — every automated step
+        can be pulled into manual control at any point.
+      </p>
+    </div>
+  </div>
+
+  <div class="sec wrap fcta">
+    <h2 class="rv">See your own trips move through it.</h2>
+    <EmailCapture uid="autopilot-cta" marginTop="32px" />
+  </div>
+</Base>
