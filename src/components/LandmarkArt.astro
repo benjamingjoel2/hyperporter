@@ -1,0 +1,40 @@
+---
+/**
+ * Renders a destination's hero/tile artwork: a real photo when the content
+ * entry sets `heroImage` (+ required `heroAlt`), otherwise the generated
+ * landmark SVG. Unlike the prototype — which called destArt() client-side
+ * on every route change — this runs at build time, so the markup ships
+ * prerendered in the static HTML.
+ *
+ * `uid` must be unique per instance on a page: the generated SVG defines
+ * gradient/pattern ids scoped to it, and two instances sharing an id
+ * (e.g. a hero and a tile for the same destination) would collide.
+ *
+ * The prototype's real-photo path wrapped the image in a decorative
+ * `<svg><image .../></svg>` with `aria-hidden="true"` (so its `.dp-hero>svg`
+ * / `.dp-tile>svg` CSS still applied) — meaning a real photo had no
+ * accessible alt text at all. This renders a plain `<img alt>` instead and
+ * carries the same positioning via the `.art-bg` class added in
+ * global.css, so `heroAlt` is actually exposed to screen readers / image
+ * search rather than being silently dropped.
+ */
+import { destArt } from '../lib/landmark/generator';
+
+interface Props {
+  name: string;
+  uid: string;
+  heroImage?: string;
+  heroAlt?: string;
+}
+
+const { name, uid, heroImage, heroAlt } = Astro.props;
+const svg = heroImage ? null : destArt(name, uid);
+---
+
+{
+  heroImage ? (
+    <img class="art-bg" src={heroImage} alt={heroAlt} />
+  ) : (
+    <Fragment set:html={svg} />
+  )
+}
