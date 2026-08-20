@@ -534,16 +534,38 @@ footer{border-top:1px solid var(--line);background:#090A0C;padding:clamp(56px,6v
 :focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:6px}
 
 /* ============ ANCHOR PARITY ============
-   The prototype's nav/back/CTA elements were all <button onclick="go(id)">
-   driving the client-side router. The ones with a genuine destination in
-   this migration are <a href> now instead — the class-based rules above
-   (.cta-nav, .dp-back, .f-pill, .gua-cta) already applied regardless of
-   tag, but the tag-combinator ones (`.links button`, `.drawer button`,
-   `.f-col button`) had to be repointed at `a` directly, above, since a
-   button-only selector never matched the new anchors. This block just
-   adds the one thing plain <a> doesn't get for free that <button> did:
-   no underline. */
-.links a,.drawer a,.f-col a,.cta-nav,.dp-back,.f-pill,.gua-cta{text-decoration:none}
+   Everything that navigates was a <button onclick="go(id)"> (or a clickable
+   <div>) in the prototype's client-side router, and is a real <a href> here.
+   That swap silently drops three things a <button> got for free, so each
+   converted element needs them back:
+
+     1. no underline           — <a> is underlined by default, <button> isn't
+     2. a block-ish display    — <a> is inline, so width/height/vertical
+                                 margin silently do nothing
+     3. color: inherit         — already global via `a{color:inherit}` above
+
+   Selectors written as `.container button` never match the new anchors at
+   all, so those are widened to cover both tags rather than duplicated. */
+
+/* 1. Underlines. */
+.links a,.drawer a,.f-col a,.cta-nav,.dp-back,.f-pill,.gua-cta,
+.dreg,.visit,.r-back,.feat,.prow,.back,.art-next,.btn,.d-cols a{text-decoration:none}
+
+/* 2. Elements whose own rules set width or vertical margin, which an inline
+      <a> would ignore: `.gua-cta` is width:100%, `.back` is margin-bottom:30px. */
+.gua-cta,.back{display:inline-block}
+
+/* 3. Country links in the destinations index: `.d-cols button` is tag-scoped,
+      so as an <a> they were rendering completely unstyled. */
+.d-cols a{display:block;width:100%;text-align:left;background:none;border:0;padding:7px 0;color:var(--muted);font-size:15px;break-inside:avoid;transition:color .2s,transform .2s}
+.d-cols a:hover{color:var(--signal);transform:translateX(3px)}
+
+/* 4. `.art-next b` inherits its color from the element it sits in. On a
+      <button> that resolved to the UA default black — invisible against the
+      #07080A page, which is a real (if unnoticed) bug in the prototype. As an
+      <a> it inherits --paper and is legible; pinning it here keeps that true
+      regardless of tag. */
+.art-next b{color:var(--paper)}
 
 /* A real <img> (see LandmarkArt.astro) needs the same absolute-fill
    treatment the ported `.dp-hero>svg` / `.dp-tile>svg` rules above give
