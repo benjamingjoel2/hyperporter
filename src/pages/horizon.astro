@@ -1,0 +1,114 @@
+---
+/**
+ * Horizon network page. Ported from hyperporter-3.html's #view-horizon.
+ * Horizon is the NETWORK — vetted local operators — never described as
+ * software (that's Autopilot).
+ *
+ * One locked-in change from the prototype: the radial diagram is rebuilt
+ * on the canonical 7-region taxonomy from the destinations collection
+ * (Africa, Asia, Australia & Oceania, Europe, Middle East, North & Central
+ * America, South America). The prototype used its own overlapping 6-label
+ * set ("Latin America", "SE Asia", "Oceania"...) that matched nothing else
+ * on the site; now that /regions/* are real crawlable URLs there is one
+ * region list, and each node links to its region page. Spoke geometry is
+ * computed here at build time (360/7° apart) instead of client-side.
+ */
+import Base from '../layouts/Base.astro';
+import EmailCapture from '../components/EmailCapture.astro';
+import { REGIONS } from '../content.config';
+import { slugify } from '../lib/slug';
+
+const RADIUS = 176;
+const nodes = REGIONS.map((region, i) => {
+  const deg = -90 + (i * 360) / REGIONS.length;
+  const rad = (deg * Math.PI) / 180;
+  return {
+    region,
+    href: `/regions/${slugify(region)}`,
+    deg,
+    x: Math.cos(rad) * RADIUS,
+    y: Math.sin(rad) * RADIUS,
+  };
+});
+---
+
+<Base
+  title="Horizon"
+  description="Hyperporter's own ground-operations network — 130+ countries of vetted DMC relationships. Use it inside Autopilot, or bring us the trip directly."
+  currentNav="horizon"
+>
+  <div class="sec wrap">
+    <div class="tags rv"><span class="tag-p">Network</span><span class="tag-p">Global DMC supply</span></div>
+    <h1 class="rv">Real DMC relationships,<br />wherever your travellers<br />are going.</h1>
+    <p class="lede rv">
+      Horizon is Hyperporter's own ground-operations network — 130+ countries of vetted DMC relationships. Use it
+      inside Autopilot, or bring us the trip directly and we'll run it through the network for you.
+    </p>
+    <a class="btn rv" href="/signup">Sign up →</a>
+  </div>
+
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">How it works</p>
+    <div class="radial rv">
+      <div class="orbit o1"></div>
+      <div class="orbit o2"></div>
+      <div class="hub"><b>Horizon</b><span>130+ countries</span></div>
+      {nodes.map((n) => <div class="spoke" style={`transform:rotate(${n.deg}deg)`} />)}
+      {
+        nodes.map((n) => (
+          <a class="rnode" href={n.href} style={`left:calc(50% + ${n.x.toFixed(1)}px);top:calc(50% + ${n.y.toFixed(1)}px)`}>
+            {n.region}
+          </a>
+        ))
+      }
+    </div>
+    <div class="rlist">
+      {
+        nodes.map((n) => (
+          <div>
+            <i />
+            <a href={n.href}>{n.region}</a>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="sec-tight wrap">
+    <div class="pillars rv">
+      <div class="pill">
+        <div class="kind">The gap</div>
+        <p>
+          Most agencies only have deep DMC relationships in a handful of destinations. The moment a client asks for
+          somewhere outside that list, the process reverts to cold outreach and guesswork. Horizon exists so that gap
+          never shows up to your customer.
+        </p>
+      </div>
+      <div class="pill">
+        <div class="kind">Not a marketplace</div>
+        <p>
+          These are real, human-vetted relationships Hyperporter operates trips through directly — not a directory of
+          unverified contacts. Every trip run through Horizon strengthens the reliability data behind the network.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-tight wrap">
+    <div class="dmc rv">
+      <div>
+        <p class="eyebrow">For DMCs</p>
+        <p>
+          Get matched with agencies actively quoting your destination — real, structured demand, no more chasing cold
+          outreach.
+        </p>
+      </div>
+      <a class="btn" href="/signup">Join the network →</a>
+    </div>
+  </div>
+
+  <div class="sec wrap fcta">
+    <h2 class="rv">Never turn down a trip because<br />you don't have the contact.</h2>
+    <EmailCapture uid="horizon-cta" marginTop="32px" />
+  </div>
+</Base>

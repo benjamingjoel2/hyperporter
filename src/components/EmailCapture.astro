@@ -1,0 +1,43 @@
+---
+/**
+ * The email-capture input + button + message row that repeats on every
+ * marketing page (the prototype's `cap()` helper, verbatim behaviour: no
+ * backend, just client-side validation and a "captured in the UI only"
+ * notice). One shared component instead of seven inline copies.
+ */
+interface Props {
+  /** Unique suffix for the input/message ids on this page. */
+  uid: string;
+  buttonLabel?: string;
+  marginTop?: string;
+}
+
+const { uid, buttonLabel = 'Get started →', marginTop } = Astro.props;
+---
+
+<div class="iform rv" style={marginTop ? `margin-top:${marginTop}` : undefined}>
+  <input type="email" placeholder="Work email" aria-label="Work email" id={`e-${uid}`} />
+  <button class="btn" data-capture-input={`e-${uid}`} data-capture-target={`m-${uid}`} type="button"
+    >{buttonLabel}</button
+  >
+</div>
+<div class="msg" id={`m-${uid}`}></div>
+
+<script>
+  // Guarded so multiple instances on one page bind only once.
+  if (!(window as any).__capBound) {
+    (window as any).__capBound = true;
+    document.addEventListener('click', (ev) => {
+      const btn = (ev.target as HTMLElement).closest<HTMLButtonElement>('[data-capture-target]');
+      if (!btn) return;
+      const input = document.getElementById(btn.dataset.captureInput ?? '') as HTMLInputElement | null;
+      const box = document.getElementById(btn.dataset.captureTarget ?? '');
+      if (!box) return;
+      box.textContent =
+        !input?.value || !input.value.includes('@')
+          ? '× Enter a valid email address.'
+          : '✓ Captured in the UI only — no backend connected yet.';
+      box.classList.add('show');
+    });
+  }
+</script>
