@@ -33,7 +33,7 @@ const site = process.env.SITE_URL ?? 'https://staging.hyperporter.pages.dev';
 // Pages that render a noindex robots tag and so must not be listed in the
 // sitemap either: About until the "Name pending" bios are real, Terms and
 // Privacy until counsel has reviewed the drafts.
-const noindexPaths = new Set(['/about/', '/terms/', '/privacy/']);
+const noindexPaths = new Set(['/about/', '/terms/', '/privacy/', '/404/']);
 
 export default defineConfig({
   site,
