@@ -1,0 +1,94 @@
+---
+/**
+ * Ported from hyperporter-3.html's openRegion() / #view-region. One
+ * static page per canonical region (see REGIONS in content.config.ts —
+ * this is the taxonomy Horizon's radial diagram gets rebuilt onto when
+ * that page is ported, rather than keeping its own overlapping list).
+ */
+import { getCollection } from 'astro:content';
+import type { InferGetStaticPropsType } from 'astro';
+import Base from '../../layouts/Base.astro';
+import { REGIONS } from '../../content.config';
+import { slugify } from '../../lib/slug';
+
+function regionCount(n: number): string {
+  return n >= 10 ? `${Math.floor(n / 10) * 10}+` : String(n);
+}
+
+export async function getStaticPaths() {
+  const destinations = await getCollection('destinations');
+  return REGIONS.map((region) => {
+    const countries = destinations
+      .filter((d) => d.data.region === region)
+      .map((d) => ({ name: d.data.title, slug: d.id, description: d.data.description }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    return {
+      params: { slug: slugify(region) },
+      props: { region, countries },
+    };
+  });
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { region, countries } = Astro.props;
+---
+
+<Base
+  title={region}
+  description={`Sell and operate trips across ${region} on vetted local operators from the Horizon network — quoted, booked and run without cold outreach.`}
+  currentNav="destinations"
+>
+  <div class="r-hero">
+    <div class="wrap">
+      <h1>Sell trips in <u>{region}</u></h1>
+      <p class="r-sub">{regionCount(countries.length)} Countries. Zero hassle. Expertly delivered.</p>
+      <p class="r-lede">
+        Sell and operate trips across {region} on vetted local operators from the Horizon network — quoted, booked and
+        run without cold outreach.
+      </p>
+    </div>
+  </div>
+  <div class="sec-tight wrap">
+    <div class="r-bar rv">
+      <a class="r-back" href="/destinations">&larr; All destinations</a>
+      <span class="r-count">{countries.length} countries in {region}</span>
+    </div>
+    <div class="cgrid">
+      {
+        countries.map((c) => (
+          <div class="ccard rv">
+            <h3>{c.name}</h3>
+            <p>{c.description}</p>
+            <a class="visit" href={`/destinations/${c.slug}`}>
+              Visit {c.name}
+            </a>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <div class="sec-tight wrap fcta">
+    <h2 class="rv">Start selling {region}.</h2>
+    <div class="iform rv" style="margin-top:30px">
+      <input type="email" placeholder="Work email" aria-label="Work email" id="e8" />
+      <button class="btn" data-capture-target="m8" data-capture-input="e8" type="button">Get started &rarr;</button>
+    </div>
+    <div class="msg" id="m8"></div>
+  </div>
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-capture-target]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.captureInput ?? '') as HTMLInputElement | null;
+      const box = document.getElementById(btn.dataset.captureTarget ?? '');
+      if (!box) return;
+      box.textContent =
+        !input?.value || !input.value.includes('@')
+          ? '× Enter a valid email address.'
+          : '✓ Captured in the UI only — no backend connected yet.';
+      box.classList.add('show');
+    });
+  });
+</script>

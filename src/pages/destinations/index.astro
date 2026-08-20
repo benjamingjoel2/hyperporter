@@ -1,0 +1,176 @@
+---
+/**
+ * Ported from hyperporter-3.html's #view-destinations (dMode/dRender/
+ * dClear). The prototype generated both the region list and the
+ * searchable country list client-side, on every route change. Here both
+ * are rendered once at build time from the destinations collection, and
+ * a small client script — identical toggle/filter behavior, just
+ * operating on markup that already exists instead of building it — swaps
+ * between the two panels and filters the pre-rendered list as you type.
+ */
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { REGIONS } from '../../content.config';
+import { slugify } from '../../lib/slug';
+
+const destinations = await getCollection('destinations');
+
+const regionGroups = REGIONS.map((region) => {
+  const countries = destinations
+    .filter((d) => d.data.region === region)
+    .map((d) => ({ name: d.data.title, slug: d.id }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  return { region, slug: slugify(region), countries };
+}).filter((g) => g.countries.length > 0);
+
+const totalCountries = destinations.length;
+---
+
+<Base
+  title="Destinations"
+  description={`${totalCountries} countries across ${regionGroups.length} regions, run on the ground by vetted local operators through the Horizon network.`}
+  currentNav="destinations"
+>
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">Where we operate</p>
+    <div class="d-head rv">
+      <h1>Destinations</h1>
+      <p class="d-note">Trips run on the ground by vetted local operators, across every region Horizon reaches.</p>
+    </div>
+    <div class="d-modes rv">
+      <button id="dm-r" class="on" type="button">Explore by regions</button>
+      <span class="sep">|</span>
+      <button id="dm-c" type="button">Search by country</button>
+      <span class="d-tally" id="d-tally">{regionGroups.length} regions &middot; {totalCountries} countries</span>
+    </div>
+  </div>
+
+  <div id="d-regions">
+    <div class="d-band">
+      <div class="wrap">
+        <div id="dreglist">
+          {
+            regionGroups.map((g) => (
+              <a class="dreg" href={`/regions/${g.slug}`}>
+                <b>{g.region}</b>
+                <span class="dn">{g.countries.length} countries</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="d-countries" style="display:none">
+    <div class="sec-tight wrap" style="padding-top:0">
+      <div class="d-search">
+        <input type="text" id="d-q" placeholder="Search a country" aria-label="Search a country" />
+        <button class="d-clear" id="d-clear" type="button">Clear</button>
+      </div>
+      <div id="dcountrylist" style="margin-top:clamp(24px,3vw,38px)">
+        {
+          regionGroups.map((g) => (
+            <div class="d-group" data-region={g.region}>
+              <div class="d-gh">
+                <h3>{g.region}</h3>
+                <span>{g.countries.length}</span>
+              </div>
+              <div class="d-cols">
+                {g.countries.map((c) => (
+                  <a href={`/destinations/${c.slug}`} data-name={c.name.toLowerCase()}>
+                    {c.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <div class="d-none" id="d-none" style="display:none">
+        No destination matches that name — tell us where and we'll source it.
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-tight wrap fcta">
+    <h2 class="rv">Somewhere not on the list?</h2>
+    <p class="lede rv" style="margin:18px auto 0">
+      Horizon adds operators where our agencies are quoting. Tell us the destination and we'll source it.
+    </p>
+    <div class="iform rv" style="margin-top:30px">
+      <input type="email" placeholder="Work email" aria-label="Work email" id="e7" />
+      <button class="btn" data-capture-target="m7" data-capture-input="e7" type="button">Get started &rarr;</button>
+    </div>
+    <div class="msg" id="m7"></div>
+  </div>
+</Base>
+
+<script>
+  const dmR = document.getElementById('dm-r');
+  const dmC = document.getElementById('dm-c');
+  const dRegions = document.getElementById('d-regions');
+  const dCountries = document.getElementById('d-countries');
+  const tally = document.getElementById('d-tally');
+  const q = document.getElementById('d-q') as HTMLInputElement | null;
+  const clearBtn = document.getElementById('d-clear');
+  const none = document.getElementById('d-none');
+  const groups = Array.from(document.querySelectorAll<HTMLElement>('#dcountrylist .d-group'));
+  const totalRegions = groups.length;
+  const totalCountries = document.querySelectorAll('#dcountrylist a').length;
+
+  function setMode(mode: 'regions' | 'countries') {
+    dmR?.classList.toggle('on', mode === 'regions');
+    dmC?.classList.toggle('on', mode === 'countries');
+    if (dRegions) dRegions.style.display = mode === 'regions' ? '' : 'none';
+    if (dCountries) dCountries.style.display = mode === 'countries' ? '' : 'none';
+    if (mode === 'countries') filter();
+    else if (tally) tally.textContent = `${totalRegions} regions · ${totalCountries} countries`;
+  }
+
+  function filter() {
+    const query = (q?.value ?? '').trim().toLowerCase();
+    let visibleGroups = 0;
+    let visibleCountries = 0;
+    for (const group of groups) {
+      let groupHas = false;
+      for (const a of group.querySelectorAll<HTMLElement>('a')) {
+        const match = !query || (a.dataset.name ?? '').includes(query);
+        a.style.display = match ? '' : 'none';
+        if (match) {
+          groupHas = true;
+          visibleCountries++;
+        }
+      }
+      group.style.display = groupHas ? '' : 'none';
+      if (groupHas) visibleGroups++;
+    }
+    if (none) none.style.display = visibleCountries ? 'none' : '';
+    if (tally) {
+      tally.textContent = query
+        ? `${visibleCountries} match${visibleCountries === 1 ? '' : 'es'}`
+        : `${totalRegions} regions · ${totalCountries} countries`;
+    }
+  }
+
+  dmR?.addEventListener('click', () => setMode('regions'));
+  dmC?.addEventListener('click', () => setMode('countries'));
+  q?.addEventListener('input', filter);
+  clearBtn?.addEventListener('click', () => {
+    if (q) q.value = '';
+    filter();
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('[data-capture-target]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.captureInput ?? '') as HTMLInputElement | null;
+      const box = document.getElementById(btn.dataset.captureTarget ?? '');
+      if (!box) return;
+      box.textContent =
+        !input?.value || !input.value.includes('@')
+          ? '× Enter a valid email address.'
+          : '✓ Captured in the UI only — no backend connected yet.';
+      box.classList.add('show');
+    });
+  });
+</script>
