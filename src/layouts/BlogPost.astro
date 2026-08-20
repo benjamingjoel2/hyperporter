@@ -1,0 +1,66 @@
+---
+/**
+ * Article page shell. Ported from hyperporter-3.html's #view-post markup
+ * (openPost()). The "next post" link keeps the prototype's wrap-around
+ * behaviour — the last post links back to the first — so there's always a
+ * next step rather than a dead end.
+ */
+import { render, type CollectionEntry } from 'astro:content';
+import Base from './Base.astro';
+import { readingTime } from '../lib/readingTime';
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+  next: CollectionEntry<'blog'>;
+}
+
+const { entry, next } = Astro.props;
+const { title, dek, cat, date, author } = entry.data;
+const { Content } = await render(entry);
+
+const displayDate = date.toLocaleDateString('en-GB', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+});
+const read = readingTime(entry.body ?? '');
+
+const canonical = new URL(`/blog/${entry.id}/`, Astro.site).toString();
+const blogPostingJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description: dek,
+  datePublished: date.toISOString(),
+  articleSection: cat,
+  author: { '@type': 'Organization', name: author },
+  publisher: { '@type': 'Organization', name: 'Hyperporter' },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+};
+---
+
+<Base title={title} description={dek} ogType="article" currentNav="blog">
+  <Fragment slot="structured-data">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(blogPostingJsonLd)} />
+  </Fragment>
+
+  <div class="sec wrap">
+    <div class="art-top">
+      <a class="back" href="/blog">&larr; All posts</a>
+      <div class="b-meta">
+        <em>{cat}</em><span>{displayDate}</span><span>{read}</span>
+      </div>
+      <h1 class="art-title">{title}</h1>
+      <p class="art-dek">{dek}</p>
+    </div>
+    <div class="art-body">
+      <Content />
+    </div>
+    <div class="art-end">
+      <a class="art-next" href={`/blog/${next.id}`}>
+        <span>Next</span><b>{next.data.title}</b>
+      </a>
+      <a class="btn" href="/signup">Sign up &rarr;</a>
+    </div>
+  </div>
+</Base>

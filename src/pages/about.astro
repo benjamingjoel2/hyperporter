@@ -1,0 +1,54 @@
+---
+/**
+ * About page. Ported from hyperporter-3.html's #view-about, including its
+ * three "Name pending" team placeholders — carried over VISIBLY, not
+ * quietly invented. Real names and bios must land before this page ships
+ * publicly (flagged in CLAUDE.md's known gaps); noindex until then so a
+ * page saying "Placeholder bio" can't end up in search results.
+ */
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="About"
+  description="Hyperporter was built by people who've coordinated trips the old way — we think that work should run itself, with a human only where real judgment is needed."
+  currentNav="about"
+  noindex
+>
+  <div class="sec wrap">
+    <p class="eyebrow rv">About</p>
+    <h1 class="rv">We used to run this<br />by hand too.</h1>
+    <p class="lede rv">
+      Hyperporter was built by people who've coordinated trips the old way — chasing DMCs over email, relaying
+      WhatsApp messages between travellers and drivers, rebuilding the same itinerary PDF for the fifth time.
+    </p>
+    <p class="mission rv">
+      Every trip involves the same coordination work, repeated by hand, agency by agency. We think that work should
+      run itself — with a human only where real judgment is needed.
+    </p>
+  </div>
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">Team</p>
+    <div class="team rv">
+      <div class="tcell">
+        <div class="av"></div>
+        <div class="role">Founder / CEO</div>
+        <h3>Name pending</h3>
+        <p>Placeholder bio — replace before this page goes live publicly.</p>
+      </div>
+      <div class="tcell">
+        <div class="av"></div>
+        <div class="role">Co-founder / CTO</div>
+        <h3>Name pending</h3>
+        <p>Placeholder bio — replace before this page goes live publicly.</p>
+      </div>
+      <div class="tcell">
+        <div class="av"></div>
+        <div class="role">Co-founder / Operations</div>
+        <h3>Name pending</h3>
+        <p>Placeholder bio — replace before this page goes live publicly.</p>
+      </div>
+    </div>
+    <div style="margin-top:52px"><a class="btn rv" href="/signup">Sign up →</a></div>
+  </div>
+</Base>
