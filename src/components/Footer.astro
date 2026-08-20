@@ -1,13 +1,10 @@
 ---
 /**
- * Ported from hyperporter-3.html's <footer>. Menu links that have a real
- * destination in this migration (Home, Autopilot, Horizon, Destinations,
- * How It Works, Blog, About, Sign up, and the "For DMCs" / "The route"
- * aliases) are real `<a href>` now. FAQ / Terms / Privacy / "Terms &
- * Conditions" / "Privacy Policy" are left as inert `<button>` elements,
- * unchanged from the prototype — they had no handler there either. That's
- * a known gap (flagged separately), not something this port silently
- * fixes or silently hides further.
+ * Ported from hyperporter-3.html's <footer>. All links are real <a href>
+ * now, including Terms and Privacy, which point at the drafted /terms and
+ * /privacy pages (dead buttons in the prototype). FAQ remains an inert
+ * button — no FAQ page exists yet and none was asked for; left visibly
+ * dead rather than pointed somewhere misleading.
  */
 ---
 
@@ -60,8 +57,9 @@
       </div>
       <div class="f-col">
         <h4>Support</h4>
-        <a href="/signup">Contact</a><button type="button">FAQ</button><button type="button">Terms</button
-        ><button type="button">Privacy</button>
+        <a href="/signup">Contact</a><button type="button">FAQ</button><a href="/terms">Terms</a><a href="/privacy"
+          >Privacy</a
+        >
       </div>
     </div>
     <div class="f-rule"><span class="ln"></span><a class="f-pill" href="/signup">Get started</a></div>
@@ -70,7 +68,7 @@
         The operating system built for travel businesses — AI workflows and a global DMC network, so your
         operations run themselves.
       </p>
-      <button type="button">Terms &amp; Conditions</button><button type="button">Privacy Policy</button>
+      <a href="/terms">Terms &amp; Conditions</a><a href="/privacy">Privacy Policy</a>
     </div>
   </div>
   <div class="f-word" aria-hidden="true">

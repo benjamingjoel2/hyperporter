@@ -1,0 +1,61 @@
+---
+title: "The WhatsApp layer: what happens when the driver texts the traveller directly"
+dek: "Most live trip support runs through a messaging app nobody planned for, between two people who shouldn't have each other's numbers."
+cat: "Operations"
+date: 2026-07-22
+---
+Somewhere in the operational reality of nearly every trip currently running, there is a WhatsApp thread that no system knows about.
+
+It usually starts innocently. The driver needs to tell the traveller he's running fifteen minutes late. The agency isn't awake — it's a different time zone. So the ground operator forwards the traveller's number, or the traveller's number was on the voucher, and a direct line opens between two people who have never spoken and who are now, functionally, the trip.
+
+Every agency knows this happens. Most have decided it's fine, because the alternative — routing every message through an office that's asleep — is worse.
+
+## What you lose when you're not in the loop
+
+The direct line solves an immediate problem and creates several slower ones.
+
+**You lose the record.** When a dispute arises three weeks later about whether the traveller was told the excursion was cancelled, the evidence lives on two phones you don't control. The agency's version of events is a reconstruction.
+
+**You lose the early warning.** Problems on trips almost never begin as complaints. They begin as small frictions: a slightly wrong pickup point, a room that isn't ready, a guide who didn't show. If those exchanges happen entirely off-channel, the agency's first signal is often the review.
+
+**You lose the relationship.** The traveller now has a direct, warm, personal connection with a ground operator whose company they could find in about ninety seconds. This is the polite way of describing the disintermediation risk that every agency knows about and few discuss openly.
+
+**You lose control of the promise.** A driver, meaning well, tells a traveller "no problem, we can add a stop tomorrow." That stop wasn't sold, isn't priced, and now exists as an expectation the agency has to either honour for free or refuse.
+
+<blockquote class="pull">The trip is being run in a channel the agency can't see, by people the agency didn't brief, about things the agency didn't agree to.</blockquote>
+
+## Why the obvious fix doesn't work
+
+The obvious fix is to prohibit direct contact. Put it in the DMC agreement. Withhold the traveller's number. Route everything through the agency's operations inbox.
+
+This fails for a simple reason: **the traveller is standing at an airport right now.** The urgency of live travel doesn't respect routing policy. When the choice is between following the process and getting the client into a vehicle, everyone chooses the vehicle, and they're right to.
+
+Any solution that requires the agency to be the synchronous relay point between two parties in the same time zone — while the agency is in a different one — will be routed around within a season. Policies that fight physics lose.
+
+## Masked relay: the shape of the answer
+
+The workable version keeps the immediacy and removes the exposure. Traveller and driver message each other in real time. Neither one sees the other's actual number. Both are talking through a relay that sits in the middle.
+
+Mechanically, this looks like:
+
+- Each side gets a stable contact for the trip rather than a personal number.
+- Messages pass through **immediately** — no approval queue, no delay, because delay is the thing that broke the last three policies.
+- Everything is logged against the trip, so the record exists whether or not anyone needed it.
+- Certain categories break through to a human: safety language, cancellations, anything that reads like a complaint or a commitment.
+- When the trip ends, the channel closes.
+
+The critical design property is that **routine traffic must be invisible**. If the agency gets pinged every time a driver says "I'm outside," the alerts get muted within a week and the system is worse than useless — it's a false sense of coverage.
+
+## The escalation question
+
+Deciding what breaks through is where this gets genuinely difficult, and it's worth being honest that no rule set gets it perfect.
+
+Under-escalate and a real problem sits in a relay log while a family stands in a car park at midnight. Over-escalate and the operations team drowns in notifications about traffic.
+
+The practical heuristic that seems to hold: escalate on **category**, not on volume. Anything touching safety, money, or a change to what was sold goes to a human immediately, no matter how calmly it was phrased. Everything else relays silently and lands in the log. A traveller who writes "slight concern about the hotel area at night" in a mild tone has raised a safety issue, and tone should not be what determines whether anyone sees it.
+
+## What this is really protecting
+
+It's tempting to frame masked relay as a disintermediation defence — stopping the operator from stealing the client. That's part of it, and agencies are entitled to protect a relationship they paid to acquire.
+
+But the more durable benefit is that the agency finally knows what happened on its own trips. Right now, most agencies' understanding of trip execution is assembled after the fact from reviews, complaints, and whatever the DMC chooses to report. A relay log is the first time the operational reality of a trip becomes something you can actually look at — which is also the only way you ever find out which operators are quietly excellent and which ones are quietly not.

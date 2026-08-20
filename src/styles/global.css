@@ -34,6 +34,12 @@
   --mono:'IBM Plex Mono',ui-monospace,monospace;
   --pad:clamp(20px,5vw,72px);
   --max:1320px;
+  /* Hero-band photo (home / destinations-index / region pages). The
+     prototype inlined this as ~250KB of base64; it's a real static asset
+     now (public/hero.jpg, extracted byte-for-byte from that data URI).
+     Same placeholder status as the destination illustrations: stock image
+     standing in until real photography is licensed. */
+  --photo:url("/hero.jpg");
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--void)}
@@ -349,8 +355,8 @@ footer{border-top:1px solid var(--line);background:#090A0C;padding:clamp(56px,6v
 .f-pill:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,255,255,.14)}
 .f-legal{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px;margin-top:34px;padding-bottom:clamp(18px,4vw,40px)}
 .f-legal p{max-width:44ch;color:var(--dim);font-size:16px;margin:0}
-.f-legal button{background:none;border:0;color:var(--paper);font-size:16px;text-transform:uppercase;letter-spacing:.03em;padding:0;text-align:left}
-.f-legal button:hover{color:var(--dim)}
+.f-legal a,.f-legal button{background:none;border:0;color:var(--paper);font-size:16px;text-transform:uppercase;letter-spacing:.03em;padding:0;text-align:left}
+.f-legal a:hover,.f-legal button:hover{color:var(--dim)}
 .f-word{overflow:hidden;height:.56em;font-size:clamp(88px,18.5vw,250px);line-height:.78}
 .f-word .tr{display:flex;width:max-content;animation:march 60s linear infinite}
 .f-word span{font-family:var(--display);font-weight:500;letter-spacing:-.04em;color:rgba(255,255,255,.26);white-space:nowrap;padding-right:.1em}
@@ -534,16 +540,40 @@ footer{border-top:1px solid var(--line);background:#090A0C;padding:clamp(56px,6v
 :focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:6px}
 
 /* ============ ANCHOR PARITY ============
-   The prototype's nav/back/CTA elements were all <button onclick="go(id)">
-   driving the client-side router. The ones with a genuine destination in
-   this migration are <a href> now instead — the class-based rules above
-   (.cta-nav, .dp-back, .f-pill, .gua-cta) already applied regardless of
-   tag, but the tag-combinator ones (`.links button`, `.drawer button`,
-   `.f-col button`) had to be repointed at `a` directly, above, since a
-   button-only selector never matched the new anchors. This block just
-   adds the one thing plain <a> doesn't get for free that <button> did:
-   no underline. */
-.links a,.drawer a,.f-col a,.cta-nav,.dp-back,.f-pill,.gua-cta{text-decoration:none}
+   Everything that navigates was a <button onclick="go(id)"> (or a clickable
+   <div>) in the prototype's client-side router, and is a real <a href> here.
+   That swap silently drops three things a <button> got for free, so each
+   converted element needs them back:
+
+     1. no underline           — <a> is underlined by default, <button> isn't
+     2. a block-ish display    — <a> is inline, so width/height/vertical
+                                 margin silently do nothing
+     3. color: inherit         — already global via `a{color:inherit}` above
+
+   Selectors written as `.container button` never match the new anchors at
+   all, so those are widened to cover both tags rather than duplicated. */
+
+/* 1. Underlines. */
+.links a,.drawer a,.f-col a,.cta-nav,.dp-back,.f-pill,.gua-cta,
+.dreg,.visit,.r-back,.feat,.prow,.back,.art-next,.btn,.d-cols a,
+.plink,.rnode,.f-legal a,.rlist a{text-decoration:none}
+.rlist a{color:inherit}
+
+/* 2. Elements whose own rules set width or vertical margin, which an inline
+      <a> would ignore: `.gua-cta` is width:100%, `.back` is margin-bottom:30px. */
+.gua-cta,.back{display:inline-block}
+
+/* 3. Country links in the destinations index: `.d-cols button` is tag-scoped,
+      so as an <a> they were rendering completely unstyled. */
+.d-cols a{display:block;width:100%;text-align:left;background:none;border:0;padding:7px 0;color:var(--muted);font-size:15px;break-inside:avoid;transition:color .2s,transform .2s}
+.d-cols a:hover{color:var(--signal);transform:translateX(3px)}
+
+/* 4. `.art-next b` inherits its color from the element it sits in. On a
+      <button> that resolved to the UA default black — invisible against the
+      #07080A page, which is a real (if unnoticed) bug in the prototype. As an
+      <a> it inherits --paper and is legible; pinning it here keeps that true
+      regardless of tag. */
+.art-next b{color:var(--paper)}
 
 /* A real <img> (see LandmarkArt.astro) needs the same absolute-fill
    treatment the ported `.dp-hero>svg` / `.dp-tile>svg` rules above give
