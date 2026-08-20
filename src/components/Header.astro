@@ -1,0 +1,88 @@
+---
+/**
+ * Ported from hyperporter-3.html's <header class="top">. The nav items
+ * were `<button onclick="go(id)">` driving the old client-side router;
+ * they're real `<a href>` links now, and `current` picks the active one
+ * server-side instead of `go()` toggling a `.act` class at runtime.
+ * The dispatch-rail marquee is unchanged (same FEED data, doubled for the
+ * CSS `march` loop); only the clock and mobile-drawer toggle still need
+ * client JS, since both depend on runtime state a static build can't know.
+ */
+import { FEED } from '../lib/feed';
+
+interface Props {
+  current?: 'home' | 'autopilot' | 'horizon' | 'destinations' | 'how' | 'blog' | 'about';
+}
+
+const { current } = Astro.props;
+
+const NAV = [
+  { id: 'home', label: 'Home', href: '/' },
+  { id: 'autopilot', label: 'Autopilot', href: '/autopilot' },
+  { id: 'horizon', label: 'Horizon', href: '/horizon' },
+  { id: 'destinations', label: 'Destinations', href: '/destinations' },
+  { id: 'how', label: 'How It Works', href: '/how' },
+  { id: 'blog', label: 'Blog', href: '/blog' },
+  { id: 'about', label: 'About', href: '/about' },
+] as const;
+
+const row = FEED.map(
+  ([code, from, to, human]) =>
+    `<span class="ent${human ? ' h' : ''}"><b>${code}</b>${from} <u>&rarr;</u> ${to}</span>`
+).join('');
+const stream = row + row;
+---
+
+<header class="top">
+  <div class="bar">
+    <a class="mark" href="/">
+      <span class="glyph"
+        ><svg viewBox="0 0 100 100" aria-hidden="true"
+          ><circle class="ring" cx="50" cy="50" r="44"></circle><rect x="32.5" y="26" width="7.5" height="47"
+          ></rect><rect x="60" y="26" width="7.5" height="47"></rect><rect
+            x="32.5"
+            y="46.5"
+            width="35"
+            height="7.5"></rect></svg
+        ></span
+      >
+      <span class="word">Hyperporter</span>
+    </a>
+    <nav class="links" id="links">
+      {
+        NAV.map((n) => (
+          <a data-nav={n.id} class:list={{ act: current === n.id }} href={n.href}>
+            {n.label}
+          </a>
+        ))
+      }
+    </nav>
+    <div class="sys"><i></i><span id="clock">00:00 UTC</span></div>
+    <a class="cta-nav" href="/signup">Sign up</a>
+    <button class="burger" aria-label="Menu" id="burger"><span></span><span></span><span></span></button>
+  </div>
+  <div class="rail" aria-hidden="true">
+    <div class="tag">Sample thread activity</div>
+    <div class="stream" set:html={stream} />
+  </div>
+  <div class="drawer" id="drawer">
+    {NAV.map((n) => <a href={n.href}>{n.label}</a>)}
+    <a href="/signup">Sign up &rarr;</a>
+  </div>
+</header>
+
+<script>
+  const burger = document.getElementById('burger');
+  const drawer = document.getElementById('drawer');
+  burger?.addEventListener('click', () => drawer?.classList.toggle('open'));
+
+  function tick() {
+    const el = document.getElementById('clock');
+    if (!el) return;
+    const d = new Date();
+    el.textContent =
+      String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0') + ' UTC';
+  }
+  tick();
+  setInterval(tick, 10000);
+</script>
