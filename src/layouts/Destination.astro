@@ -37,6 +37,29 @@ const { title: name, region, description, heroImage, heroAlt, index: shouldIndex
 
 const regionHref = `/regions/${slugify(region)}`;
 const mail = helplineEmail(name);
+
+/**
+ * TouristDestination structured data. Inert while the page is noindex —
+ * which is all 137 of them today — but in place for when per-destination
+ * content is written and `index: true` is flipped.
+ *
+ * `name` is the country itself, so it doubles as the containsPlace/country
+ * reference; `touristType` reflects who these pages actually address (the
+ * travel businesses selling the destination), not end travellers.
+ */
+const canonical = new URL(`/destinations/${entry.id}/`, Astro.site).toString();
+const touristDestinationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TouristDestination',
+  name,
+  description,
+  url: canonical,
+  ...(heroImage ? { image: new URL(heroImage, Astro.site).toString() } : {}),
+  address: { '@type': 'PostalAddress', addressCountry: name },
+  includesAttraction: { '@type': 'Country', name },
+  touristType: 'Travel agencies, advisors and tour operators',
+  provider: { '@type': 'Organization', name: 'Hyperporter', url: Astro.site?.toString() },
+};
 ---
 
 <Base
@@ -46,6 +69,10 @@ const mail = helplineEmail(name);
   ogType="website"
   currentNav="destinations"
 >
+  <Fragment slot="structured-data">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(touristDestinationJsonLd)} />
+  </Fragment>
+
   <div class="dp-help">
     <div class="wrap">
       <div>
