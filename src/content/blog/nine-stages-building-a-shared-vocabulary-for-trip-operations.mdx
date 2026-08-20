@@ -1,0 +1,65 @@
+---
+title: "Nine stages: building a shared vocabulary for trip operations"
+dek: "Most agencies run trips through stages they've never written down. Naming them changes what you can see, delegate, and fix."
+cat: "Product"
+date: 2026-07-01
+---
+Ask three people in the same agency where a particular trip is, and you'll often get three different answers: "with the client," "waiting on Nairobi," "basically confirmed." All three might be true. None of them are the same statement.
+
+This is not a communication problem. It's a vocabulary problem — and it's the reason a lot of operational work in travel resists both delegation and improvement.
+
+## What an undefined pipeline costs
+
+When stages aren't named, several things quietly become impossible.
+
+**You can't hand a thread over.** Onboarding a new coordinator means teaching them where forty live trips currently are, one by one, in prose. The knowledge is in individual heads, so holidays and departures are genuinely risky.
+
+**You can't tell stalled from slow.** A trip that's been quiet for nine days might be perfectly healthy — the client is deciding — or it might be a quote that was never sent. Without a stage, both look identical from outside.
+
+**You can't find the bottleneck.** Everyone in the agency has an intuition about where time goes. Intuitions disagree, and there's no way to settle it without a shared unit of measurement.
+
+**You can't automate anything.** This is the one that matters most. Automation needs to know what state a thing is in before it can act. "Somewhere in the middle" is not a state a system can work with.
+
+<blockquote class="pull">You can't delegate a process you've never described, and you can't improve one you can't measure.</blockquote>
+
+## The nine
+
+The stage model that seems to fit most agencies looks like this. It's worth noting that these describe what has *happened*, not what someone intends to do next — a distinction that keeps the model honest.
+
+- **Inquiry.** A brief exists and the client has confirmed it's correct. Not "someone emailed" — a structured, agreed statement of what they want.
+- **Planning.** A draft itinerary is with the client and being iterated.
+- **Quotation.** Real supplier pricing has been requested or received, with margin applied before the client sees anything.
+- **Confirmation.** The client has accepted and availability is being re-verified against that acceptance.
+- **Booking.** Money is moving. Requests go out automatically; marking money received or sent is always deliberate and manual.
+- **Ready.** Everything is paid and the last mile is being assembled — vouchers, ground contacts, pickup details.
+- **Traveling.** The client is in destination. Live support is running.
+- **Post-Trip.** Follow-up, feedback, review. The thread stays open until anything raised is resolved.
+- **Completed.** Everything is closed and the thread archives itself.
+
+Two exit states sit outside the sequence: **Lost** (the client didn't proceed) and **Cancelled** (they proceeded and then stopped). Collapsing those two into one bucket is a common mistake and it destroys useful information — a lost enquiry is a sales signal, a cancellation is an operational one, and they need completely different follow-up.
+
+## The design rules that make it work
+
+A stage model is easy to write and easy to get wrong. Three rules do most of the work.
+
+### Stages describe the past, not the plan
+
+"Quotation" means quotes have been requested. It does not mean someone intends to request them today. The moment stages describe intent, everything drifts forward optimistically and the board stops being true.
+
+### One trip, one stage
+
+The temptation with a multi-component trip is to let the hotel be confirmed while the transfer is still quoting. Once you allow that, "what stage is this trip in" has no answer. The trip is at its **least advanced** component — which is also the operationally honest answer, since that's what's blocking departure.
+
+### Separate the stage from whether it needs a human
+
+These are genuinely different questions. A trip in Traveling might be running fine, or a traveller might be stranded. Collapsing "where is it" and "does someone need to act" into one field is the single most common modelling error, and it produces boards that look calm during emergencies.
+
+Keeping them separate means a coordinator can look at forty threads and immediately see the three that need them today — which is the actual daily job.
+
+## What you get once it exists
+
+Naming the stages is unglamorous work with disproportionate returns.
+
+Handover becomes possible, because a thread's position is a fact rather than a memory. Stalls become visible, because you can ask how long things sit in each stage. Responsibility becomes assignable at the stage level rather than by trip, which is how agencies stop having a single person who is the only one who knows anything.
+
+And automation becomes possible at all — because every automated action is fundamentally a sentence of the form *when a thread is in this state and this condition holds, do this*. Without states, there is nothing to write that sentence about. The vocabulary isn't documentation of the process. It's the precondition for ever changing it.

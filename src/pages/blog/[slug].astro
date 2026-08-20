@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import type { InferGetStaticPropsType } from 'astro';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  );
+  return posts.map((entry, i) => ({
+    params: { slug: entry.id },
+    // Wraps around, matching the prototype: the oldest post's "next" is the
+    // newest, so the article page never dead-ends.
+    props: { entry, next: posts[(i + 1) % posts.length] },
+  }));
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { entry, next } = Astro.props;
+---
+
+<BlogPost entry={entry} next={next} />
