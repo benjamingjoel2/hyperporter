@@ -1,0 +1,149 @@
+---
+/**
+ * Destination-detail page shell. Ported from hyperporter-3.html's
+ * #view-dest markup (openDest()), with two deliberate content changes
+ * beyond the mechanical HTML/CSS port:
+ *
+ * 1. The on-page lede used to be a fully generic template — "Hyperporter
+ *    helps you deliver world-class trips in {name} with zero hassle..." —
+ *    identical for all 137 countries. It's replaced here with the
+ *    destination's `description` (the prototype's actually-distinct
+ *    per-country DESC[] line, which used to appear only on region-hub
+ *    cards, never on the destination page itself). Small change, but it's
+ *    the one piece of real per-country text this page has.
+ * 2. The "Local Helpline" mailto address uses the fixed slug function
+ *    (see src/lib/destinationEmail.ts) instead of the original regex,
+ *    which dropped accented letters instead of transliterating them.
+ *
+ * Everything else — award badges, services grid, guarantee accordion —
+ * is a faithful copy, including the parts flagged separately as open
+ * questions (the award badges' accuracy is unconfirmed; this page
+ * doesn't resolve that, just carries it forward visibly rather than
+ * silently).
+ */
+import type { CollectionEntry } from 'astro:content';
+import Base from './Base.astro';
+import LandmarkArt from '../components/LandmarkArt.astro';
+import { SERVICES, GUARANTEE } from '../lib/destinationContent';
+import { helplineEmail } from '../lib/destinationEmail';
+import { slugify } from '../lib/slug';
+
+interface Props {
+  entry: CollectionEntry<'destinations'>;
+}
+
+const { entry } = Astro.props;
+const { title: name, region, description, heroImage, heroAlt, index: shouldIndex } = entry.data;
+
+const regionHref = `/regions/${slugify(region)}`;
+const mail = helplineEmail(name);
+---
+
+<Base
+  title={name}
+  description={description}
+  noindex={!shouldIndex}
+  ogType="website"
+  currentNav="destinations"
+>
+  <div class="dp-help">
+    <div class="wrap">
+      <div>
+        <b>Local Helpline</b>
+        <a href={`mailto:${mail}`}>&rarr; {mail}</a>
+      </div>
+      <a class="dp-back" href={regionHref}>&larr; Back to {region}</a>
+    </div>
+  </div>
+
+  <div class="dp-hero">
+    <LandmarkArt name={name} uid={`h${entry.id}`} heroImage={heroImage} heroAlt={heroAlt} />
+    <div class="wrap">
+      <div class="dp-grid">
+        <div class="dp-tile">
+          <LandmarkArt name={name} uid={`t${entry.id}`} heroImage={heroImage} heroAlt={heroAlt} />
+          <div class="tw">Hyperporter</div>
+          <div class="tn">{name}</div>
+        </div>
+        <div>
+          <div class="dp-badges">
+            <span class="dp-badge">Hospitality B2B Travel Partner</span>
+            <span class="dp-badge">UN Tourism Winner</span>
+          </div>
+          <h2 class="dp-h">Your Trusted Local Operator</h2>
+          <p class="dp-p">{description}</p>
+          <button class="dp-explore" id="dp-explore" type="button">Explore services</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dp-marq" aria-hidden="true">
+    <div class="tr">
+      {
+        Array.from({ length: 6 }).map(() => (
+          <>
+            <span>For Travel Creators</span>
+            <em>&mdash;</em>
+            <span>For Travel Agencies</span>
+            <em>&mdash;</em>
+            <span>For Travel Advisors</span>
+            <em>&mdash;</em>
+          </>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="sec-tight wrap" id="dp-svc">
+    <h2 class="rv">End-to-End Services</h2>
+    <p class="lede rv" style="margin-bottom:0">Everything you need to run your travel business in one place.</p>
+    <div class="svc rv">
+      {
+        SERVICES.map(([title, body]) => (
+          <article>
+            <h3>{title}</h3>
+            <p>{body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="gua">
+    <div class="wrap">
+      <div class="gua-grid">
+        <div>
+          <p class="eyebrow rv">The Hyperporter Guarantee</p>
+          <h2 class="rv">
+            Easily Sell &amp; Operate Your Trips <u>Hassle-Free</u>
+          </h2>
+        </div>
+        <div class="rv">
+          <div class="acc">
+            {
+              GUARANTEE.map(([title, body], i) => (
+                <div class:list={['acc-i', { open: i === 0 }]}>
+                  <button type="button">
+                    {title}
+                    <i>+</i>
+                  </button>
+                  <div class="acc-b">
+                    <p>{body.replaceAll('{C}', name)}</p>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+          <a class="gua-cta" href="/signup">Start today</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<script>
+  document.getElementById('dp-explore')?.addEventListener('click', () => {
+    document.getElementById('dp-svc')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+</script>
