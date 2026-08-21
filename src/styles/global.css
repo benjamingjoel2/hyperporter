@@ -556,7 +556,7 @@ footer{border-top:1px solid var(--line);background:#090A0C;padding:clamp(56px,6v
 /* 1. Underlines. */
 .links a,.drawer a,.f-col a,.cta-nav,.dp-back,.f-pill,.gua-cta,
 .dreg,.visit,.r-back,.feat,.prow,.back,.art-next,.btn,.d-cols a,
-.plink,.rnode,.f-legal a,.rlist a{text-decoration:none}
+.plink,.rnode,.f-legal a,.rlist a,.btn-o{text-decoration:none}
 .rlist a{color:inherit}
 
 /* 2. Elements whose own rules set width or vertical margin, which an inline
