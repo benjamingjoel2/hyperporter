@@ -1,0 +1,45 @@
+# Production stack for the server. Deploy is:
+#
+#   git pull origin main
+#   docker compose up -d --build
+#
+# First time only, run scripts/init-letsencrypt.sh first — see DEPLOY.md.
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        # Baked into the static build, so it must match the origin nginx
+        # actually serves. Override via SITE_URL in a .env file next to
+        # this compose file if deploying to a different hostname.
+        SITE_URL: ${SITE_URL:-https://hyperporter.com}
+    image: hyperporter-web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt:ro
+      - ./data/certbot/www:/var/www/certbot:ro
+    # Reload periodically so a certificate renewed by the certbot service is
+    # picked up without a manual restart.
+    command: >
+      /bin/sh -c "while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g 'daemon off;'"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/robots.txt"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # Renews certificates in the background. The webroot it writes to is the
+  # same one nginx serves /.well-known/acme-challenge/ from.
+  certbot:
+    image: certbot/certbot:latest
+    restart: unless-stopped
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: >
+      /bin/sh -c "trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot; sleep 12h & wait $${!}; done"
