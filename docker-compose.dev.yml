@@ -1,0 +1,29 @@
+# Local preview with hot reload, so changes are visible while you work:
+#
+#   docker compose -f docker-compose.dev.yml up
+#   # -> http://localhost:4321
+#
+# Deliberately separate from docker-compose.yml rather than a profile in it:
+# the production stack builds a static image and terminates TLS, this runs
+# the Astro dev server against your working tree. Nothing here is used on
+# the server.
+
+services:
+  dev:
+    image: node:22-alpine
+    working_dir: /app
+    ports:
+      - "4321:4321"
+    volumes:
+      - .:/app
+      # Keeps the container's node_modules from being shadowed by (or
+      # overwriting) the host's — they may hold different platform binaries.
+      - hyperporter_node_modules:/app/node_modules
+    environment:
+      # Dev origin, so canonical/OG tags in local preview don't claim to be
+      # production. Production values come from docker-compose.yml.
+      SITE_URL: http://localhost:4321
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0"
+
+volumes:
+  hyperporter_node_modules:

@@ -25,15 +25,16 @@ function indexableDestinationSlugs() {
 
 const indexableDestinations = indexableDestinationSlugs();
 
-// The production domain isn't decided yet — build against a staging
-// placeholder and override with SITE_URL once it is, rather than hardcoding
-// hyperporter.com.
-const site = process.env.SITE_URL ?? 'https://staging.hyperporter.pages.dev';
+// Production domain. Canonicals, OG URLs, the sitemap and robots.txt all
+// derive from this, so it must match how the site is actually served —
+// nginx serves https://hyperporter.com (see DEPLOY.md). Override with
+// SITE_URL for a staging or preview origin.
+const site = process.env.SITE_URL ?? 'https://hyperporter.com';
 
 // Pages that render a noindex robots tag and so must not be listed in the
 // sitemap either: About until the "Name pending" bios are real, Terms and
 // Privacy until counsel has reviewed the drafts.
-const noindexPaths = new Set(['/about/', '/terms/', '/privacy/']);
+const noindexPaths = new Set(['/about/', '/terms/', '/privacy/', '/404/']);
 
 export default defineConfig({
   site,
