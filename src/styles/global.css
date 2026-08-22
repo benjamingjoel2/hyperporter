@@ -361,26 +361,30 @@ p{margin:0 0 16px}
 
 /* ============ FOOTER ============ */
 footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px,6vw,88px) 0 0;overflow:hidden}
-.f-top{display:grid;grid-template-columns:1.5fr .85fr .85fr .85fr;gap:40px}
-.f-soc{display:flex;gap:13px;margin-bottom:38px}
-.f-soc a{width:52px;height:52px;border-radius:50%;border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;color:var(--paper);transition:border-color .25s,background .25s,transform .25s}
-.f-soc a:hover{border-color:var(--signal);color:var(--signal);transform:translateY(-2px)}
-.f-soc svg{width:19px;height:19px;fill:currentColor}
-.f-con{font-size:17px;line-height:1.55}
-.f-con div{margin-bottom:24px}
+.f-cta{display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
+.f-cta h2{font-size:clamp(26px,3.4vw,44px);margin:0;max-width:32ch}
+.f-hr{height:1px;background:var(--line-2);margin:clamp(34px,4.5vw,58px) 0 clamp(40px,5vw,64px)}
+.f-main{display:grid;grid-template-columns:1.5fr 2.4fr;gap:clamp(32px,4vw,60px)}
+.f-brand{display:flex;flex-direction:column;align-items:flex-start}
+.f-mark{width:42px;height:42px;display:block;color:var(--paper);transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
+.f-mark svg{width:100%;height:100%;display:block}
+.f-mark svg rect{fill:currentColor}
+.f-mark svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6;stroke-linecap:butt}
+.f-mark:hover{color:var(--signal);transform:rotate(90deg)}
+.f-con{font-size:15px;line-height:1.55;color:var(--muted);margin-top:30px}
+.f-con div{margin-bottom:14px}
 .f-con a{text-decoration:none;border-bottom:1px solid transparent}
 .f-con a:hover{border-bottom-color:var(--line-2)}
-.f-col h4{font-size:16px;font-weight:400;color:var(--dim);text-transform:uppercase;letter-spacing:.04em;margin:0 0 22px}
-.f-col a,.f-col button{display:block;background:none;border:0;color:var(--paper);padding:0 0 18px;font-size:17px;text-align:left;transition:color .2s,transform .2s}
-.f-col a:hover,.f-col button:hover{color:var(--signal);transform:translateX(3px)}
-.f-rule{display:flex;align-items:center;gap:28px;margin-top:clamp(40px,6vw,74px)}
-.f-rule .ln{flex:1;height:1px;background:var(--line-2)}
-.f-pill{background:var(--paper);color:var(--void);border:0;border-radius:99px;padding:15px 34px;font-size:16px;font-weight:500;white-space:nowrap;transition:transform .2s,box-shadow .2s}
+.f-copy{color:var(--dim);font-size:13.5px;margin-right:auto}
+.f-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,2.4vw,36px)}
+.f-col h4{font-family:var(--mono);font-size:10.5px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin:0 0 20px}
+.f-col a{display:block;color:var(--paper);padding:0 0 15px;font-size:15px;transition:color .2s,transform .2s}
+.f-col a:hover{color:var(--signal);transform:translateX(3px)}
+.f-pill{background:var(--paper);color:var(--void);border:0;border-radius:99px;padding:14px 30px;font-size:15px;font-weight:500;white-space:nowrap;transition:transform .2s,box-shadow .2s}
 .f-pill:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(12,22,34,.20)}
-.f-legal{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px;margin-top:34px;padding-bottom:clamp(18px,4vw,40px)}
-.f-legal p{max-width:44ch;color:var(--dim);font-size:16px;margin:0}
-.f-legal a,.f-legal button{background:none;border:0;color:var(--paper);font-size:16px;text-transform:uppercase;letter-spacing:.03em;padding:0;text-align:left}
-.f-legal a:hover,.f-legal button:hover{color:var(--dim)}
+.f-bottom{display:flex;align-items:center;gap:14px 30px;flex-wrap:wrap;margin-top:clamp(38px,5vw,66px);padding-top:clamp(22px,3vw,32px);border-top:1px solid var(--line);padding-bottom:clamp(18px,4vw,40px)}
+.f-bottom a{color:var(--dim);font-size:13.5px;letter-spacing:.02em;transition:color .2s}
+.f-bottom a:hover{color:var(--paper)}
 .f-word{overflow:hidden;height:.56em;font-size:clamp(88px,18.5vw,250px);line-height:.78}
 .f-word .tr{display:flex;width:max-content;animation:march 60s linear infinite}
 .f-word span{font-family:var(--display);font-weight:500;letter-spacing:-.04em;color:rgba(12,22,34,.11);white-space:nowrap;padding-right:.1em}
@@ -542,8 +546,8 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
   .pill:first-child{border-right:0}
   .fgrid{grid-template-columns:1fr}
   .fcell{padding:28px 0!important;border-right:0!important}
-  .f-top{grid-template-columns:1fr 1fr;gap:44px 30px}
-  .f-legal{grid-template-columns:1fr;gap:18px}
+  .f-main{grid-template-columns:1fr;gap:44px}
+  .f-cols{grid-template-columns:1fr 1fr;gap:34px 30px}
 }
 @media (max-width:860px){
   .links,.bar .cta-nav,.sys{display:none}
@@ -556,7 +560,7 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
   .stat{border-right:0;padding-right:0;margin-right:0;width:50%;margin-bottom:18px}
   .rail .tag{padding:0 12px}
 }
-@media (max-width:560px){.f-top{grid-template-columns:1fr}}
+@media (max-width:560px){.f-cols{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .rv{opacity:1;transform:none}
@@ -580,7 +584,7 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
 /* 1. Underlines. */
 .links a,.drawer a,.f-col a,.cta-nav,.dp-back,.f-pill,.gua-cta,
 .dreg,.visit,.r-back,.feat,.prow,.back,.art-next,.btn,.d-cols a,
-.plink,.rnode,.f-legal a,.rlist a,.btn-o{text-decoration:none}
+.plink,.rnode,.f-bottom a,.rlist a,.btn-o{text-decoration:none}
 .rlist a{color:inherit}
 
 /* 2. Elements whose own rules set width or vertical margin, which an inline
