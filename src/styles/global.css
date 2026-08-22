@@ -186,8 +186,8 @@ p{margin:0 0 16px}
 .pill:hover{background:rgba(12,22,34,.025)}
 .pill::before{content:"";position:absolute;left:0;top:-1px;width:0;height:1px;background:var(--signal);transition:width .5s cubic-bezier(.2,.8,.2,1)}
 .pill:hover::before{width:100%}
-.pill .num{font-family:var(--display);font-size:clamp(52px,7vw,92px);font-weight:600;line-height:1;letter-spacing:-.05em;color:transparent;-webkit-text-stroke:1px var(--line-2);margin-bottom:22px}
-.pill:hover .num{-webkit-text-stroke-color:rgba(7,120,108,.5)}
+.pill .name{font-family:var(--display);font-size:clamp(34px,5vw,62px);font-weight:600;line-height:1.05;letter-spacing:-.032em;color:var(--paper);margin:0 0 18px;transition:color .3s}
+.pill:hover .name{color:var(--signal)}
 .pill .kind{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);margin-bottom:14px}
 .pill p{color:var(--muted);font-size:15.5px;max-width:44ch}
 .plink{display:inline-flex;align-items:center;gap:9px;background:none;border:0;color:var(--paper);font-weight:600;font-size:14.5px;padding:0;margin-top:8px;transition:gap .25s,color .25s}
