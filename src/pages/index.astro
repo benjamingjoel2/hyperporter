@@ -17,6 +17,12 @@
  */
 import Base from '../layouts/Base.astro';
 import EmailCapture from '../components/EmailCapture.astro';
+import { STAGES } from '../lib/stages';
+
+// The sample thread sits at stage 3 (Quotation): 1-2 done, 3 current,
+// the rest ahead. Driven off STAGES so the labels can't drift from the
+// pipeline shown on /autopilot and /how.
+const CURRENT_STAGE = 3;
 ---
 
 <Base
@@ -69,9 +75,18 @@ import EmailCapture from '../components/EmailCapture.astro';
           <div class="thread">
             <div class="th"><span>Thread <b>KE-2291</b></span><span>Nairobi · 9 nights</span></div>
             <div class="chips">
-              <span class="chip done">INQ</span><span class="chip done">PLN</span><span class="chip now">QTE</span>
-              <span class="chip">CNF</span><span class="chip">BKG</span><span class="chip">RDY</span>
-              <span class="chip">TRV</span><span class="chip">PST</span><span class="chip">CMP</span>
+              {
+                STAGES.map((s, i) => (
+                  <span
+                    class:list={[
+                      'chip',
+                      { done: i + 1 < CURRENT_STAGE, now: i + 1 === CURRENT_STAGE }
+                    ]}
+                  >
+                    {s.name}
+                  </span>
+                ))
+              }
             </div>
             <div class="line">
               <i></i><span>Quotation requested from qualified suppliers — responses returning in parallel.</span>
