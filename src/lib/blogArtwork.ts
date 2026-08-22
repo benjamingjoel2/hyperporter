@@ -6,7 +6,7 @@
  */
 export function blogArtwork(i: number): string {
   return `<svg viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
- <g stroke="rgba(7,120,108,.34)" fill="none" stroke-width="1" stroke-dasharray="3 6">
+ <g stroke="rgba(27,116,126,.34)" fill="none" stroke-width="1" stroke-dasharray="3 6">
  ${Array.from({ length: 5 }, (_, k) => `<path d="M-20 ${60 + k * 48 + i * 7} Q200 ${20 + k * 46} 420 ${70 + k * 44 - i * 5}"/>`).join('')}
  </g>
  <g fill="var(--signal)">${Array.from({ length: 6 }, (_, k) => `<circle cx="${45 + k * 62}" cy="${110 + ((k + i) % 4) * 38}" r="2.6"/>`).join('')}</g>
