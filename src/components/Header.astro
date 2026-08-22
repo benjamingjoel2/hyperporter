@@ -27,8 +27,8 @@ const NAV = [
 ] as const;
 
 const row = FEED.map(
-  ([code, from, to, human]) =>
-    `<span class="ent${human ? ' h' : ''}"><b>${code}</b>${from} <u>&rarr;</u> ${to}</span>`
+  ([city, from, to, human]) =>
+    `<span class="ent${human ? ' h' : ''}"><b>${city}</b>${from} <u>&rarr;</u> ${to}</span>`
 ).join('');
 const stream = row + row;
 ---
