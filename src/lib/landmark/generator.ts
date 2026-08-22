@@ -59,7 +59,9 @@ const acacia = (x: number, y: number, s: number, f: string) => {
   let o=D(`M${x-3*s} ${y} l${1*s} ${-38*s} l${-17*s} ${-13*s} l${2*s} ${-5*s} l${18*s} ${9*s} l${1*s} ${-9*s} l${16*s} ${-11*s} l${3*s} ${5*s} l${-15*s} ${12*s} l${1*s} ${12*s} l${2*s} ${38*s} Z`,f);
   o+=D(`M${x-56*s} ${y-52*s} q${56*s} ${-34*s} ${112*s} 0 q${-22*s} ${15*s} ${-56*s} ${15*s} q${-34*s} 0 ${-56*s} ${-15*s} Z`,f);
   return o;};
-const stars = (r: RNG, n: number) => {let o='';for(let i=0;i<n;i++)o+=C_((r()*W).toFixed(0),(r()*330).toFixed(0),(r()*1.2+.35).toFixed(2),'#EDF1F4',(r()*.45+.12).toFixed(2));return o;};
+
+/** Soft ink for highlights that were near-white on the dark theme. */
+const INK_SOFT = '#33414E';
 
 export const A: Record<string, SceneBuilder> = {};
 
@@ -369,7 +371,7 @@ A.dunes=(r,C)=>{                                     /* Sahara / desert */
   return o+cam(700,1.1)+cam(800,.9)+cam(880,.75);};
 A.rainforest=(r,C)=>{                                /* Amazon / Congo basin */
   let o=R(0,0,W,H,C.far,.001);
-  for(let k=0;k<3;k++)o+=L(`M0 ${180+k*44} Q600 ${140+k*40} ${W} ${190+k*42}`,'#EDF1F4',18,.05);
+  for(let k=0;k<3;k++)o+=L(`M0 ${180+k*44} Q600 ${140+k*40} ${W} ${190+k*42}`,INK_SOFT,18,.05);
   const canopy=(y: number,f: string,n: number)=>{let d=`M0 ${H} L0 ${y}`;for(let i=1;i<=n;i++){const x=W/n*i;d+=` Q${x-W/n/2} ${y-70} ${x} ${y-10}`;}return D(d+` L${W} ${H} Z`,f);};
   o+=canopy(340,C.far,5)+canopy(430,C.mid,7);
   o+=water(C,G+40);
@@ -416,7 +418,7 @@ A.terraces=(r,C)=>{                                  /* rice terraces */
 A.volcano=(r,C)=>{                                   /* volcanic islands */
   let o=hills(C,G-30,30,4,C.far);
   o+=P(`260,${G} 580,150 900,${G}`,C.mid)+P(`520,166 580,150 640,166 600,178 560,178`,C.acc,.5);
-  for(let k=0;k<3;k++)o+=D(`M${570+k*8} ${140-k*10} q-30 -40 ${10+k*6} -70 q40 26 20 70 Z`,'#EDF1F4',.09);
+  for(let k=0;k<3;k++)o+=D(`M${570+k*8} ${140-k*10} q-30 -40 ${10+k*6} -70 q40 26 20 70 Z`,INK_SOFT,.09);
   o+=P(`820,${G} 1030,300 1240,${G}`,C.far);
   return o+palm(160,G,1,C.near)+palm(1060,G,.85,C.near);};
 A.saltflat=(r,C)=>{                                  /* Bolivia */
@@ -425,15 +427,15 @@ A.saltflat=(r,C)=>{                                  /* Bolivia */
   o+=R(0,G-90,W,H,C.wat);
   o+=P(`0,${G-90} 240,${G+110} 460,${G-90}`,C.far,.35)+P(`620,${G-90} 880,${G+80} 1140,${G-90}`,C.far,.3);
   o+=C_(860,G+60,42,C.acc,.22);
-  for(let i=0;i<7;i++)o+=L(`M${60+i*170} ${G-40+i*22} h120`,'#EDF1F4',1,.09);
+  for(let i=0;i<7;i++)o+=L(`M${60+i*170} ${G-40+i*22} h120`,INK_SOFT,1,.09);
   return o;};
 A.falls=(r,C)=>{                                     /* Victoria / Iguazu */
   let o=hills(C,G-140,40,4,C.far);
   o+=R(0,G-140,W,26,C.mid);
-  for(let i=0;i<16;i++){const x=90+i*66,w=30+((i*29)%26);o+=R(x,G-114,w,150,'#EDF1F4',.13+((i*17)%20)/160);}
+  for(let i=0;i<16;i++){const x=90+i*66,w=30+((i*29)%26);o+=R(x,G-114,w,150,INK_SOFT,.13+((i*17)%20)/160);}
   o+=R(0,G-114,90,150,C.near)+R(1130,G-114,70,150,C.near);
   o+=D(`M0 ${G+36} q300 -46 600 0 q300 46 600 0 L${W} ${H} L0 ${H} Z`,C.near);
-  for(let k=0;k<4;k++)o+=D(`M${140+k*220} ${G+30} q60 -50 130 -6 q-70 26 -130 6 Z`,'#EDF1F4',.07);
+  for(let k=0;k<4;k++)o+=D(`M${140+k*220} ${G+30} q60 -50 130 -6 q-70 26 -130 6 Z`,INK_SOFT,.07);
   return o;};
 A.steppe=(r,C)=>{                                    /* Mongolia / Central Asia */
   let o=hills(C,G-70,50,3,C.far)+hills(C,G-10,26,4,C.mid)+R(0,G,W,H-G,C.near);
@@ -468,27 +470,44 @@ A.cliffs=(r,C)=>{                                    /* Ireland / Atlantic cliff
   o+=P(`0,${G-20} 0,320 150,340 260,390 340,${G-20}`,C.near);
   o+=P(`${W},${G-20} ${W},260 1020,300 900,${G-20}`,C.mid);
   o+=P(`760,${G-20} 800,360 860,${G-20}`,C.near);
-  for(let i=0;i<9;i++)o+=C_(500+i*60,300+((i*53)%90),2.6,'#EDF1F4',.4);
+  for(let i=0;i<9;i++)o+=C_(500+i*60,300+((i*53)%90),2.6,INK_SOFT,.4);
   return o;};
 
 export function destArt(name: string, uid: string): string {
   const h = hash32(name), r = rngFrom(h);
   const spec = LM[name] || ["cityscape", 215] as [string, number];
   const hue = (spec[1] + (h % 31) - 15 + 360) % 360;
+
+  /**
+   * Light-theme palette. The scene builders layer far -> mid -> near, so
+   * that ordering still has to read as depth; what changes is the whole
+   * lightness ramp. Instead of pale shapes emerging from a near-black sky,
+   * the sky is now pale and the landmark silhouettes get progressively
+   * darker and more saturated toward the foreground.
+   *
+   * `acc` (sun, snow caps, lit windows) was a near-white highlight against
+   * darkness. On a pale sky a light accent is invisible, so it inverts to a
+   * saturated mid-tone that reads as a warm light source instead.
+   */
   const C: Palette = {
-    sky: `hsl(${hue},46%,29%)`, mid2: `hsl(${(hue+22)%360},40%,16%)`,
-    far: `hsl(${hue},24%,23%)`, mid: `hsl(${(hue+8)%360},22%,16%)`,
-    near: `hsl(${(hue+14)%360},20%,10%)`, wat: `hsl(${hue},28%,19%)`,
-    acc: `hsl(${(hue+42)%360},64%,74%)`
+    sky: `hsl(${hue},58%,91%)`, mid2: `hsl(${(hue+22)%360},48%,84%)`,
+    far: `hsl(${hue},26%,74%)`, mid: `hsl(${(hue+8)%360},24%,58%)`,
+    near: `hsl(${(hue+14)%360},26%,38%)`, wat: `hsl(${hue},34%,79%)`,
+    acc: `hsl(${(hue+42)%360},46%,70%)`
   };
   const sunX=(160+r()*880).toFixed(0), sunY=(120+r()*130).toFixed(0), sunR=(30+r()*26).toFixed(0);
   const scene=(A[spec[0]]||A.cityscape)(r,C);
+  // Stars are dropped: they were faint white dots on a night sky and are
+  // simply invisible against a pale one. `r` is still advanced by the same
+  // number of draws so every scene keeps its original layout — consuming a
+  // different amount of randomness here would reshuffle all 137 scenes.
+  for (let i = 0; i < 38 * 4; i++) r();
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
    <defs><linearGradient id="sk${uid}" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0" stop-color="${C.sky}"/><stop offset=".54" stop-color="${C.mid2}"/><stop offset="1" stop-color="#07080A"/></linearGradient>
-   <radialGradient id="su${uid}"><stop offset="0" stop-color="${C.acc}" stop-opacity=".9"/><stop offset="1" stop-color="${C.acc}" stop-opacity="0"/></radialGradient></defs>
-   <rect width="${W}" height="${H}" fill="url(#sk${uid})"/>${stars(r,38)}
+    <stop offset="0" stop-color="${C.sky}"/><stop offset=".54" stop-color="${C.mid2}"/><stop offset="1" stop-color="#FBFCFD"/></linearGradient>
+   <radialGradient id="su${uid}"><stop offset="0" stop-color="${C.acc}" stop-opacity=".38"/><stop offset="1" stop-color="${C.acc}" stop-opacity="0"/></radialGradient></defs>
+   <rect width="${W}" height="${H}" fill="url(#sk${uid})"/>
    <circle cx="${sunX}" cy="${sunY}" r="${Number(sunR)*3.4}" fill="url(#su${uid})"/>
-   <circle cx="${sunX}" cy="${sunY}" r="${sunR}" fill="${C.acc}" opacity=".85"/>
+   <circle cx="${sunX}" cy="${sunY}" r="${sunR}" fill="${C.acc}" opacity=".55"/>
    ${scene}</svg>`;
 }
