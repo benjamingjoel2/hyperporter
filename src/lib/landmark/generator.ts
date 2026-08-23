@@ -473,7 +473,9 @@ A.cliffs=(r,C)=>{                                    /* Ireland / Atlantic cliff
   for(let i=0;i<9;i++)o+=C_(500+i*60,300+((i*53)%90),2.6,INK_SOFT,.4);
   return o;};
 
-export function destArt(name: string, uid: string): string {
+export type ArtTheme = 'light' | 'dark';
+
+export function destArt(name: string, uid: string, theme: ArtTheme = 'light'): string {
   const h = hash32(name), r = rngFrom(h);
   const spec = LM[name] || ["cityscape", 215] as [string, number];
   const hue = (spec[1] + (h % 31) - 15 + 360) % 360;
@@ -489,24 +491,45 @@ export function destArt(name: string, uid: string): string {
    * darkness. On a pale sky a light accent is invisible, so it inverts to a
    * saturated mid-tone that reads as a warm light source instead.
    */
-  const C: Palette = {
-    sky: `hsl(${hue},58%,91%)`, mid2: `hsl(${(hue+22)%360},48%,84%)`,
-    far: `hsl(${hue},26%,74%)`, mid: `hsl(${(hue+8)%360},24%,58%)`,
-    near: `hsl(${(hue+14)%360},26%,38%)`, wat: `hsl(${hue},34%,79%)`,
-    acc: `hsl(${(hue+42)%360},46%,70%)`
-  };
+  const dark = theme === 'dark';
+  /**
+   * The dark ramp is the original prototype relationship restored: a
+   * near-black sky with silhouettes getting *paler* toward the foreground,
+   * and `acc` back to a near-white highlight for sun, snow caps and lit
+   * windows. The light ramp above is the inverse.
+   */
+  const C: Palette = dark
+    ? {
+        sky: `hsl(${hue},30%,8%)`, mid2: `hsl(${(hue+22)%360},26%,13%)`,
+        far: `hsl(${hue},16%,23%)`, mid: `hsl(${(hue+8)%360},15%,35%)`,
+        near: `hsl(${(hue+14)%360},17%,50%)`, wat: `hsl(${hue},20%,16%)`,
+        acc: `hsl(${(hue+42)%360},32%,80%)`
+      }
+    : {
+        sky: `hsl(${hue},58%,91%)`, mid2: `hsl(${(hue+22)%360},48%,84%)`,
+        far: `hsl(${hue},26%,74%)`, mid: `hsl(${(hue+8)%360},24%,58%)`,
+        near: `hsl(${(hue+14)%360},26%,38%)`, wat: `hsl(${hue},34%,79%)`,
+        acc: `hsl(${(hue+42)%360},46%,70%)`
+      };
   const sunX=(160+r()*880).toFixed(0), sunY=(120+r()*130).toFixed(0), sunR=(30+r()*26).toFixed(0);
   const scene=(A[spec[0]]||A.cityscape)(r,C);
-  // Stars are dropped: they were faint white dots on a night sky and are
-  // simply invisible against a pale one. `r` is still advanced by the same
-  // number of draws so every scene keeps its original layout — consuming a
-  // different amount of randomness here would reshuffle all 137 scenes.
-  for (let i = 0; i < 38 * 4; i++) r();
+  // The star field consumes four draws per star either way, so both themes
+  // land on identical geometry -- consuming a different amount of
+  // randomness here would reshuffle all 137 scenes. Light simply discards
+  // them: faint white dots are invisible against a pale sky.
+  let stars = '';
+  for (let i = 0; i < 38; i++) {
+    const sx = (r() * W).toFixed(0), sy = (r() * G * 0.62).toFixed(0);
+    const sr = (0.6 + r() * 1.15).toFixed(2), so = (0.25 + r() * 0.5).toFixed(2);
+    if (dark) stars += `<circle cx="${sx}" cy="${sy}" r="${sr}" fill="#FFF" opacity="${so}"/>`;
+  }
+  const foot = dark ? '#07080A' : '#FBFCFD';
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
    <defs><linearGradient id="sk${uid}" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0" stop-color="${C.sky}"/><stop offset=".54" stop-color="${C.mid2}"/><stop offset="1" stop-color="#FBFCFD"/></linearGradient>
+    <stop offset="0" stop-color="${C.sky}"/><stop offset=".54" stop-color="${C.mid2}"/><stop offset="1" stop-color="${foot}"/></linearGradient>
    <radialGradient id="su${uid}"><stop offset="0" stop-color="${C.acc}" stop-opacity=".38"/><stop offset="1" stop-color="${C.acc}" stop-opacity="0"/></radialGradient></defs>
    <rect width="${W}" height="${H}" fill="url(#sk${uid})"/>
+   ${stars}
    <circle cx="${sunX}" cy="${sunY}" r="${Number(sunR)*3.4}" fill="url(#su${uid})"/>
    <circle cx="${sunX}" cy="${sunY}" r="${sunR}" fill="${C.acc}" opacity=".55"/>
    ${scene}</svg>`;
