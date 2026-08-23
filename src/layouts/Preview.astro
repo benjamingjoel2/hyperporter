@@ -1,0 +1,107 @@
+---
+/**
+ * Standalone shell for the /preview/* design-direction comparisons.
+ *
+ * Deliberately does NOT use Base.astro: these pages exist to judge a whole
+ * visual language, header and footer included, so wrapping them in the
+ * current site chrome would defeat the point. Nothing here is shared with
+ * the real site, and nothing in src/styles/global.css is touched.
+ *
+ * Throwaway. Whichever direction wins gets built properly into the real
+ * components and these two pages get deleted.
+ */
+interface Props {
+  title: string;
+  /** Google Fonts href for this variant's typefaces. */
+  fonts: string;
+  /** Shown in the A/B switcher. */
+  variant: 'a' | 'b';
+  label: string;
+}
+const { title, fonts, variant, label } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>{title} — direction {variant.toUpperCase()}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href={fonts} rel="stylesheet" />
+    <style is:global>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      img,
+      svg {
+        max-width: 100%;
+      }
+      a {
+        color: inherit;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <slot />
+
+    <nav class="ab" aria-label="Design direction switcher">
+      <span class="ab-now">{label}</span>
+      <a href="/preview/a/" class={variant === 'a' ? 'on' : ''}>A</a>
+      <a href="/preview/b/" class={variant === 'b' ? 'on' : ''}>B</a>
+    </nav>
+
+    <style>
+      .ab {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 8px 7px 14px;
+        border-radius: 99px;
+        background: #101418;
+        color: #fff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        font: 500 12px/1 ui-sans-serif, system-ui, sans-serif;
+        letter-spacing: 0.02em;
+      }
+      .ab-now {
+        opacity: 0.6;
+        margin-right: 4px;
+        white-space: nowrap;
+      }
+      .ab a {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.12);
+        font-weight: 600;
+      }
+      .ab a.on {
+        background: #fff;
+        color: #101418;
+      }
+    </style>
+  </body>
+</html>
