@@ -35,7 +35,7 @@ const site = process.env.SITE_URL ?? 'https://hyperporter.com';
 // sitemap either: About until the "Name pending" bios are real, Terms and
 // Privacy until counsel has reviewed the drafts.
 // /preview/* is a throwaway design study, not a real page.
-const noindexPaths = new Set(['/about/', '/terms/', '/privacy/', '/404/', '/preview/oh/']);
+const noindexPaths = new Set(['/about/', '/terms/', '/privacy/', '/404/', '/preview/oh/', '/preview/brandigo/']);
 
 export default defineConfig({
   site,
