@@ -17,6 +17,15 @@
  */
 import Base from '../layouts/Base.astro';
 import EmailCapture from '../components/EmailCapture.astro';
+import { destArt } from '../lib/landmark/generator';
+import { slugify } from '../lib/slug';
+
+/**
+ * Six of the generated destination scenes, standing where a black
+ * "photography pending" plate used to. The artwork already existed for all
+ * 137 country pages and was never shown anywhere else on the site.
+ */
+const SHOWCASE = ['Japan', 'Kenya', 'Peru', 'Portugal', 'Morocco', 'Indonesia'] as const;
 import { STAGES } from '../lib/stages';
 
 // The sample thread sits at stage 3 (Quotation): 1-2 done, 3 current,
@@ -108,11 +117,21 @@ const CURRENT_STAGE = 3;
     </div>
   </div>
 
-  {/* Full-bleed media band -- the device carrying both OH Architecture and
-      Extantia. Honest placeholder: it says so on its face, and stays until
-      real photography is licensed. */}
   <div class="mband rv">
-    <div class="plate"><span class="ph">Photography pending &mdash; full-bleed operations imagery</span></div>
+    <div class="mb-head">
+      <p class="eyebrow">Where we operate</p>
+      <a class="plink" href="/destinations">All 137 destinations &rarr;</a>
+    </div>
+    <div class="mb-strip">
+      {
+        SHOWCASE.map((c, i) => (
+          <a class="mb-tile" href={`/destinations/${slugify(c)}`}>
+            <span class="mb-art" set:html={destArt(c, `hm${i}`)} />
+            <span class="mb-nm">{c}</span>
+          </a>
+        ))
+      }
+    </div>
   </div>
 
   <div class="statement">
