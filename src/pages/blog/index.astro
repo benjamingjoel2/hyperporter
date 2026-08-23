@@ -57,6 +57,9 @@ const [featured, ...rest] = posts;
         rest.map((p, i) => (
           <a class="prow rv" href={`/blog/${p.id}`}>
             <div class="pn">{String(i + 2).padStart(2, '0')}</div>
+            {/* Every card gets artwork, not just the featured one -- the
+                generator was already there and only the top post used it. */}
+            <span class="prow-art" set:html={blogArtwork(i + 2, 'compact')} />
             <div>
               <div class="b-meta">
                 <em>{p.data.cat}</em>

@@ -185,10 +185,21 @@ p{margin:0 0 16px}
 .sample-tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);text-align:right;margin-top:12px}
 
 /* ============ STATEMENT ============ */
+/* Destination showcase band. The landmark generator already draws a scene
+   for every one of the 137 countries; until this they only ever appeared
+   on the destination pages themselves. */
 .mband{padding:0 var(--pad);max-width:var(--max);margin:0 auto}
-.mband .plate{background:var(--paper);border-radius:4px;aspect-ratio:21/8;display:grid;place-items:center}
-.mband .ph{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(251,252,253,.42);text-align:center;padding:0 20px}
-@media (max-width:700px){.mband .plate{aspect-ratio:4/3}}
+.mb-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:clamp(16px,2vw,26px)}
+.mb-head .eyebrow{margin:0}
+.mb-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(8px,1vw,14px)}
+.mb-tile{display:block;text-decoration:none}
+.mb-art{display:block;aspect-ratio:3/4;overflow:hidden;border-radius:3px;border:1px solid var(--line);background:var(--steel)}
+.mb-art svg{width:100%;height:100%;display:block;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.mb-tile:hover .mb-art svg{transform:scale(1.05)}
+.mb-nm{display:block;margin-top:10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);transition:color .2s}
+.mb-tile:hover .mb-nm{color:var(--signal)}
+@media (max-width:900px){.mb-strip{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:520px){.mb-strip{grid-template-columns:repeat(2,1fr)}}
 .statement{text-align:center;padding:clamp(52px,6.5vw,92px) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);position:relative;overflow:hidden}
 .statement::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:760px;height:400px;background:radial-gradient(closest-side,rgba(27,116,126,.09),transparent);pointer-events:none}
 .statement h2{font-size:clamp(30px,5.6vw,66px);margin:0;position:relative}
@@ -262,6 +273,16 @@ p{margin:0 0 16px}
 .rnode:hover{border-color:var(--signal);color:var(--signal)}
 .rlist{display:none}
 .rlist div{display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+/* Horizon coverage grid -- one destination scene per region. */
+.cov{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,1.4vw,20px)}
+.cov-tile{display:block;text-decoration:none}
+.cov-art{display:block;aspect-ratio:4/3;overflow:hidden;border-radius:3px;border:1px solid var(--line);background:var(--steel)}
+.cov-art svg{width:100%;height:100%;display:block;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.cov-tile:hover .cov-art svg{transform:scale(1.06)}
+.cov-r{display:block;margin-top:11px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.cov-n{display:block;margin-top:3px;font-size:15px;color:var(--paper);transition:color .2s}
+.cov-tile:hover .cov-n{color:var(--signal)}
+@media (max-width:900px){.cov{grid-template-columns:repeat(2,1fr)}}
 .rlist i{width:7px;height:7px;border-radius:50%;background:var(--signal);flex-shrink:0}
 
 /* ============ DMC BAND ============ */
@@ -325,8 +346,10 @@ p{margin:0 0 16px}
 .b-meta{display:flex;gap:16px;align-items:center;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
 .b-meta em{font-style:normal;color:var(--signal)}
 .plist{border-bottom:1px solid var(--line)}
-.prow{display:grid;grid-template-columns:64px 1fr 1.05fr;gap:clamp(18px,3vw,48px);align-items:start;padding:clamp(26px,3.2vw,40px) 0;border-top:1px solid var(--line);cursor:pointer;transition:padding-left .35s cubic-bezier(.2,.8,.2,1),background .3s}
+.prow{display:grid;grid-template-columns:52px 108px 1fr 1.05fr;gap:clamp(18px,3vw,48px);align-items:start;padding:clamp(26px,3.2vw,40px) 0;border-top:1px solid var(--line);cursor:pointer;transition:padding-left .35s cubic-bezier(.2,.8,.2,1),background .3s}
 .prow:first-child{border-top:0}
+.prow-art{display:block;aspect-ratio:4/3;overflow:hidden;border-radius:3px;border:1px solid var(--line);background:var(--steel);margin-top:4px}
+.prow-art svg{width:100%;height:100%;display:block}
 .prow:hover{padding-left:14px;background:rgba(12,22,34,.022)}
 .prow .pn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);padding-top:6px}
 .prow h3{font-size:clamp(19px,1.9vw,25px);letter-spacing:-.022em;line-height:1.2;margin:12px 0 0;transition:color .3s}
@@ -410,6 +433,9 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
 .d-band .wrap{position:relative;z-index:2;padding-top:clamp(38px,5vw,72px);padding-bottom:clamp(38px,5vw,72px)}
 .dreg{width:100%;text-align:left;background:none;border:0;border-bottom:1px solid rgba(12,22,34,.16);padding:clamp(11px,1.4vw,17px) 0;display:flex;align-items:baseline;gap:clamp(14px,2vw,26px);color:var(--paper);transition:padding-left .35s cubic-bezier(.2,.8,.2,1)}
 .dreg:last-child{border-bottom:0}
+.dreg-art{flex-shrink:0;width:clamp(56px,7vw,96px);aspect-ratio:4/3;overflow:hidden;border-radius:3px;border:1px solid var(--line);align-self:center;background:var(--steel)}
+.dreg-art svg{width:100%;height:100%;display:block;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.dreg:hover .dreg-art svg{transform:scale(1.07)}
 .dreg b{font-family:var(--display);font-weight:500;font-size:clamp(26px,4.5vw,58px);letter-spacing:-.036em;line-height:1.06;transition:color .25s}
 .dreg .dn{margin-left:auto;flex-shrink:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);transition:color .25s}
 .dreg:hover{padding-left:clamp(8px,1.4vw,18px)}
@@ -566,6 +592,7 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
   .rail .tag{padding:0 12px}
 }
 @media (max-width:560px){.f-cols{grid-template-columns:1fr}}
+@media (max-width:820px){.prow{grid-template-columns:52px 1fr}.prow-art{display:none}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .rv{opacity:1;transform:none}

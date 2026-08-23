@@ -17,6 +17,19 @@ import Base from '../layouts/Base.astro';
 import EmailCapture from '../components/EmailCapture.astro';
 import { REGIONS } from '../content.config';
 import { slugify } from '../lib/slug';
+import { destArt } from '../lib/landmark/generator';
+
+/** One scene per region, so the grid reads as coverage rather than decoration. */
+const COVERAGE = [
+  { name: 'Kenya', region: 'Africa' },
+  { name: 'Japan', region: 'Asia' },
+  { name: 'New Zealand', region: 'Australia & Oceania' },
+  { name: 'Portugal', region: 'Europe' },
+  { name: 'Oman', region: 'Middle East' },
+  { name: 'Mexico', region: 'North & Central America' },
+  { name: 'Peru', region: 'South America' },
+  { name: 'Morocco', region: 'Africa' },
+] as const;
 
 const RADIUS = 176;
 const nodes = REGIONS.map((region, i) => {
@@ -69,6 +82,21 @@ const nodes = REGIONS.map((region, i) => {
             <i />
             <a href={n.href}>{n.region}</a>
           </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">(02) &mdash; The network</p>
+    <div class="cov rv">
+      {
+        COVERAGE.map((c, i) => (
+          <a class="cov-tile" href={`/destinations/${slugify(c.name)}`}>
+            <span class="cov-art" set:html={destArt(c.name, `cv${i}`)} />
+            <span class="cov-r">{c.region}</span>
+            <span class="cov-n">{c.name}</span>
+          </a>
         ))
       }
     </div>
