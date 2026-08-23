@@ -17,13 +17,27 @@
  * grid. Throwaway page -- see src/layouts/Preview.astro.
  */
 import Preview from '../../layouts/Preview.astro';
-import { STAGES } from '../../lib/stages';
+import { destArt } from '../../lib/landmark/generator';
+
+/**
+ * The grid uses the destination scenes we already generate for all 137
+ * country pages, rendered on the dark ramp. No licensing, no budget, and
+ * they are pictures of the places Horizon actually covers -- which is a
+ * better fit for this grid than the pipeline stages were.
+ */
+const PLACES = [
+  'Japan', 'Kenya', 'Peru', 'Portugal', 'Nepal', 'Indonesia',
+] as const;
+const cards = PLACES.map((name, i) => ({
+  name,
+  n: String(i + 1).padStart(2, '0'),
+  svg: destArt(name, `oh${i}`, 'dark'),
+}));
 
 const FONTS =
   'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap';
 
 const NAV = ['Autopilot', 'Horizon', 'Destinations', 'How It Works', 'Blog', 'About'];
-const grid = STAGES.slice(0, 6);
 ---
 
 <Preview title="Hyperporter — OH study" fonts={FONTS}>
@@ -72,29 +86,29 @@ const grid = STAGES.slice(0, 6);
 
   <section class="works">
     <div class="whead">
-      <h2>The<br />pipeline</h2>
-      <span class="count">(0{grid.length})</span>
+      <h2>Where we<br />operate</h2>
+      <span class="count">(0{cards.length})</span>
     </div>
     <div class="grid">
       {
-        grid.map((s, i) => (
+        cards.map((c, i) => (
           <figure class:list={['cell', i % 2 ? 'tall' : 'short']}>
-            <div class="block"><span>Photography pending</span></div>
+            <div class="block" set:html={c.svg} />
             <figcaption>
-              <span>{s.name}</span>
-              <span class="yr">{s.n}</span>
+              <span>{c.name}</span>
+              <span class="yr">{c.n}</span>
             </figcaption>
           </figure>
         ))
       }
     </div>
-    <div class="mid"><a class="pill" href="/preview/oh/">View all nine stages &rarr;</a></div>
+    <div class="mid"><a class="pill" href="/preview/oh/">All 137 destinations &rarr;</a></div>
   </section>
 
   <section class="split">
     <p class="lab">(02) — In progress</p>
     <div class="srow">
-      <div class="block sq"><span>Photography pending</span></div>
+      <div class="block sq" set:html={destArt('Morocco', 'ohsq', 'dark')} />
       <div class="stext">
         <p>
           Every stage runs on a specific feature and takes a specific action. Availability is
@@ -174,18 +188,19 @@ const grid = STAGES.slice(0, 6);
   /* In the reference these blocks are photographs. Ours are empty, and
      pure black on a near-black ground is invisible -- so the placeholder
      is lifted off the background and says what it is waiting for. */
+  /* Blocks carry the generated destination scenes, rendered on the dark
+     ramp. overflow:hidden + a slice-fitted viewBox lets each one crop to
+     whatever aspect ratio the grid asks for. */
   .block {
     background: #17171a;
     border: 1px solid rgba(242, 241, 238, 0.08);
-    display: grid;
-    place-items: center;
+    overflow: hidden;
+    position: relative;
   }
-  .block span {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9.5px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(242, 241, 238, 0.24);
+  .block :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
   /* header ----------------------------------------------------------- */
