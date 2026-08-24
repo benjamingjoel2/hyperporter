@@ -1,37 +1,36 @@
 ---
 /**
- * Homepage. Ported from hyperporter-3.html's #view-home: hero with the
- * flight-arc map over the photo band, the sample thread card, stats row,
- * statement band, the two product pillars (Autopilot = software, Horizon =
- * network — never conflated), the four-step pipeline, and the why-now note.
+ * Homepage, rebuilt on the OH Architecture structure Benjamin picked:
  *
- * The hero photo is /hero.jpg — extracted from the prototype's ~250KB
- * base64 `--photo` custom property into a real static asset (same image,
- * same placeholder status: licensed photography is still pending, like the
- * destination illustrations).
+ *   1. full-bleed photographic hero, no headline competing with the image;
+ *      the positioning line sits low in the frame
+ *   2. a strip of labelled cells directly beneath it
+ *   3. an intro block: one image, one column of copy
+ *   4. section title with the count hard right, then an asymmetric grid of
+ *      destination scenes, captioned in tracked capitals with an index
+ *   5. a split section, image against copy
  *
- * "130+" in the stats/pillars is carried over from the prototype verbatim.
- * The dataset holds 137 countries and the real public number is still an
- * open question (founder brief said "100+") — flagged in CLAUDE.md; not
- * this page's call to resolve.
+ * The hero photo is /photos/hero.jpg with a fallback to /hero.jpg; the grid
+ * uses the generated destination scenes, which exist for all 137 countries.
+ *
+ * The hero caption is the h1. It reads as body copy, but the page still
+ * needs exactly one top-level heading and the reference has no display
+ * headline in the hero — so the semantics and the design are both served
+ * rather than dropping the h1 and breaking the outline.
  */
 import Base from '../layouts/Base.astro';
 import EmailCapture from '../components/EmailCapture.astro';
 import { destArt } from '../lib/landmark/generator';
 import { slugify } from '../lib/slug';
 
-/**
- * Six of the generated destination scenes, standing where a black
- * "photography pending" plate used to. The artwork already existed for all
- * 137 country pages and was never shown anywhere else on the site.
- */
-const SHOWCASE = ['Japan', 'Kenya', 'Peru', 'Portugal', 'Morocco', 'Indonesia'] as const;
-import { STAGES } from '../lib/stages';
-
-// The sample thread sits at stage 3 (Quotation): 1-2 done, 3 current,
-// the rest ahead. Driven off STAGES so the labels can't drift from the
-// pipeline shown on /autopilot and /how.
-const CURRENT_STAGE = 3;
+const GRID = [
+  { name: 'Japan', region: 'Asia' },
+  { name: 'Kenya', region: 'Africa' },
+  { name: 'Peru', region: 'South America' },
+  { name: 'Portugal', region: 'Europe' },
+  { name: 'Nepal', region: 'Asia' },
+  { name: 'Indonesia', region: 'Asia' },
+];
 ---
 
 <Base
@@ -39,174 +38,75 @@ const CURRENT_STAGE = 3;
   description="Travel operations infrastructure — Autopilot software and the Horizon partner network, built for travel businesses."
   currentNav="home"
 >
-  <div class="hero">
-    <svg class="routes" viewBox="0 0 1400 760" preserveAspectRatio="xMidYMid slice">
-      <g class="grat">
-        <path d="M-50 200 Q700 120 1450 200"></path><path d="M-50 330 Q700 240 1450 330"></path>
-        <path d="M-50 460 Q700 380 1450 460"></path><path d="M-50 590 Q700 520 1450 590"></path>
-        <path d="M180 -20 Q120 380 180 780"></path><path d="M480 -20 Q440 380 480 780"></path>
-        <path d="M780 -20 Q760 380 780 780"></path><path d="M1080 -20 Q1090 380 1080 780"></path>
-      </g>
-      <g>
-        <path class="arc" d="M170 520 Q520 190 880 300"></path>
-        <path class="arc" d="M880 300 Q1080 200 1290 420"></path>
-        <path class="arc" d="M330 240 Q640 430 1010 210"></path>
-        <path class="arc" d="M170 520 Q560 640 1010 560"></path>
-        <path class="arc-lit" d="M170 520 Q520 190 880 300" style="animation-delay:0s"></path>
-        <path class="arc-lit" d="M880 300 Q1080 200 1290 420" style="animation-delay:2.4s"></path>
-        <path class="arc-lit" d="M330 240 Q640 430 1010 210" style="animation-delay:4.6s"></path>
-        <path class="arc-lit" d="M170 520 Q560 640 1010 560" style="animation-delay:6.5s"></path>
-      </g>
-      <g>
-        <circle class="wp-ring" cx="170" cy="520" r="9"></circle><circle class="wp" cx="170" cy="520" r="3"></circle>
-        <circle class="wp-ring" cx="880" cy="300" r="9"></circle><circle class="wp" cx="880" cy="300" r="3"></circle>
-        <circle class="wp-ring" cx="1290" cy="420" r="9"></circle><circle class="wp" cx="1290" cy="420" r="3"
-        ></circle>
-        <circle class="wp-ring" cx="330" cy="240" r="9"></circle><circle class="wp" cx="330" cy="240" r="3"></circle>
-        <circle class="wp-ring" cx="1010" cy="210" r="9"></circle><circle class="wp" cx="1010" cy="210" r="3"
-        ></circle>
-        <circle class="wp-ring" cx="1010" cy="560" r="9"></circle><circle class="wp" cx="1010" cy="560" r="3"
-        ></circle>
-      </g>
-    </svg>
-    <div class="wrap">
-      <div class="hero-grid">
-        <div>
-          <p class="eyebrow rv">(01) &mdash; Travel operations infrastructure</p>
-          <h1 class="rv">Run trips on <em>autopilot.</em></h1>
-          <p class="lede rv">
-            Backed by AI workflows and a network of the world's best operators — built for travel businesses.
-          </p>
-          <EmailCapture uid="hero" />
-          <p class="note rv">No credit card required. We'll show you what it does with your own trips.</p>
-        </div>
-        <div class="rv">
-          <div class="thread">
-            <div class="th"><span>Thread <b>KE-2291</b></span><span>Nairobi · 9 nights</span></div>
-            <div class="chips">
-              {
-                STAGES.map((s, i) => (
-                  <span
-                    class:list={[
-                      'chip',
-                      { done: i + 1 < CURRENT_STAGE, now: i + 1 === CURRENT_STAGE }
-                    ]}
-                  >
-                    {s.name}
-                  </span>
-                ))
-              }
-            </div>
-            <div class="line">
-              <i></i><span>Quotation requested from qualified suppliers — responses returning in parallel.</span>
-            </div>
-            <div class="line amb"><i></i><span>Margin applied before the customer sees a number.</span></div>
-            <div class="ft">
-              <span class="toggle"><span></span>Autopilot</span>
-              <span>Needs you · nothing</span>
-            </div>
-          </div>
-          <p class="sample-tag">Illustrative thread — not live data</p>
-        </div>
-      </div>
-      <div class="stats rv">
-        <div class="stat"><b>130+</b><span>Countries in network</span></div>
-        <div class="stat"><b>24/7</b><span>Autonomous relay</span></div>
-        <div class="stat"><b>2</b><span>Systems, one platform</span></div>
-      </div>
+  <section class="oh-hero">
+    <div class="oh-shot"></div>
+    <div class="oh-cap">
+      <h1>
+        Hyperporter runs the coordination work between traveller, agency and operator — inquiry to
+        booking to live trip support — with a human only where it counts.
+      </h1>
+      <span class="oh-scroll">Scroll &darr;</span>
     </div>
+  </section>
+
+  <div class="strip">
+    <div><b>The software</b><span>Autopilot</span></div>
+    <div><b>The network</b><span>Horizon</span></div>
+    <div><b>Coverage</b><span>137 countries</span></div>
+    <div><a href="/how">See the route &rarr;</a></div>
   </div>
 
-  <div class="mband rv">
-    <div class="mb-head">
-      <p class="eyebrow">Where we operate</p>
-      <a class="plink" href="/destinations">All 137 destinations &rarr;</a>
+  <section class="oh-intro wrap">
+    <div class="oh-thumb"></div>
+    <div class="oh-itext">
+      <p class="eyebrow">(01) &mdash; What we do</p>
+      <p>
+        A trip touches a traveller, an agency and a ground operator, and most of the work is keeping
+        those three in sync. Autopilot does that work. Horizon is the operator network underneath
+        it — 137 countries of vetted relationships.
+      </p>
+      <p>
+        Nothing about payment happens silently. A person marks money received or sent, every time.
+      </p>
+      <EmailCapture uid="hero" />
+      <p class="note">No credit card required. We'll show you what it does with your own trips.</p>
     </div>
-    <div class="mb-strip">
+  </section>
+
+  <section class="oh-works wrap">
+    <div class="ohead">
+      <h2>Where we<br />operate</h2>
+      <span class="count">({String(GRID.length).padStart(2, '0')})</span>
+    </div>
+    <div class="oh-grid">
       {
-        SHOWCASE.map((c, i) => (
-          <a class="mb-tile" href={`/destinations/${slugify(c)}`}>
-            <span class="mb-art" set:html={destArt(c, `hm${i}`)} />
-            <span class="mb-nm">{c}</span>
+        GRID.map((g, i) => (
+          <a class:list={['oh-cell', i % 2 ? 'tall' : 'short']} href={`/destinations/${slugify(g.name)}`}>
+            <span class="oh-block" set:html={destArt(g.name, `oh${i}`)} />
+            <span class="oh-cap2">
+              <span>{g.name}</span>
+              <span class="oh-ix">{String(i + 1).padStart(2, '0')}</span>
+            </span>
           </a>
         ))
       }
     </div>
-  </div>
+    <div class="oh-mid"><a class="btn-o" href="/destinations">All 137 destinations &rarr;</a></div>
+  </section>
 
-  <div class="statement">
-    <div class="wrap"><h2 class="rv">Automatic — <span class="u">until it needs you.</span></h2></div>
-  </div>
-
-  <div class="sec wrap">
-    <p class="eyebrow rv">(02) &mdash; What we're built on</p>
-    <div class="pillars rv">
-      <div class="pill">
-        <h3 class="name">Autopilot</h3>
-        <div class="kind">Our software</div>
+  <section class="oh-split wrap">
+    <p class="eyebrow">(02) &mdash; In progress</p>
+    <div class="oh-srow">
+      <span class="oh-block sq" set:html={destArt('Morocco', 'ohsq')} />
+      <div class="oh-stext">
         <p>
-          The software that runs your agency's coordination work — inquiry to booking to live trip support, with a
-          human only where it counts. Subscribe monthly and run it on the partners you already have.
+          Every stage runs on a specific feature and takes a specific action. Availability is
+          re-verified the moment a quote is accepted. Vouchers and pickup details are chased before
+          departure, not after. The thread stays open until the trip actually closes.
         </p>
-        <a class="plink" href="/autopilot">Explore Autopilot →</a>
-      </div>
-      <div class="pill">
-        <h3 class="name">Horizon</h3>
-        <div class="kind">Our supplier network</div>
-        <p>
-          Our own network of vetted operators across 130+ countries. Use it inside Autopilot, or come to us directly
-          and we'll run the trip through it.
-        </p>
-        <a class="plink" href="/horizon">Explore Horizon →</a>
+        <p class="oh-by">Hyperporter — Travel operations infrastructure</p>
       </div>
     </div>
-  </div>
-
-  <div class="sec-tight wrap">
-    <p class="eyebrow rv">(03) &mdash; System overview</p>
-    <h2 class="rv">Four moves, start to finish.</h2>
-    <div class="pipe rv">
-      <div class="pipe-rail"></div>
-      <div class="pipe-row">
-        <div class="pnode">
-          <div class="code">Step 01</div>
-          <div class="dot"></div>
-          <h3>Inquiry received</h3>
-          <p>Any channel, one structured brief.</p>
-        </div>
-        <div class="pnode">
-          <div class="code">Step 02</div>
-          <div class="dot"></div>
-          <h3>Autopilot runs it</h3>
-          <p>Planning, quoting, booking, live support.</p>
-        </div>
-        <div class="pnode">
-          <div class="code">Step 03</div>
-          <div class="dot"></div>
-          <h3>Horizon fills gaps</h3>
-          <p>A vetted operator wherever they're going.</p>
-        </div>
-        <div class="pnode">
-          <div class="code">Step 04</div>
-          <div class="dot"></div>
-          <h3>Trip goes live</h3>
-          <p>Relay handled, exceptions escalated.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="sec wrap">
-    <p class="eyebrow rv">(04) &mdash; Why now</p>
-    <p class="whynow rv">
-      Travel agencies have spent a decade bolting point solutions onto email. AI finally makes it possible to run the
-      actual coordination work end to end — not just generate an itinerary PDF — with a human only where judgment is
-      genuinely needed.
-    </p>
-  </div>
-
-  <div class="sec wrap fcta">
-    <h2 class="rv">Run your next trip on<br />infrastructure, not inboxes.</h2>
-    <EmailCapture uid="home-cta" marginTop="32px" />
-  </div>
+    <div class="oh-mid"><a class="btn-o" href="/how">The Hyperporter difference &rarr;</a></div>
+  </section>
 </Base>
