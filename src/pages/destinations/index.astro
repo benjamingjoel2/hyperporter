@@ -13,6 +13,7 @@ import Base from '../../layouts/Base.astro';
 import EmailCapture from '../../components/EmailCapture.astro';
 import { REGIONS } from '../../content.config';
 import { slugify } from '../../lib/slug';
+import { destArt } from '../../lib/landmark/generator';
 
 const destinations = await getCollection('destinations');
 
@@ -53,6 +54,9 @@ const totalCountries = destinations.length;
           {
             regionGroups.map((g) => (
               <a class="dreg" href={`/regions/${g.slug}`}>
+                {/* Scene for the first country in the region -- gives each
+                    row a face instead of leaving it a bare text list. */}
+                <span class="dreg-art" set:html={destArt(g.countries[0].name, `rg-${g.slug}`)} />
                 <b>{g.region}</b>
                 <span class="dn">{g.countries.length} countries</span>
               </a>

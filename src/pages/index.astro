@@ -17,6 +17,15 @@
  */
 import Base from '../layouts/Base.astro';
 import EmailCapture from '../components/EmailCapture.astro';
+import { destArt } from '../lib/landmark/generator';
+import { slugify } from '../lib/slug';
+
+/**
+ * Six of the generated destination scenes, standing where a black
+ * "photography pending" plate used to. The artwork already existed for all
+ * 137 country pages and was never shown anywhere else on the site.
+ */
+const SHOWCASE = ['Japan', 'Kenya', 'Peru', 'Portugal', 'Morocco', 'Indonesia'] as const;
 import { STAGES } from '../lib/stages';
 
 // The sample thread sits at stage 3 (Quotation): 1-2 done, 3 current,
@@ -63,8 +72,8 @@ const CURRENT_STAGE = 3;
     <div class="wrap">
       <div class="hero-grid">
         <div>
-          <p class="eyebrow rv">Travel operations infrastructure</p>
-          <h1 class="rv">Run trips on<br /><em>autopilot.</em></h1>
+          <p class="eyebrow rv">(01) &mdash; Travel operations infrastructure</p>
+          <h1 class="rv">Run trips on <em>autopilot.</em></h1>
           <p class="lede rv">
             Backed by AI workflows and a network of the world's best operators — built for travel businesses.
           </p>
@@ -74,28 +83,54 @@ const CURRENT_STAGE = 3;
         <div class="rv">
           <div class="thread">
             <div class="th"><span>Thread <b>KE-2291</b></span><span>Nairobi · 9 nights</span></div>
-            <div class="chips">
+            {/* Tab pattern: each chip switches the card to that stage. All
+                nine panels are rendered server-side and toggled with `hidden`,
+                so with JS off the card still shows stage 3 rather than going
+                blank. */}
+            <div class="chips" role="tablist" aria-label="Pipeline stage">
               {
                 STAGES.map((s, i) => (
-                  <span
-                    class:list={[
-                      'chip',
-                      { done: i + 1 < CURRENT_STAGE, now: i + 1 === CURRENT_STAGE }
-                    ]}
+                  <button
+                    type="button"
+                    role="tab"
+                    id={`stage-tab-${i}`}
+                    aria-controls={`stage-panel-${i}`}
+                    aria-selected={i + 1 === CURRENT_STAGE ? 'true' : 'false'}
+                    tabindex={i + 1 === CURRENT_STAGE ? 0 : -1}
+                    class:list={['chip', { done: i + 1 < CURRENT_STAGE, now: i + 1 === CURRENT_STAGE }]}
                   >
                     {s.name}
-                  </span>
+                  </button>
                 ))
               }
             </div>
-            <div class="line">
-              <i></i><span>Quotation requested from qualified suppliers — responses returning in parallel.</span>
-            </div>
-            <div class="line amb"><i></i><span>Margin applied before the customer sees a number.</span></div>
-            <div class="ft">
-              <span class="toggle"><span></span>Autopilot</span>
-              <span>Needs you · nothing</span>
-            </div>
+
+            {
+              STAGES.map((s, i) => (
+                <div
+                  class="tpanel"
+                  id={`stage-panel-${i}`}
+                  role="tabpanel"
+                  aria-labelledby={`stage-tab-${i}`}
+                  hidden={i + 1 !== CURRENT_STAGE}
+                >
+                  {/* Amber marks human-touchpoint states only, never
+                      decorative, so this dot follows s.cls. */}
+                  <div class:list={['line', { amb: s.cls !== 'Automatic' }]}>
+                    <i />
+                    <span>{s.note}</span>
+                  </div>
+                  <div class="line">
+                    <i />
+                    <span>{s.one}</span>
+                  </div>
+                  <div class="ft">
+                    <span class="toggle"><span />Autopilot</span>
+                    <span>Needs you &middot; {s.cls === 'Automatic' ? 'nothing' : 'a person'}</span>
+                  </div>
+                </div>
+              ))
+            }
           </div>
           <p class="sample-tag">Illustrative thread — not live data</p>
         </div>
@@ -108,12 +143,29 @@ const CURRENT_STAGE = 3;
     </div>
   </div>
 
+  <div class="mband rv">
+    <div class="mb-head">
+      <p class="eyebrow">Where we operate</p>
+      <a class="plink" href="/destinations">All 137 destinations &rarr;</a>
+    </div>
+    <div class="mb-strip">
+      {
+        SHOWCASE.map((c, i) => (
+          <a class="mb-tile" href={`/destinations/${slugify(c)}`}>
+            <span class="mb-art" set:html={destArt(c, `hm${i}`)} />
+            <span class="mb-nm">{c}</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+
   <div class="statement">
     <div class="wrap"><h2 class="rv">Automatic — <span class="u">until it needs you.</span></h2></div>
   </div>
 
   <div class="sec wrap">
-    <p class="eyebrow rv">What we're built on</p>
+    <p class="eyebrow rv">(02) &mdash; What we're built on</p>
     <div class="pillars rv">
       <div class="pill">
         <h3 class="name">Autopilot</h3>
@@ -137,7 +189,7 @@ const CURRENT_STAGE = 3;
   </div>
 
   <div class="sec-tight wrap">
-    <p class="eyebrow rv">System overview</p>
+    <p class="eyebrow rv">(03) &mdash; System overview</p>
     <h2 class="rv">Four moves, start to finish.</h2>
     <div class="pipe rv">
       <div class="pipe-rail"></div>
@@ -171,7 +223,7 @@ const CURRENT_STAGE = 3;
   </div>
 
   <div class="sec wrap">
-    <p class="eyebrow rv">Why now</p>
+    <p class="eyebrow rv">(04) &mdash; Why now</p>
     <p class="whynow rv">
       Travel agencies have spent a decade bolting point solutions onto email. AI finally makes it possible to run the
       actual coordination work end to end — not just generate an itinerary PDF — with a human only where judgment is
@@ -184,3 +236,45 @@ const CURRENT_STAGE = 3;
     <EmailCapture uid="home-cta" marginTop="32px" />
   </div>
 </Base>
+
+<script>
+  /**
+   * Hero thread card: the chips act as tabs over the nine stage panels.
+   * Chips to the left of the selected one read as "done", so the card still
+   * behaves as a progress display rather than a plain switcher.
+   */
+  const tablist = document.querySelector<HTMLElement>('.thread .chips[role="tablist"]');
+
+  if (tablist) {
+    const tabs = Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+
+    const select = (index: number, focus = true): void => {
+      tabs.forEach((tab, i) => {
+        const on = i === index;
+        tab.setAttribute('aria-selected', String(on));
+        tab.tabIndex = on ? 0 : -1;
+        tab.classList.toggle('now', on);
+        tab.classList.toggle('done', i < index);
+        const panel = document.getElementById(tab.getAttribute('aria-controls') ?? '');
+        if (panel) panel.hidden = !on;
+      });
+      if (focus) tabs[index].focus();
+    };
+
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => select(i, false)));
+
+    tablist.addEventListener('keydown', (event: KeyboardEvent) => {
+      const current = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+      let next: number;
+      switch (event.key) {
+        case 'ArrowRight': next = (current + 1) % tabs.length; break;
+        case 'ArrowLeft':  next = (current - 1 + tabs.length) % tabs.length; break;
+        case 'Home':       next = 0; break;
+        case 'End':        next = tabs.length - 1; break;
+        default: return;
+      }
+      event.preventDefault();
+      select(next);
+    });
+  }
+</script>
