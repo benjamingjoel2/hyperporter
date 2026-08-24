@@ -404,33 +404,35 @@ p{margin:0 0 16px}
 /* ============ FOOTER ============ */
 footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px,6vw,88px) 0 0;overflow:hidden}
 .f-cta{display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
-.f-cta h2{font-size:clamp(26px,3.4vw,44px);margin:0;max-width:32ch}
-.f-hr{height:1px;background:var(--line-2);margin:clamp(34px,4.5vw,58px) 0 clamp(40px,5vw,64px)}
-/* OH's footer: a giant logotype sitting beside nav set far larger than nav
-   normally is, with the contact block held to the right. */
-.f-main{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(26px,5vw,90px);align-items:end}
+/* Sentence case, not the uppercase the global h2 carries -- this is a
+   closing line, not a section heading. */
+.f-cta h2{font-size:clamp(26px,2.6vw,40px);text-transform:none;line-height:1.15;margin:0;max-width:32ch}
+.f-hr{height:1px;background:var(--line);margin:clamp(30px,4vw,52px) 0 clamp(40px,5vw,68px)}
+.f-main{display:grid;grid-template-columns:1fr 2.2fr;gap:clamp(30px,5vw,80px);align-items:start}
 .f-brand{display:flex;flex-direction:column;align-items:flex-start}
-.f-mark{width:clamp(84px,13vw,190px);height:auto;display:block;color:var(--paper);transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
-.f-mark svg{width:100%;height:auto;display:block}
+.f-mark{width:56px;height:56px;display:block;color:var(--paper);transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
+.f-mark svg{width:100%;height:100%;display:block}
 .f-mark svg rect{fill:currentColor}
 .f-mark svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6;stroke-linecap:butt}
 .f-mark:hover{color:var(--signal);transform:rotate(90deg)}
-.f-con{font-size:13.5px;line-height:1.6;color:var(--dim);margin-top:26px;max-width:30ch}
-.f-con div{margin-bottom:12px}
-.f-con a{text-decoration:none;border-bottom:1px solid transparent;color:var(--paper)}
+.f-con{font-size:16px;line-height:1.6;color:var(--muted);margin-top:36px;max-width:34ch}
+.f-con div{margin-bottom:22px}
+.f-con a{text-decoration:none;border-bottom:1px solid transparent}
 .f-con a:hover{border-bottom-color:var(--line-2)}
-.f-cols{display:flex;flex-direction:column}
-.f-col{display:contents}
-.f-col h4{display:none}
-.f-col a{display:block;color:var(--paper);font-family:var(--display);font-weight:400;font-size:clamp(19px,2.3vw,33px);line-height:1.26;letter-spacing:.006em;padding:0;transition:color .2s,transform .2s}
-.f-col a:hover{color:var(--signal);transform:translateX(6px)}
-.f-pill{background:var(--paper);color:var(--void);border:0;border-radius:99px;padding:14px 30px;font-size:15px;font-weight:500;white-space:nowrap;transition:transform .2s,box-shadow .2s}
+.f-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,2.4vw,36px)}
+.f-col h4{display:block;font-family:var(--mono);font-size:10.5px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin:0 0 30px}
+.f-col a{display:block;color:var(--paper);font-family:var(--body);font-weight:400;font-size:16px;letter-spacing:0;line-height:1.4;padding:0 0 26px;transition:color .2s,transform .2s}
+.f-col a:hover{color:var(--signal);transform:translateX(3px)}
+.f-pill{background:var(--paper);color:var(--void);border:0;border-radius:99px;padding:15px 32px;font-size:15px;font-weight:500;white-space:nowrap;transition:transform .2s,box-shadow .2s}
 .f-pill:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(12,22,34,.20)}
-.f-bottom{display:flex;align-items:center;gap:14px 30px;flex-wrap:wrap;margin-top:clamp(30px,4vw,56px);padding-top:clamp(18px,2.4vw,26px);border-top:1px solid var(--line);padding-bottom:clamp(18px,4vw,40px);font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase}
+/* Sentence-case sans, matching the reference -- not the mono capitals the
+   OH footer used along the bottom. */
+.f-bottom{display:flex;align-items:center;gap:14px 44px;flex-wrap:wrap;margin-top:clamp(34px,4.5vw,64px);padding-top:clamp(20px,2.6vw,30px);border-top:1px solid var(--line);padding-bottom:clamp(20px,4vw,44px);font-size:15px;color:var(--dim)}
 .f-bottom a{color:var(--dim);transition:color .2s}
 .f-bottom a:hover{color:var(--paper)}
-.f-copy{color:var(--dim);margin-right:auto}
-@media (max-width:900px){.f-main{grid-template-columns:1fr;gap:34px;align-items:start}}
+.f-copy{margin-right:auto}
+@media (max-width:900px){.f-main{grid-template-columns:1fr;gap:44px}.f-cols{grid-template-columns:1fr 1fr;gap:34px 30px}}
+@media (max-width:520px){.f-cols{grid-template-columns:1fr}}
 .f-word{overflow:hidden;height:.56em;font-size:clamp(88px,18.5vw,250px);line-height:.78}
 .f-word .tr{display:flex;width:max-content;animation:march 60s linear infinite}
 .f-word span{font-family:var(--display);font-weight:400;letter-spacing:.006em;color:rgba(12,22,34,.11);white-space:nowrap;padding-right:.1em}
@@ -596,8 +598,6 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
   .pill:last-child{padding-left:0}
   .fgrid{grid-template-columns:1fr}
   .fcell{padding:28px 0!important;border-right:0!important}
-  .f-main{grid-template-columns:1fr;gap:44px}
-  .f-cols{grid-template-columns:1fr 1fr;gap:34px 30px}
 }
 @media (max-width:860px){
   .links,.bar .cta-nav,.sys{display:none}
