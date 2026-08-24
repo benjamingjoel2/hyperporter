@@ -475,7 +475,7 @@ A.cliffs=(r,C)=>{                                    /* Ireland / Atlantic cliff
 
 export type ArtTheme = 'light' | 'dark';
 
-export function destArt(name: string, uid: string, theme: ArtTheme = 'dark'): string {
+export function destArt(name: string, uid: string, theme: ArtTheme = 'light'): string {
   const h = hash32(name), r = rngFrom(h);
   const spec = LM[name] || ["cityscape", 215] as [string, number];
   const hue = (spec[1] + (h % 31) - 15 + 360) % 360;
