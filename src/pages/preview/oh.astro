@@ -1,0 +1,520 @@
+---
+/**
+ * Design study: OH Architecture, applied to Hyperporter.
+ *
+ * The moves taken from the reference, in order of how much they matter:
+ *   1. dark ground, near-black, with everything else built on it
+ *   2. a full-bleed photographic hero with the copy sitting over it
+ *   3. a strip of labelled cells directly under the hero
+ *   4. section title with the count right-aligned on the same line -- OH's
+ *      "FEATURED WORKS ... (06)"
+ *   5. an asymmetric grid of large media blocks, captioned underneath in
+ *      small tracked capitals with an index on the right
+ *   6. centred pill buttons with an arrow
+ *   7. an oversized footer: giant logotype beside a large-type nav list
+ *
+ * Content is real. The nine pipeline stages stand in for OH's project
+ * grid. Throwaway page -- see src/layouts/Preview.astro.
+ */
+import Preview from '../../layouts/Preview.astro';
+import { destArt } from '../../lib/landmark/generator';
+
+/**
+ * The grid uses the destination scenes we already generate for all 137
+ * country pages, rendered on the dark ramp. No licensing, no budget, and
+ * they are pictures of the places Horizon actually covers -- which is a
+ * better fit for this grid than the pipeline stages were.
+ */
+const PLACES = [
+  'Japan', 'Kenya', 'Peru', 'Portugal', 'Nepal', 'Indonesia',
+] as const;
+const cards = PLACES.map((name, i) => ({
+  name,
+  n: String(i + 1).padStart(2, '0'),
+  svg: destArt(name, `oh${i}`, 'dark'),
+}));
+
+const FONTS =
+  'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap';
+
+const NAV = ['Autopilot', 'Horizon', 'Destinations', 'How It Works', 'Blog', 'About'];
+---
+
+<Preview title="Hyperporter — OH study" fonts={FONTS}>
+  <header class="top">
+    <a class="mk" href="/preview/oh/">Hyperporter</a>
+    <nav class="pills">
+      <a href="/preview/oh/">Autopilot <i>&darr;</i></a>
+      <a href="/preview/oh/">Horizon <i>&darr;</i></a>
+      <a class="on" href="/preview/oh/">Sign up</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="shot"></div>
+    <div class="hcap">
+      <p>
+        Hyperporter runs the coordination work between traveller, agency and operator — inquiry to
+        booking to live trip support — with a human only where it counts.
+      </p>
+      <span class="scroll">Scroll &darr;</span>
+    </div>
+  </section>
+
+  <div class="strip">
+    <div><b>The software</b><span>Autopilot</span></div>
+    <div><b>The network</b><span>Horizon</span></div>
+    <div><b>Coverage</b><span>137 countries</span></div>
+    <div class="go"><a href="/preview/oh/">See the route &rarr;</a></div>
+  </div>
+
+  <section class="intro">
+    <div class="thumb"></div>
+    <div class="itext">
+      <p class="lab">(01) — What we do</p>
+      <p>
+        A trip touches a traveller, an agency and a ground operator, and most of the work is keeping
+        those three in sync. Autopilot does that work. Horizon is the operator network underneath
+        it — 137 countries of vetted relationships.
+      </p>
+      <p>
+        Nothing about payment happens silently. A person marks money received or sent, every time.
+      </p>
+      <a class="pill" href="/preview/oh/">Learn more about us &rarr;</a>
+    </div>
+  </section>
+
+  <section class="works">
+    <div class="whead">
+      <h2>Where we<br />operate</h2>
+      <span class="count">(0{cards.length})</span>
+    </div>
+    <div class="grid">
+      {
+        cards.map((c, i) => (
+          <figure class:list={['cell', i % 2 ? 'tall' : 'short']}>
+            <div class="block" set:html={c.svg} />
+            <figcaption>
+              <span>{c.name}</span>
+              <span class="yr">{c.n}</span>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+    <div class="mid"><a class="pill" href="/preview/oh/">All 137 destinations &rarr;</a></div>
+  </section>
+
+  <section class="split">
+    <p class="lab">(02) — In progress</p>
+    <div class="srow">
+      <div class="block sq" set:html={destArt('Morocco', 'ohsq', 'dark')} />
+      <div class="stext">
+        <p>
+          Every stage runs on a specific feature and takes a specific action. Availability is
+          re-verified the moment a quote is accepted. Vouchers and pickup details are chased before
+          departure, not after. The thread stays open until the trip actually closes.
+        </p>
+        <p class="by">Hyperporter — Travel operations infrastructure</p>
+      </div>
+    </div>
+    <div class="mid"><a class="pill" href="/preview/oh/">The Hyperporter difference &rarr;</a></div>
+  </section>
+
+  <footer>
+    <div class="fgrid">
+      <span class="logo">HP</span>
+      <nav class="fnav">{NAV.map((n) => <a href="/preview/oh/">{n}</a>)}</nav>
+      <div class="fcol">
+        <p class="lab">Get in touch</p>
+        <p>
+          Intelak Hub, Offices 4, One Central<br />Dubai World Trade Center, UAE
+        </p>
+        <p><a class="ul" href="/preview/oh/">hello@hyperporter.com</a></p>
+      </div>
+    </div>
+    <div class="fbar">
+      <span>© 2026 Hyperporter</span><span>Terms</span><span>Privacy</span>
+    </div>
+  </footer>
+</Preview>
+
+<style>
+  :root {
+    --bg: #0b0b0c;
+    --ink: #f2f1ee;
+    --dim: rgba(242, 241, 238, 0.5);
+    --line: rgba(242, 241, 238, 0.14);
+    --pad: clamp(18px, 3.2vw, 44px);
+  }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .lab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin: 0 0 18px;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--line);
+    border-radius: 99px;
+    padding: 13px 26px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+  }
+  .pill:hover {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+  .mid {
+    display: flex;
+    justify-content: center;
+    padding: clamp(34px, 4.5vw, 60px) 0 0;
+  }
+  /* In the reference these blocks are photographs. Ours are empty, and
+     pure black on a near-black ground is invisible -- so the placeholder
+     is lifted off the background and says what it is waiting for. */
+  /* Blocks carry the generated destination scenes, rendered on the dark
+     ramp. overflow:hidden + a slice-fitted viewBox lets each one crop to
+     whatever aspect ratio the grid asks for. */
+  .block {
+    background: #17171a;
+    border: 1px solid rgba(242, 241, 238, 0.08);
+    overflow: hidden;
+    position: relative;
+  }
+  .block :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* header ----------------------------------------------------------- */
+  .top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px var(--pad);
+  }
+  .mk {
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+  }
+  .pills {
+    display: flex;
+    gap: 8px;
+  }
+  .pills a {
+    border: 1px solid var(--line);
+    border-radius: 99px;
+    padding: 9px 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    background: rgba(11, 11, 12, 0.5);
+    backdrop-filter: blur(8px);
+    display: flex;
+    gap: 7px;
+  }
+  .pills a.on {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+  .pills i {
+    font-style: normal;
+    opacity: 0.5;
+  }
+
+  /* hero ------------------------------------------------------------- */
+  .hero {
+    position: relative;
+    height: 88vh;
+    min-height: 520px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  .shot {
+    position: absolute;
+    inset: 0;
+    background: #000 url('/hero.jpg') center 40% / cover no-repeat;
+    filter: grayscale(0.35) brightness(0.62) contrast(1.05);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(11, 11, 12, 0.72) 0%, rgba(11, 11, 12, 0.1) 42%, rgba(11, 11, 12, 0.9) 100%);
+  }
+  .hcap {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 0 var(--pad) clamp(26px, 3.4vw, 46px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 30px;
+  }
+  .hcap p {
+    margin: 0;
+    max-width: 46ch;
+    font-size: clamp(15px, 1.35vw, 19px);
+    line-height: 1.5;
+  }
+  .scroll {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+
+  /* strip ------------------------------------------------------------ */
+  .strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .strip > div {
+    padding: 16px var(--pad);
+    border-right: 1px solid var(--line);
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .strip > div:last-child {
+    border-right: 0;
+    justify-content: flex-end;
+  }
+  .strip b {
+    font-weight: 500;
+  }
+  .strip span {
+    color: var(--dim);
+  }
+  @media (max-width: 860px) {
+    .strip {
+      grid-template-columns: 1fr 1fr;
+    }
+    .strip > div:nth-child(2n) {
+      border-right: 0;
+    }
+  }
+
+  /* intro ------------------------------------------------------------ */
+  .intro {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(24px, 4vw, 70px);
+    padding: clamp(40px, 5vw, 76px) var(--pad);
+    align-items: start;
+  }
+  .thumb {
+    aspect-ratio: 4 / 3;
+    background: #000 url('/hero.jpg') center 60% / cover no-repeat;
+    filter: grayscale(0.4) brightness(0.7);
+  }
+  .itext p:not(.lab) {
+    margin: 0 0 18px;
+    color: var(--dim);
+    max-width: 52ch;
+    font-size: 15.5px;
+  }
+  .itext .pill {
+    margin-top: 12px;
+  }
+  @media (max-width: 820px) {
+    .intro {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* works ------------------------------------------------------------ */
+  .works {
+    padding: clamp(40px, 5vw, 80px) var(--pad) clamp(50px, 6vw, 96px);
+  }
+  .whead {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: clamp(24px, 3vw, 44px);
+  }
+  .whead h2 {
+    margin: 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: clamp(40px, 8.4vw, 128px);
+    line-height: 0.84;
+    letter-spacing: -0.045em;
+  }
+  .count {
+    font-weight: 700;
+    font-size: clamp(28px, 5vw, 74px);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 2.2vw, 34px) clamp(16px, 2.4vw, 40px);
+  }
+  .cell {
+    margin: 0;
+  }
+  .cell .block {
+    width: 100%;
+  }
+  .cell.short .block {
+    aspect-ratio: 4 / 3;
+  }
+  .cell.tall .block {
+    aspect-ratio: 1 / 1;
+  }
+  .cell:nth-child(even) {
+    padding-top: clamp(24px, 5vw, 84px);
+  }
+  figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding-top: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .yr {
+    color: var(--dim);
+  }
+  @media (max-width: 700px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .cell:nth-child(even) {
+      padding-top: 0;
+    }
+  }
+
+  /* split ------------------------------------------------------------ */
+  .split {
+    padding: 0 var(--pad) clamp(50px, 6vw, 96px);
+  }
+  .srow {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(24px, 4vw, 70px);
+    align-items: end;
+  }
+  .block.sq {
+    aspect-ratio: 1 / 1;
+  }
+  .stext p {
+    margin: 0 0 16px;
+    color: var(--dim);
+    max-width: 54ch;
+    font-size: 15.5px;
+  }
+  .by {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  @media (max-width: 820px) {
+    .srow {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* footer ------------------------------------------------------------ */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: clamp(34px, 4vw, 62px) var(--pad) 0;
+  }
+  .fgrid {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: clamp(26px, 5vw, 90px);
+    align-items: end;
+  }
+  .logo {
+    font-weight: 700;
+    font-size: clamp(60px, 11vw, 168px);
+    line-height: 0.76;
+    letter-spacing: -0.06em;
+  }
+  .fnav {
+    display: flex;
+    flex-direction: column;
+  }
+  .fnav a {
+    font-weight: 500;
+    font-size: clamp(20px, 2.4vw, 34px);
+    line-height: 1.24;
+    letter-spacing: -0.025em;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .fnav a:hover {
+    color: var(--dim);
+    transform: translateX(6px);
+  }
+  .fcol p {
+    margin: 0 0 10px;
+    color: var(--dim);
+    font-size: 13.5px;
+  }
+  .ul {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 2px;
+    color: var(--ink);
+  }
+  @media (max-width: 900px) {
+    .fgrid {
+      grid-template-columns: 1fr;
+      gap: 34px;
+      align-items: start;
+    }
+  }
+  .fbar {
+    display: flex;
+    gap: 26px;
+    border-top: 1px solid var(--line);
+    margin-top: clamp(30px, 4vw, 56px);
+    padding: 16px 0 22px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+</style>
