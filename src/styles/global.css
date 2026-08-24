@@ -220,12 +220,13 @@ p{margin:0 0 16px}
 
 /* ============ PILLARS ============ */
 .pillars{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line)}
-.pill{padding:clamp(30px,4vw,54px) clamp(24px,3vw,48px);border-bottom:1px solid var(--line);position:relative;transition:background .3s}
-.pill:first-child{border-right:1px solid var(--line)}
+.pill{padding:clamp(30px,4vw,54px) 0;border-bottom:1px solid var(--line);position:relative;transition:background .3s}
+.pill:first-child{padding-right:clamp(28px,4vw,64px);border-right:1px solid var(--line)}
+.pill:last-child{padding-left:clamp(28px,4vw,64px)}
 .pill:hover{background:rgba(12,22,34,.025)}
 .pill::before{content:"";position:absolute;left:0;top:-1px;width:0;height:1px;background:var(--signal);transition:width .5s cubic-bezier(.2,.8,.2,1)}
 .pill:hover::before{width:100%}
-.pill .name{font-family:var(--display);font-size:clamp(32px,4.4vw,60px);font-weight:700;text-transform:uppercase;line-height:1.02;letter-spacing:.006em;color:var(--paper);margin:0 0 18px;transition:color .3s}
+.pill .name{font-family:var(--display);font-size:clamp(26px,3.2vw,44px);font-weight:700;text-transform:uppercase;line-height:1.02;letter-spacing:.006em;color:var(--paper);margin:0 0 18px;transition:color .3s}
 .pill:hover .name{color:var(--signal)}
 .pill .kind{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);margin-bottom:14px}
 .pill p{color:var(--muted);font-size:15.5px;max-width:44ch}
@@ -591,7 +592,8 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
   .zcard:nth-child(even),.zcard:nth-child(even):hover{transform:none}
   .hint{display:none}
   .pillars{grid-template-columns:1fr}
-  .pill:first-child{border-right:0}
+  .pill:first-child{border-right:0;padding-right:0}
+  .pill:last-child{padding-left:0}
   .fgrid{grid-template-columns:1fr}
   .fcell{padding:28px 0!important;border-right:0!important}
   .f-main{grid-template-columns:1fr;gap:44px}
