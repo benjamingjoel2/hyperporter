@@ -1,48 +1,12 @@
 ---
 /**
- * About page, on the harvey.ai/company structure: eyebrow and a very large
- * headline, a rule-topped stat row, a full-bleed image band, a two-column
- * statement, the team, a pull quote, and a recruiting block.
- *
- * Three of the reference's sections are deliberately not built, because
- * filling them would mean inventing things:
- *
- *  - the investor logo grid. Whether Hyperporter has raised, and from
- *    whom, is not something this repository knows. Fabricating investor
- *    marks would be a serious misrepresentation, not a design choice.
- *
- *  - "In the News". The two award badges carried over from the old site
- *    ("Hospitality B2B Travel Partner", "UN Tourism Winner") are flagged
- *    in CLAUDE.md as unverified. An awards section is exactly where an
- *    unverified claim does the most damage, so they stay out until
- *    somebody confirms them.
- *
- *  - the customer pull quote. No real customer quote exists. The quote
- *    block here is the company speaking in its own voice and is attributed
- *    as such — it is not dressed up as a customer testimonial.
- *
- * The team section still carries three "Name pending" placeholders, as it
- * did before: visible rather than quietly invented. The page stays
- * noindex until they are real.
+ * About page. Ported from hyperporter-3.html's #view-about, including its
+ * three "Name pending" team placeholders — carried over VISIBLY, not
+ * quietly invented. Real names and bios must land before this page ships
+ * publicly (flagged in CLAUDE.md's known gaps); noindex until then so a
+ * page saying "Placeholder bio" can't end up in search results.
  */
 import Base from '../layouts/Base.astro';
-import { destArt } from '../lib/landmark/generator';
-import { STAGES } from '../lib/stages';
-import { getCollection } from 'astro:content';
-import { REGIONS } from '../content.config';
-
-const destinations = await getCollection('destinations');
-const COUNTRIES = destinations.length;
-const COVERED = REGIONS.filter((r) => destinations.some((d) => d.data.region === r));
-
-const BAND = ['Kenya', 'Peru', 'Japan', 'Morocco', 'Portugal'];
-const bandArt = BAND.map((name) => ({ name, svg: destArt(name, `ab-${name}`) }));
-
-const TEAM = [
-  { role: 'Founder / CEO' },
-  { role: 'Co-founder / CTO' },
-  { role: 'Co-founder / Operations' },
-];
 ---
 
 <Base
@@ -51,95 +15,40 @@ const TEAM = [
   currentNav="about"
   noindex
 >
-  <!-- ============ HEADLINE ============ -->
-  <section class="hx hx-ab-head">
-    <p class="hx-ab-eye">Company</p>
-    <h1 class="hx-ab-h1">
-      We used to run<br />this by hand too.
-    </h1>
-  </section>
-
-  <!-- ============ STATS ============ -->
-  <section class="hx">
-    <div class="hx-ab-stats">
-      <div><b>{COUNTRIES}</b><span>Countries with vetted operators</span></div>
-      <div><b>{COVERED.length}</b><span>Regions covered</span></div>
-      <div><b>{STAGES.length}</b><span>Steps in every trip we run</span></div>
-    </div>
-  </section>
-
-  <!-- ============ BAND ============ -->
-  <section class="hx-ab-band" aria-label="Where we operate">
-    <div class="hx-ab-strip">
-      {
-        bandArt.map((a) => (
-          <figure class="hx-ab-fig">
-            <div set:html={a.svg} />
-            <figcaption>{a.name}</figcaption>
-          </figure>
-        ))
-      }
-    </div>
-  </section>
-
-  <!-- ============ STATEMENT ============ -->
-  <section class="hx hx-sec">
-    <div class="hx-ab-two">
-      <h2>Built to scale</h2>
-      <div>
-        <p>
-          Hyperporter was built by people who had coordinated trips the old way — chasing
-          operators over email, relaying WhatsApp messages between travellers and drivers,
-          rebuilding the same itinerary for the fifth time.
-        </p>
-        <p>
-          Every trip involves the same coordination work, repeated by hand, agency by
-          agency. Autopilot is the software that does it. Horizon is the network of local
-          operators it reaches, in {COUNTRIES} countries across {COVERED.length} regions.
-          Agencies take one, or the other, or both.
-        </p>
+  <div class="sec wrap">
+    <p class="eyebrow rv">About</p>
+    <h1 class="rv">We used to run this<br />by hand too.</h1>
+    <p class="lede rv">
+      Hyperporter was built by people who've coordinated trips the old way — chasing DMCs over email, relaying
+      WhatsApp messages between travellers and drivers, rebuilding the same itinerary PDF for the fifth time.
+    </p>
+    <p class="mission rv">
+      Every trip involves the same coordination work, repeated by hand, agency by agency. We think that work should
+      run itself — with a human only where real judgment is needed.
+    </p>
+  </div>
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">Team</p>
+    <div class="team rv">
+      <div class="tcell">
+        <div class="av"></div>
+        <div class="role">Founder / CEO</div>
+        <h3>Name pending</h3>
+        <p>Placeholder bio — replace before this page goes live publicly.</p>
+      </div>
+      <div class="tcell">
+        <div class="av"></div>
+        <div class="role">Co-founder / CTO</div>
+        <h3>Name pending</h3>
+        <p>Placeholder bio — replace before this page goes live publicly.</p>
+      </div>
+      <div class="tcell">
+        <div class="av"></div>
+        <div class="role">Co-founder / Operations</div>
+        <h3>Name pending</h3>
+        <p>Placeholder bio — replace before this page goes live publicly.</p>
       </div>
     </div>
-  </section>
-
-  <!-- ============ QUOTE ============ -->
-  <section class="hx hx-sec">
-    <blockquote class="hx-ab-quote">
-      <p>
-        A person should be making the decisions. Not chasing the people who have already
-        made them.
-      </p>
-      <cite>Hyperporter</cite>
-    </blockquote>
-  </section>
-
-  <!-- ============ TEAM ============ -->
-  <section class="hx hx-sec">
-    <div class="hx-mid" style="margin-left:0;text-align:left">
-      <h2>The team</h2>
-    </div>
-    <div class="hx-ab-team">
-      {
-        TEAM.map((t) => (
-          <div class="hx-ab-person">
-            <div class="hx-ab-av" />
-            <div class="hx-ab-role">{t.role}</div>
-            <h3>Name pending</h3>
-            <p>Placeholder bio — replace before this page goes live publicly.</p>
-          </div>
-        ))
-      }
-    </div>
-  </section>
-
-  <!-- ============ HIRING ============ -->
-  <section class="hx hx-sec">
-    <h2 class="hx-ab-join">
-      Join our team. <span>Help build the software travel operations should have had ten
-      years ago.</span>
-    </h2>
-    <a class="btn" href="mailto:hello@hyperporter.com?subject=Working%20at%20Hyperporter"
-      >Get in touch</a
-    >
-  </section>
+    <div style="margin-top:52px"><a class="btn rv" href="/signup">Sign up →</a></div>
+  </div>
 </Base>
