@@ -47,8 +47,8 @@ Only needed once, on a fresh server.
 **Steps**
 
 ```sh
-git clone https://github.com/benjamingjoel2/hyperporter.git
-cd hyperporter
+git clone https://github.com/benjamingjoel2/hyperporter.git /opt/hyperporter
+cd /opt/hyperporter
 
 # Issue the TLS certificate. Run this ONCE, before the first `up`.
 # Do a dry run against Let's Encrypt's staging CA first:
@@ -75,20 +75,51 @@ with a temporary self-signed cert, then replaces it with the real one.
 
 ## Deploying a change
 
+**The live checkout is `/opt/hyperporter`**, not a home directory. Merge to
+`main` first — the server pulls from `main`, so nothing that is still on a
+branch will appear.
+
+Run it as a single command from your own machine rather than an interactive
+session. The server is small enough that it drops SSH sessions while
+building, and anything typed after that silently runs on your laptop
+instead:
+
 ```sh
-git pull origin main
-docker compose up -d --build
+ssh root@hyperporter.com 'cd /opt/hyperporter && git pull --no-edit origin main && nohup docker compose up -d --build > /tmp/deploy.log 2>&1 < /dev/null &'
 ```
 
-That's it. The build runs inside Docker, so the server needs no Node
-toolchain.
+That returns in seconds. The build keeps going on the server because it is
+detached — that is what `nohup` and the redirects are for. Allow five to
+ten minutes.
 
-To confirm it worked:
+Check on it as often as you like:
 
 ```sh
-docker compose ps                      # web should be "healthy"
+ssh root@hyperporter.com 'tail -30 /tmp/deploy.log; echo ---; cd /opt/hyperporter && docker compose ps'
+```
+
+Done when `web` reads `healthy` and the log ends with `Started`. Then:
+
+```sh
 curl -sI https://hyperporter.com | head -1   # HTTP/2 200
 ```
+
+The build runs inside Docker, so the server needs no Node toolchain.
+
+If `git pull` stops on divergent branches, someone has committed on the
+server — Mau has done this for TLS fixes. Merge rather than overwrite, or
+you will throw that work away:
+
+```sh
+ssh root@hyperporter.com 'cd /opt/hyperporter && git config pull.rebase false && git pull --no-edit origin main'
+```
+
+### Building on the server is the weak point
+
+The box builds the site while also serving it, which is why it becomes
+unresponsive and drops connections mid-deploy. Moving the build to GitHub
+Actions — CI builds, the server downloads a finished `dist/` — removes the
+problem. Not done yet.
 
 ---
 
@@ -102,6 +133,7 @@ curl -sI https://hyperporter.com | head -1   # HTTP/2 200
 | `nginx/default.conf` | HTTP→HTTPS redirect, www→apex, static serving, caching, 404. |
 | `scripts/init-letsencrypt.sh` | One-time TLS bootstrap. |
 | `data/` | Certificates and ACME webroot. Created on the server, **git-ignored** — never commit it. |
+| `/opt/hyperporter` | Where the checkout lives on the production server. |
 
 ### Certificate renewal
 
