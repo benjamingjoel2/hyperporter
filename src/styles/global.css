@@ -89,36 +89,70 @@ body::after{
 .view{display:none}
 .view.on{display:block}
 
-/* ============ HEADER ============ */
+/* ============ HEADER ============
+   Arrangement follows harvey.ai: announcement strip, then a bar with the
+   wordmark hard left, navigation beside it, and one call to action on the
+   right. Nothing is centred. */
+
+/* --- announcement strip --- */
+.ann{background:var(--dark);color:#fff}
+.ann[hidden]{display:none}
+.ann-in{max-width:var(--max);margin:0 auto;padding:0 var(--pad);min-height:44px;display:flex;align-items:center;gap:16px}
+.ann-in p{margin:0 auto 0 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:14px;letter-spacing:-.008em}
+.ann-in b{font-weight:400;color:rgba(255,255,255,.55)}
+.ann-in span{color:rgba(255,255,255,.92)}
+.ann-in a{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.4);padding-bottom:1px;white-space:nowrap}
+.ann-in a:hover{border-color:#fff}
+#ann-x{background:none;border:0;color:rgba(255,255,255,.55);font-size:20px;line-height:1;padding:6px;flex-shrink:0}
+#ann-x:hover{color:#fff}
+
 header.top{position:sticky;top:0;z-index:70;background:rgba(250,250,249,.90);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.bar{max-width:var(--max);margin:0 auto;padding:0 var(--pad);height:66px;display:flex;align-items:center;gap:20px}
-.mark{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
-.mark .glyph{width:30px;height:30px;display:block;color:var(--paper);transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
+.bar{max-width:var(--max);margin:0 auto;padding:0 var(--pad);height:74px;display:flex;align-items:center;gap:38px}
+.mark{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}
+.mark .glyph{width:27px;height:27px;display:block;color:var(--paper);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
 .mark .glyph svg{width:100%;height:100%;display:block}
 .mark .glyph svg rect{fill:currentColor}
 .mark .glyph svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6;stroke-linecap:butt}
 .mark:hover .glyph{transform:rotate(90deg)}
 .mark .word{font-family:var(--display);font-weight:400;font-size:15px;letter-spacing:.13em;text-transform:uppercase}
-.links{display:flex;gap:2px;margin:0 auto}
-.links a{background:none;border:0;color:var(--muted);padding:8px 13px;font-size:15px;letter-spacing:-.008em;border-radius:4px;position:relative;text-decoration:none;transition:color .2s}
-.links a:hover{color:var(--paper)}
-.links a.act{color:var(--paper)}
-.links a.act::after{content:"";position:absolute;left:13px;right:13px;bottom:4px;height:1px;background:var(--paper)}
-.sys{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding-right:22px;margin-right:4px;border-right:1px solid var(--line)}
+
+/* nav sits beside the wordmark, left-aligned, as the reference does */
+.links{display:flex;align-items:center;gap:6px;margin-right:auto}
+.links a.flat,.grp-b{background:none;border:0;color:var(--muted);padding:9px 12px;font-size:15.5px;letter-spacing:-.01em;border-radius:4px;text-decoration:none;position:relative;display:inline-flex;align-items:center;gap:6px;transition:color .2s}
+.links a.flat:hover,.grp-b:hover{color:var(--paper)}
+.links a.flat.act,.grp-b.act{color:var(--paper)}
+.links a.flat.act::after,.grp-b.act::after{content:"";position:absolute;left:12px;right:12px;bottom:3px;height:1px;background:var(--paper)}
+.chev{width:11px;height:7px;opacity:.55;transition:transform .25s}
+.grp{position:relative}
+.grp.open .chev{transform:rotate(180deg)}
+.grp.open .grp-b{color:var(--paper)}
+.grp-p{position:absolute;z-index:9;top:calc(100% + 10px);left:0;min-width:290px;background:var(--raise);border:1px solid var(--line);border-radius:7px;box-shadow:0 20px 50px rgba(17,17,16,.13);padding:8px;opacity:0;visibility:hidden;transform:translateY(-5px);transition:opacity .2s,transform .2s,visibility .2s}
+.grp.open .grp-p{opacity:1;visibility:visible;transform:none}
+.grp-p a{display:block;padding:11px 13px;border-radius:5px;text-decoration:none;transition:background .18s}
+.grp-p a:hover{background:var(--ink)}
+.grp-p b{display:block;font-weight:400;font-size:15px;letter-spacing:-.012em;color:var(--paper)}
+.grp-p span{display:block;font-size:13.5px;color:var(--dim);margin-top:2px;letter-spacing:-.006em}
+/* a hover bridge, so the pointer can cross the gap without the panel shutting */
+.grp::after{content:"";position:absolute;top:100%;left:0;right:0;height:12px}
+
+.sys{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:0 18px;flex-shrink:0;border-left:1px solid var(--line);height:100%;background:var(--ink);position:relative;z-index:1}
 .sys i{width:5px;height:5px;border-radius:50%;background:var(--dim);animation:blip 2.6s ease-in-out infinite}
 @keyframes blip{0%,100%{opacity:1}50%{opacity:.25}}
-.cta-nav{background:var(--paper);color:var(--void);border:1px solid var(--paper);padding:9px 18px;border-radius:4px;font-weight:400;font-size:14px;transition:background .22s,color .22s}
+.cta-nav{background:var(--paper);color:var(--void);border:1px solid var(--paper);padding:11px 20px;border-radius:4px;font-weight:400;font-size:15px;letter-spacing:-.01em;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:background .22s,color .22s}
 .cta-nav:hover{background:transparent;color:var(--paper)}
-.burger{display:none;background:none;border:1px solid var(--line-2);border-radius:8px;padding:10px;margin-left:auto}
+.burger{display:none;background:none;border:1px solid var(--line-2);border-radius:6px;padding:10px;margin-left:auto}
 .burger span{display:block;width:18px;height:1.5px;background:var(--paper);margin:4px 0}
 .drawer{display:none;background:var(--ink);border-top:1px solid var(--line)}
 .drawer.open{display:block}
-.drawer a{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);color:var(--muted);padding:17px var(--pad);font-size:15px}
-.drawer a:last-child{color:var(--paper);font-weight:400;border-bottom:0}
+.drawer a{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);color:var(--muted);padding:17px var(--pad);font-size:16px;text-decoration:none}
+.drawer a:last-child{color:var(--paper);border-bottom:0}
+
+@media(max-width:1080px){.links{display:none}.burger{display:block}.cta-nav{display:none}}
 
 /* ---- dispatch rail (signature) ---- */
-.rail{height:32px;display:flex;align-items:center;overflow:hidden;border-top:1px solid var(--line);background:var(--ink)}
+.rail{height:32px;display:flex;align-items:center;overflow:hidden;border-top:1px solid var(--line);background:var(--ink);position:relative;z-index:0}
 .rail .tag{flex-shrink:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);padding:0 18px;height:100%;display:flex;align-items:center;border-right:1px solid var(--line);background:var(--void);position:relative;z-index:1}
+.rail-track{flex:1;min-width:0;overflow:hidden;height:100%;display:flex;align-items:center}
 .rail .stream{display:flex;white-space:nowrap;animation:march 58s linear infinite}
 .rail .stream:hover{animation-play-state:paused}
 .rail .ent{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:0 26px;display:flex;align-items:center;gap:9px}
