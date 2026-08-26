@@ -112,25 +112,39 @@ const CURRENT_STAGE = 3;
                   id={`stage-panel-${i}`}
                   role="tabpanel"
                   aria-labelledby={`stage-tab-${i}`}
+                  data-auto-needs={s.cls === 'Automatic' ? 'nothing' : 'a person'}
+                  data-manual-needs="all of it"
                   hidden={i + 1 !== CURRENT_STAGE}
                 >
-                  {/* Amber marks human-touchpoint states only, never
-                      decorative, so this dot follows s.cls. */}
-                  <div class:list={['line', { amb: s.cls !== 'Automatic' }]}>
-                    <i />
-                    <span>{s.note}</span>
+                  {/* Autopilot on. Amber marks human-touchpoint states only. */}
+                  <div class="v v-auto">
+                    <div class:list={['line', { amb: s.cls !== 'Automatic' }]}>
+                      <i />
+                      <span>{s.note}</span>
+                    </div>
+                    <div class="line">
+                      <i />
+                      <span>{s.one}</span>
+                    </div>
                   </div>
-                  <div class="line">
-                    <i />
-                    <span>{s.one}</span>
-                  </div>
-                  <div class="ft">
-                    <span class="toggle"><span />Autopilot</span>
-                    <span>Needs you &middot; {s.cls === 'Automatic' ? 'nothing' : 'a person'}</span>
+                  {/* Autopilot off -- the same step done by hand, so every
+                      line is a human-touchpoint state and reads amber. */}
+                  <div class="v v-manual">
+                    <div class="line amb">
+                      <i />
+                      <span>{s.manual}</span>
+                    </div>
                   </div>
                 </div>
               ))
             }
+
+            <div class="ft">
+              <button class="toggle" id="ap-toggle" type="button" aria-pressed="true">
+                <span /> Autopilot
+              </button>
+              <span id="ap-needs">Needs you &middot; nothing</span>
+            </div>
           </div>
           <p class="sample-tag">Illustrative thread — not live data</p>
         </div>
@@ -259,9 +273,31 @@ const CURRENT_STAGE = 3;
         if (panel) panel.hidden = !on;
       });
       if (focus) tabs[index].focus();
+      syncNeeds();
     };
 
     tabs.forEach((tab, i) => tab.addEventListener('click', () => select(i, false)));
+
+    /* The Autopilot switch is real: off swaps every panel to the by-hand
+       version of that stage and rewrites the "needs you" state. */
+    const thread = document.querySelector<HTMLElement>('.thread');
+    const toggle = document.querySelector<HTMLButtonElement>('#ap-toggle');
+    const needs = document.querySelector<HTMLElement>('#ap-needs');
+
+    const syncNeeds = (): void => {
+      const panel = document.querySelector<HTMLElement>('.tpanel:not([hidden])');
+      if (!panel || !needs) return;
+      const on = toggle?.getAttribute('aria-pressed') !== 'false';
+      const value = on ? panel.dataset.autoNeeds : panel.dataset.manualNeeds;
+      needs.textContent = `Needs you \u00b7 ${value ?? 'nothing'}`;
+    };
+
+    toggle?.addEventListener('click', () => {
+      const on = toggle.getAttribute('aria-pressed') !== 'false';
+      toggle.setAttribute('aria-pressed', String(!on));
+      thread?.classList.toggle('manual', on);
+      syncNeeds();
+    });
 
     tablist.addEventListener('keydown', (event: KeyboardEvent) => {
       const current = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
