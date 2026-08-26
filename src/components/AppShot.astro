@@ -1,0 +1,149 @@
+---
+/**
+ * A rendering of the Autopilot interface, built in markup rather than
+ * captured as an image.
+ *
+ * The reference site anchors nearly every section with a large product
+ * screenshot; that is most of why its pages feel substantial. We have no
+ * screenshots, so this draws the interface instead. Built in HTML it stays
+ * sharp at any size, weighs nothing, and can be re-pointed at a different
+ * stage per placement — which a PNG could not.
+ *
+ * This is a depiction of our own product for marketing, in the same way a
+ * screenshot would be. The trip, the operators and the prices in it are
+ * illustrative, and the caption on each placement says so.
+ *
+ * `stage` picks which pipeline step the thread is sitting at, so the same
+ * component can show a quotation in the hero and a booking further down.
+ * `compact` drops the sidebar for narrow placements (the product cards).
+ */
+import { STAGES } from '../lib/stages';
+
+interface Props {
+  stage?: number;
+  compact?: boolean;
+  /** Extra class on the root, for placement-specific sizing. */
+  class?: string;
+}
+
+const { stage = 3, compact = false, class: klass = '' } = Astro.props;
+const current = STAGES[stage - 1];
+
+const THREADS = [
+  { city: 'Nairobi', ref: 'KE-2291', meta: '9 nights', on: true },
+  { city: 'Cusco', ref: 'PE-1184', meta: '6 nights', on: false },
+  { city: 'Marrakesh', ref: 'MA-0937', meta: '4 nights', on: false },
+  { city: 'Hanoi', ref: 'VN-2203', meta: '11 nights', on: false },
+];
+
+const QUOTES = [
+  { op: 'Rift Valley Ground Services', turn: 'replied in 40 min', price: '4,180', pick: true },
+  { op: 'Acacia Safari Logistics', turn: 'replied in 2 h', price: '4,505', pick: false },
+  { op: 'Karen Overland Co.', turn: 'awaiting reply', price: '—', pick: false },
+];
+---
+
+<div class:list={['app', klass, { compact }]}>
+  {
+    !compact && (
+      <aside class="app-side">
+        <div class="app-brand">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <circle class="ring" cx="50" cy="50" r="44" />
+            <rect x="32.5" y="26" width="7.5" height="47" />
+            <rect x="60" y="26" width="7.5" height="47" />
+            <rect x="32.5" y="46.5" width="35" height="7.5" />
+          </svg>
+          <span>Autopilot</span>
+        </div>
+
+        <div class="app-nav">
+          <span class="on">Threads</span>
+          <span>Operators</span>
+          <span>Quotes</span>
+          <span>Vouchers</span>
+          <span>Payments</span>
+        </div>
+
+        <div class="app-lbl">Open trips</div>
+        <div class="app-threads">
+          {THREADS.map((t) => (
+            <div class:list={['app-thread', { on: t.on }]}>
+              <b>{t.city}</b>
+              <span>
+                {t.ref} &middot; {t.meta}
+              </span>
+            </div>
+          ))}
+        </div>
+      </aside>
+    )
+  }
+
+  <div class="app-main">
+    <div class="app-head">
+      <div>
+        <b>Nairobi &mdash; 9 nights</b>
+        <span>KE-2291 &middot; 2 travellers</span>
+      </div>
+      <div class="app-stage">{current.name}</div>
+    </div>
+
+    <div class="app-rail" aria-hidden="true">
+      {
+        STAGES.map((s, i) => (
+          <i
+            class:list={[
+              { done: i + 1 < stage, now: i + 1 === stage },
+              { amb: s.cls === 'Human touchpoint' },
+            ]}
+          />
+        ))
+      }
+    </div>
+
+    <div class="app-feed">
+      <div class="app-row">
+        <span class="app-who">Traveller</span>
+        <div class="app-said">
+          Two of us, first week of March. Somewhere we can see the migration without a
+          six-hour drive every morning.
+        </div>
+      </div>
+
+      <div class="app-row a">
+        <span class="app-who">Autopilot</span>
+        <div class="app-said">
+          Brief confirmed. Requested availability and pricing from four operators in the
+          Mara.
+        </div>
+      </div>
+
+      <div class="app-quotes">
+        <div class="app-quotes-h">
+          <span>Operator quotes</span>
+          <span>per person</span>
+        </div>
+        {QUOTES.map((q) => (
+          <div class:list={['app-quote', { pick: q.pick }]}>
+            <b>{q.op}</b>
+            <span>{q.turn}</span>
+            <em>{q.price}</em>
+          </div>
+        ))}
+      </div>
+
+      <div class="app-row m">
+        <span class="app-who">Needs you</span>
+        <div class="app-said">
+          Margin is set at 18%. Approve the quote and Autopilot sends it on.
+        </div>
+      </div>
+    </div>
+
+    <div class="app-foot">
+      <span>Autopilot on &middot; {STAGES.length - 2} of {STAGES.length} steps automatic</span>
+      <span class="app-cta">Approve</span>
+    </div>
+  </div>
+</div>
