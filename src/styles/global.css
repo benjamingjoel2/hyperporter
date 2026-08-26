@@ -74,7 +74,7 @@ header.top{position:sticky;top:0;z-index:70;background:rgba(251,252,253,.82);bac
 .mark .glyph svg rect{fill:currentColor}
 .mark .glyph svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6;stroke-linecap:butt}
 .mark:hover .glyph{color:var(--signal);transform:rotate(90deg)}
-.mark .word{font-family:var(--mono);font-weight:400;font-size:13px;letter-spacing:.06em}
+.mark .word{font-family:var(--mono);font-weight:400;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase}
 .links{display:flex;gap:4px;margin-left:auto}
 .links a{background:none;border:0;color:var(--muted);padding:8px 12px;font-size:14px;border-radius:6px;position:relative;transition:color .2s,background .2s}
 .links a:hover{color:var(--paper);background:rgba(12,22,34,.05)}
