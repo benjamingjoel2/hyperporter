@@ -741,7 +741,7 @@ footer{background:var(--dark);color:#fff;padding:clamp(56px,6vw,92px) 0 0;overfl
 .hx-card{position:relative;overflow:hidden;border-radius:6px;background:var(--dark);color:#fff;padding:clamp(28px,3.2vw,44px);min-height:clamp(430px,40vw,556px);display:flex;flex-direction:column}
 .hx-card-art{position:absolute;inset:0;opacity:.92;filter:grayscale(1) contrast(1.02) brightness(1.28)}
 .hx-card-art svg{width:100%;height:100%;object-fit:cover;display:block}
-.hx-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,15,14,.06) 0%,rgba(16,15,14,.14) 26%,rgba(16,15,14,.52) 50%,rgba(16,15,14,.90) 72%,rgba(16,15,14,.97) 100%)}
+.hx-card::after{content:"";position:absolute;inset:0;background:linear-gradient(158deg,rgba(16,15,14,.94) 0%,rgba(16,15,14,.86) 26%,rgba(16,15,14,.62) 56%,rgba(16,15,14,.40) 100%)}
 .hx-card>*{position:relative;z-index:2}
 .hx-card>.hx-card-art{position:absolute;inset:0;z-index:0}
 .hx-card h3{font-size:clamp(24px,2.5vw,34px);letter-spacing:-.022em;margin:0 0 14px;color:#fff}
@@ -811,3 +811,95 @@ footer{background:var(--dark);color:#fff;padding:clamp(56px,6vw,92px) 0 0;overfl
 .hx-shot-f{margin-top:28px;padding-top:20px;border-top:1px solid var(--line);font-size:14px;color:var(--dim)}
 .hx-shot-f .amb{color:var(--amber)}
 @media(max-width:920px){.hx-shot{position:static}}
+
+/* ============================================================
+   APP SHOT — the Autopilot interface, drawn in markup.
+   The reference anchors every section with a product screenshot;
+   we have none, so this stands in. Sharp at any size, no weight.
+   ============================================================ */
+.app{display:grid;grid-template-columns:238px minmax(0,1fr);background:var(--raise);border:1px solid var(--line);border-radius:9px;overflow:hidden;box-shadow:0 30px 80px rgba(17,17,16,.14),0 3px 10px rgba(17,17,16,.05);text-align:left}
+.app.compact{grid-template-columns:1fr}
+@media(max-width:760px){.app{grid-template-columns:1fr}.app-side{display:none}}
+
+.app-side{background:var(--ink);border-right:1px solid var(--line);padding:20px 16px;display:flex;flex-direction:column;gap:22px}
+.app-brand{display:flex;align-items:center;gap:9px;font-size:13.5px;letter-spacing:-.01em}
+.app-brand svg{width:19px;height:19px;color:var(--paper)}
+.app-brand svg rect{fill:currentColor}
+.app-brand svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6}
+.app-nav{display:flex;flex-direction:column;gap:1px}
+.app-nav span{font-size:13px;color:var(--dim);padding:7px 9px;border-radius:4px;letter-spacing:-.008em}
+.app-nav span.on{background:var(--raise);color:var(--paper);box-shadow:0 1px 2px rgba(17,17,16,.06)}
+.app-lbl{font-size:11.5px;color:var(--dim);padding:0 9px;letter-spacing:-.004em}
+.app-threads{display:flex;flex-direction:column;gap:2px}
+.app-thread{padding:8px 9px;border-radius:4px;display:flex;flex-direction:column;gap:2px}
+.app-thread b{font-size:13px;font-weight:400;color:var(--muted);letter-spacing:-.01em}
+.app-thread span{font-size:11.5px;color:var(--dim)}
+.app-thread.on{background:var(--raise);box-shadow:0 1px 2px rgba(17,17,16,.06)}
+.app-thread.on b{color:var(--paper)}
+
+.app-main{display:flex;flex-direction:column;min-width:0}
+.app-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:17px 22px;border-bottom:1px solid var(--line)}
+.app-head b{display:block;font-size:14.5px;font-weight:400;letter-spacing:-.012em}
+.app-head span{font-size:12px;color:var(--dim)}
+.app-stage{font-size:12px;color:var(--void);background:var(--paper);border-radius:99px;padding:5px 12px;white-space:nowrap}
+
+.app-rail{display:flex;gap:4px;padding:14px 22px 0}
+.app-rail i{flex:1;height:3px;border-radius:2px;background:var(--steel)}
+.app-rail i.done{background:var(--line-2)}
+.app-rail i.now{background:var(--paper)}
+.app-rail i.now.amb{background:var(--amber)}
+
+.app-feed{padding:18px 22px;display:flex;flex-direction:column;gap:13px;flex:1}
+.app-row{display:flex;flex-direction:column;gap:5px}
+.app-who{font-size:11.5px;color:var(--dim)}
+.app-said{font-size:13.5px;line-height:1.5;color:var(--muted);background:var(--ink);border-radius:4px;border:1px solid var(--line);padding:11px 13px;letter-spacing:-.008em;max-width:60ch}
+.app-row.a .app-said{background:var(--raise)}
+.app-row.m .app-who{color:var(--amber)}
+.app-row.m .app-said{border-color:rgba(138,85,18,.30);background:rgba(138,85,18,.045);color:var(--paper)}
+
+.app-quotes{border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.app-quotes-h{display:flex;justify-content:space-between;padding:9px 13px;background:var(--ink);border-bottom:1px solid var(--line);font-size:11.5px;color:var(--dim)}
+.app-quote{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:14px;align-items:center;padding:10px 13px;border-bottom:1px solid var(--line)}
+.app-quote:last-child{border-bottom:0}
+.app-quote b{font-size:13px;font-weight:400;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.app-quote span{font-size:11.5px;color:var(--dim);white-space:nowrap}
+.app-quote em{font-style:normal;font-size:13.5px;min-width:52px;text-align:right;color:var(--muted)}
+.app-quote.pick{background:var(--ink)}
+.app-quote.pick em{color:var(--paper)}
+
+.app-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 22px;border-top:1px solid var(--line);font-size:12px;color:var(--dim)}
+.app-cta{background:var(--paper);color:var(--void);border-radius:4px;padding:6px 15px;font-size:12.5px}
+
+/* Placement: bleeding out of the bottom of a dark product card. */
+.app.in-card{box-shadow:0 -10px 50px rgba(0,0,0,.45);border-color:rgba(255,255,255,.10)}
+
+/* --- placements for the interface shot --------------------- */
+.hx-frame-app{position:relative;z-index:2;width:100%;max-width:1120px}
+.hx-cap{margin:16px 0 0;font-size:13.5px;color:var(--dim);text-align:center;letter-spacing:-.005em}
+.hx-side{position:sticky;top:112px}
+.hx-side-app{width:100%}
+.hx-side .hx-cap{text-align:left;margin-top:14px}
+@media(max-width:920px){.hx-side{position:static}}
+.hx-split-h{margin-bottom:34px}
+.hx-split-more{margin-top:36px}
+
+/* --- product cards: copy above, interface bleeding below ---- */
+.hx-card{position:relative;overflow:hidden;border-radius:6px;background:var(--dark);color:#fff;min-height:clamp(430px,40vw,556px);display:flex;flex-direction:column;padding:0}
+.hx-card-copy{position:relative;z-index:2;padding:clamp(28px,3.2vw,44px)}
+.hx-card-shot{position:relative;z-index:2;margin:auto 0 0 clamp(28px,3.2vw,44px);height:clamp(160px,18vw,244px);overflow:hidden}
+.hx-card-shot .app{transform:scale(.82);transform-origin:top left;width:154%;border-bottom-left-radius:0;border-bottom-right-radius:0}
+.hx-card .hx-kind{font-size:14px;color:rgba(255,255,255,.80);margin:0 0 18px;letter-spacing:-.008em;padding:0}
+.hx-card h3{font-size:clamp(24px,2.5vw,34px);letter-spacing:-.022em;margin:0 0 14px;color:#fff}
+.hx-card p{color:var(--dim-d);font-size:16px;line-height:1.55;margin:0 0 26px;max-width:38ch;letter-spacing:-.008em}
+
+/* --- full-bleed statement band ----------------------------- */
+.hx-band{position:relative;overflow:hidden;background:var(--dark);color:#fff}
+.hx-band-art{position:absolute;inset:0;opacity:.85;filter:grayscale(1) brightness(1.2)}
+.hx-band-art svg{width:100%;height:100%;display:block}
+.hx-band::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(16,15,14,.95) 0%,rgba(16,15,14,.86) 42%,rgba(16,15,14,.55) 100%)}
+.hx-band-in{position:relative;z-index:2;padding-block:clamp(84px,11vw,180px);max-width:var(--max)}
+.hx-band-tag{display:block;font-size:15px;color:rgba(255,255,255,.72);margin-bottom:26px;letter-spacing:-.008em}
+.hx-band h2{color:#fff;max-width:19ch;margin:0 0 26px}
+.hx-band p{color:var(--dim-d);font-size:clamp(16px,1.3vw,18.5px);line-height:1.55;max-width:52ch;margin:0 0 34px;letter-spacing:-.008em}
+.hx-band .btn{background:#fff;color:var(--dark);border-color:#fff}
+.hx-band .btn:hover{background:transparent;color:#fff}
