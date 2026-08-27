@@ -25,10 +25,12 @@
  */
 import Base from '../layouts/Base.astro';
 import AppShot from '../components/AppShot.astro';
+import WorldMap from '../components/WorldMap.astro';
 import { destArt } from '../lib/landmark/generator';
 import { STAGES } from '../lib/stages';
 import { getCollection } from 'astro:content';
 import { REGIONS } from '../content.config';
+import { slugify } from '../lib/slug';
 
 const destinations = await getCollection('destinations');
 const COUNTRIES = destinations.length;
@@ -47,15 +49,17 @@ const bandArt = destArt('Morocco', 'band-bg', 'dark');
   currentNav="home"
 >
   <!-- ============ HERO ============ -->
-  <section class="hx hx-hero">
-    <div class="hx-hero-grid">
-      <h1 class="hx-h1">Run trips<br />on autopilot.</h1>
-      <div class="hx-hero-aside">
-        <p>
-          Autopilot coordinates the work between you, your traveller and the operator on
-          the ground. Horizon is the network of operators it reaches.
-        </p>
+  <section class="hx-shero">
+    <div class="hx-shero-map" aria-hidden="true"><WorldMap bare /></div>
+    <div class="hx hx-shero-in">
+      <h1 class="hx-shero-h">Run trips on autopilot.</h1>
+      <p>
+        Autopilot coordinates the work between you, your traveller and the operator on the
+        ground. Horizon is the network of operators it reaches — {COUNTRIES} countries.
+      </p>
+      <div class="hx-ph-cta">
         <a class="btn" href="/signup">Request a demo</a>
+        <a class="btn-o" href="/destinations">See coverage</a>
       </div>
     </div>
   </section>
@@ -69,15 +73,33 @@ const bandArt = destArt('Morocco', 'band-bg', 'dark');
     <p class="hx-cap">Autopilot, mid-quotation. Illustrative trip and operators.</p>
   </section>
 
-  <!-- ============ FACTS ============ -->
+  <!-- ============ COVERAGE ============ -->
+  <!-- The map itself lives in the hero above and in full on /destinations.
+       Repeating it here would say the same thing twice and cost another
+       120KB of path data on one page. -->
   <section class="hx hx-sec">
     <div class="hx-mid">
       <h2>Operators in {COUNTRIES} countries</h2>
       <p>Vetted ground partners across every region Horizon reaches.</p>
     </div>
-    <div class="hx-facts">
-      {COVERED.map((r) => <span>{r}</span>)}
+    <div class="hx-rows">
+      {
+        COVERED.map((r, i) => (
+          <a class="hx-row hx-row-link" href={`/regions/${slugify(r)}`}>
+            <div class="hx-row-n">{String(i + 1).padStart(2, '0')}</div>
+            <h3>{r}</h3>
+            <p class="hx-row-b">
+              {destinations.filter((d) => d.data.region === r).length} countries with vetted
+              operators
+            </p>
+            <div class="hx-row-t">View region &rarr;</div>
+          </a>
+        ))
+      }
     </div>
+    <p style="margin:clamp(28px,3.4vw,44px) 0 0">
+      <a class="btn" href="/destinations">Check a country on the map</a>
+    </p>
   </section>
 
   <!-- ============ TWO PRODUCTS ============ -->
