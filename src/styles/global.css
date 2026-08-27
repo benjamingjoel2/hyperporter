@@ -984,11 +984,11 @@ footer{background:var(--dark);color:#fff;padding:clamp(56px,6vw,92px) 0 0;overfl
 /* --- image tiles ------------------------------------------ */
 .hx-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:clamp(14px,1.8vw,26px)}
 .hx-tile{display:block;text-decoration:none;color:inherit}
-.hx-tile-art{aspect-ratio:4/3;border-radius:6px;overflow:hidden;background:var(--steel);border:1px solid var(--line)}
+.hx-tile-art{display:block;aspect-ratio:4/3;border-radius:6px;overflow:hidden;background:var(--steel);border:1px solid var(--line)}
 .hx-tile-art svg{width:100%;height:100%;display:block;transition:transform .55s cubic-bezier(.2,.8,.2,1)}
 .hx-tile:hover .hx-tile-art svg{transform:scale(1.05)}
-.hx-tile-r{margin-top:14px;font-size:13.5px;color:var(--dim);letter-spacing:-.005em}
-.hx-tile-n{margin-top:3px;font-family:var(--display);font-size:20px;letter-spacing:-.011em}
+.hx-tile-r{display:block;margin-top:14px;font-size:13.5px;color:var(--dim);letter-spacing:-.005em}
+.hx-tile-n{display:block;margin-top:3px;font-family:var(--display);font-size:20px;letter-spacing:-.011em}
 
 /* --- editorial index (blog / destinations) ---------------- */
 .hx-idx{display:grid;grid-template-columns:minmax(0,.55fr) minmax(0,1.45fr);gap:clamp(30px,6vw,100px);align-items:start}
