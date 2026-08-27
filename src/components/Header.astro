@@ -1,13 +1,28 @@
 ---
 /**
- * Ported from hyperporter-3.html's <header class="top">. The nav items
- * were `<button onclick="go(id)">` driving the old client-side router;
- * they're real `<a href>` links now, and `current` picks the active one
- * server-side instead of `go()` toggling a `.act` class at runtime.
- * The dispatch-rail marquee is unchanged (same FEED data, doubled for the
- * CSS `march` loop); only the clock and mobile-drawer toggle still need
- * client JS, since both depend on runtime state a static build can't know.
+ * Header, rebuilt on the harvey.ai arrangement:
+ *
+ *   1. a dismissible announcement strip across the top
+ *   2. wordmark hard left, navigation immediately beside it (not centred)
+ *   3. grouped nav items that open a panel, rather than a flat list
+ *   4. the call to action alone on the right
+ *
+ * Two departures from the reference, both deliberate:
+ *
+ *  - the reference pairs a "Login" button with its demo button. We have no
+ *    app URL to point one at, so inventing a Login that goes nowhere would
+ *    be worse than leaving it out. Add it once there is somewhere to go.
+ *
+ *  - the dispatch rail stays. The reference has no equivalent, but it is
+ *    Hyperporter's own, and the UTC clock has moved into it from the bar —
+ *    it belongs with the live data, and the reference keeps its top bar
+ *    clear of anything but navigation.
+ *
+ * The announcement strip carries the newest blog post, read from the
+ * content collection at build time, so it cannot go stale or point at a
+ * post that has been renamed.
  */
+import { getCollection } from 'astro:content';
 import { FEED } from '../lib/feed';
 
 interface Props {
@@ -16,12 +31,35 @@ interface Props {
 
 const { current } = Astro.props;
 
-const NAV = [
-  { id: 'home', label: 'Home', href: '/' },
-  { id: 'autopilot', label: 'Autopilot', href: '/autopilot' },
-  { id: 'horizon', label: 'Horizon', href: '/horizon' },
-  { id: 'destinations', label: 'Destinations', href: '/destinations' },
-  { id: 'how', label: 'How It Works', href: '/how' },
+const posts = await getCollection('blog');
+const latest = posts.sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+)[0];
+
+interface NavItem { label: string; href: string; note: string }
+interface NavGroup { label: string; ids: string[]; items: NavItem[] }
+
+/** Grouped navigation. `ids` marks which pages light the group as active. */
+const NAV: NavGroup[] = [
+  {
+    label: 'Platform',
+    ids: ['autopilot', 'how'],
+    items: [
+      { label: 'Autopilot', href: '/autopilot', note: 'The software that runs the trip' },
+      { label: 'How it works', href: '/how', note: 'All nine steps, end to end' },
+    ],
+  },
+  {
+    label: 'Network',
+    ids: ['horizon', 'destinations'],
+    items: [
+      { label: 'Horizon', href: '/horizon', note: 'Vetted operators on the ground' },
+      { label: 'Destinations', href: '/destinations', note: 'Every country we cover' },
+    ],
+  },
+];
+
+const FLAT = [
   { id: 'blog', label: 'Blog', href: '/blog' },
   { id: 'about', label: 'About', href: '/about' },
 ] as const;
@@ -32,6 +70,17 @@ const row = FEED.map(
 ).join('');
 const stream = row + row;
 ---
+
+<div class="ann" id="ann" hidden>
+  <div class="ann-in">
+    <p>
+      <b>New</b>
+      <span>{latest.data.title}</span>
+      <a href={`/blog/${latest.id}`}>Read it &rarr;</a>
+    </p>
+    <button type="button" id="ann-x" aria-label="Dismiss announcement">&times;</button>
+  </div>
+</div>
 
 <header class="top">
   <div class="bar">
@@ -48,30 +97,115 @@ const stream = row + row;
       >
       <span class="word">Hyperporter</span>
     </a>
-    <nav class="links" id="links">
+
+    <nav class="links" aria-label="Main">
       {
-        NAV.map((n) => (
-          <a data-nav={n.id} class:list={{ act: current === n.id }} href={n.href}>
+        NAV.map((g) => (
+          <div class="grp">
+            <button
+              type="button"
+              class:list={['grp-b', { act: current !== undefined && g.ids.includes(current) }]}
+              aria-expanded="false"
+            >
+              {g.label}
+              <svg viewBox="0 0 12 8" aria-hidden="true" class="chev">
+                <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.4" />
+              </svg>
+            </button>
+            <div class="grp-p">
+              {g.items.map((it) => (
+                <a href={it.href}>
+                  <b>{it.label}</b>
+                  <span>{it.note}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+      {
+        FLAT.map((n) => (
+          <a class:list={['flat', { act: current === n.id }]} href={n.href}>
             {n.label}
           </a>
         ))
       }
     </nav>
-    <div class="sys"><i></i><span id="clock">00:00 UTC</span></div>
-    <a class="cta-nav" href="/signup">Sign up</a>
+
+    <a class="cta-nav" href="/signup">Request a demo</a>
     <button class="burger" aria-label="Menu" id="burger"><span></span><span></span><span></span></button>
   </div>
-  <div class="rail" aria-hidden="true">
+
+  <div class="rail">
     <div class="tag">Live activity</div>
-    <div class="stream" set:html={stream} />
+    <div class="rail-track"><div class="stream" aria-hidden="true" set:html={stream} /></div>
+    <div class="sys"><i></i><span id="clock">00:00 UTC</span></div>
   </div>
+
   <div class="drawer" id="drawer">
-    {NAV.map((n) => <a href={n.href}>{n.label}</a>)}
-    <a href="/signup">Sign up &rarr;</a>
+    {NAV.flatMap((g) => g.items).map((n) => <a href={n.href}>{n.label}</a>)}
+    {FLAT.map((n) => <a href={n.href}>{n.label}</a>)}
+    <a href="/signup">Request a demo &rarr;</a>
   </div>
 </header>
 
 <script>
+  // Announcement strip. Hidden in the markup and revealed here, so it
+  // never flashes in for someone who already dismissed it.
+  const ann = document.getElementById('ann');
+  const annX = document.getElementById('ann-x');
+  const KEY = 'hp-ann';
+  try {
+    if (ann && localStorage.getItem(KEY) !== 'off') ann.hidden = false;
+  } catch {
+    if (ann) ann.hidden = false;
+  }
+  annX?.addEventListener('click', () => {
+    if (ann) ann.hidden = true;
+    try {
+      localStorage.setItem(KEY, 'off');
+    } catch {
+      /* private browsing — the strip simply returns next visit */
+    }
+  });
+
+  // Nav groups: hover for a pointer, click and Escape for keyboard and
+  // touch. Only one open at a time.
+  const groups = Array.from(document.querySelectorAll<HTMLElement>('.grp'));
+
+  function close(except?: HTMLElement) {
+    groups.forEach((g) => {
+      if (g === except) return;
+      g.classList.remove('open');
+      g.querySelector('.grp-b')?.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  groups.forEach((g) => {
+    const btn = g.querySelector<HTMLButtonElement>('.grp-b');
+    btn?.addEventListener('click', () => {
+      const open = g.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      close(g);
+    });
+    g.addEventListener('mouseenter', () => {
+      g.classList.add('open');
+      btn?.setAttribute('aria-expanded', 'true');
+      close(g);
+    });
+    g.addEventListener('mouseleave', () => {
+      g.classList.remove('open');
+      btn?.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+  });
+  document.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement).closest('.grp')) close();
+  });
+
   const burger = document.getElementById('burger');
   const drawer = document.getElementById('drawer');
   burger?.addEventListener('click', () => drawer?.classList.toggle('open'));

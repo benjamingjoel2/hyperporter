@@ -1,38 +1,144 @@
 ---
 /**
- * How It Works. Ported from hyperporter-3.html's #view-how: the nine-stage
- * spine, rendered at build time from STAGES. Amber marks human-touchpoint
- * stages only — it's reserved for manual states in the design system.
+ * How It Works — the nine stages, end to end.
+ *
+ * Rebuilt on the site's shared page patterns. The prototype's spine
+ * carried a three-letter code, a name, a class pill and one line per
+ * stage; this shows the same nine stages with the full body copy and the
+ * interface beside them, so the page answers the question it is named
+ * after rather than summarising it.
+ *
+ * Amber marks human-touchpoint stages only. It is reserved for manual
+ * states across the design system and never used decoratively.
  */
 import Base from '../layouts/Base.astro';
+import AppShot from '../components/AppShot.astro';
+import { destArt } from '../lib/landmark/generator';
 import { STAGES } from '../lib/stages';
+
+const AUTO = STAGES.filter((s) => s.cls === 'Automatic').length;
+const HUMAN = STAGES.length - AUTO;
+const bandArt = destArt('Portugal', 'how-band', 'dark');
 ---
 
 <Base
   title="How It Works"
-  description="One system, from first message to last day of the trip — the nine stages every trip runs through, and where a human stays in the loop."
+  description="One system, from first message to the last day of the trip — the nine stages every trip runs through, and where a person stays in the loop."
   currentNav="how"
 >
-  <div class="sec wrap">
-    <p class="eyebrow rv">The route</p>
-    <h1 class="rv">One system, from first message<br />to last day of the trip.</h1>
-    <p class="lede rv">
-      Every stage runs on a specific feature, and takes a specific action — here's the full route.
+  <!-- ============ HEAD ============ -->
+  <section class="hx hx-ph">
+    <p class="hx-ph-eye">The route</p>
+    <h1>One system, from first message to the last day of the trip.</h1>
+    <p class="hx-ph-lede">
+      Every trip runs through the same nine stages. {AUTO} of them run on their own. The
+      other {HUMAN} are the points where a person should be deciding — and they stay that
+      way on purpose.
     </p>
-  </div>
-  <div class="sec-tight wrap">
-    <div class="spine rv">
+    <div class="hx-ph-cta">
+      <a class="btn" href="/signup">Request a demo</a>
+      <a class="btn-o" href="/autopilot">About Autopilot</a>
+    </div>
+  </section>
+
+  <!-- ============ STAGES + INTERFACE ============ -->
+  <section class="hx hx-sec">
+    <div class="hx-split">
+      <div>
+        <div class="hx-list" id="stage-list">
+          {
+            STAGES.map((s, i) => (
+              <div class:list={['hx-item', { on: i === 0 }]}>
+                <button type="button" aria-expanded={i === 0 ? 'true' : 'false'}>
+                  <span class="hx-n">{s.n}</span>
+                  <span>{s.name}</span>
+                </button>
+                <div class="hx-body">
+                  <div class="hx-body-in">
+                    <p>{s.body}</p>
+                    {s.cls === 'Human touchpoint' && (
+                      <span class="hx-amb">A person handles this</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="hx-side">
+        <AppShot stage={1} class="hx-side-app" />
+        <p class="hx-cap">The same thread, at the selected step.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHERE A PERSON STAYS ============ -->
+  <section class="hx hx-sec">
+    <div class="hx-two" style="margin-bottom:clamp(34px,4vw,60px)">
+      <h2>Where a person stays in the loop</h2>
+      <p>
+        Two of the nine stages are deliberately not automated. Both involve money or a
+        commitment to a customer, and both are decisions rather than steps.
+      </p>
+    </div>
+    <div class="hx-rows">
       {
-        STAGES.map((s) => (
-          <div class:list={['srow', { human: s.cls !== 'Automatic' }]}>
-            <div class="scode">{s.c}</div>
-            <div class="sname">{s.name}</div>
-            <span class="pill-l">{s.cls}</span>
-            <div class="snote">{s.note}</div>
+        STAGES.filter((s) => s.cls === 'Human touchpoint').map((s) => (
+          <div class="hx-row human">
+            <div class="hx-row-n">{s.n}</div>
+            <h3>{s.name}</h3>
+            <p class="hx-row-b">{s.manual}</p>
+            <div class="hx-row-t">Needs a person</div>
           </div>
         ))
       }
     </div>
-    <div style="margin-top:52px"><a class="btn rv" href="/signup">Sign up →</a></div>
-  </div>
+    <div class="hx-note" style="margin-top:clamp(30px,3.6vw,52px)">
+      <div class="hx-note-t">Manual &middot; always</div>
+      <p>
+        Payment marking stays manual, deliberately. Autopilot does not move money on its
+        own, and every automated step can be pulled into manual control at any point.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ BAND ============ -->
+  <section class="hx-band">
+    <div class="hx-band-art" aria-hidden="true" set:html={bandArt} />
+    <div class="hx hx-band-in">
+      <span class="hx-band-tag">The whole point</span>
+      <h2>One thread, from the first message to the last invoice.</h2>
+      <p>No forwarded email chains, and no spreadsheet of who owes what.</p>
+      <a class="btn" href="/signup">Request a demo</a>
+    </div>
+  </section>
 </Base>
+
+<script>
+  // Stage list, mirrored by the interface beside it. Server-rendered with
+  // the first stage open, so this only enhances working markup.
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.hx-item'));
+  const app = document.querySelector<HTMLElement>('.hx-side-app');
+  const pill = app?.querySelector<HTMLElement>('.app-stage');
+  const rail = Array.from(app?.querySelectorAll<HTMLElement>('.app-rail i') ?? []);
+
+  function open(index: number) {
+    items.forEach((el, i) => {
+      const on = i === index;
+      el.classList.toggle('on', on);
+      el.querySelector('button')?.setAttribute('aria-expanded', on ? 'true' : 'false');
+    });
+    const label = items[index].querySelector('button span:last-child')?.textContent ?? '';
+    if (pill) pill.textContent = label;
+    rail.forEach((seg, i) => {
+      seg.classList.toggle('done', i < index);
+      seg.classList.toggle('now', i === index);
+    });
+  }
+
+  items.forEach((el, i) => {
+    el.querySelector('button')?.addEventListener('click', () => open(i));
+  });
+</script>

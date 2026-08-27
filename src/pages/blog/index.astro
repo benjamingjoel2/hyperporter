@@ -1,14 +1,20 @@
 ---
 /**
- * Blog index. Ported from hyperporter-3.html's #view-blog: the newest post
- * gets the featured treatment (with decorative artwork), the rest fall into
- * the numbered list below. Ordering is by date descending rather than the
- * prototype's hardcoded array order, so a new post lands in the right place
+ * Blog index, on the reference's index structure: a sticky column on the
+ * left carrying the title and category filters, the posts as an editorial
+ * list on the right — thumbnail, category, title, dek, date.
+ *
+ * The prototype's split of "one featured post plus a numbered list" is
+ * gone. It gave the newest post a different shape for no editorial
+ * reason, and a filter is more use than a rank on seven posts.
+ *
+ * Filtering is client-side over markup that is already all there, so the
+ * full list works before the script runs and for anything that never runs
+ * it. Ordering is by date descending, so a post lands in the right place
  * on its date alone.
  */
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import EmailCapture from '../../components/EmailCapture.astro';
 import { blogArtwork } from '../../lib/blogArtwork';
 import { readingTime } from '../../lib/readingTime';
 
@@ -16,9 +22,10 @@ const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 
-const fmt = (d: Date) => d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+const CATS = ['All posts', ...Array.from(new Set(posts.map((p) => p.data.cat))).sort()];
 
-const [featured, ...rest] = posts;
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 
 <Base
@@ -26,59 +33,65 @@ const [featured, ...rest] = posts;
   description="Field notes on travel operations — how trips are coordinated, quoted, and run between agencies and ground operators."
   currentNav="blog"
 >
-  <div class="sec wrap">
-    <p class="eyebrow rv">Field notes</p>
-    <div class="b-head rv">
-      <h1 style="margin:0">Notes from the<br />coordination layer.</h1>
-      <span class="b-count">{posts.length} posts</span>
+  <section class="hx hx-ph">
+    <p class="hx-ph-eye">Field notes</p>
+    <h1>Notes from the coordination layer.</h1>
+  </section>
+
+  <section class="hx" style="padding-bottom:var(--sec)">
+    <div class="hx-idx">
+      <div class="hx-idx-side">
+        <nav class="hx-cats" aria-label="Filter posts">
+          {
+            CATS.map((c, i) => (
+              <button type="button" class:list={['hx-cat', { on: i === 0 }]} data-cat={c}>
+                {c}
+              </button>
+            ))
+          }
+        </nav>
+        <p id="cat-count">{posts.length} posts</p>
+      </div>
+
+      <div class="hx-feed" id="feed">
+        {
+          posts.map((p, i) => (
+            <a class="hx-post" href={`/blog/${p.id}`} data-cat={p.data.cat}>
+              <span class="hx-post-art" set:html={blogArtwork(i, 'compact')} />
+              <span>
+                <span class="hx-post-m">
+                  {p.data.cat} &middot; {readingTime(p.body ?? '')}
+                </span>
+                <h3>{p.data.title}</h3>
+                <p>{p.data.dek}</p>
+                <span class="hx-post-d">{fmt(p.data.date)}</span>
+              </span>
+            </a>
+          ))
+        }
+      </div>
     </div>
-
-    {
-      featured && (
-        <div id="featured">
-          <a class="feat rv" href={`/blog/${featured.id}`}>
-            <div>
-              <div class="b-meta">
-                <em>{featured.data.cat}</em>
-                <span>{fmt(featured.data.date)}</span>
-                <span>{readingTime(featured.body ?? '')}</span>
-              </div>
-              <div class="feat-t">{featured.data.title}</div>
-              <p>{featured.data.dek}</p>
-            </div>
-            <div class="feat-art" set:html={blogArtwork(0)} />
-          </a>
-        </div>
-      )
-    }
-
-    <div class="plist">
-      {
-        rest.map((p, i) => (
-          <a class="prow rv" href={`/blog/${p.id}`}>
-            <div class="pn">{String(i + 2).padStart(2, '0')}</div>
-            {/* Every card gets artwork, not just the featured one -- the
-                generator was already there and only the top post used it. */}
-            <span class="prow-art" set:html={blogArtwork(i + 2, 'compact')} />
-            <div>
-              <div class="b-meta">
-                <em>{p.data.cat}</em>
-                <span>{readingTime(p.body ?? '')}</span>
-              </div>
-              <h3>{p.data.title}</h3>
-            </div>
-            <div style="display:flex;gap:20px;align-items:flex-start;padding-top:6px">
-              <p>{p.data.dek}</p>
-              <span class="arrow">&rarr;</span>
-            </div>
-          </a>
-        ))
-      }
-    </div>
-  </div>
-
-  <div class="sec-tight wrap fcta">
-    <h2 class="rv">See it running on a real trip.</h2>
-    <EmailCapture uid="blog-cta" marginTop="30px" />
-  </div>
+  </section>
 </Base>
+
+<script>
+  // Filter the list that is already rendered. Nothing is fetched and
+  // nothing is built here; the full list is the no-script state.
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.hx-cat'));
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.hx-post'));
+  const count = document.getElementById('cat-count');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat ?? 'All posts';
+      buttons.forEach((b) => b.classList.toggle('on', b === btn));
+      let shown = 0;
+      items.forEach((el) => {
+        const match = cat === 'All posts' || el.dataset.cat === cat;
+        el.hidden = !match;
+        if (match) shown += 1;
+      });
+      if (count) count.textContent = `${shown} ${shown === 1 ? 'post' : 'posts'}`;
+    });
+  });
+</script>
