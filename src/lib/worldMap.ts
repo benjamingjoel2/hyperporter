@@ -54,7 +54,14 @@ const norm = (s: string) =>
     .trim();
 
 export interface MapCountry {
+  /** Natural Earth's name for the shape. */
   name: string;
+  /**
+   * Our name for it, where we cover it. Natural Earth calls things
+   * "Dominican Rep." and "United States of America"; a visitor should see
+   * the name we use everywhere else on the site.
+   */
+  label?: string;
   d: string;
   covered: boolean;
   slug?: string;
@@ -137,6 +144,7 @@ export function buildWorldMap(covered: { title: string; slug: string }[]): World
     if (hit) drawn.add(key);
     countries.push({
       name: f.properties.name,
+      label: hit?.title,
       d: trim(d),
       covered: Boolean(hit),
       slug: hit?.slug,
