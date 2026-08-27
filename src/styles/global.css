@@ -1171,3 +1171,12 @@ footer{background:var(--dark);color:#fff;padding:clamp(56px,6vw,92px) 0 0;overfl
 .wm-tip span{display:inline-flex;align-items:center;gap:6px;margin-top:4px;font-size:13px;color:var(--muted);letter-spacing:-.005em}
 .wm-tip span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--paper)}
 .wm-on a:focus-visible path,.wm-dots a:focus-visible circle{outline:2px solid #fff;outline-offset:2px}
+/* uncovered: same bubble, faded, and no link to follow */
+.wm-base path{transition:fill .18s}
+.wm-base path[data-label]:hover{fill:#3A3630}
+/* Recessed, but solid: a translucent bubble was unreadable whenever it
+   landed over a covered (near-white) country. */
+.wm-tip.off{background:#17150F;border:1px solid rgba(255,255,255,.20);box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.wm-tip.off b{color:rgba(255,255,255,.74)}
+.wm-tip.off span{color:rgba(255,255,255,.48)}
+.wm-tip.off span::before{background:rgba(255,255,255,.34)}
