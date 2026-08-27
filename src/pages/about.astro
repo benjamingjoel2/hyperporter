@@ -1,54 +1,118 @@
 ---
 /**
- * About page. Ported from hyperporter-3.html's #view-about, including its
- * three "Name pending" team placeholders — carried over VISIBLY, not
- * quietly invented. Real names and bios must land before this page ships
- * publicly (flagged in CLAUDE.md's known gaps); noindex until then so a
- * page saying "Placeholder bio" can't end up in search results.
+ * About, on the site's shared page patterns.
+ *
+ * Rebuilt again after the first attempt was reverted — this one stays on
+ * the same patterns every other page uses rather than importing a set of
+ * its own, so it is consistent with the site instead of being a one-off.
+ *
+ * Not built, because filling them would mean inventing things:
+ *
+ *  - an investor grid. Whether Hyperporter has raised, and from whom, is
+ *    not something this repository knows.
+ *  - a press or awards section. The two badges carried over from the old
+ *    site are flagged in CLAUDE.md as unverified, and an awards block is
+ *    where an unverified claim does the most damage.
+ *  - a customer testimonial. There is no real quote. The pull quote here
+ *    is the company in its own voice, attributed as such.
+ *
+ * "Name pending" stays on the three team cards, visible rather than
+ * quietly filled in, and the page stays noindex until they are real.
  */
 import Base from '../layouts/Base.astro';
+import { destArt } from '../lib/landmark/generator';
+import { networkCounts } from '../lib/counts';
+import { STAGES } from '../lib/stages';
+
+const { countries, regionCount } = await networkCounts();
+
+const BAND = ['Kenya', 'Peru', 'Japan', 'Morocco', 'Portugal'];
+const bandArt = BAND.map((name) => ({ name, svg: destArt(name, `ab-${name}`) }));
+
+const TEAM = ['Founder / CEO', 'Co-founder / CTO', 'Co-founder / Operations'];
 ---
 
 <Base
   title="About"
-  description="Hyperporter was built by people who've coordinated trips the old way — we think that work should run itself, with a human only where real judgment is needed."
+  description="Hyperporter was built by people who've coordinated trips the old way — we think that work should run itself, with a person only where real judgment is needed."
   currentNav="about"
   noindex
 >
-  <div class="sec wrap">
-    <p class="eyebrow rv">About</p>
-    <h1 class="rv">We used to run this<br />by hand too.</h1>
-    <p class="lede rv">
-      Hyperporter was built by people who've coordinated trips the old way — chasing DMCs over email, relaying
-      WhatsApp messages between travellers and drivers, rebuilding the same itinerary PDF for the fifth time.
-    </p>
-    <p class="mission rv">
-      Every trip involves the same coordination work, repeated by hand, agency by agency. We think that work should
-      run itself — with a human only where real judgment is needed.
-    </p>
-  </div>
-  <div class="sec-tight wrap">
-    <p class="eyebrow rv">Team</p>
-    <div class="team rv">
-      <div class="tcell">
-        <div class="av"></div>
-        <div class="role">Founder / CEO</div>
-        <h3>Name pending</h3>
-        <p>Placeholder bio — replace before this page goes live publicly.</p>
-      </div>
-      <div class="tcell">
-        <div class="av"></div>
-        <div class="role">Co-founder / CTO</div>
-        <h3>Name pending</h3>
-        <p>Placeholder bio — replace before this page goes live publicly.</p>
-      </div>
-      <div class="tcell">
-        <div class="av"></div>
-        <div class="role">Co-founder / Operations</div>
-        <h3>Name pending</h3>
-        <p>Placeholder bio — replace before this page goes live publicly.</p>
+  <section class="hx hx-ph">
+    <p class="hx-ph-eye">Company</p>
+    <h1>We used to run this by hand too.</h1>
+  </section>
+
+  <section class="hx">
+    <div class="hx-ab-stats">
+      <div><b>{countries}</b><span>Countries with vetted operators</span></div>
+      <div><b>{regionCount}</b><span>Regions covered</span></div>
+      <div><b>{STAGES.length}</b><span>Steps in every trip we run</span></div>
+    </div>
+  </section>
+
+  <section class="hx-ab-band" aria-label="Where we operate">
+    <div class="hx-ab-strip">
+      {
+        bandArt.map((a) => (
+          <figure class="hx-ab-fig">
+            <div set:html={a.svg} />
+            <figcaption>{a.name}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="hx hx-sec">
+    <div class="hx-two">
+      <h2>Built to scale</h2>
+      <div>
+        <p>
+          Hyperporter was built by people who had coordinated trips the old way — chasing
+          operators over email, relaying WhatsApp messages between travellers and drivers,
+          rebuilding the same itinerary for the fifth time.
+        </p>
+        <p>
+          Every trip involves the same coordination work, repeated by hand, agency by
+          agency. Autopilot is the software that does it. Horizon is the network of local
+          operators it reaches, in {countries} countries across {regionCount} regions.
+          Agencies take one, or the other, or both.
+        </p>
       </div>
     </div>
-    <div style="margin-top:52px"><a class="btn rv" href="/signup">Sign up →</a></div>
-  </div>
+  </section>
+
+  <section class="hx hx-sec">
+    <blockquote class="hx-ab-quote">
+      <p>A person should be making the decisions. Not chasing the people who have already made them.</p>
+      <cite>Hyperporter</cite>
+    </blockquote>
+  </section>
+
+  <section class="hx hx-sec">
+    <div class="hx-two" style="margin-bottom:clamp(30px,3.6vw,52px)">
+      <h2>The team</h2>
+      <p>Names and bios are still being finalised. This page is hidden from search until they are.</p>
+    </div>
+    <div class="hx-ab-team">
+      {
+        TEAM.map((role) => (
+          <div class="hx-ab-person">
+            <div class="hx-ab-av" />
+            <div class="hx-ab-role">{role}</div>
+            <h3>Name pending</h3>
+            <p>Placeholder bio — replace before this page goes live publicly.</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="hx hx-sec">
+    <h2 class="hx-ab-join">
+      Join our team. <span>Help build the software travel operations should have had ten years ago.</span>
+    </h2>
+    <a class="btn" href="mailto:hello@hyperporter.com?subject=Working%20at%20Hyperporter">Get in touch</a>
+  </section>
 </Base>

@@ -1,37 +1,44 @@
 ---
 /**
- * Homepage. Ported from hyperporter-3.html's #view-home: hero with the
- * flight-arc map over the photo band, the sample thread card, stats row,
- * statement band, the two product pillars (Autopilot = software, Horizon =
- * network — never conflated), the four-step pipeline, and the why-now note.
+ * Homepage, on the harvey.ai structure.
  *
- * The hero photo is /hero.jpg — extracted from the prototype's ~250KB
- * base64 `--photo` custom property into a real static asset (same image,
- * same placeholder status: licensed photography is still pending, like the
- * destination illustrations).
+ * The reference anchors every section with something to look at — a large
+ * product screenshot, a client-logo wall, a photographed customer, video.
+ * That is most of why its pages read as substantial. The first pass here
+ * built only the text-led sections and came out looking empty.
  *
- * "130+" in the stats/pillars is carried over from the prototype verbatim.
- * The dataset holds 137 countries and the real public number is still an
- * open question (founder brief said "100+") — flagged in CLAUDE.md; not
- * this page's call to resolve.
+ * What that gap is filled with now:
+ *  - AppShot, the Autopilot interface drawn in markup, standing where the
+ *    reference puts a screenshot: the hero frame, the software card, and
+ *    the stage detail panel. It re-points at a different pipeline stage
+ *    per placement, which a captured image could not do.
+ *  - the destination artwork, at full bleed, for the network sections.
+ *
+ * Still deliberately absent, because they cannot be filled honestly:
+ *  - the client-logo wall. No logos exist to show; inventing them would be
+ *    fabrication. Plain facts carry that space instead.
+ *  - the customer testimonial and video carousel. No real quote or footage
+ *    exists, and writing one for ourselves would be worse than the gap.
+ *
+ * "137" is the number the dataset holds, used in place of the prototype's
+ * "130+". The public figure is still unresolved — see CLAUDE.md.
  */
 import Base from '../layouts/Base.astro';
-import EmailCapture from '../components/EmailCapture.astro';
+import AppShot from '../components/AppShot.astro';
 import { destArt } from '../lib/landmark/generator';
-import { slugify } from '../lib/slug';
-
-/**
- * Six of the generated destination scenes, standing where a black
- * "photography pending" plate used to. The artwork already existed for all
- * 137 country pages and was never shown anywhere else on the site.
- */
-const SHOWCASE = ['Japan', 'Kenya', 'Peru', 'Portugal', 'Morocco', 'Indonesia'] as const;
 import { STAGES } from '../lib/stages';
+import { getCollection } from 'astro:content';
+import { REGIONS } from '../content.config';
 
-// The sample thread sits at stage 3 (Quotation): 1-2 done, 3 current,
-// the rest ahead. Driven off STAGES so the labels can't drift from the
-// pipeline shown on /autopilot and /how.
-const CURRENT_STAGE = 3;
+const destinations = await getCollection('destinations');
+const COUNTRIES = destinations.length;
+const COVERED = REGIONS.filter((r) => destinations.some((d) => d.data.region === r));
+const AUTO = STAGES.filter((s) => s.cls === 'Automatic').length;
+const HUMAN = STAGES.length - AUTO;
+
+const frameArt = destArt('Peru', 'frame-bg');
+const horizonArt = destArt('Kenya', 'card-hz', 'dark');
+const bandArt = destArt('Morocco', 'band-bg', 'dark');
 ---
 
 <Base
@@ -39,276 +46,169 @@ const CURRENT_STAGE = 3;
   description="Travel operations infrastructure — Autopilot software and the Horizon partner network, built for travel businesses."
   currentNav="home"
 >
-  <div class="hero">
-    <svg class="routes" viewBox="0 0 1400 760" preserveAspectRatio="xMidYMid slice">
-      <g class="grat">
-        <path d="M-50 200 Q700 120 1450 200"></path><path d="M-50 330 Q700 240 1450 330"></path>
-        <path d="M-50 460 Q700 380 1450 460"></path><path d="M-50 590 Q700 520 1450 590"></path>
-        <path d="M180 -20 Q120 380 180 780"></path><path d="M480 -20 Q440 380 480 780"></path>
-        <path d="M780 -20 Q760 380 780 780"></path><path d="M1080 -20 Q1090 380 1080 780"></path>
-      </g>
-      <g>
-        <path class="arc" d="M170 520 Q520 190 880 300"></path>
-        <path class="arc" d="M880 300 Q1080 200 1290 420"></path>
-        <path class="arc" d="M330 240 Q640 430 1010 210"></path>
-        <path class="arc" d="M170 520 Q560 640 1010 560"></path>
-        <path class="arc-lit" d="M170 520 Q520 190 880 300" style="animation-delay:0s"></path>
-        <path class="arc-lit" d="M880 300 Q1080 200 1290 420" style="animation-delay:2.4s"></path>
-        <path class="arc-lit" d="M330 240 Q640 430 1010 210" style="animation-delay:4.6s"></path>
-        <path class="arc-lit" d="M170 520 Q560 640 1010 560" style="animation-delay:6.5s"></path>
-      </g>
-      <g>
-        <circle class="wp-ring" cx="170" cy="520" r="9"></circle><circle class="wp" cx="170" cy="520" r="3"></circle>
-        <circle class="wp-ring" cx="880" cy="300" r="9"></circle><circle class="wp" cx="880" cy="300" r="3"></circle>
-        <circle class="wp-ring" cx="1290" cy="420" r="9"></circle><circle class="wp" cx="1290" cy="420" r="3"
-        ></circle>
-        <circle class="wp-ring" cx="330" cy="240" r="9"></circle><circle class="wp" cx="330" cy="240" r="3"></circle>
-        <circle class="wp-ring" cx="1010" cy="210" r="9"></circle><circle class="wp" cx="1010" cy="210" r="3"
-        ></circle>
-        <circle class="wp-ring" cx="1010" cy="560" r="9"></circle><circle class="wp" cx="1010" cy="560" r="3"
-        ></circle>
-      </g>
-    </svg>
-    <div class="wrap">
-      <div class="hero-grid">
-        <div>
-          <p class="eyebrow rv">(01) &mdash; Travel operations infrastructure</p>
-          <h1 class="rv">Run trips on <em>autopilot.</em></h1>
-          <p class="lede rv">
-            Backed by AI workflows and a network of the world's best operators — built for travel businesses.
-          </p>
-        </div>
-        <div class="rv">
-          <div class="thread">
-            <div class="th"><span>Thread <b>KE-2291</b></span><span>Nairobi · 9 nights</span></div>
-            {/* Tab pattern: each chip switches the card to that stage. All
-                nine panels are rendered server-side and toggled with `hidden`,
-                so with JS off the card still shows stage 3 rather than going
-                blank. */}
-            <div class="chips" role="tablist" aria-label="Pipeline stage">
-              {
-                STAGES.map((s, i) => (
-                  <button
-                    type="button"
-                    role="tab"
-                    id={`stage-tab-${i}`}
-                    aria-controls={`stage-panel-${i}`}
-                    aria-selected={i + 1 === CURRENT_STAGE ? 'true' : 'false'}
-                    tabindex={i + 1 === CURRENT_STAGE ? 0 : -1}
-                    class:list={['chip', { done: i + 1 < CURRENT_STAGE, now: i + 1 === CURRENT_STAGE }]}
-                  >
-                    {s.name}
-                  </button>
-                ))
-              }
-            </div>
+  <!-- ============ HERO ============ -->
+  <section class="hx hx-hero">
+    <div class="hx-hero-grid">
+      <h1 class="hx-h1">Run trips<br />on autopilot.</h1>
+      <div class="hx-hero-aside">
+        <p>
+          Autopilot coordinates the work between you, your traveller and the operator on
+          the ground. Horizon is the network of operators it reaches.
+        </p>
+        <a class="btn" href="/signup">Request a demo</a>
+      </div>
+    </div>
+  </section>
 
-            {
-              STAGES.map((s, i) => (
-                <div
-                  class="tpanel"
-                  id={`stage-panel-${i}`}
-                  role="tabpanel"
-                  aria-labelledby={`stage-tab-${i}`}
-                  data-auto-needs={s.cls === 'Automatic' ? 'nothing' : 'a person'}
-                  data-manual-needs="all of it"
-                  hidden={i + 1 !== CURRENT_STAGE}
-                >
-                  {/* Autopilot on. Amber marks human-touchpoint states only. */}
-                  <div class="v v-auto">
-                    <div class:list={['line', { amb: s.cls !== 'Automatic' }]}>
-                      <i />
-                      <span>{s.note}</span>
-                    </div>
-                    <div class="line">
-                      <i />
-                      <span>{s.one}</span>
-                    </div>
-                  </div>
-                  {/* Autopilot off -- the same step done by hand, so every
-                      line is a human-touchpoint state and reads amber. */}
-                  <div class="v v-manual">
-                    <div class="line amb">
-                      <i />
-                      <span>{s.manual}</span>
-                    </div>
+  <!-- ============ PRODUCT ============ -->
+  <section class="hx">
+    <div class="hx-frame">
+      <div class="hx-frame-art" aria-hidden="true" set:html={frameArt} />
+      <AppShot stage={3} class="hx-frame-app" />
+    </div>
+    <p class="hx-cap">Autopilot, mid-quotation. Illustrative trip and operators.</p>
+  </section>
+
+  <!-- ============ FACTS ============ -->
+  <section class="hx hx-sec">
+    <div class="hx-mid">
+      <h2>Operators in {COUNTRIES} countries</h2>
+      <p>Vetted ground partners across every region Horizon reaches.</p>
+    </div>
+    <div class="hx-facts">
+      {COVERED.map((r) => <span>{r}</span>)}
+    </div>
+  </section>
+
+  <!-- ============ TWO PRODUCTS ============ -->
+  <section class="hx hx-sec">
+    <div class="hx-mid">
+      <h2>Two products. One operation.</h2>
+      <p>
+        The software and the network are sold separately. Most agencies take one, some
+        take both.
+      </p>
+    </div>
+    <div class="hx-duo">
+      <article class="hx-card">
+        <div class="hx-card-copy">
+          <div class="hx-kind">Our software</div>
+          <h3>Autopilot</h3>
+          <p>
+            Nine steps from first message to trip complete, in one thread. You keep the
+            client relationship; it keeps the chasing.
+          </p>
+          <a class="hx-ghost" href="/autopilot">Explore Autopilot &rarr;</a>
+        </div>
+        <div class="hx-card-shot"><AppShot stage={5} compact class="in-card" /></div>
+      </article>
+
+      <article class="hx-card">
+        <div class="hx-card-art" aria-hidden="true" set:html={horizonArt} />
+        <div class="hx-card-copy">
+          <div class="hx-kind">Our supplier network</div>
+          <h3>Horizon</h3>
+          <p>
+            Local operators we have vetted ourselves, in {COUNTRIES} countries. Reach them
+            through Autopilot, or bring us the trip and we will run it.
+          </p>
+          <a class="hx-ghost" href="/horizon">Explore Horizon &rarr;</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ STATEMENT BAND ============ -->
+  <section class="hx-band">
+    <div class="hx-band-art" aria-hidden="true" set:html={bandArt} />
+    <div class="hx hx-band-in">
+      <span class="hx-band-tag">The whole point</span>
+      <h2>One thread, from the first message to the last invoice.</h2>
+      <p>
+        No forwarded email chains, no spreadsheet of who owes what. {AUTO} of the {
+          STAGES.length
+        } steps run on their own. The other {HUMAN} are the ones a person should be making anyway.
+      </p>
+      <a class="btn" href="/how">See how it works</a>
+    </div>
+  </section>
+
+  <!-- ============ STAGES ============ -->
+  <section class="hx hx-sec">
+    <div class="hx-split">
+      <div>
+        <h2 class="hx-split-h">Every step of a trip, in one place</h2>
+        <div class="hx-list" id="stage-list">
+          {
+            STAGES.map((s, i) => (
+              <div class:list={['hx-item', { on: i === 0 }]} data-stage={i + 1}>
+                <button type="button" aria-expanded={i === 0 ? 'true' : 'false'}>
+                  <span class="hx-n">{s.n}</span>
+                  <span>{s.name}</span>
+                </button>
+                <div class="hx-body">
+                  <div class="hx-body-in">
+                    <p>{s.body}</p>
+                    {s.cls === 'Human touchpoint' && (
+                      <span class="hx-amb">A person handles this</span>
+                    )}
                   </div>
                 </div>
-              ))
-            }
-
-            <div class="ft">
-              <button class="toggle" id="ap-toggle" type="button" aria-pressed="true">
-                <span /> Autopilot
-              </button>
-              <span id="ap-needs">Needs you &middot; nothing</span>
-            </div>
-          </div>
-          <p class="sample-tag">Illustrative thread — not live data</p>
+              </div>
+            ))
+          }
         </div>
+        <p class="hx-split-more"><a class="hx-more" href="/how">See how it works &rarr;</a></p>
       </div>
-      <div class="stats rv">
-        <div class="stat"><b>130+</b><span>Countries in network</span></div>
-        <div class="stat"><b>24/7</b><span>Autonomous relay</span></div>
-        <div class="stat"><b>2</b><span>Systems, one platform</span></div>
+
+      <div class="hx-side">
+        <AppShot stage={1} class="hx-side-app" />
+        <p class="hx-cap">The same thread, at the selected step.</p>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="mband rv">
-    <div class="mb-head">
-      <p class="eyebrow">Where we operate</p>
-      <a class="plink" href="/destinations">All 137 destinations &rarr;</a>
-    </div>
-    <div class="mb-strip">
-      {
-        SHOWCASE.map((c, i) => (
-          <a class="mb-tile" href={`/destinations/${slugify(c)}`}>
-            <span class="mb-art" set:html={destArt(c, `hm${i}`)} />
-            <span class="mb-nm">{c}</span>
-          </a>
-        ))
-      }
-    </div>
-  </div>
-
-  <div class="statement">
-    <div class="wrap"><h2 class="rv">Automatic — <span class="u">until it needs you.</span></h2></div>
-  </div>
-
-  <div class="sec wrap">
-    <p class="eyebrow rv">(02) &mdash; What we're built on</p>
-    <div class="pillars rv">
-      <div class="pill">
-        <h3 class="name">Autopilot</h3>
-        <div class="kind">Our software</div>
-        <p>
-          The software that runs your agency's coordination work — inquiry to booking to live trip support, with a
-          human only where it counts. Subscribe monthly and run it on the partners you already have.
-        </p>
-        <a class="plink" href="/autopilot">Explore Autopilot →</a>
+  <!-- ============ STATS ============ -->
+  <section class="hx-dark">
+    <div class="hx hx-sec">
+      <div class="hx-mid">
+        <h2>What the network covers</h2>
       </div>
-      <div class="pill">
-        <h3 class="name">Horizon</h3>
-        <div class="kind">Our supplier network</div>
-        <p>
-          Our own network of vetted operators across 130+ countries. Use it inside Autopilot, or come to us directly
-          and we'll run the trip through it.
-        </p>
-        <a class="plink" href="/horizon">Explore Horizon →</a>
-      </div>
+      <dl style="margin:0">
+        <div class="hx-stat"><dt>Countries with vetted operators</dt><dd>{COUNTRIES}</dd></div>
+        <div class="hx-stat"><dt>Regions covered</dt><dd>{COVERED.length}</dd></div>
+        <div class="hx-stat"><dt>Steps from inquiry to trip complete</dt><dd>{STAGES.length}</dd></div>
+        <div class="hx-stat"><dt>Of those, handled by a person</dt><dd>{HUMAN}</dd></div>
+      </dl>
     </div>
-  </div>
-
-  <div class="sec-tight wrap">
-    <p class="eyebrow rv">(03) &mdash; System overview</p>
-    <h2 class="rv">Four moves, start to finish.</h2>
-    <div class="pipe rv">
-      <div class="pipe-rail"></div>
-      <div class="pipe-row">
-        <div class="pnode">
-          <div class="code">Step 01</div>
-          <div class="dot"></div>
-          <h3>Inquiry received</h3>
-          <p>Any channel, one structured brief.</p>
-        </div>
-        <div class="pnode">
-          <div class="code">Step 02</div>
-          <div class="dot"></div>
-          <h3>Autopilot runs it</h3>
-          <p>Planning, quoting, booking, live support.</p>
-        </div>
-        <div class="pnode">
-          <div class="code">Step 03</div>
-          <div class="dot"></div>
-          <h3>Horizon fills gaps</h3>
-          <p>A vetted operator wherever they're going.</p>
-        </div>
-        <div class="pnode">
-          <div class="code">Step 04</div>
-          <div class="dot"></div>
-          <h3>Trip goes live</h3>
-          <p>Relay handled, exceptions escalated.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="sec wrap">
-    <p class="eyebrow rv">(04) &mdash; Why now</p>
-    <p class="whynow rv">
-      Travel agencies have spent a decade bolting point solutions onto email. AI finally makes it possible to run the
-      actual coordination work end to end — not just generate an itinerary PDF — with a human only where judgment is
-      genuinely needed.
-    </p>
-  </div>
-
-  <div class="sec wrap fcta">
-    <h2 class="rv">Run your next trip on<br />infrastructure, not inboxes.</h2>
-    <EmailCapture uid="home-cta" marginTop="32px" />
-  </div>
+  </section>
 </Base>
 
 <script>
-  /**
-   * Hero thread card: the chips act as tabs over the nine stage panels.
-   * Chips to the left of the selected one read as "done", so the card still
-   * behaves as a progress display rather than a plain switcher.
-   */
-  const tablist = document.querySelector<HTMLElement>('.thread .chips[role="tablist"]');
+  // Stage accordion. One item open at a time, and the interface beside it
+  // re-points at that step. Everything renders server-side with the first
+  // stage open, so this only enhances markup that already works.
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.hx-item'));
+  const app = document.querySelector<HTMLElement>('.hx-side-app');
+  const pill = app?.querySelector<HTMLElement>('.app-stage');
+  const rail = Array.from(app?.querySelectorAll<HTMLElement>('.app-rail i') ?? []);
 
-  if (tablist) {
-    const tabs = Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
-
-    const select = (index: number, focus = true): void => {
-      tabs.forEach((tab, i) => {
-        const on = i === index;
-        tab.setAttribute('aria-selected', String(on));
-        tab.tabIndex = on ? 0 : -1;
-        tab.classList.toggle('now', on);
-        tab.classList.toggle('done', i < index);
-        const panel = document.getElementById(tab.getAttribute('aria-controls') ?? '');
-        if (panel) panel.hidden = !on;
-      });
-      if (focus) tabs[index].focus();
-      syncNeeds();
-    };
-
-    tabs.forEach((tab, i) => tab.addEventListener('click', () => select(i, false)));
-
-    /* The Autopilot switch is real: off swaps every panel to the by-hand
-       version of that stage and rewrites the "needs you" state. */
-    const thread = document.querySelector<HTMLElement>('.thread');
-    const toggle = document.querySelector<HTMLButtonElement>('#ap-toggle');
-    const needs = document.querySelector<HTMLElement>('#ap-needs');
-
-    const syncNeeds = (): void => {
-      const panel = document.querySelector<HTMLElement>('.tpanel:not([hidden])');
-      if (!panel || !needs) return;
-      const on = toggle?.getAttribute('aria-pressed') !== 'false';
-      const value = on ? panel.dataset.autoNeeds : panel.dataset.manualNeeds;
-      needs.textContent = `Needs you \u00b7 ${value ?? 'nothing'}`;
-    };
-
-    toggle?.addEventListener('click', () => {
-      const on = toggle.getAttribute('aria-pressed') !== 'false';
-      toggle.setAttribute('aria-pressed', String(!on));
-      thread?.classList.toggle('manual', on);
-      syncNeeds();
+  function open(index: number) {
+    items.forEach((el, i) => {
+      const on = i === index;
+      el.classList.toggle('on', on);
+      el.querySelector('button')?.setAttribute('aria-expanded', on ? 'true' : 'false');
     });
 
-    tablist.addEventListener('keydown', (event: KeyboardEvent) => {
-      const current = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
-      let next: number;
-      switch (event.key) {
-        case 'ArrowRight': next = (current + 1) % tabs.length; break;
-        case 'ArrowLeft':  next = (current - 1 + tabs.length) % tabs.length; break;
-        case 'Home':       next = 0; break;
-        case 'End':        next = tabs.length - 1; break;
-        default: return;
-      }
-      event.preventDefault();
-      select(next);
+    const label = items[index].querySelector('button span:last-child')?.textContent ?? '';
+    if (pill) pill.textContent = label;
+    rail.forEach((seg, i) => {
+      seg.classList.toggle('done', i < index);
+      seg.classList.toggle('now', i === index);
     });
   }
+
+  items.forEach((el, i) => {
+    el.querySelector('button')?.addEventListener('click', () => open(i));
+  });
 </script>

@@ -44,23 +44,22 @@ const blogPostingJsonLd = {
     <script is:inline type="application/ld+json" set:html={JSON.stringify(blogPostingJsonLd)} />
   </Fragment>
 
-  <div class="sec wrap">
-    <div class="art-top">
-      <a class="back" href="/blog">&larr; All posts</a>
-      <div class="b-meta">
-        <em>{cat}</em><span>{displayDate}</span><span>{read}</span>
-      </div>
-      <h1 class="art-title">{title}</h1>
-      <p class="art-dek">{dek}</p>
-    </div>
+  <article class="hx hx-art">
+    <p class="hx-ph-eye"><a class="hx-back" href="/blog">&larr; All posts</a></p>
+    <p class="hx-art-m">{cat} &middot; {displayDate} &middot; {read}</p>
+    <h1 class="hx-art-t">{title}</h1>
+    <p class="hx-art-dek">{dek}</p>
+
     <div class="art-body">
       <Content />
     </div>
-    <div class="art-end">
-      <a class="art-next" href={`/blog/${next.id}`}>
-        <span>Next</span><b>{next.data.title}</b>
+
+    <div class="hx-art-end">
+      <a class="hx-art-next" href={`/blog/${next.id}`}>
+        <span>Next</span>
+        <b>{next.data.title}</b>
       </a>
-      <a class="btn" href="/signup">Sign up &rarr;</a>
+      <a class="btn" href="/signup">Request a demo</a>
     </div>
-  </div>
+  </article>
 </Base>

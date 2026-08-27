@@ -1,16 +1,18 @@
 ---
 /**
- * Ported from hyperporter-3.html's #view-destinations (dMode/dRender/
- * dClear). The prototype generated both the region list and the
- * searchable country list client-side, on every route change. Here both
- * are rendered once at build time from the destinations collection, and
- * a small client script — identical toggle/filter behavior, just
- * operating on markup that already exists instead of building it — swaps
- * between the two panels and filters the pre-rendered list as you type.
+ * Destinations index, on the site's shared page patterns.
+ *
+ * The prototype's two-mode toggle — "explore by regions" / "search by
+ * country" — is gone. It hid half the content behind a control most
+ * people never pressed. Regions are tiles, every country is listed below
+ * them, and the search filters that list in place rather than swapping
+ * the page for a different one.
+ *
+ * Counts come from the collection, so they cannot drift from the rest of
+ * the site.
  */
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import EmailCapture from '../../components/EmailCapture.astro';
 import { REGIONS } from '../../content.config';
 import { slugify } from '../../lib/slug';
 import { destArt } from '../../lib/landmark/generator';
@@ -33,133 +35,97 @@ const totalCountries = destinations.length;
   description={`${totalCountries} countries across ${regionGroups.length} regions, run on the ground by vetted local operators through the Horizon network.`}
   currentNav="destinations"
 >
-  <div class="sec-tight wrap">
-    <p class="eyebrow rv">Where we operate</p>
-    <div class="d-head rv">
-      <h1>Destinations</h1>
-      <p class="d-note">Trips run on the ground by vetted local operators, across every region Horizon reaches.</p>
-    </div>
-    <div class="d-modes rv">
-      <button id="dm-r" class="on" type="button">Explore by regions</button>
-      <span class="sep">|</span>
-      <button id="dm-c" type="button">Search by country</button>
-      <span class="d-tally" id="d-tally">{regionGroups.length} regions &middot; {totalCountries} countries</span>
-    </div>
-  </div>
-
-  <div id="d-regions">
-    <div class="d-band">
-      <div class="wrap">
-        <div id="dreglist">
-          {
-            regionGroups.map((g) => (
-              <a class="dreg" href={`/regions/${g.slug}`}>
-                {/* Scene for the first country in the region -- gives each
-                    row a face instead of leaving it a bare text list. */}
-                <span class="dreg-art" set:html={destArt(g.countries[0].name, `rg-${g.slug}`)} />
-                <b>{g.region}</b>
-                <span class="dn">{g.countries.length} countries</span>
-              </a>
-            ))
-          }
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="d-countries" style="display:none">
-    <div class="sec-tight wrap" style="padding-top:0">
-      <div class="d-search">
-        <input type="text" id="d-q" placeholder="Search a country" aria-label="Search a country" />
-        <button class="d-clear" id="d-clear" type="button">Clear</button>
-      </div>
-      <div id="dcountrylist" style="margin-top:clamp(24px,3vw,38px)">
-        {
-          regionGroups.map((g) => (
-            <div class="d-group" data-region={g.region}>
-              <div class="d-gh">
-                <h3>{g.region}</h3>
-                <span>{g.countries.length}</span>
-              </div>
-              <div class="d-cols">
-                {g.countries.map((c) => (
-                  <a href={`/destinations/${c.slug}`} data-name={c.name.toLowerCase()}>
-                    {c.name}
-                  </a>
-                ))}
-              </div>
-            </div>
-          ))
-        }
-      </div>
-      <div class="d-none" id="d-none" style="display:none">
-        No destination matches that name — tell us where and we'll source it.
-      </div>
-    </div>
-  </div>
-
-  <div class="sec-tight wrap fcta">
-    <h2 class="rv">Somewhere not on the list?</h2>
-    <p class="lede rv" style="margin:18px auto 0">
-      Horizon adds operators where our agencies are quoting. Tell us the destination and we'll source it.
+  <section class="hx hx-ph">
+    <p class="hx-ph-eye">Where we operate</p>
+    <h1>{totalCountries} countries, {regionGroups.length} regions.</h1>
+    <p class="hx-ph-lede">
+      Trips run on the ground by vetted local operators, across every region Horizon
+      reaches.
     </p>
-    <EmailCapture uid="dest-cta" marginTop="30px" />
-  </div>
+  </section>
+
+  <!-- ============ REGIONS ============ -->
+  <section class="hx">
+    <div class="hx-tiles">
+      {
+        regionGroups.map((g) => (
+          <a class="hx-tile" href={`/regions/${g.slug}`}>
+            <span class="hx-tile-art" set:html={destArt(g.countries[0].name, `rg-${g.slug}`)} />
+            <span class="hx-tile-r">{g.countries.length} countries</span>
+            <span class="hx-tile-n">{g.region}</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ============ EVERY COUNTRY ============ -->
+  <section class="hx hx-sec">
+    <div class="hx-dh">
+      <h2>Every country</h2>
+      <div class="hx-dsearch">
+        <input type="search" id="d-q" placeholder="Search a country" aria-label="Search a country" />
+        <span id="d-tally">{totalCountries} countries</span>
+      </div>
+    </div>
+
+    <div id="dlist">
+      {
+        regionGroups.map((g) => (
+          <div class="hx-dgroup" data-region={g.region}>
+            <div class="hx-dgh">
+              <h3>{g.region}</h3>
+              <span>{g.countries.length}</span>
+            </div>
+            <div class="hx-dcols">
+              {g.countries.map((c) => (
+                <a href={`/destinations/${c.slug}`} data-name={c.name.toLowerCase()}>
+                  {c.name}
+                </a>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <p class="hx-dnone" id="d-none" hidden>
+      No destination matches that name — tell us where and we will source it.
+    </p>
+  </section>
 </Base>
 
 <script>
-  const dmR = document.getElementById('dm-r');
-  const dmC = document.getElementById('dm-c');
-  const dRegions = document.getElementById('d-regions');
-  const dCountries = document.getElementById('d-countries');
-  const tally = document.getElementById('d-tally');
+  // Filters the list that is already on the page. With no script, every
+  // country is still listed and every link still works.
   const q = document.getElementById('d-q') as HTMLInputElement | null;
-  const clearBtn = document.getElementById('d-clear');
+  const tally = document.getElementById('d-tally');
   const none = document.getElementById('d-none');
-  const groups = Array.from(document.querySelectorAll<HTMLElement>('#dcountrylist .d-group'));
-  const totalRegions = groups.length;
-  const totalCountries = document.querySelectorAll('#dcountrylist a').length;
-
-  function setMode(mode: 'regions' | 'countries') {
-    dmR?.classList.toggle('on', mode === 'regions');
-    dmC?.classList.toggle('on', mode === 'countries');
-    if (dRegions) dRegions.style.display = mode === 'regions' ? '' : 'none';
-    if (dCountries) dCountries.style.display = mode === 'countries' ? '' : 'none';
-    if (mode === 'countries') filter();
-    else if (tally) tally.textContent = `${totalRegions} regions · ${totalCountries} countries`;
-  }
+  const groups = Array.from(document.querySelectorAll<HTMLElement>('.hx-dgroup'));
+  const total = document.querySelectorAll('#dlist a').length;
 
   function filter() {
     const query = (q?.value ?? '').trim().toLowerCase();
-    let visibleGroups = 0;
-    let visibleCountries = 0;
+    let shown = 0;
     for (const group of groups) {
-      let groupHas = false;
+      let has = false;
       for (const a of group.querySelectorAll<HTMLElement>('a')) {
         const match = !query || (a.dataset.name ?? '').includes(query);
-        a.style.display = match ? '' : 'none';
+        a.hidden = !match;
         if (match) {
-          groupHas = true;
-          visibleCountries++;
+          has = true;
+          shown += 1;
         }
       }
-      group.style.display = groupHas ? '' : 'none';
-      if (groupHas) visibleGroups++;
+      group.hidden = !has;
     }
-    if (none) none.style.display = visibleCountries ? 'none' : '';
+    if (none) none.hidden = shown > 0;
     if (tally) {
       tally.textContent = query
-        ? `${visibleCountries} match${visibleCountries === 1 ? '' : 'es'}`
-        : `${totalRegions} regions · ${totalCountries} countries`;
+        ? `${shown} ${shown === 1 ? 'match' : 'matches'}`
+        : `${total} countries`;
     }
   }
 
-  dmR?.addEventListener('click', () => setMode('regions'));
-  dmC?.addEventListener('click', () => setMode('countries'));
   q?.addEventListener('input', filter);
-  clearBtn?.addEventListener('click', () => {
-    if (q) q.value = '';
-    filter();
-  });
-
 </script>
