@@ -6,10 +6,16 @@
  * paths — no mapping library, no runtime projection, no tiles.
  *
  * Resolution is a deliberate trade. The 110m set is 119KB of path data and
- * omits small island states; the 50m set includes them but costs 1.1MB,
- * which is far too heavy for a marketing page. So: 110m for the shapes,
- * plus a dot per covered country that 110m drops, positioned from that
- * country's real 50m centroid. Accurate, and a tenth of the weight.
+ * omits small island states; the 50m set includes them but costs 1.1MB of
+ * paths, far too heavy for a marketing page. So: 110m for the shapes, plus
+ * a dot per covered country that 110m drops.
+ *
+ * Those dot positions are the real 50m centroids, but computed once and
+ * written into ISLAND_CENTROIDS below rather than derived at build time.
+ * Parsing the 50m topology on every build cost ~1.5MB of JSON and a large
+ * transient allocation to produce thirteen coordinate pairs, and that was
+ * enough to push the production box's build over its memory limit.
+ * Regenerate with scripts/island-centroids.mjs if destinations change.
  *
  * Coverage is derived from the destinations collection, so the map cannot
  * disagree with the rest of the site.
@@ -18,7 +24,6 @@ import { feature } from 'topojson-client';
 import { geoNaturalEarth1, geoPath, geoCentroid } from 'd3-geo';
 import type { FeatureCollection, Geometry } from 'geojson';
 import topo110 from 'world-atlas/countries-110m.json';
-import topo50 from 'world-atlas/countries-50m.json';
 
 export const MAP_W = 1600;
 export const MAP_H = 820;
@@ -62,6 +67,26 @@ export interface MapDot {
   slug: string;
 }
 
+/**
+ * Centroids for the covered countries that 110m geometry omits, in degrees.
+ * Generated from Natural Earth 50m — see scripts/island-centroids.mjs.
+ */
+const ISLAND_CENTROIDS: { title: string; lon: number; lat: number }[] = [
+  { title: "Antigua & Barbuda", lon: -61.7945, lat: 17.2762 },
+  { title: "Bahrain", lon: 50.5425, lat: 26.0417 },
+  { title: "Barbados", lon: -59.5602, lat: 13.1811 },
+  { title: "Cape Verde", lon: -23.9576, lat: 15.9551 },
+  { title: "Cook Islands", lon: -159.7871, lat: -21.2195 },
+  { title: "French Polynesia", lon: -144.8045, lat: -14.7283 },
+  { title: "Maldives", lon: 73.4573, lat: 3.7316 },
+  { title: "Malta", lon: 14.405, lat: 35.9215 },
+  { title: "Mauritius", lon: 57.5714, lat: -20.2779 },
+  { title: "Saint Lucia", lon: -60.9696, lat: 13.8946 },
+  { title: "Samoa", lon: -172.1649, lat: -13.7536 },
+  { title: "Seychelles", lon: 55.476, lat: -4.6601 },
+  { title: "Singapore", lon: 103.817, lat: 1.359 },
+];
+
 export interface WorldMap {
   countries: MapCountry[];
   dots: MapDot[];
@@ -72,7 +97,14 @@ export interface WorldMap {
 /**
  * @param covered  our destinations, as { title, slug }
  */
+let cache: { key: string; value: WorldMap } | null = null;
+
 export function buildWorldMap(covered: { title: string; slug: string }[]): WorldMap {
+  // Two pages render the map. Without this the whole topology is parsed and
+  // projected once per page.
+  const cacheKey = covered.map((c) => c.slug).join('|');
+  if (cache?.key === cacheKey) return cache.value;
+
   const projection = geoNaturalEarth1().fitSize([MAP_W, MAP_H], { type: 'Sphere' });
   const toPath = geoPath(projection);
 
@@ -111,37 +143,29 @@ export function buildWorldMap(covered: { title: string; slug: string }[]): World
     });
   }
 
-  // Anything covered that 110m does not draw gets a dot at its real centroid.
-  const stillWanted = [...wanted.entries()].filter(([key]) => !drawn.has(key));
+  // Anything covered that 110m does not draw gets a dot at its real centroid,
+  // read from the precomputed table.
+  const byTitle = new Map(ISLAND_CENTROIDS.map((c) => [c.title, c]));
   const dots: MapDot[] = [];
   const missing: string[] = [];
 
-  if (stillWanted.length) {
-    const fc50 = feature(
-      topo50 as never,
-      (topo50 as never as { objects: { countries: never } }).objects.countries
-    ) as unknown as FeatureCollection<Geometry, { name: string }>;
-    const byName = new Map(fc50.features.map((f) => [norm(f.properties.name), f]));
-
-    for (const [key, entry] of stillWanted) {
-      const f = byName.get(key);
-      if (!f) {
-        missing.push(entry.title);
-        continue;
-      }
-      const point = projection(geoCentroid(f));
-      if (!point) {
-        missing.push(entry.title);
-        continue;
-      }
-      dots.push({
-        name: entry.title,
-        slug: entry.slug,
-        x: Math.round(point[0] * 10) / 10,
-        y: Math.round(point[1] * 10) / 10,
-      });
+  for (const [key, entry] of wanted) {
+    if (drawn.has(key)) continue;
+    const c = byTitle.get(entry.title);
+    const point = c ? projection([c.lon, c.lat]) : null;
+    if (!point) {
+      missing.push(entry.title);
+      continue;
     }
+    dots.push({
+      name: entry.title,
+      slug: entry.slug,
+      x: Math.round(point[0] * 10) / 10,
+      y: Math.round(point[1] * 10) / 10,
+    });
   }
 
-  return { countries, dots, missing };
+  const result = { countries, dots, missing };
+  cache = { key: cacheKey, value: result };
+  return result;
 }
