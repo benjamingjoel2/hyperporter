@@ -62,7 +62,7 @@ const coveredCount = countries.filter((c) => c.covered).length + dots.length;
   <div class="wm-frame">
     <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} role="img" aria-label={`Hyperporter operates in ${coveredCount} countries`}>
       <g class="wm-base">
-        {countries.filter((c) => !c.covered).map((c) => <path d={c.d} />)}
+        {countries.filter((c) => !c.covered).map((c) => <path d={c.d} data-label={c.name} />)}
       </g>
       <g class="wm-on">
         {
@@ -101,7 +101,7 @@ const coveredCount = countries.filter((c) => c.covered).length + dots.length;
     !bare && (
       <div class="wm-tip" id="wm-tip" hidden aria-hidden="true">
         <b></b>
-        <span>Available</span>
+        <span class="wm-tip-s"></span>
       </div>
     )
   }
@@ -125,10 +125,16 @@ const coveredCount = countries.filter((c) => c.covered).length + dots.length;
   if (root && tip) {
     const label = tip.querySelector('b');
 
+    const state = tip.querySelector('.wm-tip-s');
+
     const show = (el: Element, x: number, y: number) => {
       const name = (el as HTMLElement).dataset.label ?? '';
       if (!name) return;
+      // anything in .wm-base is a country we do not cover
+      const off = Boolean(el.closest('.wm-base'));
       if (label) label.textContent = name;
+      if (state) state.textContent = off ? 'Unavailable' : 'Available';
+      tip.classList.toggle('off', off);
       tip.hidden = false;
       const box = root.getBoundingClientRect();
       const w = tip.offsetWidth;
@@ -144,7 +150,9 @@ const coveredCount = countries.filter((c) => c.covered).length + dots.length;
     };
 
     root.addEventListener('pointermove', (e) => {
-      const hit = (e.target as Element).closest('.wm-on a, .wm-dots a');
+      const hit = (e.target as Element).closest(
+        '.wm-on a, .wm-dots a, .wm-base path[data-label]'
+      );
       if (hit) show(hit, e.clientX, e.clientY);
       else hide();
     });

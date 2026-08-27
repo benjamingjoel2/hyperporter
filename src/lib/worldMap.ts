@@ -44,6 +44,25 @@ const ALIASES: Record<string, string> = {
   'French Polynesia': 'Fr. Polynesia',
 };
 
+/**
+ * Natural Earth abbreviates to fit its own labels. These are shown to
+ * visitors in the hover bubble, so they get written out properly.
+ */
+const DISPLAY_NAMES: Record<string, string> = {
+  'Bosnia and Herz.': 'Bosnia and Herzegovina',
+  'Central African Rep.': 'Central African Republic',
+  'Dem. Rep. Congo': 'Democratic Republic of the Congo',
+  'Eq. Guinea': 'Equatorial Guinea',
+  'Falkland Is.': 'Falkland Islands',
+  'Fr. S. Antarctic Lands': 'French Southern and Antarctic Lands',
+  'N. Cyprus': 'Northern Cyprus',
+  'S. Sudan': 'South Sudan',
+  'Solomon Is.': 'Solomon Islands',
+  'W. Sahara': 'Western Sahara',
+  eSwatini: 'Eswatini',
+  Macedonia: 'North Macedonia',
+};
+
 const norm = (s: string) =>
   s
     .toLowerCase()
@@ -143,7 +162,7 @@ export function buildWorldMap(covered: { title: string; slug: string }[]): World
     const hit = wanted.get(key);
     if (hit) drawn.add(key);
     countries.push({
-      name: f.properties.name,
+      name: DISPLAY_NAMES[f.properties.name] ?? f.properties.name,
       label: hit?.title,
       d: trim(d),
       covered: Boolean(hit),
