@@ -69,10 +69,13 @@ const coveredCount = countries.filter((c) => c.covered).length + dots.length;
           countries
             .filter((c) => c.covered)
             .map((c) => (
-              <a href={`/destinations/${c.slug}`} data-name={c.name.toLowerCase()}>
-                <path d={c.d}>
-                  <title>{c.name}</title>
-                </path>
+              <a
+                href={`/destinations/${c.slug}`}
+                data-name={(c.label ?? c.name).toLowerCase()}
+                data-label={c.label ?? c.name}
+                aria-label={`${c.label ?? c.name} — available`}
+              >
+                <path d={c.d} />
               </a>
             ))
         }
@@ -80,16 +83,28 @@ const coveredCount = countries.filter((c) => c.covered).length + dots.length;
       <g class="wm-dots">
         {
           dots.map((d) => (
-            <a href={`/destinations/${d.slug}`} data-name={d.name.toLowerCase()}>
-              <circle cx={d.x} cy={d.y} r="4.5">
-                <title>{d.name}</title>
-              </circle>
+            <a
+              href={`/destinations/${d.slug}`}
+              data-name={d.name.toLowerCase()}
+              data-label={d.name}
+              aria-label={`${d.name} — available`}
+            >
+              <circle cx={d.x} cy={d.y} r="4.5" />
             </a>
           ))
         }
       </g>
     </svg>
   </div>
+
+  {
+    !bare && (
+      <div class="wm-tip" id="wm-tip" hidden aria-hidden="true">
+        <b></b>
+        <span>Available</span>
+      </div>
+    )
+  }
 
   {
     !bare && (
@@ -100,6 +115,55 @@ const coveredCount = countries.filter((c) => c.covered).length + dots.length;
     )
   }
 </div>
+
+<script>
+  {/* Hover bubble. The links work on their own; this only names what is
+      under the pointer before you click it. */}
+  const root = document.querySelector<HTMLElement>('.wm:not(.bare)');
+  const tip = document.getElementById('wm-tip');
+
+  if (root && tip) {
+    const label = tip.querySelector('b');
+
+    const show = (el: Element, x: number, y: number) => {
+      const name = (el as HTMLElement).dataset.label ?? '';
+      if (!name) return;
+      if (label) label.textContent = name;
+      tip.hidden = false;
+      const box = root.getBoundingClientRect();
+      const w = tip.offsetWidth;
+      const h = tip.offsetHeight;
+      // keep the bubble inside the map, and above the pointer
+      const left = Math.min(Math.max(x - box.left - w / 2, 6), box.width - w - 6);
+      const top = Math.max(y - box.top - h - 14, 6);
+      tip.style.transform = `translate(${Math.round(left)}px, ${Math.round(top)}px)`;
+    };
+
+    const hide = () => {
+      tip.hidden = true;
+    };
+
+    root.addEventListener('pointermove', (e) => {
+      const hit = (e.target as Element).closest('.wm-on a, .wm-dots a');
+      if (hit) show(hit, e.clientX, e.clientY);
+      else hide();
+    });
+    root.addEventListener('pointerleave', hide);
+
+    // keyboard: name the link when it takes focus
+    root.addEventListener(
+      'focusin',
+      (e) => {
+        const hit = (e.target as Element).closest('.wm-on a, .wm-dots a');
+        if (!hit) return hide();
+        const r = hit.getBoundingClientRect();
+        show(hit, r.left + r.width / 2, r.top + r.height / 2);
+      },
+      true
+    );
+    root.addEventListener('focusout', hide, true);
+  }
+</script>
 
 {
   interactive && (
@@ -124,14 +188,15 @@ const coveredCount = countries.filter((c) => c.covered).length + dots.length;
           el.classList.toggle('hit', match);
           if (match) {
             hits += 1;
-            if (!firstName) firstName = name;
+            // use the label as authored -- re-casing the lowercased name
+            // breaks on non-ASCII letters (Türkiye became "TüRkiye")
+            if (!firstName) firstName = el.dataset.label ?? name;
           }
         }
         wm?.classList.toggle('searching', term.length > 0);
         if (!status) return;
         if (!term) status.textContent = `${total} countries covered`;
-        else if (hits === 1)
-          status.textContent = `${firstName.replace(/\b\w/g, (m) => m.toUpperCase())} — covered`;
+        else if (hits === 1) status.textContent = `${firstName} — covered`;
         else if (hits > 1) status.textContent = `${hits} matches`;
         else status.textContent = 'Not covered yet — tell us and we will source it';
       });
