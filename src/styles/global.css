@@ -984,11 +984,11 @@ footer{background:var(--dark);color:#fff;padding:clamp(56px,6vw,92px) 0 0;overfl
 /* --- image tiles ------------------------------------------ */
 .hx-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:clamp(14px,1.8vw,26px)}
 .hx-tile{display:block;text-decoration:none;color:inherit}
-.hx-tile-art{aspect-ratio:4/3;border-radius:6px;overflow:hidden;background:var(--steel);border:1px solid var(--line)}
+.hx-tile-art{display:block;aspect-ratio:4/3;border-radius:6px;overflow:hidden;background:var(--steel);border:1px solid var(--line)}
 .hx-tile-art svg{width:100%;height:100%;display:block;transition:transform .55s cubic-bezier(.2,.8,.2,1)}
 .hx-tile:hover .hx-tile-art svg{transform:scale(1.05)}
-.hx-tile-r{margin-top:14px;font-size:13.5px;color:var(--dim);letter-spacing:-.005em}
-.hx-tile-n{margin-top:3px;font-family:var(--display);font-size:20px;letter-spacing:-.011em}
+.hx-tile-r{display:block;margin-top:14px;font-size:13.5px;color:var(--dim);letter-spacing:-.005em}
+.hx-tile-n{display:block;margin-top:3px;font-family:var(--display);font-size:20px;letter-spacing:-.011em}
 
 /* --- editorial index (blog / destinations) ---------------- */
 .hx-idx{display:grid;grid-template-columns:minmax(0,.55fr) minmax(0,1.45fr);gap:clamp(30px,6vw,100px);align-items:start}
@@ -1106,7 +1106,11 @@ footer{background:var(--dark);color:#fff;padding:clamp(56px,6vw,92px) 0 0;overfl
    Starlink's availability map, on our palette: a dark ground with
    the covered world lit and everything else recessed.
    ============================================================ */
-.wm{--wm-bg:#0B0A09;--wm-off:#26241F;--wm-on:#F5F4F1}
+.wm{--wm-bg:#0B0A09;--wm-off:#26241F;--wm-on:#F5F4F1;
+  /* The map's own accent: a country you can actually sell.
+     Deliberately not amber -- amber is reserved sitewide for a step a
+     person must touch, and using it here as a highlight diluted that. */
+  --wm-live:#2FD483}
 .wm-bar{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:clamp(20px,2.4vw,32px)}
 .wm-bar input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:4px;padding:12px 15px;font:inherit;font-size:15.5px;color:#fff;min-width:260px}
 .wm-bar input::placeholder{color:rgba(255,255,255,.42)}
@@ -1117,14 +1121,14 @@ footer{background:var(--dark);color:#fff;padding:clamp(56px,6vw,92px) 0 0;overfl
 .wm-frame svg{width:100%;height:auto;display:block}
 .wm-base path{fill:var(--wm-off);stroke:var(--wm-bg);stroke-width:.6}
 .wm-on path{fill:var(--wm-on);stroke:var(--wm-bg);stroke-width:.6;transition:fill .2s,opacity .2s}
-.wm-on a:hover path{fill:#fff;stroke:#fff;stroke-width:2.2;paint-order:stroke}
+.wm-on a:hover path{fill:var(--wm-live);stroke:var(--wm-live);stroke-width:2.2;paint-order:stroke}
 .wm-dots circle{fill:var(--wm-on);stroke:var(--wm-bg);stroke-width:1.2;transition:opacity .2s,r .2s}
-.wm-dots a:hover circle{fill:#fff;r:6}
+.wm-dots a:hover circle{fill:var(--wm-live);r:6.5}
 .wm-on a,.wm-dots a{cursor:pointer}
 
 /* while searching, everything unmatched steps back */
 .wm.searching .wm-on path,.wm.searching .wm-dots circle{opacity:.22}
-.wm.searching .hit path,.wm.searching .hit circle{opacity:1;fill:var(--amber)}
+.wm.searching .hit path,.wm.searching .hit circle{opacity:1;fill:var(--wm-live)}
 .wm.searching .hit circle{r:7}
 
 .wm-key{display:flex;gap:22px;margin-top:clamp(16px,2vw,24px);font-size:14px;color:rgba(255,255,255,.60)}
@@ -1169,5 +1173,14 @@ footer{background:var(--dark);color:#fff;padding:clamp(56px,6vw,92px) 0 0;overfl
 .wm-tip[hidden]{display:none}
 .wm-tip b{display:block;font-family:var(--display);font-weight:400;font-size:16px;letter-spacing:-.011em;line-height:1.2}
 .wm-tip span{display:inline-flex;align-items:center;gap:6px;margin-top:4px;font-size:13px;color:var(--muted);letter-spacing:-.005em}
-.wm-tip span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--paper)}
-.wm-on a:focus-visible path,.wm-dots a:focus-visible circle{outline:2px solid #fff;outline-offset:2px}
+.wm-tip span::before{content:"";width:6px;height:6px;border-radius:50%;background:#1FA765}
+.wm-on a:focus-visible path,.wm-dots a:focus-visible circle{outline:2px solid var(--wm-live);outline-offset:2px}
+/* uncovered: same bubble, faded, and no link to follow */
+.wm-base path{transition:fill .18s}
+.wm-base path[data-label]:hover{fill:#3A3630}
+/* Recessed, but solid: a translucent bubble was unreadable whenever it
+   landed over a covered (near-white) country. */
+.wm-tip.off{background:#17150F;border:1px solid rgba(255,255,255,.20);box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.wm-tip.off b{color:rgba(255,255,255,.74)}
+.wm-tip.off span{color:rgba(255,255,255,.48)}
+.wm-tip.off span::before{background:rgba(255,255,255,.34)}
