@@ -1,0 +1,140 @@
+---
+/**
+ * Coverage map, on the Starlink availability-map model: a full-bleed dark
+ * world, countries we cover lit, everything else recessed.
+ *
+ * Real Natural Earth geometry, projected to SVG paths at build time (see
+ * lib/worldMap.ts). No mapping library reaches the browser and nothing is
+ * fetched at runtime — it is one inline SVG.
+ *
+ * Two states only, covered or not, because that is the only distinction
+ * the data actually supports. Tiers would need a judgement per country
+ * that nobody has made yet, and inventing them would put claims on a map.
+ *
+ * Covered countries are links to their destination page. The 13 island
+ * states too small to draw at this resolution are dots, positioned from
+ * their real centroids rather than placed by hand.
+ */
+import { getCollection } from 'astro:content';
+import { buildWorldMap, MAP_W, MAP_H } from '../lib/worldMap';
+
+interface Props {
+  /** Adds the search field and the status readout. */
+  interactive?: boolean;
+  /** Drops the frame, key and links so the map can sit behind content. */
+  bare?: boolean;
+}
+
+const { interactive = false, bare = false } = Astro.props;
+
+const destinations = await getCollection('destinations');
+const { countries, dots, missing } = buildWorldMap(
+  destinations.map((d) => ({ title: d.data.title, slug: d.id }))
+);
+
+// A country with no geometry would be silently absent from the map, so
+// fail the build rather than ship a map that quietly under-reports.
+if (missing.length) {
+  throw new Error(`WorldMap: no geometry for ${missing.join(', ')}`);
+}
+
+const coveredCount = countries.filter((c) => c.covered).length + dots.length;
+---
+
+<div class:list={['wm', { bare }]} data-covered={coveredCount}>
+  {
+    interactive && (
+      <div class="wm-bar">
+        <input
+          type="search"
+          id="wm-q"
+          placeholder="Check a country"
+          aria-label="Check whether a country is covered"
+          autocomplete="off"
+        />
+        <p class="wm-status" id="wm-status" role="status">
+          {coveredCount} countries covered
+        </p>
+      </div>
+    )
+  }
+
+  <div class="wm-frame">
+    <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} role="img" aria-label={`Hyperporter operates in ${coveredCount} countries`}>
+      <g class="wm-base">
+        {countries.filter((c) => !c.covered).map((c) => <path d={c.d} />)}
+      </g>
+      <g class="wm-on">
+        {
+          countries
+            .filter((c) => c.covered)
+            .map((c) => (
+              <a href={`/destinations/${c.slug}`} data-name={c.name.toLowerCase()}>
+                <path d={c.d}>
+                  <title>{c.name}</title>
+                </path>
+              </a>
+            ))
+        }
+      </g>
+      <g class="wm-dots">
+        {
+          dots.map((d) => (
+            <a href={`/destinations/${d.slug}`} data-name={d.name.toLowerCase()}>
+              <circle cx={d.x} cy={d.y} r="4.5">
+                <title>{d.name}</title>
+              </circle>
+            </a>
+          ))
+        }
+      </g>
+    </svg>
+  </div>
+
+  {
+    !bare && (
+      <div class="wm-key">
+        <span class="wm-k on">Covered</span>
+        <span class="wm-k">Not yet</span>
+      </div>
+    )
+  }
+</div>
+
+{
+  interactive && (
+    <script>
+      {/* Search over the shapes already in the SVG. With no script the map
+          is still a complete, clickable map — only the field goes away. */}
+      const q = document.getElementById('wm-q') as HTMLInputElement | null;
+      const status = document.getElementById('wm-status');
+      const wm = document.querySelector<HTMLElement>('.wm');
+      const total = Number(wm?.dataset.covered ?? 0);
+      const shapes = Array.from(
+        document.querySelectorAll<SVGAElement>('.wm-on a, .wm-dots a')
+      );
+
+      q?.addEventListener('input', () => {
+        const term = q.value.trim().toLowerCase();
+        let hits = 0;
+        let firstName = '';
+        for (const el of shapes) {
+          const name = el.dataset.name ?? '';
+          const match = term.length > 0 && name.includes(term);
+          el.classList.toggle('hit', match);
+          if (match) {
+            hits += 1;
+            if (!firstName) firstName = name;
+          }
+        }
+        wm?.classList.toggle('searching', term.length > 0);
+        if (!status) return;
+        if (!term) status.textContent = `${total} countries covered`;
+        else if (hits === 1)
+          status.textContent = `${firstName.replace(/\b\w/g, (m) => m.toUpperCase())} — covered`;
+        else if (hits > 1) status.textContent = `${hits} matches`;
+        else status.textContent = 'Not covered yet — tell us and we will source it';
+      });
+    </script>
+  )
+}
