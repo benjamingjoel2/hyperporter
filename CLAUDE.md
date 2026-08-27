@@ -82,8 +82,34 @@ photography is licensed. Keep them as the fallback when `DEST_IMG` has no entry.
 5. **Footer** Terms / Privacy / FAQ buttons have no handlers.
 6. **Country count** — site says "130+ countries", the dataset holds 137, and a founder brief
    said "100+". Unresolved. Confirm the real number before publishing.
-7. **Award badges** — "Hospitality B2B Travel Partner" and "UN Tourism Winner" appear on every
-   destination page, copied from the live site. Confirm they are accurate to claim.
+7. **Award badges** — "Hospitality B2B Travel Partner" and "UN Tourism Winner" have been
+   REMOVED from all 137 destination pages pending confirmation. Restore only once verified.
+
+
+## Design direction (current)
+
+Light base, punctuated by full-bleed dark moments — the homepage hero, the
+coverage map, the statement bands, the stats block and the footer. Structure
+and restraint come from harvey.ai; the cinematic dark hero and the coverage
+map come from starlink.com.
+
+- **Display type**: Newsreader (serif). **Everything else**: Hyperlocal ROM,
+  the brand cut of ABC ROM. IBM Plex Mono survives only in the dispatch rail.
+- **No accent colour.** `--signal` resolves to a warm grey. Amber is the only
+  colour on the site and still means one thing: a step a person must touch.
+- `AppShot.astro` draws the Autopilot interface in markup, standing wherever
+  the reference would put a product screenshot. Re-points per pipeline stage.
+- `WorldMap.astro` + `lib/worldMap.ts`: real Natural Earth geometry projected
+  to SVG at build time. 110m shapes plus centroid dots for the 13 island
+  states 110m drops. Two states only — covered or not. The build **fails** if
+  any destination has no geometry, so the map can never under-report.
+- `lib/counts.ts` is the single source for country/region figures. Never
+  hard-code them again.
+
+### Font licence — outstanding
+Hyperlocal ROM was supplied under a **desktop** licence, whose terms forbid
+"storing on publicly available servers". It is live on hyperporter.com at the
+founder's explicit instruction. A Dinamo **web** licence is still required.
 
 ## Migration target
 
