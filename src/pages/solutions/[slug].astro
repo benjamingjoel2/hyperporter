@@ -1,0 +1,53 @@
+---
+/**
+ * One page per solutions category. The tier pill on each feature is the
+ * founder's wording verbatim — "Autopilot up" and "€19/mo add-on" say
+ * something a tier name alone would not.
+ */
+import Base from '../../layouts/Base.astro';
+import { CATEGORIES } from '../../lib/content/solutions';
+
+export function getStaticPaths() {
+  return CATEGORIES.map((c) => ({ params: { slug: c.slug }, props: { c } }));
+}
+
+const { c } = Astro.props;
+---
+
+<Base
+  title={c.name}
+  description={`${c.title} ${c.lede}`}
+  currentNav="solutions"
+>
+  <div class="sec wrap">
+    <p class="eyebrow rv">Solutions &mdash; {c.name}</p>
+    <h1 class="rv">{c.title}</h1>
+    <p class="lede rv">{c.lede}</p>
+  </div>
+
+  <div class="sec-tight wrap">
+    <div class="flist rv">
+      {
+        c.features.map((f, i) => (
+          <div class="fitem">
+            <div class="fn">{String(i + 1).padStart(2, '0')}</div>
+            <div>
+              <b>{f.name}</b>
+              <p>{f.body}</p>
+              <span class="tierpill">{f.tier}</span>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="nextup rv">
+      <div>
+        <p class="eyebrow" style="margin-bottom:0">Up next</p>
+        <h3>{c.next.title}</h3>
+        <p>{c.next.desc}</p>
+      </div>
+      <a class="plink" href={c.next.href}>{c.next.cta} &rarr;</a>
+    </div>
+  </div>
+</Base>

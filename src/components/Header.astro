@@ -11,19 +11,34 @@
 import { FEED } from '../lib/feed';
 
 interface Props {
-  current?: 'home' | 'autopilot' | 'horizon' | 'destinations' | 'how' | 'blog' | 'about';
+  current?:
+    | 'home'
+    | 'product'
+    | 'solutions'
+    | 'customers'
+    | 'pricing'
+    | 'security'
+    | 'destinations'
+    | 'blog'
+    | 'about';
 }
 
 const { current } = Astro.props;
 
+/**
+ * Nav follows the product model: Product is the four layers, Solutions is
+ * the same features grouped by job, Customers is who each is for. The old
+ * flat Autopilot / Horizon entries now live under Product, since neither is
+ * the platform any more — OS is.
+ */
 const NAV = [
-  { id: 'home', label: 'Home', href: '/' },
-  { id: 'autopilot', label: 'Autopilot', href: '/autopilot' },
-  { id: 'horizon', label: 'Horizon', href: '/horizon' },
+  { id: 'product', label: 'Product', href: '/product' },
+  { id: 'solutions', label: 'Solutions', href: '/solutions' },
+  { id: 'customers', label: 'Customers', href: '/customers' },
+  { id: 'pricing', label: 'Pricing', href: '/pricing' },
   { id: 'destinations', label: 'Destinations', href: '/destinations' },
-  { id: 'how', label: 'How It Works', href: '/how' },
-  { id: 'blog', label: 'Blog', href: '/blog' },
-  { id: 'about', label: 'About', href: '/about' },
+  { id: 'blog', label: 'Resources', href: '/blog' },
+  { id: 'security', label: 'Security', href: '/security' },
 ] as const;
 
 const row = FEED.map(
@@ -58,7 +73,7 @@ const stream = row + row;
       }
     </nav>
     <div class="sys"><i></i><span id="clock">00:00 UTC</span></div>
-    <a class="cta-nav" href="/signup">Sign up</a>
+    <a class="cta-nav" href="/signup">Get started free</a>
     <button class="burger" aria-label="Menu" id="burger"><span></span><span></span><span></span></button>
   </div>
   <div class="rail" aria-hidden="true">
@@ -67,7 +82,7 @@ const stream = row + row;
   </div>
   <div class="drawer" id="drawer">
     {NAV.map((n) => <a href={n.href}>{n.label}</a>)}
-    <a href="/signup">Sign up &rarr;</a>
+    <a href="/signup">Get started free &rarr;</a>
   </div>
 </header>
 

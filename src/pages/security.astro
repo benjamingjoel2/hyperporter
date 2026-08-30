@@ -1,0 +1,70 @@
+---
+/**
+ * Security. The SOC 2 / GDPR answer says "not formally, not yet" — that is
+ * deliberate and accurate, and must not be softened into implying
+ * certification the company does not hold.
+ */
+import Base from '../layouts/Base.astro';
+import { SECURITY } from '../lib/content/pricing';
+---
+
+<Base
+  title="Security"
+  description="Encryption, zero standing access, account isolation, and no training on your data — the practices Hyperporter is built on, and what is not yet certified."
+  currentNav="security"
+>
+  <div class="sec wrap">
+    <p class="eyebrow rv">{SECURITY.eyebrow}</p>
+    <h1 class="rv">{SECURITY.title}</h1>
+    <p class="lede rv">{SECURITY.lede}</p>
+  </div>
+
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">{SECURITY.practicesEyebrow}</p>
+    <h2 class="rv">{SECURITY.practicesTitle}</h2>
+    <div class="reasons rv" style="grid-template-columns:repeat(2,1fr)">
+      {
+        SECURITY.practices.map((p) => (
+          <div>
+            <b>{p.title}</b>
+            <p>{p.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">{SECURITY.controlEyebrow}</p>
+    <h2 class="rv">{SECURITY.controlTitle}</h2>
+    <div class="reasons rv">
+      {
+        SECURITY.controls.map((c) => (
+          <div>
+            <b>{c.title}</b>
+            <p>{c.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">FAQ</p>
+    <div class="acc rv" id="sec-faq">
+      {
+        SECURITY.faq.map((f, i) => (
+          <div class:list={['acc-i', { open: i === 0 }]}>
+            <button type="button" aria-expanded={i === 0 ? 'true' : 'false'}>
+              {f.q}
+              <i>+</i>
+            </button>
+            <div class="acc-b">
+              <p>{f.a}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</Base>
