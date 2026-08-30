@@ -9,15 +9,15 @@
  * as in that file. Having it in both places would give the same six pages
  * two entry points in the same bar.
  *
- * `icon` names a shape drawn inline in Header.astro. No icon library is
- * loaded — thirteen 20px glyphs are not worth a dependency.
+ * Rows are numbered rather than iconed: the site already numbers its
+ * ladders, stages and feature lists, so a number reads as part of the same
+ * system where a tinted icon tile would read as borrowed from elsewhere.
  */
 
 export interface MegaRow {
   label: string;
   desc: string;
   href: string;
-  icon: string;
 }
 
 export interface MegaTab {
@@ -26,6 +26,10 @@ export interface MegaTab {
   /** Small caps heading above the rows. */
   heading: string;
   rows: MegaRow[];
+  /** The strip closing the panel — one concrete next step, never filler. */
+  footLabel: string;
+  footCta: string;
+  footHref: string;
 }
 
 export interface NavItem {
@@ -46,26 +50,32 @@ export const NAV: NavItem[] = [
         label: 'Products',
         heading: 'The four capabilities',
         rows: [
-          { label: 'Overview', desc: 'All four products, one connected system', href: '/product', icon: 'grid' },
-          { label: 'OS', desc: 'The foundation everyone gets, free forever', href: '/os', icon: 'screen' },
-          { label: 'Autopilot', desc: 'Automation that still knows when to stop', href: '/autopilot', icon: 'loop' },
-          { label: 'Intelligence', desc: 'An AI layer trained on your own data', href: '/intelligence', icon: 'spark' },
-          { label: 'Horizon', desc: 'A vetted list of DMCs and suppliers', href: '/horizon', icon: 'globe' },
+          { label: 'Overview', desc: 'All four products, one connected system', href: '/product' },
+          { label: 'OS', desc: 'The foundation everyone gets, free forever', href: '/os' },
+          { label: 'Autopilot', desc: 'Automation that still knows when to stop', href: '/autopilot' },
+          { label: 'Intelligence', desc: 'An AI layer trained on your own data', href: '/intelligence' },
+          { label: 'Horizon', desc: 'A vetted list of DMCs and suppliers', href: '/horizon' },
         ],
+        footLabel: 'Every tier is strictly additive',
+        footCta: 'See what each one costs',
+        footHref: '/pricing',
       },
       {
         id: 'solutions',
         label: 'Solutions',
         heading: 'Every feature, by category',
         rows: [
-          { label: 'Overview', desc: 'Six categories, from inquiry to getting paid', href: '/solutions', icon: 'grid' },
-          { label: 'Inquiry', desc: 'How a new lead enters the CRM', href: '/solutions/inquiry', icon: 'inbox' },
-          { label: 'Operations', desc: 'CRM and stage automation', href: '/solutions/operations', icon: 'flow' },
-          { label: 'Branding', desc: 'Your identity on everything customers see', href: '/solutions/branding', icon: 'badge' },
-          { label: 'Communication', desc: 'Talking to travelers and partners, everywhere', href: '/solutions/communication', icon: 'chat' },
-          { label: 'Payments', desc: 'Money in, money out, fully automated', href: '/solutions/payments', icon: 'card' },
-          { label: 'Marketing', desc: 'Outbound reach beyond a single trip', href: '/solutions/marketing', icon: 'send' },
+          { label: 'Overview', desc: 'Six categories, from inquiry to getting paid', href: '/solutions' },
+          { label: 'Inquiry', desc: 'How a new lead enters the CRM', href: '/solutions/inquiry' },
+          { label: 'Operations', desc: 'CRM and stage automation', href: '/solutions/operations' },
+          { label: 'Branding', desc: 'Your identity on everything customers see', href: '/solutions/branding' },
+          { label: 'Communication', desc: 'Talking to travelers and partners, everywhere', href: '/solutions/communication' },
+          { label: 'Payments', desc: 'Money in, money out, fully automated', href: '/solutions/payments' },
+          { label: 'Marketing', desc: 'Outbound reach beyond a single trip', href: '/solutions/marketing' },
         ],
+        footLabel: 'Every feature, with the tier it lands on',
+        footCta: 'Compare all six',
+        footHref: '/solutions',
       },
     ],
   },
@@ -80,22 +90,28 @@ export const NAV: NavItem[] = [
         label: 'Resellers',
         heading: 'For Resellers',
         rows: [
-          { label: 'Agent OS', desc: 'The full walkthrough, for agencies', href: '/customers/agent-os', icon: 'grid' },
-          { label: 'Travel agencies', desc: 'Multi-agent teams, one shared CRM and brand', href: '/customers/travel-agencies', icon: 'shop' },
-          { label: 'Travel agents', desc: 'Run your book of clients from one thread', href: '/customers/travel-agents', icon: 'person' },
-          { label: 'Independent advisors', desc: 'Look like a full agency, without the overhead', href: '/customers/independent-advisors', icon: 'star' },
-          { label: 'Creators', desc: 'Turn your audience into bookings', href: '/customers/creators', icon: 'camera' },
+          { label: 'Agent OS', desc: 'The full walkthrough, for agencies', href: '/customers/agent-os' },
+          { label: 'Travel agencies', desc: 'Multi-agent teams, one shared CRM and brand', href: '/customers/travel-agencies' },
+          { label: 'Travel agents', desc: 'Run your book of clients from one thread', href: '/customers/travel-agents' },
+          { label: 'Independent advisors', desc: 'Look like a full agency, without the overhead', href: '/customers/independent-advisors' },
+          { label: 'Creators', desc: 'Turn your audience into bookings', href: '/customers/creators' },
         ],
+        footLabel: 'Resellers run the full ladder',
+        footCta: 'Showcase, Autopilot, Intelligence',
+        footHref: '/pricing',
       },
       {
         id: 'supplier',
         label: 'Suppliers',
         heading: 'For Suppliers',
         rows: [
-          { label: 'Supplier OS', desc: 'The full walkthrough, for suppliers', href: '/customers/supplier-os', icon: 'grid' },
-          { label: 'DMCs', desc: 'Reply your way, get discovered as the network grows', href: '/customers/dmcs', icon: 'pin' },
-          { label: 'Tour operators', desc: 'Build and quote packages from your own rates', href: '/customers/tour-operators', icon: 'route' },
+          { label: 'Supplier OS', desc: 'The full walkthrough, for suppliers', href: '/customers/supplier-os' },
+          { label: 'DMCs', desc: 'Reply your way, get discovered as the network grows', href: '/customers/dmcs' },
+          { label: 'Tour operators', desc: 'Build and quote packages from your own rates', href: '/customers/tour-operators' },
         ],
+        footLabel: 'Suppliers skip straight to Intelligence',
+        footCta: 'Free on Showcase, forever',
+        footHref: '/pricing',
       },
     ],
   },

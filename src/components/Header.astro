@@ -10,7 +10,6 @@
  */
 import { FEED } from '../lib/feed';
 import { NAV, DRAWER } from '../lib/content/nav';
-import MegaIcon from './MegaIcon.astro';
 
 interface Props {
   current?:
@@ -87,17 +86,22 @@ const stream = row + row;
                   {n.tabs.map((t, i) => (
                     <div class="mega-view" data-view={t.id} hidden={i !== 0}>
                       <p class="mega-head">{t.heading}</p>
-                      {t.rows.map((r) => (
-                        <a class="mega-row" href={r.href}>
-                          <span class="mega-ico">
-                            <MegaIcon name={r.icon} />
-                          </span>
-                          <span>
-                            <b>{r.label}</b>
-                            <em>{r.desc}</em>
-                          </span>
-                        </a>
-                      ))}
+                      <div class="mega-list">
+                        {t.rows.map((r, j) => (
+                          <a class="mega-row" href={r.href}>
+                            <span class="mega-n">{String(j + 1).padStart(2, '0')}</span>
+                            <span class="mega-txt">
+                              <b>{r.label}</b>
+                              <em>{r.desc}</em>
+                            </span>
+                            <span class="mega-go">&rarr;</span>
+                          </a>
+                        ))}
+                      </div>
+                      <a class="mega-foot" href={t.footHref}>
+                        <span>{t.footLabel}</span>
+                        <em>{t.footCta} &rarr;</em>
+                      </a>
                     </div>
                   ))}
                 </div>
