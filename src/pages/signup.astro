@@ -1,104 +1,81 @@
 ---
 /**
- * Sign up, on the site's shared page patterns.
- *
- * The form still has no backend. Submitting validates the email in the
- * browser and says plainly that nothing was sent — the same honest notice
- * the prototype carried. Wiring this to something real is an open task.
+ * Signup page. Ported from hyperporter-3.html's #view-signup. The form has
+ * no backend — submitting validates the email client-side and shows the
+ * same "captured in the UI only" notice as the prototype's cap() helper.
  */
 import Base from '../layouts/Base.astro';
-import { STAGES } from '../lib/stages';
-import { networkCounts } from '../lib/counts';
-
-const { countries } = await networkCounts();
-const HUMAN = STAGES.filter((s) => s.cls === 'Human touchpoint').length;
 ---
 
 <Base
   title="Sign up"
   description="Sign up and we'll walk through your actual inquiry-to-booking flow — what Autopilot would have done with it, and where Horizon fills the gaps."
 >
-  <section class="hx hx-ph">
-    <p class="hx-ph-eye">Request a demo</p>
-    <h1>See it running on a real trip.</h1>
-    <p class="hx-ph-lede">
-      We walk through your actual inquiry-to-booking flow — what Autopilot would have done
-      with it, and where Horizon fills the gaps.
+  <div class="sec wrap">
+    <p class="eyebrow rv">Sign up</p>
+    <h1 class="rv">See it running<br />on a real trip.</h1>
+    <p class="lede rv">
+      Sign up and we'll walk through your actual inquiry-to-booking flow — what Autopilot would have done with it,
+      and where Horizon fills the gaps.
     </p>
-  </section>
-
-  <section class="hx" style="padding-bottom:var(--sec)">
-    <div class="hx-idx">
-      <div class="hx-idx-side">
-        <h2>What happens next</h2>
-        <div class="hx-rows" style="margin-top:26px">
-          <div class="hx-su-step"><span>01</span><p>We walk through a real inquiry from your inbox.</p></div>
-          <div class="hx-su-step"><span>02</span><p>You see the draft itinerary and the quote it produces.</p></div>
-          <div class="hx-su-step">
-            <span>03</span><p>You see the {HUMAN} points where a person stays in the loop.</p>
-          </div>
+    <div class="sgrid rv" style="margin-top:44px">
+      <div class="panel">
+        <div class="field"><label for="f-name">Name</label><input id="f-name" type="text" placeholder="Your name" /></div>
+        <div class="field">
+          <label for="f-agency">Agency name</label><input id="f-agency" type="text" placeholder="Agency" />
         </div>
-        <p>Operators in {countries} countries are reachable through Horizon if you want them.</p>
+        <div class="field">
+          <label for="f-email">Email</label><input id="f-email" type="email" placeholder="you@agency.com" />
+        </div>
+        <div class="field">
+          <label for="f-vol">Bookings per month</label>
+          <select id="f-vol">
+            <option>Under 20</option>
+            <option>20–50</option>
+            <option>50–150</option>
+            <option>150+</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-int">Interested in</label>
+          <select id="f-int">
+            <option>Autopilot — the software</option>
+            <option>Horizon — the network</option>
+            <option>Autopilot + Horizon</option>
+          </select>
+        </div>
+        <button class="btn" style="width:100%" data-capture-input="f-email" data-capture-target="m-signup" type="button"
+          >Create account</button
+        >
+        <p class="note">No credit card, no commitment.</p>
+        <div class="msg" id="m-signup"></div>
       </div>
-
-      <div>
-        <div class="hx-form">
-          <div class="hx-f">
-            <label for="f-name">Name</label>
-            <input id="f-name" type="text" autocomplete="name" placeholder="Your name" />
-          </div>
-          <div class="hx-f">
-            <label for="f-agency">Agency name</label>
-            <input id="f-agency" type="text" autocomplete="organization" placeholder="Agency" />
-          </div>
-          <div class="hx-f wide">
-            <label for="f-email">Work email</label>
-            <input id="f-email" type="email" autocomplete="email" placeholder="you@agency.com" />
-          </div>
-          <div class="hx-f">
-            <label for="f-vol">Bookings per month</label>
-            <select id="f-vol">
-              <option>Under 20</option>
-              <option>20–50</option>
-              <option>50–150</option>
-              <option>150+</option>
-            </select>
-          </div>
-          <div class="hx-f">
-            <label for="f-int">Interested in</label>
-            <select id="f-int">
-              <option>Autopilot — the software</option>
-              <option>Horizon — the network</option>
-              <option>Autopilot and Horizon</option>
-            </select>
-          </div>
-          <div class="wide">
-            <button
-              class="btn"
-              type="button"
-              data-capture-input="f-email"
-              data-capture-target="m-signup">Request a demo</button
-            >
-            <p class="hx-su-note">No credit card, no commitment.</p>
-            <div class="msg" id="m-signup"></div>
-          </div>
-        </div>
+      <div class="panel">
+        <p class="eyebrow">What happens next</p>
+        <ol class="nlist">
+          <li>We walk through a real inquiry from your inbox.</li>
+          <li>You see the draft itinerary and quote it produces.</li>
+          <li>You see exactly where a human stays in the loop.</li>
+        </ol>
       </div>
     </div>
-  </section>
+  </div>
 </Base>
 
 <script>
-  document.addEventListener('click', (ev) => {
-    const btn = (ev.target as HTMLElement).closest<HTMLButtonElement>('[data-capture-target]');
-    if (!btn) return;
-    const input = document.getElementById(btn.dataset.captureInput ?? '') as HTMLInputElement | null;
-    const box = document.getElementById(btn.dataset.captureTarget ?? '');
-    if (!box) return;
-    box.textContent =
-      !input?.value || !input.value.includes('@')
-        ? '× Enter a valid email address.'
-        : '✓ Captured in the browser only — no backend is connected yet.';
-    box.classList.add('show');
-  });
+  if (!(window as any).__capBound) {
+    (window as any).__capBound = true;
+    document.addEventListener('click', (ev) => {
+      const btn = (ev.target as HTMLElement).closest<HTMLButtonElement>('[data-capture-target]');
+      if (!btn) return;
+      const input = document.getElementById(btn.dataset.captureInput ?? '') as HTMLInputElement | null;
+      const box = document.getElementById(btn.dataset.captureTarget ?? '');
+      if (!box) return;
+      box.textContent =
+        !input?.value || !input.value.includes('@')
+          ? '× Enter a valid email address.'
+          : '✓ Captured in the UI only — no backend connected yet.';
+      box.classList.add('show');
+    });
+  }
 </script>
