@@ -859,3 +859,74 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
 .case h3{margin:12px 0 10px;font-size:19px}
 .case p{margin:0;color:var(--muted);font-size:15px}
 @media (max-width:760px){.cases{grid-template-columns:1fr}}
+
+/* ============================================================
+   MEGA MENU
+   ============================================================
+   Product and Customers open a panel: a rail of tabs on the left, the
+   rows for the selected tab on the right.
+
+   The panel is positioned against the header rather than the trigger, so
+   it stays put when the trigger moves and never runs off the right edge
+   on a narrow desktop window. `header.top` is already `position:sticky`,
+   which is a positioned value, so it is the containing block — adding
+   `position:relative` here would silently un-stick the header. */
+.mega-wrap{position:static;display:inline-flex}
+.mega-trigger{display:inline-flex;align-items:center;gap:6px}
+.mega-trigger .chev{width:9px;height:6px;opacity:.5;transition:transform .25s,opacity .25s}
+.mega-wrap.open .chev{transform:rotate(180deg);opacity:.9}
+.mega-wrap.open>.mega-trigger{color:var(--signal)}
+
+.mega{
+  position:absolute;top:calc(100% - 6px);left:50%;transform:translateX(-50%);
+  z-index:60;display:grid;grid-template-columns:188px minmax(0,1fr);
+  min-width:640px;max-width:min(92vw,860px);
+  background:var(--raise);border:1px solid var(--line);
+  border-radius:calc(var(--radius) + 6px);
+  box-shadow:0 24px 60px rgba(12,18,24,.13),0 2px 8px rgba(12,18,24,.06);
+  overflow:hidden;
+}
+.mega[hidden]{display:none}
+
+/* left rail */
+.mega-rail{display:flex;flex-direction:column;gap:2px;padding:14px;background:var(--ink);border-right:1px solid var(--line)}
+.mega-tab{
+  background:none;border:0;border-radius:var(--radius);padding:11px 14px;text-align:left;
+  font:inherit;font-size:15px;color:var(--muted);cursor:pointer;
+  transition:background .2s,color .2s;
+}
+.mega-tab:hover{color:var(--paper)}
+.mega-tab.on{background:var(--raise);color:var(--signal);box-shadow:0 1px 3px rgba(12,18,24,.07)}
+.mega-tab:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
+
+/* right column */
+.mega-views{padding:20px 22px 22px}
+.mega-view[hidden]{display:none}
+.mega-head{
+  margin:0 0 12px;padding-left:12px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
+}
+.mega-row{
+  display:grid;grid-template-columns:38px minmax(0,1fr);gap:14px;align-items:start;
+  padding:10px 12px;border-radius:var(--radius);transition:background .18s;
+}
+.mega-row:hover{background:var(--ink)}
+.mega-row:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
+.mega-ico{
+  width:38px;height:38px;border-radius:var(--radius);display:grid;place-items:center;
+  background:var(--signal-dim);color:var(--signal);
+}
+.mega-ico svg{width:19px;height:19px}
+.mega-row b{display:block;font-weight:500;font-size:15px;color:var(--paper);letter-spacing:-.006em}
+.mega-row em{display:block;margin-top:2px;font-style:normal;font-size:13.5px;color:var(--dim);line-height:1.45}
+
+/* Panels are hover-and-click affordances; below the nav breakpoint the
+   drawer lists every link inside them instead. */
+@media (max-width:1080px){
+  .mega{display:none!important}
+}
+.drawer-h{
+  margin:16px 0 4px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);
+}
+.drawer-h:first-child{margin-top:0}
