@@ -12,7 +12,16 @@ interface Props {
   ogType?: 'website' | 'article';
   noindex?: boolean;
   /** Which header nav item to mark active. See Header.astro. */
-  currentNav?: 'home' | 'autopilot' | 'horizon' | 'destinations' | 'how' | 'blog' | 'about';
+  currentNav?:
+    | 'home'
+    | 'product'
+    | 'solutions'
+    | 'customers'
+    | 'pricing'
+    | 'security'
+    | 'destinations'
+    | 'blog'
+    | 'about';
 }
 
 const { title, description, canonical, ogImage, ogType, noindex, currentNav } = Astro.props;
@@ -86,10 +95,16 @@ const organizationJsonLd = {
       );
       document.querySelectorAll('.rv:not(.in)').forEach((el) => io.observe(el));
 
-      // Accordion (used by the destination-page guarantee section, and
-      // reusable anywhere else `.acc-i` shows up later, e.g. an FAQ page).
+      // Accordion. This is the ONLY handler for `.acc-i` on the site — the
+      // destination guarantee section, the homepage FAQ and the security FAQ
+      // all ride on it. A page must not bind its own: a second listener on
+      // the same button toggles twice per click, which reads as an accordion
+      // that does nothing at all.
       document.querySelectorAll<HTMLButtonElement>('.acc-i > button').forEach((btn) => {
-        btn.addEventListener('click', () => btn.parentElement?.classList.toggle('open'));
+        btn.addEventListener('click', () => {
+          const open = btn.parentElement?.classList.toggle('open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
       });
     </script>
   </body>

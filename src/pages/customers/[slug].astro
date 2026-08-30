@@ -1,0 +1,117 @@
+---
+/**
+ * Customer pages. Two shapes share this route:
+ *
+ *  - the two overviews (Agent OS, Supplier OS), which are the walkthroughs
+ *    the homepage points at
+ *  - the six segment pages, which add why-it-fits reasons and the pricing
+ *    ladder for that side
+ *
+ * They live on one route because the nav treats them as one group and the
+ * hero, feature list and CTA are identical between them.
+ */
+import Base from '../../layouts/Base.astro';
+import { OVERVIEWS, SEGMENTS } from '../../lib/content/customers';
+import type { Overview, Segment } from '../../lib/content/customers';
+
+export function getStaticPaths() {
+  return [
+    ...OVERVIEWS.map((o) => ({ params: { slug: o.slug }, props: { overview: o, segment: null } })),
+    ...SEGMENTS.map((s) => ({ params: { slug: s.slug }, props: { overview: null, segment: s } })),
+  ];
+}
+
+const { overview, segment } = Astro.props as {
+  overview: Overview | null;
+  segment: Segment | null;
+};
+
+const page = (overview ?? segment)!;
+const features = page.features;
+---
+
+<Base
+  title={overview ? overview.name : segment!.name}
+  description={page.lede}
+  currentNav="customers"
+>
+  <div class="sec wrap">
+    <p class="eyebrow rv">{page.eyebrow}</p>
+    <h1 class="rv">{page.title}</h1>
+    <p class="lede rv">{page.lede}</p>
+    <div class="rv" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
+      <a class="btn" href="/signup">Get started free</a>
+      <a class="btn-o" href={overview ? overview.pricingHref : '/pricing'}>
+        {overview ? overview.pricingLabel : 'See pricing'}
+      </a>
+    </div>
+  </div>
+
+  {
+    segment && (
+      <div class="sec-tight wrap">
+        <p class="eyebrow rv">Why it fits</p>
+        <div class="reasons rv">
+          {segment.reasons.map((r) => (
+            <div>
+              <b>{r.title}</b>
+              <p>{r.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  <div class="sec-tight wrap">
+    {
+      overview ? (
+        <>
+          <p class="eyebrow rv">{overview.sectionEyebrow}</p>
+          <h2 class="rv">{overview.sectionTitle}</h2>
+          {overview.note && <p class="lede rv">{overview.note}</p>}
+        </>
+      ) : (
+        <p class="eyebrow rv">Features that matter most here</p>
+      )
+    }
+
+    <div class="flist rv">
+      {
+        features.map((f) => (
+          <div class="fitem">
+            <div class="fn">{f.n}</div>
+            <div>
+              <b>{f.name}</b>
+              <p>{f.body}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  {
+    segment && (
+      <div class="sec-tight wrap">
+        <h2 class="rv">{segment.pricingTitle}</h2>
+        <div class="tiers rv">
+          {segment.tiers.map((t) => (
+            <div class="tier">
+              <div class="tname">{t.name}</div>
+              <div class="tkind">{t.kicker}</div>
+              <div class="tamt">{t.amount}</div>
+              <p class="tnote">{t.note}</p>
+              <ul>
+                <li>{t.line}</li>
+              </ul>
+              <a class="btn-o" href="/pricing">
+                Compare tiers
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+</Base>

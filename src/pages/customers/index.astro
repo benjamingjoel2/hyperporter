@@ -1,0 +1,59 @@
+---
+/** Customers index — the two sides of a booking, then the segments inside each. */
+import Base from '../../layouts/Base.astro';
+import { OVERVIEWS, SEGMENTS, SIDE_LABEL, SIDE_SUB } from '../../lib/content/customers';
+
+const SIDES = [
+  {
+    side: 'reseller' as const,
+    body: 'Runs the full ladder — OS, Autopilot, Intelligence — and sources suppliers through the Horizon list.',
+  },
+  {
+    side: 'supplier' as const,
+    body: 'Skips straight to Intelligence — free CRM on Showcase, listed on Horizon at no cost.',
+  },
+];
+---
+
+<Base
+  title="Customers"
+  description="Same product underneath. Different starting point, depending on whether you're sourcing suppliers or being sourced."
+  currentNav="customers"
+>
+  <div class="sec wrap">
+    <p class="eyebrow rv">Customers</p>
+    <h1 class="rv">Whichever side of the booking you're on.</h1>
+    <p class="lede rv">
+      Same product underneath. Different starting point, depending on whether you're sourcing
+      suppliers or being sourced.
+    </p>
+  </div>
+
+  <div class="sec-tight wrap">
+    <div class="sides rv">
+      {
+        SIDES.map(({ side, body }) => {
+          const overview = OVERVIEWS.find((o) => o.side === side)!;
+          const segments = SEGMENTS.filter((s) => s.side === side);
+          return (
+            <div class="side">
+              <div class="kind">{SIDE_LABEL[side]}</div>
+              <h3>{SIDE_SUB[side]}</h3>
+              <p>{body}</p>
+              <ul>
+                {segments.map((s) => (
+                  <li>
+                    <a href={`/customers/${s.slug}`}>{s.name}</a>
+                  </li>
+                ))}
+              </ul>
+              <a class="plink" href={`/customers/${overview.slug}`}>
+                Explore {overview.name} &rarr;
+              </a>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</Base>

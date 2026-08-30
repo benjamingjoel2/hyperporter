@@ -1,0 +1,118 @@
+---
+/**
+ * Pricing — two ladders off the same three tiers.
+ *
+ * Both ladders render server-side and the switch only toggles which is
+ * visible, so with no JavaScript the page still shows every tier and every
+ * feature rather than an empty panel.
+ */
+import Base from '../layouts/Base.astro';
+import { LADDERS } from '../lib/content/pricing';
+---
+
+<Base
+  title="Pricing"
+  description="Same three tiers. Resellers run the full ladder; Suppliers skip straight from Showcase to Intelligence. Every tier is strictly additive."
+  currentNav="pricing"
+>
+  <div class="sec wrap">
+    <p class="eyebrow rv">Pricing</p>
+    <h1 class="rv">Same three tiers. Which ones apply depends on who you are.</h1>
+    <p class="lede rv">
+      Every tier is strictly additive. Resellers run the full ladder; Suppliers skip straight to
+      Intelligence.
+    </p>
+    <div class="switch rv" id="p-switch">
+      {
+        LADDERS.map((l, i) => (
+          <button type="button" data-side={l.side} class={i === 0 ? 'on' : ''}>
+            {l.label}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  {
+    LADDERS.map((l, i) => (
+      <div class="p-ladder" data-side={l.side} hidden={i !== 0}>
+        <div class="sec-tight wrap">
+          <p class="eyebrow rv">{l.intro}</p>
+          <div class="tiers rv">
+            {l.tiers.map((t) => (
+              <div class="tier">
+                <div class="tname">{t.name}</div>
+                <div class="tkind">{t.kind}</div>
+                <div class="tamt">{t.amount}</div>
+                <p class="tnote">{t.note}</p>
+                <ul>
+                  {t.features.map((f) => (
+                    <li>{f}</li>
+                  ))}
+                </ul>
+                <a class="btn" href={t.href}>
+                  {t.cta}
+                </a>
+              </div>
+            ))}
+          </div>
+
+          <h2 class="rv" style="margin-top:clamp(48px,6vw,84px)">Every feature, compared</h2>
+          <div class="pm-scroll rv">
+            <table class="pm">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  {l.columns.map((c) => (
+                    <th style="text-align:center">{c}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {l.matrix.map((g) => (
+                  <>
+                    <tr class="pm-group">
+                      <td colspan={l.columns.length + 1}>{g.group}</td>
+                    </tr>
+                    {g.rows.map((r) => (
+                      <tr>
+                        <td>{r.feature}</td>
+                        {r.cells.map((cell) => (
+                          <td
+                            class:list={[
+                              'pm-cell',
+                              { 'pm-yes': cell === '✓', 'pm-no': cell === '—' },
+                            ]}
+                          >
+                            {cell}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</Base>
+
+<script>
+  // Toggles which ladder is visible. Both are in the DOM already, so with no
+  // JavaScript the page shows the Reseller ladder in full rather than nothing.
+  const sw = document.getElementById('p-switch');
+  const ladders = Array.from(document.querySelectorAll<HTMLElement>('.p-ladder'));
+
+  sw?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-side]');
+    if (!btn) return;
+    const side = btn.dataset.side;
+    sw.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b === btn));
+    ladders.forEach((l) => {
+      l.hidden = l.dataset.side !== side;
+    });
+  });
+</script>

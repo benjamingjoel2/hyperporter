@@ -1,0 +1,75 @@
+---
+/**
+ * Shared shape for the four product pages. Each one is a hero, a numbered
+ * feature list, optional cases, and a link forward to the next layer.
+ *
+ * Autopilot and Horizon carry extras the others don't — the pilot targets
+ * table and the supplier types / fee explanation — so both are slots rather
+ * than fields on the product, which would leave two nulls on every other page.
+ */
+import type { Product } from '../lib/content/products';
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const { eyebrow, title, lede, features, featuresTitle, cases, casesTitle, next } = product;
+---
+
+<div class="sec wrap">
+  <p class="eyebrow rv">{eyebrow}</p>
+  <h1 class="rv">{title}</h1>
+  <p class="lede rv">{lede}</p>
+</div>
+
+<slot name="after-hero" />
+
+<div class="sec-tight wrap">
+  {featuresTitle && <h2 class="rv">{featuresTitle}</h2>}
+  <div class="flist rv">
+    {
+      features.map((f) => (
+        <div class="fitem">
+          <div class="fn">{f.n}</div>
+          <div>
+            <b>{f.name}</b>
+            <p>{f.body}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<slot name="after-features" />
+
+{
+  cases.length > 0 && (
+    <div class="sec-tight wrap">
+      {casesTitle && <h2 class="rv">{casesTitle}</h2>}
+      <div class="cases rv">
+        {cases.map((c) => (
+          <div class="case">
+            <div class="kind">{c.kind}</div>
+            <h3>{c.title}</h3>
+            <p>{c.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+<slot name="after-cases" />
+
+<div class="sec-tight wrap">
+  <div class="nextup rv">
+    <div>
+      <p class="eyebrow" style="margin-bottom:0">{next.eyebrow}</p>
+      <h3>{next.title}</h3>
+      <p>{next.desc}</p>
+    </div>
+    <a class="plink" href={next.href}>{next.cta} &rarr;</a>
+  </div>
+</div>
