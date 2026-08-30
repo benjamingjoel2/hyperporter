@@ -1,38 +1,25 @@
 ---
 /**
- * Horizon — the NETWORK of vetted local operators. Never described as
- * software; that is Autopilot.
+ * Horizon network page. Ported from hyperporter-3.html's #view-horizon.
+ * Horizon is the NETWORK — vetted local operators — never described as
+ * software (that's Autopilot).
  *
- * Rebuilt on the same structure as the rest of the site: page head, a
- * full-bleed coverage band, region rows, the two positioning columns, and
- * the note for operators.
- *
- * The prototype's radial diagram is gone. It was a decorative wheel that
- * carried one fact — seven regions — in a form nobody could scan, and the
- * same seven regions now read as rows with their real country counts,
- * each linking to its region page.
- *
- * Country and region figures come from networkCounts(), not from copy.
- * This page previously hard-coded "130+" in three places while the
- * homepage said 137.
+ * One locked-in change from the prototype: the radial diagram is rebuilt
+ * on the canonical 7-region taxonomy from the destinations collection
+ * (Africa, Asia, Australia & Oceania, Europe, Middle East, North & Central
+ * America, South America). The prototype used its own overlapping 6-label
+ * set ("Latin America", "SE Asia", "Oceania"...) that matched nothing else
+ * on the site; now that /regions/* are real crawlable URLs there is one
+ * region list, and each node links to its region page. Spoke geometry is
+ * computed here at build time (360/7° apart) instead of client-side.
  */
 import Base from '../layouts/Base.astro';
-import { getCollection } from 'astro:content';
-import { networkCounts } from '../lib/counts';
+import EmailCapture from '../components/EmailCapture.astro';
+import { REGIONS } from '../content.config';
 import { slugify } from '../lib/slug';
 import { destArt } from '../lib/landmark/generator';
 
-const { countries, regions, regionCount } = await networkCounts();
-const destinations = await getCollection('destinations');
-
-/** Each region, with the number of countries actually in it. */
-const REGION_ROWS = regions.map((region) => ({
-  region,
-  href: `/regions/${slugify(region)}`,
-  count: destinations.filter((d) => d.data.region === region).length,
-}));
-
-/** One scene per region, so the band reads as coverage rather than decoration. */
+/** One scene per region, so the grid reads as coverage rather than decoration. */
 const COVERAGE = [
   { name: 'Kenya', region: 'Africa' },
   { name: 'Japan', region: 'Asia' },
@@ -44,103 +31,112 @@ const COVERAGE = [
   { name: 'Morocco', region: 'Africa' },
 ] as const;
 
-const bandArt = destArt('Morocco', 'hz-band', 'dark');
+const RADIUS = 176;
+const nodes = REGIONS.map((region, i) => {
+  const deg = -90 + (i * 360) / REGIONS.length;
+  const rad = (deg * Math.PI) / 180;
+  return {
+    region,
+    href: `/regions/${slugify(region)}`,
+    deg,
+    x: Math.cos(rad) * RADIUS,
+    y: Math.sin(rad) * RADIUS,
+  };
+});
 ---
 
 <Base
   title="Horizon"
-  description={`Hyperporter's own ground-operations network — vetted local operators in ${countries} countries. Use it inside Autopilot, or bring us the trip directly.`}
+  description="Hyperporter's own ground-operations network — 130+ countries of vetted DMC relationships. Use it inside Autopilot, or bring us the trip directly."
   currentNav="horizon"
 >
-  <!-- ============ HEAD ============ -->
-  <section class="hx hx-ph">
-    <p class="hx-ph-eye">Our supplier network</p>
-    <h1>Real operator relationships, wherever your travellers are going.</h1>
-    <p class="hx-ph-lede">
-      Horizon is Hyperporter's own ground-operations network — vetted local operators in {
-        countries
-      } countries. Use it inside Autopilot, or bring us the trip directly and we will run it
-      through the network for you.
+  <div class="sec wrap">
+    <div class="tags rv"><span class="tag-p">Network</span><span class="tag-p">Global DMC supply</span></div>
+    <h1 class="rv">Real DMC relationships,<br />wherever your travellers<br />are going.</h1>
+    <p class="lede rv">
+      Horizon is Hyperporter's own ground-operations network — 130+ countries of vetted DMC relationships. Use it
+      inside Autopilot, or bring us the trip directly and we'll run it through the network for you.
     </p>
-    <div class="hx-ph-cta">
-      <a class="btn" href="/signup">Request a demo</a>
-      <a class="btn-o" href="/destinations">See every country</a>
-    </div>
-  </section>
+    <a class="btn rv" href="/signup">Sign up →</a>
+  </div>
 
-  <!-- ============ COVERAGE ============ -->
-  <section class="hx">
-    <div class="hx-tiles">
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">(01) &mdash; How it works</p>
+    <div class="radial rv">
+      <div class="orbit o1"></div>
+      <div class="orbit o2"></div>
+      <div class="hub"><b>Horizon</b><span>130+ countries</span></div>
+      {nodes.map((n) => <div class="spoke" style={`transform:rotate(${n.deg}deg)`} />)}
+      {
+        nodes.map((n) => (
+          <a class="rnode" href={n.href} style={`left:calc(50% + ${n.x.toFixed(1)}px);top:calc(50% + ${n.y.toFixed(1)}px)`}>
+            {n.region}
+          </a>
+        ))
+      }
+    </div>
+    <div class="rlist">
+      {
+        nodes.map((n) => (
+          <div>
+            <i />
+            <a href={n.href}>{n.region}</a>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">(02) &mdash; The network</p>
+    <div class="cov rv">
       {
         COVERAGE.map((c, i) => (
-          <a class="hx-tile" href={`/destinations/${slugify(c.name)}`}>
-            <span class="hx-tile-art" set:html={destArt(c.name, `hzcv${i}`)} />
-            <span class="hx-tile-r">{c.region}</span>
-            <span class="hx-tile-n">{c.name}</span>
+          <a class="cov-tile" href={`/destinations/${slugify(c.name)}`}>
+            <span class="cov-art" set:html={destArt(c.name, `cv${i}`)} />
+            <span class="cov-r">{c.region}</span>
+            <span class="cov-n">{c.name}</span>
           </a>
         ))
       }
     </div>
-  </section>
+  </div>
 
-  <!-- ============ REGIONS ============ -->
-  <section class="hx hx-sec">
-    <div class="hx-two" style="margin-bottom:clamp(34px,4vw,60px)">
-      <h2>{regionCount} regions, {countries} countries</h2>
-      <p>
-        Operators we have vetted ourselves and run trips through directly. Every country has
-        its own page, and every region its own list.
-      </p>
-    </div>
-    <div class="hx-rows">
-      {
-        REGION_ROWS.map((r, i) => (
-          <a class="hx-row hx-row-link" href={r.href}>
-            <div class="hx-row-n">{String(i + 1).padStart(2, '0')}</div>
-            <h3>{r.region}</h3>
-            <p class="hx-row-b">{r.count} countries with vetted operators</p>
-            <div class="hx-row-t">View region &rarr;</div>
-          </a>
-        ))
-      }
-    </div>
-  </section>
-
-  <!-- ============ POSITIONING ============ -->
-  <section class="hx hx-sec">
-    <div class="hx-grid">
-      <div>
-        <div class="hx-cell-n">01</div>
-        <h3>The gap</h3>
+  <div class="sec-tight wrap">
+    <div class="pillars rv">
+      <div class="pill">
+        <div class="kind">The gap</div>
         <p>
-          Most agencies have deep operator relationships in a handful of destinations. The
-          moment a client asks for somewhere outside that list, the process reverts to cold
-          outreach and guesswork. Horizon exists so that gap never reaches your customer.
+          Most agencies only have deep DMC relationships in a handful of destinations. The moment a client asks for
+          somewhere outside that list, the process reverts to cold outreach and guesswork. Horizon exists so that gap
+          never shows up to your customer.
         </p>
       </div>
-      <div>
-        <div class="hx-cell-n">02</div>
-        <h3>Not a marketplace</h3>
+      <div class="pill">
+        <div class="kind">Not a marketplace</div>
         <p>
-          These are real, human-vetted relationships Hyperporter operates trips through
-          directly — not a directory of unverified contacts. Every trip run through Horizon
-          strengthens the reliability data behind the network.
+          These are real, human-vetted relationships Hyperporter operates trips through directly — not a directory of
+          unverified contacts. Every trip run through Horizon strengthens the reliability data behind the network.
         </p>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- ============ BAND ============ -->
-  <section class="hx-band">
-    <div class="hx-band-art" aria-hidden="true" set:html={bandArt} />
-    <div class="hx hx-band-in">
-      <span class="hx-band-tag">For operators</span>
-      <h2>Get matched with agencies already quoting your destination.</h2>
-      <p>
-        Real, structured demand from agencies actively planning trips where you operate — not
-        cold outreach.
-      </p>
-      <a class="btn" href="/signup">Join the network</a>
+  <div class="sec-tight wrap">
+    <div class="dmc rv">
+      <div>
+        <p class="eyebrow">For DMCs</p>
+        <p>
+          Get matched with agencies actively quoting your destination — real, structured demand, no more chasing cold
+          outreach.
+        </p>
+      </div>
+      <a class="btn" href="/signup">Join the network →</a>
     </div>
-  </section>
+  </div>
+
+  <div class="sec wrap fcta">
+    <h2 class="rv">Never turn down a trip because<br />you don't have the contact.</h2>
+    <EmailCapture uid="horizon-cta" marginTop="32px" />
+  </div>
 </Base>

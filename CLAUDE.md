@@ -88,23 +88,26 @@ photography is licensed. Keep them as the fallback when `DEST_IMG` has no entry.
 
 ## Design direction (current)
 
-Light base, punctuated by full-bleed dark moments — the homepage hero, the
-coverage map, the statement bands, the stats block and the footer. Structure
-and restraint come from harvey.ai; the cinematic dark hero and the coverage
-map come from starlink.com.
+Light base with teal as the accent. Reverted (Aug 2026) to the pre-Harvey
+direction at commit `28d708a` at the founder's instruction — the harvey.ai /
+starlink.com rebuild is preserved in git history at `d05cc73` if it is ever
+wanted back.
 
-- **Display type**: Newsreader (serif). **Everything else**: Hyperlocal ROM,
-  the brand cut of ABC ROM. IBM Plex Mono survives only in the dispatch rail.
-- **No accent colour.** `--signal` resolves to a warm grey. Amber is the only
-  colour on the site and still means one thing: a step a person must touch.
-- `AppShot.astro` draws the Autopilot interface in markup, standing wherever
-  the reference would put a product screenshot. Re-points per pipeline stage.
-- `WorldMap.astro` + `lib/worldMap.ts`: real Natural Earth geometry projected
-  to SVG at build time. 110m shapes plus centroid dots for the 13 island
-  states 110m drops. Two states only — covered or not. The build **fails** if
-  any destination has no geometry, so the map can never under-report.
-- `lib/counts.ts` is the single source for country/region figures. Never
-  hard-code them again.
+- **Display type**: PT Serif. **Body/UI**: Hyperlocal ROM, the brand cut of
+  ABC ROM, with Inter as the fallback. IBM Plex Mono for labels and eyebrows,
+  which stay in capitals.
+- **Accent**: `--signal` is teal `#1B747E`. Amber `#9A5F0B` is still reserved
+  for human-touchpoint / manual states — never decorative.
+- Homepage opens on the photo band with the flight-arc overlay, as it did
+  before the rebuild.
+- `WorldMap.astro` + `lib/worldMap.ts` survived the revert: real Natural Earth
+  geometry projected to SVG at build time. 110m shapes plus centroid dots for
+  the 13 island states 110m drops. Two states only — covered or not. The build
+  **fails** if any destination has no geometry, so the map can never
+  under-report. It lives on `/destinations` and keeps its own dark ground;
+  hover green is deliberately not `--signal`.
+- Removed with the revert: `AppShot.astro` (the Autopilot interface drawn in
+  markup) and `lib/counts.ts`. Both are recoverable from `d05cc73`.
 
 ### Font licence — outstanding
 Hyperlocal ROM was supplied under a **desktop** licence, whose terms forbid

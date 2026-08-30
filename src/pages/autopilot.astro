@@ -1,50 +1,14 @@
 ---
 /**
- * Autopilot — the SOFTWARE. Never described as the contact network; that
- * is Horizon.
- *
- * Rebuilt on the same structure as the homepage: page head, a full-width
- * interface, feature rows for the nine stages, a feature grid, and the
- * manual-payment note. The prototype's horizontally-scrolling zigzag is
- * gone — nine cards on a track nobody scrolls buried the content that
- * matters, and the same nine stages now read down the page.
- *
- * Payment marking is manual by design and the note keeps that wording
- * exact.
+ * Autopilot product page. Ported from hyperporter-3.html's #view-autopilot.
+ * Autopilot is the SOFTWARE — never described as the contact network (that's
+ * Horizon). The nine-stage zigzag renders at build time from STAGES instead
+ * of client-side. Payment marking is manual by design; the callout keeps
+ * that wording exact.
  */
 import Base from '../layouts/Base.astro';
-import AppShot from '../components/AppShot.astro';
-import { destArt } from '../lib/landmark/generator';
+import EmailCapture from '../components/EmailCapture.astro';
 import { STAGES } from '../lib/stages';
-import { networkCounts } from '../lib/counts';
-
-const { countries } = await networkCounts();
-const AUTO = STAGES.filter((s) => s.cls === 'Automatic').length;
-const frameArt = destArt('Peru', 'ap-frame');
-const bandArt = destArt('Japan', 'ap-band', 'dark');
-
-const FEATURES = [
-  {
-    n: '01',
-    h: 'One link, always current',
-    p: 'The link a customer opens updates in place. No new PDF, no version confusion, ever.',
-  },
-  {
-    n: '02',
-    h: 'Autopilot or manual, your call',
-    p: 'Every thread can run itself or be pulled under your control, per account or per trip.',
-  },
-  {
-    n: '03',
-    h: 'It tells you what to do',
-    p: 'When a thread needs you, you get a specific action — not a vague alert.',
-  },
-  {
-    n: '04',
-    h: 'Margin, handled',
-    p: 'Your markup applies automatically on every quote. Your operator never sees what you charge.',
-  },
-];
 ---
 
 <Base
@@ -52,90 +16,76 @@ const FEATURES = [
   description="The software that runs inquiry, quoting, booking, and live trip support — automated by default, with a human only where a real decision is needed."
   currentNav="autopilot"
 >
-  <!-- ============ HEAD ============ -->
-  <section class="hx hx-ph">
-    <p class="hx-ph-eye">Our software</p>
-    <h1>Run your agency on autopilot.</h1>
-    <p class="hx-ph-lede">
-      Inquiry, quoting, booking and live trip support, in one thread. Automated by default,
-      with a person only where a real decision is needed. Subscribe monthly and run it on
-      your own contacts, or add Horizon.
+  <div class="sec wrap">
+    <div class="tags rv"><span class="tag-p">Software</span><span class="tag-p">For travel agencies</span></div>
+    <h1 class="rv">Run your agency<br />on autopilot.</h1>
+    <p class="lede rv">
+      The software that runs inquiry, quoting, booking, and live trip support — automated by default, with a human
+      only where a real decision is needed. Subscribe monthly and run it on your own contacts, or add Horizon.
     </p>
-    <div class="hx-ph-cta">
-      <a class="btn" href="/signup">Request a demo</a>
-      <a class="btn-o" href="/how">See how it works</a>
-    </div>
-  </section>
+    <a class="btn rv" href="/signup">Sign up →</a>
+  </div>
 
-  <!-- ============ INTERFACE ============ -->
-  <section class="hx">
-    <div class="hx-frame">
-      <div class="hx-frame-art" aria-hidden="true" set:html={frameArt} />
-      <AppShot stage={3} class="hx-frame-app" />
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">(01) &mdash; The full route</p>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap">
+      <h2 class="rv" style="margin:0">Nine stages, one thread.</h2>
+      <span class="hint rv">Scroll the timeline →</span>
     </div>
-    <p class="hx-cap">Autopilot, mid-quotation. Illustrative trip and operators.</p>
-  </section>
+    <div class="zig">
+      <div class="ztrack">
+        {
+          STAGES.map((s) => (
+            <div class="zcard">
+              <div class="zh">
+                <span>{s.c}</span>
+                <em>{s.n}</em>
+              </div>
+              <h3>{s.name}</h3>
+              <div class="one">{s.one}</div>
+              <p>{s.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
 
-  <!-- ============ THE NINE STAGES ============ -->
-  <section class="hx hx-sec">
-    <div class="hx-two" style="margin-bottom:clamp(34px,4vw,60px)">
-      <h2>Nine stages, one thread</h2>
+  <div class="sec wrap">
+    <p class="eyebrow rv">(02) &mdash; What you get</p>
+    <div class="fgrid rv">
+      <div class="fcell">
+        <div class="fi">01</div>
+        <h3>One link, always current</h3>
+        <p>The magic link a customer sees updates in place — no new PDF, no version confusion, ever.</p>
+      </div>
+      <div class="fcell">
+        <div class="fi">02</div>
+        <h3>Autopilot or manual, your call</h3>
+        <p>Every thread can run itself or be pulled under your control, per account or per trip.</p>
+      </div>
+      <div class="fcell">
+        <div class="fi">03</div>
+        <h3>It tells you what to do</h3>
+        <p>When a thread needs you, you get a specific action — not a vague alert.</p>
+      </div>
+      <div class="fcell">
+        <div class="fi">04</div>
+        <h3>Margin, handled</h3>
+        <p>Your markup applies automatically on every quote. Your DMC never sees what you charge.</p>
+      </div>
+    </div>
+    <div class="callout rv">
+      <div class="lock">Manual · always</div>
       <p>
-        Every stage runs on a specific feature and takes a specific action. {AUTO} of the {
-          STAGES.length
-        } run on their own; the rest are the decisions you should be making anyway.
+        Payment marking stays manual, deliberately. Autopilot doesn't move money on its own — every automated step
+        can be pulled into manual control at any point.
       </p>
     </div>
-    <div class="hx-rows">
-      {
-        STAGES.map((s) => (
-          <div class:list={['hx-row', { human: s.cls !== 'Automatic' }]}>
-            <div class="hx-row-n">{s.n}</div>
-            <h3>{s.name}</h3>
-            <p class="hx-row-b">{s.body}</p>
-            <div class="hx-row-t">{s.cls === 'Automatic' ? 'Automatic' : 'Needs a person'}</div>
-          </div>
-        ))
-      }
-    </div>
-  </section>
+  </div>
 
-  <!-- ============ WHAT YOU GET ============ -->
-  <section class="hx hx-sec">
-    <div class="hx-mid" style="margin-left:0;text-align:left">
-      <h2>What you get</h2>
-    </div>
-    <div class="hx-grid">
-      {
-        FEATURES.map((f) => (
-          <div>
-            <div class="hx-cell-n">{f.n}</div>
-            <h3>{f.h}</h3>
-            <p>{f.p}</p>
-          </div>
-        ))
-      }
-    </div>
-    <div class="hx-note" style="margin-top:clamp(34px,4vw,60px)">
-      <div class="hx-note-t">Manual &middot; always</div>
-      <p>
-        Payment marking stays manual, deliberately. Autopilot does not move money on its
-        own, and every automated step can be pulled into manual control at any point.
-      </p>
-    </div>
-  </section>
-
-  <!-- ============ BAND ============ -->
-  <section class="hx-band">
-    <div class="hx-band-art" aria-hidden="true" set:html={bandArt} />
-    <div class="hx hx-band-in">
-      <span class="hx-band-tag">And the operators</span>
-      <h2>Bring your own contacts, or use ours.</h2>
-      <p>
-        Autopilot runs on whatever operators you already work with. Add Horizon and it
-        reaches vetted operators in {countries} countries as well.
-      </p>
-      <a class="btn" href="/horizon">Explore Horizon</a>
-    </div>
-  </section>
+  <div class="sec wrap fcta">
+    <h2 class="rv">See your own trips move through it.</h2>
+    <EmailCapture uid="autopilot-cta" marginTop="32px" />
+  </div>
 </Base>
