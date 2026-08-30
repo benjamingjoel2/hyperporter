@@ -74,7 +74,12 @@ body::after{
 .view.on{display:block}
 
 /* ============ HEADER ============ */
-header.top{position:sticky;top:0;z-index:70;background:rgba(251,252,253,.82);backdrop-filter:blur(16px) saturate(140%);border-bottom:1px solid var(--line)}
+/* Solid, not frosted. A translucent bar shows the page moving underneath
+   it however much you blur — and on iOS, where the unprefixed
+   backdrop-filter may not apply at all, it shows through completely
+   unblurred. The bar's job is to stay legible over anything, so it is
+   opaque and the question does not arise. */
+header.top{position:sticky;top:0;z-index:70;background:var(--void);border-bottom:1px solid var(--line)}
 .bar{max-width:var(--max);margin:0 auto;padding:0 var(--pad);height:72px;display:flex;align-items:center;gap:34px}
 .mark{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
 .mark .glyph{width:30px;height:30px;display:block;color:var(--paper);transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
@@ -176,7 +181,7 @@ p{margin:0 0 16px}
 .stat span{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim)}
 
 /* ---- thread card ---- */
-.thread{background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(244,247,250,.96));border:1px solid var(--line-2);border-radius:16px;padding:22px;backdrop-filter:blur(10px);box-shadow:0 24px 60px rgba(12,22,34,.10)}
+.thread{background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(244,247,250,.96));border:1px solid var(--line-2);border-radius:16px;padding:22px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 24px 60px rgba(12,22,34,.10)}
 .thread .th{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding-bottom:16px;border-bottom:1px solid var(--line)}
 .thread .th b{color:var(--paper);font-weight:400}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin:18px 0}
@@ -554,7 +559,7 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
 .dp-tile .tw{font-family:var(--display);font-weight:400;font-size:11px;letter-spacing:.04em;color:rgba(12,22,34,.62);margin-bottom:12px}
 .dp-tile .tn{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.2vw,56px);letter-spacing:-.022em;line-height:.98}
 .dp-badges{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:24px}
-.dp-badge{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);border:1px solid var(--line-2);border-radius:99px;padding:8px 15px;background:rgba(255,255,255,.70);backdrop-filter:blur(6px)}
+.dp-badge{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);border:1px solid var(--line-2);border-radius:99px;padding:8px 15px;background:rgba(255,255,255,.70);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .dp-h{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.5vw,44px);letter-spacing:-.022em;line-height:1.08;margin:0 0 16px}
 .dp-p{color:var(--muted);font-size:15.5px;line-height:1.62;max-width:52ch;margin:0 0 30px}
 .dp-explore{background:none;border:1px solid var(--line-2);color:var(--paper);padding:17px 44px;border-radius:var(--radius);font-size:15px;font-weight:400;transition:border-color .25s,background .25s,color .25s}
@@ -859,3 +864,100 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
 .case h3{margin:12px 0 10px;font-size:19px}
 .case p{margin:0;color:var(--muted);font-size:15px}
 @media (max-width:760px){.cases{grid-template-columns:1fr}}
+
+/* ============================================================
+   MEGA MENU
+   ============================================================
+   Product and Customers open a panel: a rail of tabs on the left, a
+   numbered list on the right, closing on one concrete next step.
+
+   Numbers rather than icon tiles. The site already numbers its product
+   ladder, its stages and its feature lists, so a number belongs to the
+   same system; a grid of tinted icon squares would read as borrowed from
+   somewhere else. The only colour in here is the accent, on the row you
+   are pointing at.
+
+   The panel is positioned against the header rather than the trigger, so
+   it cannot run off the right edge on a narrow desktop window.
+   `header.top` is already `position:sticky`, which is a positioned value
+   and therefore the containing block — adding `position:relative` here
+   would silently un-stick the header. */
+.mega-wrap{position:static;display:inline-flex}
+.mega-trigger{display:inline-flex;align-items:center;gap:6px}
+.mega-trigger .chev{width:9px;height:6px;opacity:.45;transition:transform .25s,opacity .25s}
+.mega-wrap.open .chev{transform:rotate(180deg);opacity:.9}
+.mega-wrap.open>.mega-trigger{color:var(--paper);background:rgba(12,22,34,.05)}
+
+.mega{
+  position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  z-index:60;display:grid;grid-template-columns:170px minmax(0,1fr);
+  min-width:660px;max-width:min(94vw,820px);
+  background:var(--raise);
+  border:1px solid var(--line);
+  border-top:0;
+  box-shadow:0 30px 70px -20px rgba(12,22,34,.22);
+}
+.mega[hidden]{display:none}
+
+/* Left rail: mono labels, a rule marking the live one. No filled pill. */
+.mega-rail{display:flex;flex-direction:column;padding:26px 0;border-right:1px solid var(--line)}
+.mega-tab{
+  background:none;border:0;border-left:2px solid transparent;
+  padding:11px 22px;text-align:left;cursor:pointer;
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim);transition:color .2s,border-color .2s;
+}
+.mega-tab:hover{color:var(--muted)}
+.mega-tab.on{color:var(--signal);border-left-color:var(--signal)}
+.mega-tab:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
+
+.mega-views{padding:26px 30px 0}
+.mega-view[hidden]{display:none}
+.mega-head{
+  margin:0 0 4px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);
+}
+
+/* Rows: number, name, description, separated by hairlines. */
+.mega-list{border-top:1px solid var(--line);margin-top:14px}
+.mega-row{
+  display:grid;grid-template-columns:34px minmax(0,1fr) 16px;align-items:baseline;gap:0 14px;
+  padding:13px 0;border-bottom:1px solid var(--line);
+  transition:background .18s;
+}
+.mega-row:last-child{border-bottom:0}
+.mega-n{
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--dim);
+  font-variant-numeric:tabular-nums;transition:color .18s;
+}
+.mega-txt b{display:block;font-weight:400;font-size:16px;color:var(--paper);letter-spacing:-.012em;transition:color .18s}
+.mega-txt em{display:block;margin-top:3px;font-style:normal;font-size:13.5px;color:var(--dim);line-height:1.45}
+.mega-go{font-size:14px;color:transparent;transition:color .18s,transform .18s;transform:translateX(-4px)}
+.mega-row:hover{background:linear-gradient(90deg,rgba(27,116,126,.05),transparent 70%)}
+.mega-row:hover .mega-n,.mega-row:hover .mega-txt b,.mega-row:hover .mega-go{color:var(--signal)}
+.mega-row:hover .mega-go{transform:none}
+.mega-row:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
+
+/* One real next step, never filler. */
+.mega-foot{
+  display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  margin:0 -30px;padding:15px 30px;border-top:1px solid var(--line);background:var(--ink);
+}
+.mega-foot span{font-size:13.5px;color:var(--muted)}
+.mega-foot em{
+  font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--signal);
+}
+.mega-foot:hover em{text-decoration:underline;text-underline-offset:3px}
+
+/* Panels are pointer affordances; below this width the drawer lists
+   everything inside them instead. */
+@media (max-width:1080px){
+  .mega{display:none!important}
+}
+
+.drawer-h{
+  margin:16px 0 4px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);
+}
+.drawer-h:first-child{margin-top:0}
