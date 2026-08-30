@@ -8,9 +8,13 @@
 import { getCollection } from 'astro:content';
 import type { InferGetStaticPropsType } from 'astro';
 import Base from '../../layouts/Base.astro';
-import { destArt } from '../../lib/landmark/generator';
+import EmailCapture from '../../components/EmailCapture.astro';
 import { REGIONS } from '../../content.config';
 import { slugify } from '../../lib/slug';
+
+function regionCount(n: number): string {
+  return n >= 10 ? `${Math.floor(n / 10) * 10}+` : String(n);
+}
 
 export async function getStaticPaths() {
   const destinations = await getCollection('destinations');
@@ -36,30 +40,37 @@ const { region, countries } = Astro.props;
   description={`Sell and operate trips across ${region} on vetted local operators from the Horizon network — quoted, booked and run without cold outreach.`}
   currentNav="destinations"
 >
-  <section class="hx hx-ph">
-    <p class="hx-ph-eye"><a class="hx-back" href="/destinations">&larr; All destinations</a></p>
-    <h1>Sell trips in {region}</h1>
-    <p class="hx-ph-lede">
-      {countries.length} countries with vetted local operators from the Horizon network —
-      quoted, booked and run without cold outreach.
-    </p>
-    <div class="hx-ph-cta">
-      <a class="btn" href="/signup">Request a demo</a>
-      <a class="btn-o" href="/horizon">About Horizon</a>
+  <div class="r-hero">
+    <div class="wrap">
+      <h1>Sell trips in <u>{region}</u></h1>
+      <p class="r-sub">{regionCount(countries.length)} Countries. Zero hassle. Expertly delivered.</p>
+      <p class="r-lede">
+        Sell and operate trips across {region} on vetted local operators from the Horizon network — quoted, booked and
+        run without cold outreach.
+      </p>
     </div>
-  </section>
-
-  <section class="hx" style="padding-bottom:var(--sec)">
-    <div class="hx-tiles">
+  </div>
+  <div class="sec-tight wrap">
+    <div class="r-bar rv">
+      <a class="r-back" href="/destinations">&larr; All destinations</a>
+      <span class="r-count">{countries.length} countries in {region}</span>
+    </div>
+    <div class="cgrid">
       {
-        countries.map((c, i) => (
-          <a class="hx-tile" href={`/destinations/${c.slug}`}>
-            <span class="hx-tile-art" set:html={destArt(c.name, `rgc${i}`)} />
-            <span class="hx-tile-r">{region}</span>
-            <span class="hx-tile-n">{c.name}</span>
-          </a>
+        countries.map((c) => (
+          <div class="ccard rv">
+            <h3>{c.name}</h3>
+            <p>{c.description}</p>
+            <a class="visit" href={`/destinations/${c.slug}`}>
+              Visit {c.name}
+            </a>
+          </div>
         ))
       }
     </div>
-  </section>
+  </div>
+  <div class="sec-tight wrap fcta">
+    <h2 class="rv">Start selling {region}.</h2>
+    <EmailCapture uid="region-cta" marginTop="30px" />
+  </div>
 </Base>

@@ -12,16 +12,16 @@ import Base from '../layouts/Base.astro';
 ---
 
 <Base title="Page not found" description="That page doesn't exist. Find your way back to destinations, the blog, or the homepage." noindex>
-  <section class="hx hx-ph">
-    <p class="hx-ph-eye">Error 404</p>
-    <h1>That page isn't on the map.</h1>
-    <p class="hx-ph-lede">
+  <div class="sec wrap fcta">
+    <p class="eyebrow rv" style="justify-content:center">Error 404</p>
+    <h1 class="rv">That page isn't<br />on the map.</h1>
+    <p class="lede rv" style="margin:18px auto 0">
       The link may be out of date, or the page may have moved. Here's the way back.
     </p>
-    <div class="hx-ph-cta">
+    <div class="rv" style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:34px">
       <a class="btn" href="/">Back to home</a>
       <a class="btn-o" href="/destinations">Browse destinations</a>
       <a class="btn-o" href="/blog">Read the blog</a>
     </div>
-  </section>
+  </div>
 </Base>
