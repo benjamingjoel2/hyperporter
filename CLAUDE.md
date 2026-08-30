@@ -93,9 +93,15 @@ direction at commit `28d708a` at the founder's instruction — the harvey.ai /
 starlink.com rebuild is preserved in git history at `d05cc73` if it is ever
 wanted back.
 
-- **Display type**: PT Serif. **Body/UI**: Hyperlocal ROM, the brand cut of
-  ABC ROM, with Inter as the fallback. IBM Plex Mono for labels and eyebrows,
-  which stay in capitals.
+- **Type**: Hyperlocal ROM throughout — display, body and labels — with Inter
+  as the single fallback. PT Serif and IBM Plex Mono were dropped (Aug 2026)
+  at the founder's instruction; the only Google Fonts request left is Inter.
+  Labels and eyebrows stay in capitals with their wide tracking.
+  Two things the switch needed: display sizes carry `-.022em` tracking (the
+  serif wanted `+.006em`; a grotesque at 108px wants the opposite), and
+  anything with digits that line up or tick over gets
+  `font-variant-numeric:tabular-nums`, since the labels are no longer
+  monospaced. Hyperlocal ROM ships real `tnum` figures.
 - **Accent**: `--signal` is teal `#1B747E`. Amber `#9A5F0B` is still reserved
   for human-touchpoint / manual states — never decorative.
 - Homepage opens on the photo band with the flight-arc overlay, as it did
