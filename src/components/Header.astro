@@ -9,6 +9,7 @@
  * client JS, since both depend on runtime state a static build can't know.
  */
 import { FEED } from '../lib/feed';
+import { NAV, DRAWER } from '../lib/content/nav';
 
 interface Props {
   current?:
@@ -25,21 +26,6 @@ interface Props {
 
 const { current } = Astro.props;
 
-/**
- * Nav follows the product model: Product is the four layers, Solutions is
- * the same features grouped by job, Customers is who each is for. The old
- * flat Autopilot / Horizon entries now live under Product, since neither is
- * the platform any more — OS is.
- */
-const NAV = [
-  { id: 'product', label: 'Product', href: '/product' },
-  { id: 'solutions', label: 'Solutions', href: '/solutions' },
-  { id: 'customers', label: 'Customers', href: '/customers' },
-  { id: 'pricing', label: 'Pricing', href: '/pricing' },
-  { id: 'destinations', label: 'Destinations', href: '/destinations' },
-  { id: 'blog', label: 'Resources', href: '/blog' },
-  { id: 'security', label: 'Security', href: '/security' },
-] as const;
 
 const row = FEED.map(
   ([city, from, to, human]) =>
@@ -65,11 +51,68 @@ const stream = row + row;
     </a>
     <nav class="links" id="links">
       {
-        NAV.map((n) => (
-          <a data-nav={n.id} class:list={{ act: current === n.id }} href={n.href}>
-            {n.label}
-          </a>
-        ))
+        NAV.map((n) =>
+          n.tabs ? (
+            <div class="mega-wrap" data-mega={n.id}>
+              <a
+                class:list={['mega-trigger', { act: current === n.id }]}
+                href={n.href}
+                aria-expanded="false"
+                aria-haspopup="true"
+              >
+                {n.label}
+                <svg class="chev" viewBox="0 0 12 8" aria-hidden="true">
+                  <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+                </svg>
+              </a>
+
+              <div class="mega" hidden>
+                <div class="mega-rail" role="tablist" aria-label={`${n.label} sections`}>
+                  {n.tabs.map((t, i) => (
+                    <button
+                      type="button"
+                      role="tab"
+                      class:list={['mega-tab', { on: i === 0 }]}
+                      data-tab={t.id}
+                      aria-selected={i === 0 ? 'true' : 'false'}
+                      tabindex={i === 0 ? 0 : -1}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div class="mega-views">
+                  {n.tabs.map((t, i) => (
+                    <div class="mega-view" data-view={t.id} hidden={i !== 0}>
+                      <p class="mega-head">{t.heading}</p>
+                      <div class="mega-list">
+                        {t.rows.map((r, j) => (
+                          <a class="mega-row" href={r.href}>
+                            <span class="mega-n">{String(j + 1).padStart(2, '0')}</span>
+                            <span class="mega-txt">
+                              <b>{r.label}</b>
+                              <em>{r.desc}</em>
+                            </span>
+                            <span class="mega-go">&rarr;</span>
+                          </a>
+                        ))}
+                      </div>
+                      <a class="mega-foot" href={t.footHref}>
+                        <span>{t.footLabel}</span>
+                        <em>{t.footCta} &rarr;</em>
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <a data-nav={n.id} class:list={{ act: current === n.id }} href={n.href}>
+              {n.label}
+            </a>
+          )
+        )
       }
     </nav>
     <div class="sys"><i></i><span id="clock">00:00 UTC</span></div>
@@ -81,12 +124,119 @@ const stream = row + row;
     <div class="stream" set:html={stream} />
   </div>
   <div class="drawer" id="drawer">
-    {NAV.map((n) => <a href={n.href}>{n.label}</a>)}
+    {
+      DRAWER.map((g) => (
+        <>
+          {g.heading && <p class="drawer-h">{g.heading}</p>}
+          {g.links.map((n) => (
+            <a href={n.href}>{n.label}</a>
+          ))}
+        </>
+      ))
+    }
     <a href="/signup">Get started free &rarr;</a>
   </div>
 </header>
 
 <script>
+  /**
+   * Mega menu. Opens on hover for a pointer, and on click for touch and
+   * keyboard — hover alone would make it unreachable on a phone.
+   *
+   * A short close delay covers the gap between the trigger and the panel:
+   * without it the panel shuts while the pointer travels the few pixels
+   * between them, which reads as the menu flickering shut on approach.
+   */
+  const wraps = Array.from(document.querySelectorAll<HTMLElement>('.mega-wrap'));
+  const hoverable = window.matchMedia('(hover: hover)').matches;
+  let shutTimer: ReturnType<typeof setTimeout> | undefined;
+
+  function setOpen(wrap: HTMLElement, open: boolean) {
+    const panel = wrap.querySelector<HTMLElement>('.mega');
+    const trigger = wrap.querySelector<HTMLElement>('.mega-trigger');
+    if (!panel || !trigger) return;
+    panel.hidden = !open;
+    wrap.classList.toggle('open', open);
+    trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  const closeAll = (except?: HTMLElement) =>
+    wraps.forEach((w) => w !== except && setOpen(w, false));
+
+  wraps.forEach((wrap) => {
+    const trigger = wrap.querySelector<HTMLElement>('.mega-trigger');
+
+    if (hoverable) {
+      wrap.addEventListener('pointerenter', () => {
+        clearTimeout(shutTimer);
+        closeAll(wrap);
+        setOpen(wrap, true);
+      });
+      wrap.addEventListener('pointerleave', () => {
+        shutTimer = setTimeout(() => setOpen(wrap, false), 180);
+      });
+    }
+
+    // Click opens rather than following the link, so a touch user can reach
+    // the panel at all. The overview page is the first row inside it.
+    trigger?.addEventListener('click', (e) => {
+      if (hoverable && wrap.classList.contains('open')) return; // let it navigate
+      e.preventDefault();
+      const open = !wrap.classList.contains('open');
+      closeAll(wrap);
+      setOpen(wrap, open);
+    });
+
+    // Tabs inside the panel.
+    const tabs = Array.from(wrap.querySelectorAll<HTMLButtonElement>('.mega-tab'));
+    const views = Array.from(wrap.querySelectorAll<HTMLElement>('.mega-view'));
+
+    const select = (id: string) => {
+      tabs.forEach((t) => {
+        const on = t.dataset.tab === id;
+        t.classList.toggle('on', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+      });
+      views.forEach((v) => {
+        v.hidden = v.dataset.view !== id;
+      });
+    };
+
+    tabs.forEach((tab, i) => {
+      // pointerenter, not click: the reference switches on hover, and a
+      // click would feel like a dead button to anyone using a mouse
+      tab.addEventListener('pointerenter', () => tab.dataset.tab && select(tab.dataset.tab));
+      tab.addEventListener('click', () => tab.dataset.tab && select(tab.dataset.tab));
+      tab.addEventListener('keydown', (e) => {
+        const k = e.key;
+        if (k !== 'ArrowDown' && k !== 'ArrowUp') return;
+        e.preventDefault();
+        const next = tabs[(i + (k === 'ArrowDown' ? 1 : tabs.length - 1)) % tabs.length];
+        if (next.dataset.tab) select(next.dataset.tab);
+        next.focus();
+      });
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const open = wraps.find((w) => w.classList.contains('open'));
+    if (!open) return;
+    setOpen(open, false);
+    open.querySelector<HTMLElement>('.mega-trigger')?.focus();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement).closest('.mega-wrap')) closeAll();
+  });
+
+  // Tabbing out of a panel closes it.
+  document.addEventListener('focusin', (e) => {
+    const inside = (e.target as HTMLElement).closest('.mega-wrap');
+    wraps.forEach((w) => w !== inside && setOpen(w, false));
+  });
+
   const burger = document.getElementById('burger');
   const drawer = document.getElementById('drawer');
   burger?.addEventListener('click', () => drawer?.classList.toggle('open'));
