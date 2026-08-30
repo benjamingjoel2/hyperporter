@@ -35,6 +35,10 @@ const stream = row + row;
 ---
 
 <header class="top">
+  {/* Dims and blurs the page while a panel is open. Sits inside the header
+      on a negative z-index, so it paints above the page but behind the
+      header's own opaque background — the bar and the panel stay crisp. */}
+  <div class="mega-scrim" aria-hidden="true"></div>
   <div class="bar">
     <a class="mark" href="/">
       <span class="glyph"
@@ -151,6 +155,8 @@ const stream = row + row;
   const hoverable = window.matchMedia('(hover: hover)').matches;
   let shutTimer: ReturnType<typeof setTimeout> | undefined;
 
+  const bar = document.querySelector<HTMLElement>('header.top');
+
   function setOpen(wrap: HTMLElement, open: boolean) {
     const panel = wrap.querySelector<HTMLElement>('.mega');
     const trigger = wrap.querySelector<HTMLElement>('.mega-trigger');
@@ -158,6 +164,8 @@ const stream = row + row;
     panel.hidden = !open;
     wrap.classList.toggle('open', open);
     trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    // the scrim follows whether *any* panel is open, not just this one
+    bar?.classList.toggle('mega-open', wraps.some((w) => w.classList.contains('open')));
   }
 
   const closeAll = (except?: HTMLElement) =>

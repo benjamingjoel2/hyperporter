@@ -946,3 +946,16 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
   text-transform:uppercase;color:var(--dim);
 }
 .drawer-h:first-child{margin-top:0}
+
+/* Scrim behind an open mega panel. Slight — enough to push the page back
+   and let the panel sit forward, not enough to read as a modal. */
+.mega-scrim{
+  position:fixed;inset:0;z-index:-1;
+  background:rgba(12,18,24,.16);
+  -webkit-backdrop-filter:blur(3px);
+  backdrop-filter:blur(3px);
+  opacity:0;pointer-events:none;
+  transition:opacity .22s ease;
+}
+header.top.mega-open .mega-scrim{opacity:1}
+@media (max-width:1080px){.mega-scrim{display:none}}
