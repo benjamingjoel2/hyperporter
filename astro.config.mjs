@@ -39,6 +39,12 @@ const noindexPaths = new Set(['/about/', '/terms/', '/privacy/', '/404/', '/prev
 
 export default defineConfig({
   site,
+  // /how is gone: its nine-stage content now lives on /autopilot, which is
+  // where the new product model puts it. The route stays as a redirect so
+  // existing links and any indexed copy keep working.
+  redirects: {
+    '/how': '/autopilot',
+  },
   integrations: [
     mdx(),
     sitemap({

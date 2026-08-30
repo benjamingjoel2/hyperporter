@@ -22,16 +22,19 @@ const [featured, ...rest] = posts;
 ---
 
 <Base
-  title="Blog"
-  description="Field notes on travel operations — how trips are coordinated, quoted, and run between agencies and ground operators."
+  title="Resources"
+  description="Product updates, pilot progress, and what we're learning about automation in travel."
   currentNav="blog"
 >
   <div class="sec wrap">
-    <p class="eyebrow rv">Field notes</p>
+    <p class="eyebrow rv">Resources</p>
     <div class="b-head rv">
-      <h1 style="margin:0">Notes from the<br />coordination layer.</h1>
+      <h1 style="margin:0">The latest from<br />Hyperporter.</h1>
       <span class="b-count">{posts.length} posts</span>
     </div>
+    <p class="lede rv" style="margin-top:18px">
+      Product updates, pilot progress, and what we're learning about automation in travel.
+    </p>
 
     {
       featured && (

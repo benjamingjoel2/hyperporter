@@ -1,0 +1,37 @@
+---
+/**
+ * Intelligence — the AI layer. Atlas reads from Vault, which holds the
+ * account's own contracts and rates. The "trained on your data, not anyone
+ * else's" claim is load-bearing and repeated on /security; keep the two
+ * pages saying the same thing.
+ */
+import Base from '../layouts/Base.astro';
+import ProductPage from '../components/ProductPage.astro';
+import { byProduct } from '../lib/content/products';
+
+const product = byProduct('intelligence');
+---
+
+<Base
+  title="Intelligence"
+  description="An AI layer trained on your own contracts, rates and history — queryable, quotable, and able to suggest full itineraries."
+  currentNav="product"
+>
+  <ProductPage product={product}>
+    <div slot="after-features" class="sec-tight wrap">
+      <p class="eyebrow rv">How it processes your documents</p>
+      <h2 class="rv">Every contract, every rate sheet — organized and queryable in minutes, not weeks.</h2>
+      <p class="lede rv">
+        Drop in years of contracts, rate sheets, and past itineraries. Atlas reads, structures, and
+        indexes all of it into Vault — ready to query the same day, not after a manual data-entry
+        project.
+      </p>
+      <div class="tags rv" style="margin-top:26px">
+        <span class="tag-p">Your docs</span>
+        <span class="tag-p">Vault</span>
+        <span class="tag-p">Structured</span>
+        <span class="tag-p">Queryable</span>
+      </div>
+    </div>
+  </ProductPage>
+</Base>

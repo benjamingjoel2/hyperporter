@@ -4,26 +4,39 @@ Context for any Claude Code session working in this repo. Read this first.
 
 ## What Hyperporter is
 
-Travel-tech company. Two products, and they are **not** the same thing:
+Travel-tech company. **Four product layers**, and they are not interchangeable:
 
-- **Autopilot** — the *software*. Automates the coordination workflow between traveller, travel
-  agency, and ground operator (DMC). Sold as a monthly subscription.
-- **Horizon** — the *partner/contact network*. Vetted local operators across many countries.
-  Not software.
+- **OS** — the *platform*. CRM, magic links, public inquiry form, proposal generator.
+  Free on every tier, for both sides. This is the software; when you mean "the platform",
+  the word is **OS**, not Autopilot.
+- **Autopilot** — the *automation layer* on top of OS. The nine-stage engine, Inquiry
+  through Post-Trip, with human escalation points by design.
+- **Intelligence** — the *AI layer* on top of Autopilot. Atlas is the assistant, Vault is
+  where an account's own contracts and rates live. Trained on the account's own data only.
+- **Horizon** — the *supplier network*. A vetted list of DMCs and suppliers across 130+
+  countries that agencies search. Not software, and suppliers never log into it.
 
-Three ways customers buy:
+Two sides of the market:
 
-1. **Horizon only** — no software. They inquire, we run the trip through the network.
-2. **Autopilot only** — they subscribe and use their own existing contacts.
-3. **Autopilot + Horizon** — they subscribe, and Horizon is available inside the software.
+- **Resellers** — travel agencies, travel agents, independent advisors, creators. They
+  source suppliers and run the full ladder: Showcase → Autopilot → Intelligence.
+- **Suppliers** — DMCs and tour operators. They are the ones being sourced, and skip the
+  middle tier: Showcase → Intelligence.
+
+Tiers are **Showcase** (free), **Autopilot** (€49/mo), **Intelligence** (custom). Note the
+tier names collide with two of the product-layer names; that is the founder's naming.
 
 ### Terminology rules — do not break these
 
-- Never describe Horizon as the software.
-- Never describe Autopilot as the contact network.
-- When referring to the platform/software, the word is **Autopilot**.
-- Do not overstate automation. Payment marking is **manual** — a human confirms it.
-  "Auto-confirmation" language is wrong.
+- Never describe Horizon as software, and never as something a supplier logs into.
+- Never call Autopilot the platform. OS is the platform; Autopilot is automation on top.
+- Intelligence trains on the account's own Vault only — never on anyone else's data.
+  This claim appears on /intelligence and /security and must stay identical on both.
+- Do not overstate automation. Escalation to a human is a designed feature, not a gap.
+- The Autopilot before/after figures are **pilot targets, not results**. The sentence
+  saying so must stay next to the table.
+- Horizon's fee is 10%, and the supplier always receives their full quoted rate.
+- Security: SOC 2 and GDPR are **not** certified — "targeted post-pilot". Never soften this.
 
 ## Current state of the code
 
@@ -68,6 +81,21 @@ Destination artwork is **generated SVG**, not photography — 50 hand-built land
 (Flame Towers for Azerbaijan, Tiger's Nest for Bhutan, Belém Tower for Portugal, and so on),
 seeded per country for palette variation. These are placeholders standing in until real
 photography is licensed. Keep them as the fallback when `DEST_IMG` has no entry.
+
+## Site structure (Aug 2026)
+
+Built from the founder's content file — 26 views, ~4,900 words.
+
+- `/` · `/product` · `/os` · `/autopilot` · `/intelligence` · `/horizon`
+- `/solutions` + `/solutions/[slug]` — six categories, tier shown per feature
+- `/customers` + `/customers/[slug]` — the two overviews (agent-os, supplier-os)
+  and six segments, all on one route
+- `/pricing` (two ladders, one switch) · `/security` · `/blog` (as Resources)
+- `/destinations` and the 137 country pages are unchanged and still noindex
+- `/how` is gone; its nine stages live on `/autopilot`. The route 301s there.
+
+Content lives in `src/lib/content/{products,solutions,customers,pricing}.ts`, not in
+the page files. Pages are thin; edit the content modules.
 
 ## Known gaps — these need doing
 

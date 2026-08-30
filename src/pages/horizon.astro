@@ -1,142 +1,49 @@
 ---
 /**
- * Horizon network page. Ported from hyperporter-3.html's #view-horizon.
- * Horizon is the NETWORK — vetted local operators — never described as
- * software (that's Autopilot).
+ * Horizon — the supplier network. Never the software: agencies search it,
+ * suppliers are listed on it for free and never log into it.
  *
- * One locked-in change from the prototype: the radial diagram is rebuilt
- * on the canonical 7-region taxonomy from the destinations collection
- * (Africa, Asia, Australia & Oceania, Europe, Middle East, North & Central
- * America, South America). The prototype used its own overlapping 6-label
- * set ("Latin America", "SE Asia", "Oceania"...) that matched nothing else
- * on the site; now that /regions/* are real crawlable URLs there is one
- * region list, and each node links to its region page. Spoke geometry is
- * computed here at build time (360/7° apart) instead of client-side.
+ * The country figure stays "130+" to match the rest of the site's public
+ * copy, even though the dataset holds 137. That discrepancy is unresolved —
+ * see CLAUDE.md.
  */
 import Base from '../layouts/Base.astro';
-import EmailCapture from '../components/EmailCapture.astro';
-import { REGIONS } from '../content.config';
-import { slugify } from '../lib/slug';
-import { destArt } from '../lib/landmark/generator';
+import ProductPage from '../components/ProductPage.astro';
+import { byProduct, HORIZON_SUPPLIER_TYPES } from '../lib/content/products';
+import WorldMap from '../components/WorldMap.astro';
 
-/** One scene per region, so the grid reads as coverage rather than decoration. */
-const COVERAGE = [
-  { name: 'Kenya', region: 'Africa' },
-  { name: 'Japan', region: 'Asia' },
-  { name: 'New Zealand', region: 'Australia & Oceania' },
-  { name: 'Portugal', region: 'Europe' },
-  { name: 'Oman', region: 'Middle East' },
-  { name: 'Mexico', region: 'North & Central America' },
-  { name: 'Peru', region: 'South America' },
-  { name: 'Morocco', region: 'Africa' },
-] as const;
-
-const RADIUS = 176;
-const nodes = REGIONS.map((region, i) => {
-  const deg = -90 + (i * 360) / REGIONS.length;
-  const rad = (deg * Math.PI) / 180;
-  return {
-    region,
-    href: `/regions/${slugify(region)}`,
-    deg,
-    x: Math.cos(rad) * RADIUS,
-    y: Math.sin(rad) * RADIUS,
-  };
-});
+const product = byProduct('horizon');
 ---
 
 <Base
   title="Horizon"
-  description="Hyperporter's own ground-operations network — 130+ countries of vetted DMC relationships. Use it inside Autopilot, or bring us the trip directly."
-  currentNav="horizon"
+  description="A vetted list of DMCs and suppliers across 130+ countries — search, quote, and book directly from your CRM, on every tier including free."
+  currentNav="product"
 >
-  <div class="sec wrap">
-    <div class="tags rv"><span class="tag-p">Network</span><span class="tag-p">Global DMC supply</span></div>
-    <h1 class="rv">Real DMC relationships,<br />wherever your travellers<br />are going.</h1>
-    <p class="lede rv">
-      Horizon is Hyperporter's own ground-operations network — 130+ countries of vetted DMC relationships. Use it
-      inside Autopilot, or bring us the trip directly and we'll run it through the network for you.
-    </p>
-    <a class="btn rv" href="/signup">Sign up →</a>
-  </div>
-
-  <div class="sec-tight wrap">
-    <p class="eyebrow rv">(01) &mdash; How it works</p>
-    <div class="radial rv">
-      <div class="orbit o1"></div>
-      <div class="orbit o2"></div>
-      <div class="hub"><b>Horizon</b><span>130+ countries</span></div>
-      {nodes.map((n) => <div class="spoke" style={`transform:rotate(${n.deg}deg)`} />)}
-      {
-        nodes.map((n) => (
-          <a class="rnode" href={n.href} style={`left:calc(50% + ${n.x.toFixed(1)}px);top:calc(50% + ${n.y.toFixed(1)}px)`}>
-            {n.region}
-          </a>
-        ))
-      }
-    </div>
-    <div class="rlist">
-      {
-        nodes.map((n) => (
-          <div>
-            <i />
-            <a href={n.href}>{n.region}</a>
-          </div>
-        ))
-      }
-    </div>
-  </div>
-
-  <div class="sec-tight wrap">
-    <p class="eyebrow rv">(02) &mdash; The network</p>
-    <div class="cov rv">
-      {
-        COVERAGE.map((c, i) => (
-          <a class="cov-tile" href={`/destinations/${slugify(c.name)}`}>
-            <span class="cov-art" set:html={destArt(c.name, `cv${i}`)} />
-            <span class="cov-r">{c.region}</span>
-            <span class="cov-n">{c.name}</span>
-          </a>
-        ))
-      }
-    </div>
-  </div>
-
-  <div class="sec-tight wrap">
-    <div class="pillars rv">
-      <div class="pill">
-        <div class="kind">The gap</div>
-        <p>
-          Most agencies only have deep DMC relationships in a handful of destinations. The moment a client asks for
-          somewhere outside that list, the process reverts to cold outreach and guesswork. Horizon exists so that gap
-          never shows up to your customer.
-        </p>
+  <ProductPage product={product}>
+    <section slot="after-hero" class="mapband">
+      <div class="wrap">
+        <p class="eyebrow rv" style="color:rgba(255,255,255,.66)">Where the network reaches</p>
+        <WorldMap />
       </div>
-      <div class="pill">
-        <div class="kind">Not a marketplace</div>
-        <p>
-          These are real, human-vetted relationships Hyperporter operates trips through directly — not a directory of
-          unverified contacts. Every trip run through Horizon strengthens the reliability data behind the network.
+    </section>
+
+    <div slot="after-features" class="sec-tight wrap">
+      <p class="eyebrow rv">What's on the list</p>
+      <h2 class="rv">Great wholesale B2B prices, across every type of supplier.</h2>
+      <div class="tags rv" style="margin-top:24px">
+        {HORIZON_SUPPLIER_TYPES.map((t) => <span class="tag-p">{t}</span>)}
+      </div>
+
+      <div style="margin-top:clamp(40px,5vw,72px)">
+        <p class="eyebrow rv">How the fee works</p>
+        <h2 class="rv">10%, locked. The supplier always gets their full quoted rate.</h2>
+        <p class="lede rv">
+          A markup on top of the quoted rate, absorbed by the agency or passed through to the
+          traveler. Being listed costs a supplier nothing — Horizon is the agency's tool for finding
+          them, not a product the supplier logs into.
         </p>
       </div>
     </div>
-  </div>
-
-  <div class="sec-tight wrap">
-    <div class="dmc rv">
-      <div>
-        <p class="eyebrow">For DMCs</p>
-        <p>
-          Get matched with agencies actively quoting your destination — real, structured demand, no more chasing cold
-          outreach.
-        </p>
-      </div>
-      <a class="btn" href="/signup">Join the network →</a>
-    </div>
-  </div>
-
-  <div class="sec wrap fcta">
-    <h2 class="rv">Never turn down a trip because<br />you don't have the contact.</h2>
-    <EmailCapture uid="horizon-cta" marginTop="32px" />
-  </div>
+  </ProductPage>
 </Base>
