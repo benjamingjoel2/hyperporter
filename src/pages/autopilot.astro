@@ -1,91 +1,69 @@
 ---
 /**
- * Autopilot product page. Ported from hyperporter-3.html's #view-autopilot.
- * Autopilot is the SOFTWARE — never described as the contact network (that's
- * Horizon). The nine-stage zigzag renders at build time from STAGES instead
- * of client-side. Payment marking is manual by design; the callout keeps
- * that wording exact.
+ * Autopilot — the automation layer, not the platform. OS is the platform.
+ *
+ * The nine-stage engine lives here now; it used to have its own /how page.
+ * The before/after figures are pilot TARGETS, and the note saying so is not
+ * decorative — it is the difference between a target and a claim. Keep it
+ * adjacent to the table.
  */
 import Base from '../layouts/Base.astro';
-import EmailCapture from '../components/EmailCapture.astro';
-import { STAGES } from '../lib/stages';
+import ProductPage from '../components/ProductPage.astro';
+import { byProduct, AUTOPILOT_TARGETS } from '../lib/content/products';
+
+const product = byProduct('autopilot');
 ---
 
 <Base
   title="Autopilot"
-  description="The software that runs inquiry, quoting, booking, and live trip support — automated by default, with a human only where a real decision is needed."
-  currentNav="autopilot"
+  description="Full nine-stage automation, from Inquiry through Post-Trip, with human escalation points built in by design."
+  currentNav="product"
 >
-  <div class="sec wrap">
-    <div class="tags rv"><span class="tag-p">Software</span><span class="tag-p">For travel agencies</span></div>
-    <h1 class="rv">Run your agency<br />on autopilot.</h1>
-    <p class="lede rv">
-      The software that runs inquiry, quoting, booking, and live trip support — automated by default, with a human
-      only where a real decision is needed. Subscribe monthly and run it on your own contacts, or add Horizon.
-    </p>
-    <a class="btn rv" href="/signup">Sign up →</a>
-  </div>
+  <ProductPage product={product}>
+    <div slot="after-features" class="sec-tight wrap">
+      <div class="mission rv">
+        Automation that still knows when to stop is the whole point — not less human involvement,
+        the right human involvement.
+      </div>
+      <p class="hint rv">The design principle behind every escalation point in Autopilot</p>
+    </div>
 
-  <div class="sec-tight wrap">
-    <p class="eyebrow rv">(01) &mdash; The full route</p>
-    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap">
-      <h2 class="rv" style="margin:0">Nine stages, one thread.</h2>
-      <span class="hint rv">Scroll the timeline →</span>
-    </div>
-    <div class="zig">
-      <div class="ztrack">
-        {
-          STAGES.map((s) => (
-            <div class="zcard">
-              <div class="zh">
-                <span>{s.c}</span>
-                <em>{s.n}</em>
-              </div>
-              <h3>{s.name}</h3>
-              <div class="one">{s.one}</div>
-              <p>{s.body}</p>
-            </div>
-          ))
-        }
+    <div slot="after-cases" class="sec-tight wrap">
+      <div class="pm-scroll rv">
+        <table class="pm">
+          <thead>
+            <tr>
+              <th>&nbsp;</th>
+              <th>Before Autopilot</th>
+              <th>After Autopilot</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              AUTOPILOT_TARGETS.map((t) => (
+                <tr>
+                  <td>{t.metric}</td>
+                  <td class="pm-cell">{t.before}</td>
+                  <td class="pm-cell pm-yes">{t.after}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
       </div>
-    </div>
-  </div>
-
-  <div class="sec wrap">
-    <p class="eyebrow rv">(02) &mdash; What you get</p>
-    <div class="fgrid rv">
-      <div class="fcell">
-        <div class="fi">01</div>
-        <h3>One link, always current</h3>
-        <p>The magic link a customer sees updates in place — no new PDF, no version confusion, ever.</p>
-      </div>
-      <div class="fcell">
-        <div class="fi">02</div>
-        <h3>Autopilot or manual, your call</h3>
-        <p>Every thread can run itself or be pulled under your control, per account or per trip.</p>
-      </div>
-      <div class="fcell">
-        <div class="fi">03</div>
-        <h3>It tells you what to do</h3>
-        <p>When a thread needs you, you get a specific action — not a vague alert.</p>
-      </div>
-      <div class="fcell">
-        <div class="fi">04</div>
-        <h3>Margin, handled</h3>
-        <p>Your markup applies automatically on every quote. Your DMC never sees what you charge.</p>
-      </div>
-    </div>
-    <div class="callout rv">
-      <div class="lock">Manual · always</div>
-      <p>
-        Payment marking stays manual, deliberately. Autopilot doesn't move money on its own — every automated step
-        can be pulled into manual control at any point.
+      <p class="hint rv" style="margin-top:18px">
+        These are pilot targets, not marketing claims. Real numbers replace these once the pilot runs.
       </p>
-    </div>
-  </div>
 
-  <div class="sec wrap fcta">
-    <h2 class="rv">See your own trips move through it.</h2>
-    <EmailCapture uid="autopilot-cta" marginTop="32px" />
-  </div>
+      <div class="callout rv">
+        <span class="lock">Before you automate</span>
+        <p>
+          No supplier list yet? Autopilot automates requests going out to suppliers you already work
+          with. If the agency doesn't have a supplier list yet, Horizon gives them a vetted one first
+          — free, on any tier — so there's something for Autopilot to automate against.
+          <a href="/horizon" style="color:var(--signal)">See Horizon for the supplier list.</a>
+        </p>
+      </div>
+    </div>
+  </ProductPage>
 </Base>

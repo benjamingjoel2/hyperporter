@@ -1,0 +1,37 @@
+---
+/** Solutions index — six categories, ordered as a trip actually runs. */
+import Base from '../../layouts/Base.astro';
+import { CATEGORIES } from '../../lib/content/solutions';
+---
+
+<Base
+  title="Solutions"
+  description="Every feature grouped by what it actually does — six categories, from the first inquiry through getting paid, each showing which tier it's on."
+  currentNav="solutions"
+>
+  <div class="sec wrap">
+    <p class="eyebrow rv">Solutions</p>
+    <h1 class="rv">Every feature, by what it actually does.</h1>
+    <p class="lede rv">
+      Six categories, from the first inquiry through getting paid. Each one lists exactly what's
+      included and which tier it's on.
+    </p>
+  </div>
+
+  <div class="sec-tight wrap">
+    <div class="ladder rv">
+      {
+        CATEGORIES.map((c, i) => (
+          <a class="lrow" href={`/solutions/${c.slug}`}>
+            <div class="lrow-n">{String(i + 1).padStart(2, '0')}</div>
+            <div>
+              <h3>{c.name}</h3>
+              <p>{c.desc}</p>
+            </div>
+            <span class="plink">View features &rarr;</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Base>
