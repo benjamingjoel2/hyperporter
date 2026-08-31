@@ -1,25 +1,32 @@
-# Production stack for the server. Deploy is:
+# Production stack for the server.
 #
-#   git pull origin main
-#   docker compose up -d --build
+# The server does NOT build the site. GitHub Actions builds it and publishes
+# the finished files to the `deploy` branch; ./site is a checkout of that
+# branch, bind-mounted straight into nginx. Deploying is:
+#
+#   cd /opt/hyperporter/site && git fetch --depth 1 origin deploy \
+#     && git reset --hard origin/deploy
+#
+# That is a few seconds. It used to be `docker compose up -d --build`, which
+# ran the whole Astro build on a 956MB box that was serving traffic at the
+# same time — it swapped and crawled. See .github/workflows/deploy.yml.
+#
+# Because ./site is a bind mount of static files, nginx picks up a new build
+# immediately; no restart, no rebuild, no downtime.
 #
 # First time only, run scripts/init-letsencrypt.sh first — see DEPLOY.md.
 
 services:
   web:
-    build:
-      context: .
-      args:
-        # Baked into the static build, so it must match the origin nginx
-        # actually serves. Override via SITE_URL in a .env file next to
-        # this compose file if deploying to a different hostname.
-        SITE_URL: ${SITE_URL:-https://hyperporter.com}
-    image: hyperporter-web
+    image: nginx:1.27-alpine
     restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
     volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      # The built site, as published by CI to the `deploy` branch.
+      - ./site:/usr/share/nginx/html:ro
       - ./data/certbot/conf:/etc/letsencrypt:ro
       - ./data/certbot/www:/var/www/certbot:ro
     # Reload periodically so a certificate renewed by the certbot service is

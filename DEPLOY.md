@@ -75,51 +75,64 @@ with a temporary self-signed cert, then replaces it with the real one.
 
 ## Deploying a change
 
-**The live checkout is `/opt/hyperporter`**, not a home directory. Merge to
-`main` first — the server pulls from `main`, so nothing that is still on a
-branch will appear.
+**The server does not build the site.** GitHub Actions builds it on every push
+to `main` and publishes the finished files to the `deploy` branch. The server
+holds a checkout of that branch at `/opt/hyperporter/site`, bind-mounted into
+nginx.
 
-Run it as a single command from your own machine rather than an interactive
-session. The server is small enough that it drops SSH sessions while
-building, and anything typed after that silently runs on your laptop
-instead:
+So deploying is a pull, not a build:
 
 ```sh
-ssh root@hyperporter.com 'cd /opt/hyperporter && git pull --no-edit origin main && nohup docker compose up -d --build > /tmp/deploy.log 2>&1 < /dev/null &'
+ssh root@hyperporter.com 'cd /opt/hyperporter/site && git fetch --depth 1 origin deploy && git reset --hard origin/deploy'
 ```
 
-That returns in seconds. The build keeps going on the server because it is
-detached — that is what `nohup` and the redirects are for. Allow five to
-ten minutes.
+That takes a few seconds. nginx serves the files straight off the bind mount,
+so there is nothing to restart and no downtime.
 
-Check on it as often as you like:
+`reset --hard` rather than `pull` because CI force-pushes a single fresh commit
+each time — otherwise the repository would grow by a whole copy of the site on
+every deploy, and a fast-forward would fail.
+
+Check it landed:
 
 ```sh
-ssh root@hyperporter.com 'tail -30 /tmp/deploy.log; echo ---; cd /opt/hyperporter && docker compose ps'
+curl -sI https://hyperporter.com | head -1          # HTTP/2 200
+curl -s https://hyperporter.com | grep -o '<title>[^<]*'
 ```
 
-Done when `web` reads `healthy` and the log ends with `Started`. Then:
+### One-time switch to this setup
+
+Only needed once, on a server still running the old build-on-the-box stack:
 
 ```sh
-curl -sI https://hyperporter.com | head -1   # HTTP/2 200
+ssh root@hyperporter.com 'cd /opt/hyperporter \
+  && git pull --no-edit origin main \
+  && git clone --branch deploy --depth 1 git@github.com:benjamingjoel2/hyperporter.git site \
+  && docker compose up -d'
 ```
 
-The build runs inside Docker, so the server needs no Node toolchain.
+The clone must exist before `docker compose up -d`, or nginx starts with an
+empty document root and the site 404s. If the `deploy` branch does not exist
+yet, let the Deploy workflow finish once first — Actions tab, or push anything
+to `main`.
 
-If `git pull` stops on divergent branches, someone has committed on the
-server — Mau has done this for TLS fixes. Merge rather than overwrite, or
-you will throw that work away:
+### Why it changed
 
-```sh
-ssh root@hyperporter.com 'cd /opt/hyperporter && git config pull.rebase false && git pull --no-edit origin main'
-```
+The old deploy ran `docker compose up -d --build`, which ran the full Astro
+build on the server. The build peaks around 740MB; the box has 956MB of RAM
+and 128MB of swap, and serves the live site at the same time. It did not fail
+cleanly — it swapped to disk and crawled, so a deploy would run for twenty
+minutes and never finish.
 
-### Building on the server is the weak point
+CI was already building the same site on every push, on a 16GB runner. Now
+that build is the one that ships.
 
-The box builds the site while also serving it, which is why it becomes
-unresponsive and drops connections mid-deploy. Moving the build to GitHub
-Actions — CI builds, the server downloads a finished `dist/` — removes the
-problem. Not done yet.
+### If a deploy goes wrong
+
+The `deploy` branch holds only the current build, so there is no previous
+commit to roll back to on that branch. To roll back, re-run the Deploy
+workflow from the last good commit on `main` (Actions tab, "Run workflow"),
+then pull again on the server.
 
 ---
 
