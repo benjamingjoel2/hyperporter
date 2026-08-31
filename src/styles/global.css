@@ -32,17 +32,26 @@
   font-weight:400;font-style:normal;font-display:swap;
 }
 :root{
-  --void:#FBFCFD;
-  --ink:#F1F4F7;
-  --steel:#E8ECF1;
+  /* Ground is warm off-white, not white, and the greys are warm with it —
+     measured off the reference at 1440px, where the ground reads
+     rgb(250,250,249), ink rgb(13,16,22) and secondary text rgb(104,101,94).
+     A neutral-grey secondary on this ground looks dirty; the warm one is
+     what makes the page read as considered. */
+  --void:#FAFAF9;
+  --ink:#F1F2F0;
+  --steel:#E6E5E3;
   --raise:#FFFFFF;
-  --line:rgba(12,22,34,.11);
-  --line-2:rgba(12,22,34,.22);
-  --paper:#0C1218;
-  --muted:#4C5866;
-  --dim:#626B78;
-  --signal:#1B747E;
-  --signal-dim:rgba(27,116,126,.10);
+  --line:#E1DFDA;
+  --line-2:#C8C5BF;
+  --paper:#0D1016;
+  --muted:#68655E;
+  --dim:#8F8D8A;
+  /* Teal darkened from #1B747E so it holds white text in the structural
+     role the reference gives its forest green: announcement bar, buttons,
+     and nothing decorative. */
+  --signal:#0E4B52;
+  --signal-hi:#12606A;
+  --signal-dim:rgba(14,75,82,.10);
   --amber:#9A5F0B;
   /* Photo scrim base. Light again, so the hero bands whiten the photograph
      rather than darkening it. */
@@ -52,14 +61,14 @@
   --mono:'Hyperlocal ROM','Inter',system-ui,sans-serif;
   /* Buttons, inputs and segmented controls. Not pills — a small, even
      corner, as on the reference. Label chips keep their own pill radius. */
-  --radius:8px;
-  --pad:clamp(20px,4vw,56px);
-  --max:1580px;
+  --radius:6px;
+  --pad:clamp(20px,3.2vw,48px);
+  --max:1680px;
   --photo:url("/hero.jpg");
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--void)}
-body{margin:0;background:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{margin:0;background:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 /* Underlines off at the root. They were being switched off one selector at
    a time, which meant every link added since — the product ladder, the
    mega-menu rows, the tier cards — arrived with the browser default
@@ -98,24 +107,68 @@ body::after{
    backdrop-filter may not apply at all, it shows through completely
    unblurred. The bar's job is to stay legible over anything, so it is
    opaque and the question does not arise. */
-header.top{position:sticky;top:0;z-index:70;background:var(--raise);border-bottom:1px solid var(--line)}
-.bar{max-width:var(--max);margin:0 auto;padding:0 var(--pad);height:72px;display:flex;align-items:center;gap:34px}
-.mark{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
-.mark .glyph{width:30px;height:30px;display:block;color:var(--paper);transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
+header.top{position:sticky;top:0;z-index:70;background:var(--raise);border-bottom:1px solid var(--line);
+  transition:background .28s ease,border-color .28s ease}
+
+/* Transparent over a full-bleed hero, solid once past it. Only engages on a
+   page that actually has one — `.over` is added by the header's own script
+   when it finds a `.lg-hero`, so the other 184 pages keep the opaque bar and
+   nothing has to opt out.
+
+   The scrim is not decoration: white nav over the homepage hero's pale sky
+   measured 2.7:1, under the 4.5:1 minimum, and 12.6:1 with it. It rides with
+   the bar rather than the hero, so legibility survives a change of
+   photograph. Positive z-index on the children rather than a negative one on
+   the scrim — a negative-z child escapes to behind the parent entirely. */
+header.top.over{background:transparent;border-bottom-color:transparent}
+header.top.over::before{content:"";position:absolute;inset:0 0 -34px;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,10,13,.72) 0%,rgba(6,10,13,.66) 76%,rgba(6,10,13,0) 100%);
+  transition:opacity .28s ease}
+header.top.over .bar,header.top.over .rail{position:relative;z-index:1}
+header.top.over .links a,header.top.over .mark,header.top.over .bar-acts .login{color:#fff;opacity:.94}
+header.top.over .links a:hover,header.top.over .mark:hover .glyph{opacity:1}
+header.top.over .mark .glyph{color:#fff}
+header.top.over .rail{background:transparent;border-color:rgba(255,255,255,.22)}
+/* The tag carries its own opaque ground so the marquee scrolls behind it
+   rather than under the text; over the hero that reads as a white block, so
+   it goes transparent and keeps only its divider. */
+/* The tag needs a ground of its own or the marquee scrolls visibly behind
+   the label and the two sets of letters interleave. Transparent was wrong;
+   it takes a darker tint of the header scrim instead, so it reads as a chip
+   rather than a white block. */
+header.top.over .rail .tag{color:#fff;background:rgba(6,10,13,.86);
+  border-right-color:rgba(255,255,255,.22)}
+header.top.over .rail .ent{color:rgba(255,255,255,.82)}
+header.top.over .rail .ent b{color:#fff}
+/* Nav left, wordmark centred, actions right — the reference's arrangement.
+   Three grid columns rather than flex, so the wordmark is centred on the
+   viewport and not merely "after the nav": with flex it drifts whenever the
+   nav or the actions change width. */
+.bar{max-width:var(--max);margin:0 auto;padding:0 var(--pad);height:76px;
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px}
+.mark{display:flex;align-items:center;gap:11px;text-decoration:none;justify-self:center;white-space:nowrap}
+.mark .glyph{width:24px;height:24px;display:block;color:var(--paper);transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
 .mark .glyph svg{width:100%;height:100%;display:block}
 .mark .glyph svg rect{fill:currentColor}
 .mark .glyph svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6;stroke-linecap:butt}
 .mark:hover .glyph{color:var(--signal);transform:rotate(90deg)}
-.mark .word{font-family:var(--mono);font-weight:400;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase}
-.links{display:flex;gap:4px;margin-left:auto}
-.links a{background:none;border:0;color:var(--muted);padding:8px 12px;font-size:14px;border-radius:6px;position:relative;transition:color .2s,background .2s}
-.links a:hover{color:var(--paper);background:rgba(12,22,34,.05)}
-.links a.act{color:var(--paper)}
+.mark .word{font-family:var(--display);font-weight:400;font-size:19px;letter-spacing:.14em;text-transform:uppercase}
+.links{display:flex;gap:2px;align-items:center;min-width:0}
+.links a{background:none;border:0;color:var(--paper);opacity:.85;padding:8px 11px;font-size:14px;letter-spacing:-.01em;border-radius:6px;position:relative;transition:opacity .2s,background .2s}
+.links a:hover{opacity:1;background:rgba(13,16,22,.05)}
+.links a.act{opacity:1}
 .links a.act::after{content:"";position:absolute;left:14px;right:14px;bottom:2px;height:1px;background:var(--signal)}
 @keyframes blip{0%,100%{opacity:1}50%{opacity:.25}}
-.cta-nav{background:var(--paper);color:var(--void);border:0;padding:11px 22px;border-radius:var(--radius);font-weight:400;font-size:14px;transition:transform .2s,box-shadow .2s}
-.cta-nav:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(12,22,34,.20)}
-.burger{display:none;background:none;border:1px solid var(--line-2);border-radius:8px;padding:10px;margin-left:auto}
+.bar-acts{display:flex;gap:18px;align-items:center;justify-content:flex-end;justify-self:end}
+.bar-acts .login{font-size:14px;color:var(--paper);opacity:.85}
+.bar-acts .login:hover{opacity:1}
+.cta-nav{display:inline-flex;align-items:center;gap:9px;background:var(--signal);color:#fff;border:0;
+  padding:10px 16px;border-radius:var(--radius);font-weight:400;font-size:14px;letter-spacing:-.01em;
+  transition:background .18s ease}
+.cta-nav:hover{background:var(--signal-hi)}
+.cta-nav i{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.16);
+  display:grid;place-items:center;font-style:normal;font-size:11px;line-height:1}
+.burger{display:none;background:none;border:1px solid var(--line-2);border-radius:6px;padding:10px}
 .burger span{display:block;width:18px;height:1.5px;background:var(--paper);margin:4px 0}
 .drawer{display:none;background:var(--ink);border-top:1px solid var(--line)}
 .drawer.open{display:block}
@@ -136,18 +189,21 @@ header.top{position:sticky;top:0;z-index:70;background:var(--raise);border-botto
 @keyframes march{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ============ TYPE ============ */
-.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);display:flex;align-items:center;gap:12px;margin:0 0 22px}
-.eyebrow::before{content:"";width:26px;height:1px;background:var(--signal)}
-h1{font-family:var(--display);font-weight:400;letter-spacing:-.02em;line-height:1.04;margin:0 0 26px;font-size:clamp(32px,4.6vw,62px)}
-h2{font-family:var(--display);font-weight:400;letter-spacing:-.018em;line-height:1.1;margin:0 0 20px;font-size:clamp(24px,3vw,38px)}
-h3{font-family:var(--display);font-weight:400;margin:0 0 10px;font-size:19px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 22px}
+/* Measured off the reference: h1 56.25/59.06 with -1.25px tracking, h2
+   41.25/43.31 with -1.24px — i.e. 1.05 leading and -.03/-.04em, both at
+   weight 400. The tracking is doing the work here; drop it and a 56px
+   grotesque reads as shouting. */
+h1{font-family:var(--display);font-weight:400;letter-spacing:-.04em;line-height:1.05;margin:0 0 26px;font-size:clamp(34px,4.1vw,58px);text-wrap:balance}
+h2{font-family:var(--display);font-weight:400;letter-spacing:-.03em;line-height:1.05;margin:0 0 20px;font-size:clamp(28px,3vw,42px);text-wrap:balance}
+h3{font-family:var(--display);font-weight:400;letter-spacing:-.015em;line-height:1.25;margin:0 0 10px;font-size:19px}
 
 /* The labels were monospaced; Hyperlocal ROM is not. Its tabular figures
    keep the columns lined up and stop the clock jittering as it ticks. */
 #clock,.sys span,.stat b,.d-modes .d-tally,.dreg .dn,.wm-status,.ohead .count,.eyebrow{
   font-variant-numeric:tabular-nums;
 }
-.lede{font-size:clamp(16px,1.45vw,19px);color:var(--muted);max-width:56ch;margin:0 0 32px;line-height:1.55}
+.lede{font-size:17px;color:var(--muted);max-width:62ch;margin:0 0 32px;line-height:1.5}
 p{margin:0 0 16px}
 /* padding-block, not the `padding: X 0` shorthand: these come after .wrap
    in the cascade, so the shorthand's 0 wiped .wrap's horizontal gutter and
@@ -165,10 +221,18 @@ p{margin:0 0 16px}
 .tag-p{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);border:1px solid rgba(27,116,126,.28);background:var(--signal-dim);padding:7px 13px;border-radius:99px}
 
 /* ============ BUTTONS / FORMS ============ */
-.btn{background:var(--paper);color:var(--void);border:0;padding:15px 30px;border-radius:var(--radius);font-weight:400;font-size:15px;transition:transform .2s,box-shadow .2s}
-.btn:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(12,22,34,.20)}
-.btn-o{background:none;border:1px solid var(--line-2);color:var(--paper);padding:14px 28px;border-radius:var(--radius);font-weight:400;transition:border-color .2s,background .2s}
-.btn-o:hover{border-color:var(--paper);background:rgba(12,22,34,.05)}
+/* Solid accent, white label, squared. Not the reference's 48px pill: the
+   no-fully-rounded-buttons rule on this site predates it and still holds. */
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--signal);color:#fff;border:0;
+  padding:12px 18px;border-radius:var(--radius);font-weight:400;font-size:15px;letter-spacing:-.01em;
+  transition:background .18s ease}
+.btn:hover{background:var(--signal-hi)}
+.btn i{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.16);
+  display:grid;place-items:center;font-style:normal;font-size:11px;line-height:1}
+.btn-o{display:inline-flex;align-items:center;gap:9px;background:none;border:1px solid var(--line-2);
+  color:var(--paper);padding:11px 17px;border-radius:var(--radius);font-weight:400;font-size:15px;
+  letter-spacing:-.01em;transition:border-color .2s,background .2s}
+.btn-o:hover{border-color:var(--paper);background:rgba(13,16,22,.05)}
 .iform{display:flex;gap:10px;flex-wrap:wrap;max-width:520px;align-items:center}
 .iform input{flex:1;min-width:210px;background:var(--raise);border:1px solid var(--line-2);color:var(--paper);padding:15px 20px;border-radius:var(--radius);font:inherit;font-size:15px;transition:border-color .2s,background .2s}
 .iform input::placeholder{color:var(--dim)}
@@ -402,7 +466,7 @@ p{margin:0 0 16px}
 .prow-art svg{width:100%;height:100%;display:block}
 .prow:hover{padding-left:14px;background:rgba(12,22,34,.022)}
 .prow .pn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);padding-top:6px}
-.prow h3{font-size:clamp(19px,1.9vw,25px);letter-spacing:.006em;line-height:1.3;margin:12px 0 0;transition:color .3s}
+.prow h3{font-size:clamp(19px,1.9vw,25px);letter-spacing:-.015em;line-height:1.3;margin:12px 0 0;transition:color .3s}
 .prow:hover h3{color:var(--signal)}
 .prow p{color:var(--dim);font-size:14.5px;margin:0;max-width:46ch}
 .prow .arrow{color:var(--dim);transition:color .3s,transform .3s}
@@ -416,7 +480,7 @@ p{margin:0 0 16px}
 .art-dek{font-size:clamp(17px,1.7vw,21px);color:var(--muted);max-width:58ch;line-height:1.5;margin:0}
 .art-body{max-width:68ch;padding-top:clamp(34px,4.4vw,58px);font-size:17.5px;line-height:1.78;color:var(--muted)}
 .art-body p{margin:0 0 26px}
-.art-body h2{font-size:clamp(23px,2.5vw,30px);color:var(--paper);text-transform:none;font-weight:400;margin:52px 0 18px;letter-spacing:.006em;line-height:1.3}
+.art-body h2{font-size:clamp(23px,2.5vw,30px);color:var(--paper);text-transform:none;font-weight:400;margin:52px 0 18px;letter-spacing:-.02em;line-height:1.3}
 .art-body h3{font-size:19px;color:var(--paper);margin:38px 0 12px}
 .art-body strong{color:var(--paper);font-weight:400}
 .art-body ul{margin:0 0 26px;padding-left:0;list-style:none}
@@ -438,7 +502,7 @@ p{margin:0 0 16px}
 }
 
 /* ============ FOOTER ============ */
-footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px,6vw,88px) 0 0;overflow:hidden}
+footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56px,6vw,88px) 0 0;overflow:hidden}
 .f-cta{display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
 /* Sentence case, not the uppercase the global h2 carries -- this is a
    closing line, not a section heading. */
@@ -456,26 +520,35 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
 .f-con a{text-decoration:none;border-bottom:1px solid transparent}
 .f-con a:hover{border-bottom-color:var(--line-2)}
 .f-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,2.4vw,36px)}
-.f-col h4{display:block;font-family:var(--mono);font-size:10.5px;font-weight:400;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin:0 0 30px}
-.f-col a{display:block;color:var(--paper);font-family:var(--body);font-weight:400;font-size:16px;letter-spacing:0;line-height:1.4;padding:0 0 26px;transition:color .2s,transform .2s}
-.f-col a:hover{color:var(--signal);transform:translateX(3px)}
+.f-col h4{display:block;font-family:var(--display);font-size:14px;font-weight:400;letter-spacing:-.01em;text-transform:none;color:var(--paper);margin:0 0 16px}
+.f-col a{display:block;color:var(--signal);font-family:var(--body);font-weight:400;font-size:14px;letter-spacing:-.01em;line-height:1.4;padding:4px 0;transition:color .2s}
+.f-col a:hover{color:var(--paper)}
 .f-pill{background:var(--paper);color:var(--void);border:0;border-radius:var(--radius);padding:15px 32px;font-size:15px;font-weight:400;white-space:nowrap;transition:transform .2s,box-shadow .2s}
 .f-pill:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(12,22,34,.20)}
 /* Sentence-case sans, matching the reference -- not the mono capitals the
    OH footer used along the bottom. */
+/* The oversized wordmark that closes the reference's footer. Drawn as SVG
+   with textLength rather than a vw font-size: "HYPERPORTER" is 11 characters
+   where the reference's mark is 6, so a 15vw value overflows the page at
+   every width — and would break again whenever the webfont falls back to a
+   wider face. textLength fits the container exactly, always.
+
+   The reference sets its mark in a serif; ours stays in the site face. PT
+   Serif was dropped in Aug 2026 at the founder's instruction, and bringing a
+   serif back for one lockup is a design-system decision, not a styling one. */
+.f-logotype{padding-block:clamp(46px,7vw,104px) clamp(30px,4vw,60px)}
+.f-logotype svg{display:block;width:100%;height:auto;fill:var(--signal);overflow:visible}
+
 .f-bottom{display:flex;align-items:center;gap:14px 44px;flex-wrap:wrap;margin-top:clamp(34px,4.5vw,64px);padding-top:clamp(20px,2.6vw,30px);border-top:1px solid var(--line);padding-bottom:clamp(20px,4vw,44px);font-size:15px;color:var(--dim)}
 .f-bottom a{color:var(--dim);transition:color .2s}
 .f-bottom a:hover{color:var(--paper)}
 .f-copy{margin-right:auto}
 @media (max-width:900px){.f-main{grid-template-columns:1fr;gap:44px}.f-cols{grid-template-columns:1fr 1fr;gap:34px 30px}}
 @media (max-width:520px){.f-cols{grid-template-columns:1fr}}
-.f-word{overflow:hidden;height:.56em;font-size:clamp(88px,18.5vw,250px);line-height:.78}
-.f-word .tr{display:flex;width:max-content;animation:march 60s linear infinite}
-.f-word span{font-family:var(--display);font-weight:400;letter-spacing:-.03em;color:rgba(12,22,34,.11);white-space:nowrap;padding-right:.1em}
 
 /* ============ DESTINATIONS ============ */
 .d-head{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(20px,4vw,60px);align-items:end}
-.d-head h1{margin:0;text-transform:none;font-size:clamp(42px,7.4vw,100px);letter-spacing:.004em;line-height:1.0}
+.d-head h1{margin:0;text-transform:none;font-size:clamp(42px,7.4vw,100px);letter-spacing:-.04em;line-height:1.0}
 .d-note{color:var(--muted);font-size:clamp(15px,1.4vw,18px);max-width:38ch;margin:0 0 10px;line-height:1.55}
 .d-modes{display:flex;align-items:center;gap:16px;border-top:1px solid var(--line-2);margin-top:clamp(28px,3.6vw,46px);padding-top:24px}
 .d-modes button{background:none;border:0;padding:3px 0;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid transparent;transition:color .25s,border-color .25s}

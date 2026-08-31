@@ -1,295 +1,332 @@
 ---
 /**
- * Homepage. Ported from hyperporter-3.html's #view-home: hero with the
- * flight-arc map over the photo band, the sample thread card, stats row,
- * statement band, the two product pillars (Autopilot = software, Horizon =
- * network — never conflated), the four-step pipeline, and the why-now note.
+ * Homepage, on the legora.com design direction.
  *
- * The hero photo is /hero.jpg — extracted from the prototype's ~250KB
- * base64 `--photo` custom property into a real static asset (same image,
- * same placeholder status: licensed photography is still pending, like the
- * destination illustrations).
+ * Structure and every spacing value came from measuring the reference at
+ * 1440px rather than eyeballing it; the numbers are noted in
+ * src/styles/legora-home.css at the rule that uses them. The shape, in
+ * order: a 100vh photographic hero with the headline at 87% down, a
+ * statement block pinned to the grey band beneath it, a full-viewport band
+ * of the nine stages, the four layers as 4:5 portrait cards, one carousel
+ * with an active slide, the destination gallery, an interstitial, the stat
+ * rows, the vision block, the dark security band and the FAQ.
  *
- * "130+" in the stats/pillars is carried over from the prototype verbatim.
- * The dataset holds 137 countries and the real public number is still an
- * open question (founder brief said "100+") — flagged in CLAUDE.md; not
- * this page's call to resolve.
+ * Content comes from the content modules, as everywhere else on this site —
+ * PRODUCTS, STAGES, SECURITY, HOME_FAQ and the destinations collection — so
+ * the page stays thin and cannot drift from /product, /autopilot or
+ * /security.
+ *
+ * Three of the reference's sections have no honest equivalent here and are
+ * handled rather than faked: its "Trusted by" logo wall is omitted, since
+ * there are no named customers at pilot stage; the founder portrait is a
+ * visible placeholder, as on /about; and the security cards carry real
+ * status instead of certification seals — SOC 2 and GDPR are targeted
+ * post-pilot, not held. Do not turn that last one into a seal.
  */
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import EmailCapture from '../components/EmailCapture.astro';
-
-import { STAGES } from '../lib/stages';
+import Carousel from '../components/legora/Carousel.astro';
+import { destArt } from '../lib/landmark/generator';
 import { PRODUCTS } from '../lib/content/products';
-import { HOME_FAQ } from '../lib/content/pricing';
+import { STAGES } from '../lib/stages';
+import { HOME_FAQ, SECURITY } from '../lib/content/pricing';
+import { CARD_ART, CARD_ALT } from '../lib/legoraArt';
+import '../styles/legora-home.css';
 
-// The sample thread sits at stage 3 (Quotation): 1-2 done, 3 current,
-// the rest ahead. Driven off STAGES so the labels can't drift from the
-// pipeline shown on /autopilot and /how.
-const CURRENT_STAGE = 3;
+/** Twelve chosen to spread the archetypes -- no two share a builder, so the
+    gallery shows what the generator actually does rather than twelve
+    variations of a cityscape. */
+const PICKS = [
+  'Japan', 'Peru', 'Kenya', 'Iceland', 'Jordan', 'Vietnam',
+  'Namibia', 'Portugal', 'Nepal', 'Brazil', 'Oman', 'Bolivia',
+];
+const all = await getCollection('destinations');
+const byName = new Map(all.map((d) => [d.data.title, d.data]));
+const places = PICKS.map((name) => {
+  const d = byName.get(name);
+  if (!d) throw new Error(`legora preview: no destination entry for ${name}`);
+  return { name, region: d.region };
+});
+
+const SEGMENTS = [
+  { name: 'Travel agencies', kind: 'Reseller', body: 'Multi-agent teams on one shared CRM and one brand — every agent, every trip, one stage engine.' },
+  { name: 'Travel agents', kind: 'Reseller', body: 'Run your whole book of clients from a single thread, without a second system to keep in sync.' },
+  { name: 'Independent advisors', kind: 'Reseller', body: 'Look like a full agency without the overhead — branded proposals, magic links, a real CRM.' },
+  { name: 'Creators', kind: 'Reseller', body: 'Turn an audience into bookings: a public inquiry form, and a pipeline that handles the rest.' },
+  { name: 'DMCs', kind: 'Supplier', body: 'Reply the way you already do, and get discovered by agencies as the network grows.' },
+  { name: 'Tour operators', kind: 'Supplier', body: 'Build and quote packages from your own rates, and keep your full quoted rate on every booking.' },
+];
+
+/** The four practices are real and in place today; the fifth card states
+    what is NOT held. Do not turn that one into a seal. */
+const CERTS = [
+  ...SECURITY.practices.map((p) => ({ ...p, status: 'IN\nPLACE', pending: false })),
+  {
+    title: 'SOC 2 & GDPR',
+    body: 'Not formally certified, not yet. Both are targeted post-pilot, once real usage volume justifies the audit. The practices above are already how the platform is built, ahead of the paperwork.',
+    status: 'TARGETED\nPOST-PILOT',
+    pending: true,
+  },
+];
+
+const STATS = [
+  ['130+', 'Countries with vetted DMCs and suppliers on Horizon.'],
+  ['9', 'Stages from Inquiry to Completed, all on one thread.'],
+  ['€0', 'To start on Showcase. Free forever for suppliers; free up to 20 trips a month for resellers.'],
+  ['10%', 'Horizon’s fee. The supplier always receives their full quoted rate.'],
+];
+
 ---
 
 <Base
   title="Home"
-  description="Travel operations infrastructure — Autopilot software and the Horizon partner network, built for travel businesses."
+  description="Travel operations infrastructure — one connected system for agencies, DMCs and tour operators."
   currentNav="home"
 >
-  <div class="hero">
-    <svg class="routes" viewBox="0 0 1400 760" preserveAspectRatio="xMidYMid slice">
-      <g class="grat">
-        <path d="M-50 200 Q700 120 1450 200"></path><path d="M-50 330 Q700 240 1450 330"></path>
-        <path d="M-50 460 Q700 380 1450 460"></path><path d="M-50 590 Q700 520 1450 590"></path>
-        <path d="M180 -20 Q120 380 180 780"></path><path d="M480 -20 Q440 380 480 780"></path>
-        <path d="M780 -20 Q760 380 780 780"></path><path d="M1080 -20 Q1090 380 1080 780"></path>
-      </g>
-      <g>
-        <path class="arc" d="M170 520 Q520 190 880 300"></path>
-        <path class="arc" d="M880 300 Q1080 200 1290 420"></path>
-        <path class="arc" d="M330 240 Q640 430 1010 210"></path>
-        <path class="arc" d="M170 520 Q560 640 1010 560"></path>
-        <path class="arc-lit" d="M170 520 Q520 190 880 300" style="animation-delay:0s"></path>
-        <path class="arc-lit" d="M880 300 Q1080 200 1290 420" style="animation-delay:2.4s"></path>
-        <path class="arc-lit" d="M330 240 Q640 430 1010 210" style="animation-delay:4.6s"></path>
-        <path class="arc-lit" d="M170 520 Q560 640 1010 560" style="animation-delay:6.5s"></path>
-      </g>
-      <g>
-        <circle class="wp-ring" cx="170" cy="520" r="9"></circle><circle class="wp" cx="170" cy="520" r="3"></circle>
-        <circle class="wp-ring" cx="880" cy="300" r="9"></circle><circle class="wp" cx="880" cy="300" r="3"></circle>
-        <circle class="wp-ring" cx="1290" cy="420" r="9"></circle><circle class="wp" cx="1290" cy="420" r="3"
-        ></circle>
-        <circle class="wp-ring" cx="330" cy="240" r="9"></circle><circle class="wp" cx="330" cy="240" r="3"></circle>
-        <circle class="wp-ring" cx="1010" cy="210" r="9"></circle><circle class="wp" cx="1010" cy="210" r="3"
-        ></circle>
-        <circle class="wp-ring" cx="1010" cy="560" r="9"></circle><circle class="wp" cx="1010" cy="560" r="3"
-        ></circle>
-      </g>
-    </svg>
-    <div class="wrap">
-      <div class="hero-grid">
-        <div>
-          <p class="eyebrow rv">The operating system for travel businesses</p>
-          <h1 class="rv">Inquiry to booking, without the <em>email threads.</em></h1>
-          <p class="lede rv">
-            Hyperporter replaces the spreadsheets, WhatsApp chains, and inbox chaos travel agencies
-            and DMCs run on with one connected system — CRM, automation, and a live supplier network
-            in one place.
+  <main>
+    <section class="lg-hero">
+      <img
+        class="lg-hero-img"
+        src="/hero.jpg"
+        alt="Aerial view of a mountain range at dawn, cloud filling the valleys below the ridgelines."
+      />
+      <div class="lg-hero-veil"></div>
+      <div class="lg-hero-in">
+        <h1>Inquiry to booking,<br />without the email threads.</h1>
+        <div class="lg-hero-sub">
+          <span>One connected system for agencies, DMCs and tour operators.</span>
+          <a class="btn btn-lg" href="/signup">Get started free <i aria-hidden="true">&rarr;</i></a>
+        </div>
+      </div>
+      <button class="lg-cue" id="lg-cue" type="button" aria-label="Scroll to content">&darr;</button>
+    </section>
+
+    <section class="lg-stmt wrap" id="product">
+      <h2>Introducing the Hyperporter OS</h2>
+      <p>The platform underneath every tier — free, forever, on both sides of the market.</p>
+    </section>
+
+    <section class="lg-band">
+      <div class="wrap">
+        <div class="lg-band-lead">
+          <p class="eyebrow">Autopilot · nine stages</p>
+          <p class="dek" style="color:#3A3833">
+            Inquiry through Post-Trip. The escalation points where a person takes over are designed
+            in, not gaps left over.
           </p>
-          <div class="rv" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
-            <a class="btn" href="/signup">Get started free</a>
-            <a class="btn-o" href="/pricing">See pricing</a>
-          </div>
         </div>
-        <div class="rv">
-          <div class="thread">
-            <div class="th"><span>Thread <b>KE-2291</b></span><span>Nairobi · 9 nights</span></div>
-            {/* Tab pattern: each chip switches the card to that stage. All
-                nine panels are rendered server-side and toggled with `hidden`,
-                so with JS off the card still shows stage 3 rather than going
-                blank. */}
-            <div class="chips" role="tablist" aria-label="Pipeline stage">
-              {
-                STAGES.map((s, i) => (
-                  <button
-                    type="button"
-                    role="tab"
-                    id={`stage-tab-${i}`}
-                    aria-controls={`stage-panel-${i}`}
-                    aria-selected={i + 1 === CURRENT_STAGE ? 'true' : 'false'}
-                    tabindex={i + 1 === CURRENT_STAGE ? 0 : -1}
-                    class:list={['chip', { done: i + 1 < CURRENT_STAGE, now: i + 1 === CURRENT_STAGE }]}
-                  >
-                    {s.name}
-                  </button>
-                ))
-              }
-            </div>
-
-            {
-              STAGES.map((s, i) => (
-                <div
-                  class="tpanel"
-                  id={`stage-panel-${i}`}
-                  role="tabpanel"
-                  aria-labelledby={`stage-tab-${i}`}
-                  data-auto-needs={s.cls === 'Automatic' ? 'nothing' : 'a person'}
-                  data-manual-needs="all of it"
-                  hidden={i + 1 !== CURRENT_STAGE}
-                >
-                  {/* Autopilot on. Amber marks human-touchpoint states only. */}
-                  <div class="v v-auto">
-                    <div class:list={['line', { amb: s.cls !== 'Automatic' }]}>
-                      <i />
-                      <span>{s.note}</span>
-                    </div>
-                    <div class="line">
-                      <i />
-                      <span>{s.one}</span>
-                    </div>
-                  </div>
-                  {/* Autopilot off -- the same step done by hand, so every
-                      line is a human-touchpoint state and reads amber. */}
-                  <div class="v v-manual">
-                    <div class="line amb">
-                      <i />
-                      <span>{s.manual}</span>
-                    </div>
-                  </div>
-                </div>
-              ))
-            }
-
-            <div class="ft">
-              <button class="toggle" id="ap-toggle" type="button" aria-pressed="true">
-                <span /> Autopilot
-              </button>
-              <span id="ap-needs">Needs you &middot; nothing</span>
-            </div>
-          </div>
-          <p class="sample-tag">Illustrative thread — not live data</p>
+        <div class="lg-pills">
+          {
+            STAGES.map((s, i) => (
+              <Fragment>
+                <button class="lg-pill" type="button" aria-expanded="false" aria-controls={`s${i}`}>
+                  <em>{s.n}</em> {s.name} <i aria-hidden="true">+</i>
+                </button>
+                <p class="lg-pill-body" id={`s${i}`} hidden>
+                  {s.one}
+                  {s.cls === 'Human touchpoint' && <span class="lg-tag">Human touchpoint</span>}
+                </p>
+              </Fragment>
+            ))
+          }
         </div>
       </div>
-      <div class="stats rv">
-        <div class="stat"><b>130+</b><span>Countries on Horizon</span></div>
-        <div class="stat"><b>9</b><span>Stages, one thread</span></div>
-        <div class="stat"><b>$0</b><span>To start, on Showcase</span></div>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <div class="statement">
-    <div class="wrap"><h2 class="rv">Automatic — <span class="u">until it needs you.</span></h2></div>
-  </div>
-
-  <!-- ============ WHICH SIDE ============ -->
-  <div class="sec wrap">
-    <p class="eyebrow rv">Whichever side of the booking you're on</p>
-    <div class="sides rv">
-      <div class="side">
-        <div class="kind">For Resellers</div>
-        <h3>Travel agencies &amp; advisors</h3>
-        <p>Coordinate your traveler and your supplier in one thread.</p>
-        <a class="plink" href="/customers/agent-os">Explore Agent OS &rarr;</a>
+    <section class="lg-sec wrap">
+      <div class="lg-sec-lead">
+        <h2>Four layers, one connected system.</h2>
+        <p class="dek">Each one sits on the one below it. Nothing is taken away as you move up.</p>
       </div>
-      <div class="side">
-        <div class="kind">For Suppliers</div>
-        <h3>DMCs &amp; tour operators</h3>
+      <div class="lg-grid4">
+        {
+          PRODUCTS.map((p) => (
+            <article class="lg-card">
+              <figure>
+                <svg viewBox="0 0 320 400" role="img" aria-label={CARD_ALT[p.slug]} set:html={CARD_ART[p.slug]} />
+              </figure>
+              <span class="lg-avail">{p.availability}</span>
+              <h3>{p.name}</h3>
+              <p>{p.summary}</p>
+              <a class="lg-read" href={`/${p.slug}`}>
+                <span aria-hidden="true">&#8627;</span> <span>Read more</span>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="lg-car" id="customers">
+      <div class="wrap lg-car-head">
+        <h2>Every side.<br />Every trip.</h2>
         <p>
-          A free CRM for the requests you're already getting — WhatsApp &amp; email integration from
-          Intelligence.
+          Resellers source suppliers and run the full ladder. Suppliers are the ones being sourced,
+          and stay free on Showcase.
         </p>
-        <a class="plink" href="/customers/supplier-os">Explore Supplier OS &rarr;</a>
       </div>
-    </div>
-  </div>
+      <Carousel items={SEGMENTS} active={2} uid="seg" />
+    </section>
 
-  <!-- ============ THE FOUR LAYERS ============ -->
-  <div class="sec-tight wrap">
-    <p class="eyebrow rv">Product</p>
-    <h2 class="rv">Every capability, in one connected system.</h2>
-    <div class="ladder rv">
-      {
-        PRODUCTS.map((prod) => (
-          <a class="lrow" href={`/${prod.slug}`}>
-            <div class="lrow-n">
-              {prod.n} &mdash; {prod.availability}
+    <section class="lg-gal" id="destinations">
+      <div class="wrap lg-gal-head">
+        <h2>Every destination,<br />drawn rather than stocked.</h2>
+        <p>
+          Destination artwork is generated, not stock — one scene per country, built from that
+          country’s own landmark and seeded so the palette never repeats.
+        </p>
+      </div>
+      <div class="wrap lg-gal-grid">
+        {
+          places.map((p, i) => (
+            <a class="lg-gal-i" href={`/destinations/${p.name.toLowerCase().replace(/\s+/g, '-')}`}>
+              <Fragment set:html={destArt(p.name, `g${i}`, 'light')} />
+              <span class="lg-gal-n">{p.name}</span>
+              <span class="lg-gal-r">{p.region}</span>
+            </a>
+          ))
+        }
+      </div>
+      <p class="lg-gal-note">
+        Placeholders until photography is licensed — a real photo drops in per country without
+        touching the layout.
+      </p>
+    </section>
+
+    <section class="lg-inter">
+      <img src="/hero.jpg" alt="" />
+      <div class="lg-inter-in">
+        <p class="eyebrow">Horizon</p>
+        <h2>A vetted list of DMCs and suppliers, ready to quote.</h2>
+      </div>
+    </section>
+
+    <section class="lg-sec wrap">
+      <div class="lg-statwrap">
+        <div class="lg-statprose">
+          <p>
+            Every trip involves the same coordination work, repeated by hand, agency by agency —
+            chasing DMCs over email, relaying messages between travellers and drivers, rebuilding
+            the same itinerary for the fifth time.
+          </p>
+          <p>
+            Hyperporter puts that work on one thread, and leaves a person exactly where judgment is
+            actually needed.
+          </p>
+        </div>
+        <div class="lg-stats">
+          {
+            STATS.map(([n, label]) => (
+              <div class="lg-strow">
+                <b>{n}</b>
+                <p>{label}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="lg-vision">
+      <div class="wrap lg-vision-grid">
+        <div>
+          <h2>Our vision</h2>
+          <div class="lg-vision-by">
+            <div class="lg-portrait">
+              Founder portrait pending — not invented here, the same way /about carries its
+              placeholders visibly.
+            </div>
+            <div class="lg-vision-name">Name pending</div>
+            <div class="lg-vision-role">Founder &amp; CEO</div>
+          </div>
+        </div>
+        <div>
+          <div class="lg-vision-prose">
+            <div>
+              <p>
+                Hyperporter was built by people who’ve coordinated trips the old way — chasing DMCs
+                over email, relaying WhatsApp messages between travellers and drivers, rebuilding
+                the same itinerary PDF for the fifth time.
+              </p>
+              <p>
+                Every trip involves the same coordination work, repeated by hand, agency by agency.
+                We think that work should run itself.
+              </p>
             </div>
             <div>
-              <h3>{prod.name}</h3>
-              <p>{prod.summary}</p>
-            </div>
-            <span class="plink">Read more &rarr;</span>
-          </a>
-        ))
-      }
-    </div>
-  </div>
-
-  <!-- ============ FAQ ============ -->
-  <div class="sec-tight wrap">
-    <p class="eyebrow rv">FAQ</p>
-    <h2 class="rv">A few quick answers.</h2>
-    <div class="acc rv" id="home-faq">
-      {
-        HOME_FAQ.map((f, i) => (
-          <div class:list={['acc-i', { open: i === 0 }]}>
-            <button type="button" aria-expanded={i === 0 ? 'true' : 'false'}>
-              {f.q}
-              <i>+</i>
-            </button>
-            <div class="acc-b">
-              <p>{f.a}</p>
+              <p>
+                Not all of it, though. Automation that pretends a person is never needed is
+                automation that fails quietly, at the worst moment, on someone’s holiday.
+              </p>
+              <p>
+                So the escalation points are designed in: money changing hands, and a traveller in
+                trouble. Those stay human on purpose.
+              </p>
             </div>
           </div>
-        ))
-      }
-    </div>
-  </div>
+          <div class="lg-vision-photo">
+            <img
+              src="/hero.jpg"
+              alt="Mountain range at dawn, cloud filling the valleys below the ridgelines."
+            />
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <div class="sec wrap fcta">
-    <h2 class="rv">Run your next trip on<br />infrastructure, not inboxes.</h2>
-    <EmailCapture uid="home-cta" marginTop="32px" />
-  </div>
+    <section class="lg-sec-dark">
+      <div class="wrap">
+        <h2>Built to the standard your contracts and rates actually deserve.</h2>
+        <a class="lg-read" href="/security"><span aria-hidden="true">&#8627;</span> <span>Read more</span></a>
+        <p class="lg-fine">
+          Encryption in transit and at rest. Zero standing access. Account isolation. No training on
+          your data.<br />SOC&nbsp;2 and GDPR-formal compliance are targeted post-pilot — not held
+          today, and we won’t imply otherwise.
+        </p>
+        <div class="lg-certs">
+          {
+            CERTS.map((c) => (
+              <div class="lg-cert">
+                <b>{c.title}</b>
+                <p>{c.body}</p>
+                <div class:list={['lg-seal', { 'lg-pending': c.pending }]}>
+                  <i>
+                    {c.status.split('\n').map((line, i) => (
+                      <Fragment>
+                        {i > 0 && <br />}
+                        {line}
+                      </Fragment>
+                    ))}
+                  </i>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="lg-sec wrap" style="padding-top:0">
+      <div class="lg-faq">
+        {
+          HOME_FAQ.map((f, i) => (
+            <div class="lg-qa">
+              <button type="button" aria-expanded="false" aria-controls={`q${i}`}>
+                {f.q} <i aria-hidden="true">+</i>
+              </button>
+              <div class="lg-qa-b" id={`q${i}`} hidden>
+                {f.a}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="lg-close wrap">
+      <h2>Run your next trip on<br />infrastructure, not inboxes.</h2>
+      <a class="btn btn-lg" href="/signup">Get started free <i aria-hidden="true">&rarr;</i></a>
+    </section>
+  </main>
+
 </Base>
-
-<script>
-  /**
-   * Hero thread card: the chips act as tabs over the nine stage panels.
-   * Chips to the left of the selected one read as "done", so the card still
-   * behaves as a progress display rather than a plain switcher.
-   */
-  const tablist = document.querySelector<HTMLElement>('.thread .chips[role="tablist"]');
-
-  if (tablist) {
-    const tabs = Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
-
-    const select = (index: number, focus = true): void => {
-      tabs.forEach((tab, i) => {
-        const on = i === index;
-        tab.setAttribute('aria-selected', String(on));
-        tab.tabIndex = on ? 0 : -1;
-        tab.classList.toggle('now', on);
-        tab.classList.toggle('done', i < index);
-        const panel = document.getElementById(tab.getAttribute('aria-controls') ?? '');
-        if (panel) panel.hidden = !on;
-      });
-      if (focus) tabs[index].focus();
-      syncNeeds();
-    };
-
-    tabs.forEach((tab, i) => tab.addEventListener('click', () => select(i, false)));
-
-    /* The Autopilot switch is real: off swaps every panel to the by-hand
-       version of that stage and rewrites the "needs you" state. */
-    const thread = document.querySelector<HTMLElement>('.thread');
-    const toggle = document.querySelector<HTMLButtonElement>('#ap-toggle');
-    const needs = document.querySelector<HTMLElement>('#ap-needs');
-
-    const syncNeeds = (): void => {
-      const panel = document.querySelector<HTMLElement>('.tpanel:not([hidden])');
-      if (!panel || !needs) return;
-      const on = toggle?.getAttribute('aria-pressed') !== 'false';
-      const value = on ? panel.dataset.autoNeeds : panel.dataset.manualNeeds;
-      needs.textContent = `Needs you \u00b7 ${value ?? 'nothing'}`;
-    };
-
-    toggle?.addEventListener('click', () => {
-      const on = toggle.getAttribute('aria-pressed') !== 'false';
-      toggle.setAttribute('aria-pressed', String(!on));
-      thread?.classList.toggle('manual', on);
-      syncNeeds();
-    });
-
-    tablist.addEventListener('keydown', (event: KeyboardEvent) => {
-      const current = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
-      let next: number;
-      switch (event.key) {
-        case 'ArrowRight': next = (current + 1) % tabs.length; break;
-        case 'ArrowLeft':  next = (current - 1 + tabs.length) % tabs.length; break;
-        case 'Home':       next = 0; break;
-        case 'End':        next = tabs.length - 1; break;
-        default: return;
-      }
-      event.preventDefault();
-      select(next);
-    });
-  }
-</script>

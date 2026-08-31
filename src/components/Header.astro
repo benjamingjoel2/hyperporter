@@ -39,19 +39,6 @@ const stream = row + row;
       header's own opaque background — the bar and the panel stay crisp. */}
   <div class="mega-scrim" aria-hidden="true"></div>
   <div class="bar">
-    <a class="mark" href="/">
-      <span class="glyph"
-        ><svg viewBox="0 0 100 100" aria-hidden="true"
-          ><circle class="ring" cx="50" cy="50" r="44"></circle><rect x="32.5" y="26" width="7.5" height="47"
-          ></rect><rect x="60" y="26" width="7.5" height="47"></rect><rect
-            x="32.5"
-            y="46.5"
-            width="35"
-            height="7.5"></rect></svg
-        ></span
-      >
-      <span class="word">Hyperporter</span>
-    </a>
     <nav class="links" id="links">
       {
         NAV.map((n) =>
@@ -118,8 +105,24 @@ const stream = row + row;
         )
       }
     </nav>
-    <a class="cta-nav" href="/signup">Get started free</a>
-    <button class="burger" aria-label="Menu" id="burger"><span></span><span></span><span></span></button>
+    <a class="mark" href="/">
+      <span class="glyph"
+        ><svg viewBox="0 0 100 100" aria-hidden="true"
+          ><circle class="ring" cx="50" cy="50" r="44"></circle><rect x="32.5" y="26" width="7.5" height="47"
+          ></rect><rect x="60" y="26" width="7.5" height="47"></rect><rect
+            x="32.5"
+            y="46.5"
+            width="35"
+            height="7.5"></rect></svg
+        ></span
+      >
+      <span class="word">Hyperporter</span>
+    </a>
+    <div class="bar-acts">
+      <a class="login" href="/signup">Log in</a>
+      <a class="cta-nav" href="/signup">Get started free <i aria-hidden="true">&rarr;</i></a>
+      <button class="burger" aria-label="Menu" id="burger"><span></span><span></span><span></span></button>
+    </div>
   </div>
   <div class="rail" aria-hidden="true">
     <div class="tag">Live activity</div>
@@ -139,6 +142,57 @@ const stream = row + row;
     <a href="/signup">Get started free &rarr;</a>
   </div>
 </header>
+
+<script>
+  /**
+   * Transparent-over-hero mode. A page that opens on a full-bleed hero (the
+   * homepage) gets a transparent bar until the hero headline reaches it;
+   * every other page keeps the opaque bar and opts into nothing.
+   *
+   * The trigger is measured off the headline rather than the hero's height:
+   * white nav text over a white headline is unreadable, and the centred
+   * wordmark lands directly on top of it.
+   */
+  const bar = document.querySelector<HTMLElement>('header.top');
+  const heroTitle = document.querySelector<HTMLElement>('.lg-hero h1');
+
+  if (bar && heroTitle) {
+    let ticking = false;
+    let trigger = 0;
+
+    const measure = (): void => {
+      const was = bar.classList.contains('over');
+      bar.classList.add('over');
+      trigger = Math.max(
+        heroTitle.getBoundingClientRect().top + window.scrollY - bar.offsetHeight - 16,
+        0
+      );
+      bar.classList.toggle('over', was || window.scrollY <= trigger);
+    };
+
+    const apply = (): void => {
+      ticking = false;
+      bar.classList.toggle('over', window.scrollY <= trigger);
+    };
+
+    measure();
+    apply();
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(apply);
+        }
+      },
+      { passive: true }
+    );
+    window.addEventListener('resize', () => {
+      measure();
+      apply();
+    });
+  }
+</script>
 
 <script>
   /**
