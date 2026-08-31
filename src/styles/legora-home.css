@@ -179,7 +179,10 @@
 .lg-car-n{position:absolute;z-index:1;left:14px;top:12px;font-size:14px;letter-spacing:-.01em}
 .lg-car-k{position:absolute;z-index:1;left:14px;bottom:12px;font-size:10px;letter-spacing:.09em;
   text-transform:uppercase;color:rgba(255,255,255,.74)}
-.lg-car-panels{max-width:var(--max);margin:0 auto;padding:20px var(--pad) 0}
+/* The active tile is scrolled to the centre of the row, so a left-aligned
+   panel reads as detached from it and leaves a void in the middle. */
+.lg-car-panels{max-width:var(--max);margin:0 auto;padding:20px var(--pad) 0;
+  display:flex;justify-content:center}
 .lg-car-p{max-width:46ch}
 .lg-car-p[hidden]{display:none}
 .lg-car-p b{display:block;font-weight:400;font-size:15px;letter-spacing:-.01em;margin-bottom:12px}
