@@ -67,12 +67,19 @@ const EVENTS: [from: string, to: string, human: 0 | 1][] = [
 export type FeedEntry = [city: string, from: string, to: string, human: 0 | 1];
 
 /**
- * 50 cities × 12 events, offset so each city starts at a different point in
- * the event list. 600 entries, none of them a duplicate of another.
+ * 600 entries: the city advances on every single one, and the event strides
+ * by 7 through a 24-long list so the pairing keeps changing.
+ *
+ * The obvious construction — for each city, list twelve events — groups all
+ * twelve of a city's entries together, which reads as "NAIROBI, NAIROBI,
+ * NAIROBI" scrolling past. Walking one flat index and taking the city
+ * modulo 50 rotates through all fifty before any of them repeats.
+ *
+ * 7 and 24 share no factors, so the event index cycles through all 24
+ * before repeating; 50 and 24 likewise, so a city meets a different event
+ * each time round.
  */
-export const FEED: FeedEntry[] = CITIES.flatMap((city, c) =>
-  Array.from({ length: 12 }, (_, i) => {
-    const [from, to, human] = EVENTS[(c * 5 + i) % EVENTS.length];
-    return [city, from, to, human] as FeedEntry;
-  })
-);
+export const FEED: FeedEntry[] = Array.from({ length: 600 }, (_, i) => {
+  const [from, to, human] = EVENTS[(i * 7) % EVENTS.length];
+  return [CITIES[i % CITIES.length], from, to, human] as FeedEntry;
+});
