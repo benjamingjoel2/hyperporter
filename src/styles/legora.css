@@ -1,0 +1,413 @@
+/*
+ * Design study: legora.com, applied to Hyperporter.
+ *
+ * Every value here was measured off the live reference at a 1440px viewport
+ * rather than eyeballed, and the numbers that matter are noted at the rule
+ * that uses them. The ones worth knowing up front:
+ *
+ *   ground     rgb(250,250,249)   warm off-white, not white
+ *   ink        rgb(13,16,22)
+ *   secondary  rgb(104,101,94)    warm grey
+ *   display    weight 400 at 41-56px with -.03/-.04em tracking, 1.05 leading
+ *   hero       100vh, headline baseline at 87% down
+ *   cards      324x405 image tiles = 4:5 portrait, square corners
+ *
+ * Loaded only by /preview/legora. It deliberately does not share anything
+ * with global.css -- see src/layouts/Preview.astro for why the previews are
+ * standalone.
+ *
+ * Three deliberate departures from the reference, all with a reason:
+ *   - buttons stay squared, not 48px pills (standing instruction on this site)
+ *   - the accent is Hyperporter teal, not Legora's forest green
+ *   - the footer wordmark stays in the site face; the reference sets it in a
+ *     serif, and PT Serif was dropped in Aug 2026 at the founder's instruction
+ */
+
+/* ------------------------------------------------------------------
+   Tokens. Measured off legora.com at 1440px, not eyeballed:
+   ground rgb(250,250,249), ink rgb(13,16,22), secondary rgb(104,101,94),
+   accent rgb(0,80,50). The accent is the one substitution — Hyperporter's
+   teal darkened to the same weight so it holds white text in the same
+   structural role (bar, buttons) and nowhere decorative.
+   Committed single-theme light: Legora is, and a dark inversion would be
+   a different design, not this one. Every colour is painted explicitly.
+------------------------------------------------------------------- */
+:root{
+  --ground:#FAFAF9;
+  --ink:#0D1016;
+  --muted:#68655E;
+  --faint:#8F8D8A;
+  --deep:#0E4B52;
+  --deep-hi:#12606A;
+  --band:#E6E5E3;
+  --hair:#E1DFDA;
+  --tile:#EAE9E6;
+  --white:#FFFFFF;
+  --max:1680px;
+  --pad:clamp(20px,3.2vw,48px);
+  --font:'Inter Tight','Inter',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:var(--font);font-size:16px;line-height:1.45;font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--deep);outline-offset:3px}
+
+.wrap{max-width:var(--max);margin:0 auto;padding-inline:var(--pad)}
+
+/* Legora's display setting: weight 400 at large size with hard negative
+   tracking and 1.05 leading. The negative tracking is the whole reason a
+   56px grotesque reads as considered rather than shouty. */
+h1,h2,h3{margin:0;font-weight:400}
+h1{font-size:clamp(34px,4.1vw,58px);line-height:1.05;letter-spacing:-.04em}
+h2{font-size:clamp(28px,3vw,42px);line-height:1.05;letter-spacing:-.03em}
+h3{font-size:19px;line-height:1.25;letter-spacing:-.015em}
+p{margin:0}
+.dek{color:var(--muted);font-size:17px;line-height:1.5;max-width:62ch}
+
+/* ---------------- announcement bar ---------------- */
+.ann{background:var(--deep);color:var(--white);font-size:13px;letter-spacing:-.005em}
+.ann-in{max-width:var(--max);margin:0 auto;padding:11px var(--pad);
+  display:flex;gap:10px;align-items:center;justify-content:center;text-align:center;flex-wrap:wrap}
+.ann b{font-weight:500}
+.ann a{color:rgba(255,255,255,.66);display:inline-flex;gap:6px;align-items:center}
+.ann a:hover{color:var(--white)}
+
+/* ---------------- header: nav left, wordmark centred, actions right ------- */
+/* The bar and the announcement ride in one fixed shell, so the hero
+   starts at y=0 and the nav sits over the photograph. Legora's own bar is
+   opaque the whole way down; over a full-bleed photo the transparent state
+   is the better read, so this departs from the reference deliberately.
+   Colour is driven off `.solid` on the shell — one class, no per-element
+   scroll logic. */
+.chrome{position:fixed;top:0;left:0;right:0;z-index:50}
+/* White nav over a pale sky measured 2.7:1 — unreadable. The scrim rides
+   with the bar rather than the hero, so legibility survives a change of
+   photograph. Positive z-index on the children, not a negative one on the
+   scrim: a negative-z child escapes to behind the parent entirely. */
+.chrome::before{content:"";position:absolute;inset:0 0 -34px;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,10,13,.44) 0%,rgba(6,10,13,.32) 76%,rgba(6,10,13,0) 100%);
+  transition:opacity .28s ease}
+.chrome.solid::before{opacity:0}
+.ann,.top{position:relative;z-index:1}
+.top{border-bottom:1px solid transparent;
+  transition:background .28s ease,border-color .28s ease,backdrop-filter .28s ease}
+.chrome.solid .top{background:rgba(250,250,249,.92);
+  -webkit-backdrop-filter:saturate(1.6) blur(10px);backdrop-filter:saturate(1.6) blur(10px);
+  border-bottom-color:var(--hair)}
+/* No backdrop-filter (older iOS, Firefox default): fall back to a fully
+   opaque bar rather than letting page content read through it. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .chrome.solid .top{background:var(--ground)}
+}
+.top .nav a,.top .mark,.top .acts a:not(.btn){color:#fff;transition:color .28s ease}
+.chrome.solid .top .nav a,.chrome.solid .top .mark,.chrome.solid .top .acts a:not(.btn){color:var(--ink)}
+.top-in{max-width:var(--max);margin:0 auto;padding:18px var(--pad);
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px}
+.nav{display:flex;gap:26px;font-size:14px;letter-spacing:-.01em}
+.nav a{opacity:.92}
+.nav a:hover{opacity:1}
+.mark{font-size:20px;letter-spacing:.14em;font-weight:400;white-space:nowrap}
+.acts{display:flex;gap:18px;align-items:center;justify-content:flex-end;font-size:14px}
+
+/* Squared, not Legora's 48px pill — standing instruction on this site is
+   no fully-rounded buttons (Harvey-style). Everything else about the
+   button is Legora's: solid deep accent, white label, small arrow badge. */
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--deep);color:var(--white);
+  border-radius:6px;padding:9px 14px;font-size:14px;letter-spacing:-.01em;
+  transition:background .18s ease}
+.btn:hover{background:var(--deep-hi)}
+.btn i{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.16);
+  display:grid;place-items:center;font-style:normal;font-size:11px;line-height:1}
+.btn-lg{padding:12px 18px;font-size:15px}
+
+/* ---------------- hero: full-bleed photo, headline low in frame ---------- */
+/* Legora's hero is a full-viewport autoplaying video: 1440x900 at a
+   900px viewport, object-fit:cover, headline bottom at 87% down. Matching
+   the frame here — svh first so mobile browser chrome doesn't leave a gap
+   when the toolbar retracts, plain vh as the fallback. */
+.hero{position:relative;min-height:100vh;min-height:100svh;
+  display:flex;align-items:flex-end;color:var(--white);overflow:hidden;background:#0B0F12}
+/* Their footage is low-key throughout, which is why white nav sits on it
+   with no scrim at all. Ours is a bright dawn sky, so it gets graded down
+   to the same register rather than propping up the bar with a heavy
+   gradient. */
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:brightness(.66) saturate(.86) contrast(1.04);
+  transform:scale(1.06);
+  animation:drift 34s ease-in-out infinite alternate}
+@keyframes drift{from{transform:scale(1.06) translate3d(0,0,0)}
+                 to{transform:scale(1.15) translate3d(0,-1.4%,0)}}
+.hero-veil{position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(6,10,13,.5) 0%,rgba(6,10,13,.12) 38%,rgba(6,10,13,.58) 100%)}
+.hero-in{position:relative;width:100%;max-width:var(--max);margin:0 auto;
+  padding:0 var(--pad) clamp(46px,4.6vw,58px);text-align:center}
+
+/* Scroll cue, as on the reference. Hidden once the page has moved. */
+.cue{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:2;
+  width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.34);
+  background:rgba(8,12,16,.34);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  color:#fff;font-family:inherit;font-size:13px;line-height:1;cursor:pointer;
+  display:grid;place-items:center;transition:opacity .3s ease,background .2s ease}
+.cue:hover{background:rgba(8,12,16,.6)}
+.cue.gone{opacity:0;pointer-events:none}
+.hero h1{color:var(--white);text-wrap:balance}
+.hero-sub{margin-top:26px;display:flex;gap:20px;align-items:center;justify-content:center;flex-wrap:wrap}
+.hero-sub span{font-size:16px;color:rgba(255,255,255,.9)}
+
+/* ---------------- centred statement ---------------- */
+/* Asymmetric on purpose, matching the reference: a long drop from the hero
+   (312px at 1440) and then only 60px to the grey band, so the statement
+   reads as the band's title rather than as its own centred section.
+   Symmetric padding here is what made it look generic. */
+.stmt{padding-top:clamp(132px,21.7vw,312px);padding-bottom:clamp(40px,4.2vw,60px);
+  text-align:center}
+.stmt h2{text-wrap:balance}
+.stmt p{margin-top:30px;color:var(--muted);font-size:15px;line-height:1.4}
+
+/* ---------------- grey band of stage pills ---------------- */
+/* The reference builds on full-viewport blocks: its grey band is exactly
+   100vh, same as the hero. Ours was 715px and content-height. */
+.band{background:var(--band);padding:clamp(54px,6vw,84px) 0;
+  min-height:100vh;min-height:100svh;display:flex;align-items:center}
+.band > .wrap{width:100%}
+.band-lead{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;
+  margin-bottom:38px}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.pills{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.pill{border:0;font-family:inherit;text-align:left;cursor:pointer;
+  background:#7C7A75;color:var(--white);border-radius:999px;
+  padding:11px 16px 11px 20px;display:flex;align-items:center;gap:14px;
+  font-size:15px;letter-spacing:-.01em;transition:background .18s ease}
+.pill:hover{background:#6A6864}
+.pill[aria-expanded="true"]{background:var(--deep)}
+.pill em{font-style:normal;font-variant-numeric:tabular-nums;opacity:.6;font-size:13px}
+.pill i{font-style:normal;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.2);
+  display:grid;place-items:center;font-size:13px;line-height:1;flex:none}
+.pill-body{max-width:58ch;color:#3A3833;font-size:15px;line-height:1.5;
+  padding:2px 0 12px 20px;margin:0}
+.pill-body[hidden]{display:none}
+.pill-body .tag{display:inline-block;margin-top:9px;font-size:12px;letter-spacing:.08em;
+  text-transform:uppercase;color:#7A5A18}
+
+/* ---------------- 4-up cards ---------------- */
+.sec{padding-block:clamp(80px,9vw,140px)}
+.sec-lead{max-width:62ch;margin-bottom:clamp(40px,5vw,66px)}
+.sec-lead h2{margin-bottom:18px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,2.4vw,36px)}
+/* Measured off the reference: 324x405 = exactly 4:5 portrait, square
+   corners, 16px to the title. Mine were 4/3.1 landscape with a 2px radius,
+   which is why the row read completely differently. */
+.card figure{margin:0 0 16px;aspect-ratio:4/5;background:var(--tile);border-radius:0;
+  overflow:hidden;position:relative}
+.card figure svg{position:absolute;inset:0;width:100%;height:100%}
+.card h3{font-size:15px;letter-spacing:-.01em;margin-bottom:12px}
+.card p{color:var(--muted);font-size:15px;line-height:1.5}
+.read{display:inline-flex;gap:7px;align-items:center;margin-top:20px;font-size:14px;color:var(--ink)}
+.read:hover{color:var(--deep)}
+.read span:first-child{color:var(--faint)}
+.avail{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);
+  display:block;margin-bottom:8px}
+
+/* ---------------- carousel (one active slide) ----------------
+   The reference's arrangement: arrows pinned left and right, a dot pager
+   centred above, short tiles running off both edges, and one ACTIVE slide
+   that grows and carries its own title, body and link beneath the row.
+   Used once, on the customer segments, as it is there. */
+.car{padding-block:clamp(70px,8vw,120px);overflow:hidden}
+.car-head{text-align:center;margin-bottom:clamp(24px,3vw,36px)}
+.car-head p{margin:20px auto 0;color:var(--muted);font-size:15px;line-height:1.4;max-width:56ch}
+.car-bar{position:relative;max-width:var(--max);margin:0 auto clamp(20px,2.4vw,32px);
+  padding-inline:var(--pad);display:flex;align-items:center;justify-content:center;min-height:36px}
+.car-bar button{position:absolute;width:34px;height:34px;border-radius:50%;
+  border:1px solid var(--hair);background:var(--white);color:var(--ink);font-family:inherit;
+  font-size:14px;cursor:pointer;display:grid;place-items:center;
+  transition:border-color .18s ease,background .18s ease}
+.car-bar button:hover{border-color:#C6C3BD;background:#F2F1EE}
+.car-prev{left:var(--pad)}
+.car-next{right:var(--pad)}
+.dots{display:flex;gap:7px;align-items:center;padding:8px 12px;border-radius:999px;background:#EDECE9}
+.dot{width:6px;height:6px;border-radius:50%;background:#BFBDB8;
+  transition:width .25s ease,background .25s ease}
+.dot.on{width:22px;border-radius:3px;background:var(--ink)}
+
+.car-row{display:flex;gap:14px;align-items:flex-start;padding-inline:var(--pad);
+  overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--pad);
+  scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none}
+.car-row::-webkit-scrollbar{display:none}
+.car-t{position:relative;flex:0 0 clamp(140px,14vw,196px);border:0;padding:0;background:none;
+  font-family:inherit;text-align:left;cursor:pointer;color:var(--white);scroll-snap-align:center;
+  display:block;transition:flex-basis .38s cubic-bezier(.2,.7,.3,1)}
+.car-t.on{flex-basis:clamp(240px,26vw,368px)}
+.car-art{position:relative;display:block;aspect-ratio:3/2.4;overflow:hidden;
+  transition:aspect-ratio .38s cubic-bezier(.2,.7,.3,1)}
+.car-t.on .car-art{aspect-ratio:3/3.4}
+.car-art svg{position:absolute;inset:0;width:100%;height:100%}
+.car-art::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(8,12,16,.44) 0%,rgba(8,12,16,0) 48%,rgba(8,12,16,.5))}
+.car-n{position:absolute;z-index:1;left:14px;top:12px;font-size:14px;letter-spacing:-.01em}
+.car-k{position:absolute;z-index:1;left:14px;bottom:12px;font-size:10px;letter-spacing:.09em;
+  text-transform:uppercase;color:rgba(255,255,255,.74)}
+.car-panels{max-width:var(--max);margin:0 auto;padding:20px var(--pad) 0}
+.car-p{max-width:46ch}
+.car-p[hidden]{display:none}
+.car-p b{display:block;font-weight:400;font-size:15px;letter-spacing:-.01em;margin-bottom:12px}
+.car-p p{color:var(--muted);font-size:15px;line-height:1.5}
+
+/* ---------------- destination gallery ----------------
+   A plain grid, not a second carousel: the reference has exactly one, and
+   two in a row would read as a template. The artwork is the point here. */
+.gal{padding-block:clamp(70px,8vw,120px)}
+.gal-head{text-align:center;margin-bottom:clamp(30px,4vw,48px)}
+.gal-head p{margin:20px auto 0;color:var(--muted);font-size:15px;line-height:1.4;max-width:56ch}
+.gal-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
+.gal-i{position:relative;aspect-ratio:3/3.9;overflow:hidden;color:var(--white);display:block;
+  transition:transform .3s cubic-bezier(.2,.7,.3,1)}
+.gal-i:hover{transform:translateY(-6px)}
+.gal-i svg{position:absolute;inset:0;width:100%;height:100%}
+.gal-i::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(8,12,16,.34) 0%,rgba(8,12,16,0) 44%,rgba(8,12,16,.54))}
+.gal-n{position:absolute;z-index:1;left:13px;bottom:28px;font-size:14px;letter-spacing:-.01em}
+.gal-r{position:absolute;z-index:1;left:13px;bottom:11px;font-size:10px;letter-spacing:.09em;
+  text-transform:uppercase;color:rgba(255,255,255,.72)}
+.gal-note{text-align:center;margin-top:clamp(26px,3vw,40px);color:var(--faint);font-size:13px}
+
+/* ---------------- full-bleed interstitial ---------------- */
+/* Copy sits at the top of the frame on the reference, not centred in it. */
+.inter{position:relative;min-height:min(78vh,660px);display:flex;justify-content:center;
+  align-items:flex-start;color:var(--white);overflow:hidden;background:#23262A;text-align:center}
+.inter img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:grayscale(.35) brightness(.62)}
+.inter-in{position:relative;padding:clamp(44px,5vw,74px) var(--pad) 0;max-width:900px}
+.inter .eyebrow{color:rgba(255,255,255,.7)}
+.inter h2{color:var(--white);margin-top:14px;text-wrap:balance}
+
+/* ---------------- stat rows on hairlines ---------------- */
+.statwrap{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+  gap:clamp(32px,6vw,96px);align-items:start}
+.statprose p{color:var(--ink);font-size:17px;line-height:1.5;max-width:44ch}
+.statprose p + p{margin-top:22px}
+.stats{border-top:1px solid var(--hair)}
+.strow{display:grid;grid-template-columns:minmax(0,1fr) minmax(200px,270px);gap:30px;
+  align-items:center;padding:clamp(26px,3.4vw,46px) 0;border-bottom:1px solid var(--hair)}
+.strow b{font-weight:300;font-size:clamp(52px,7.2vw,104px);line-height:.94;letter-spacing:-.045em;
+  font-variant-numeric:tabular-nums;display:block}
+.strow p{color:var(--muted);font-size:15px;line-height:1.45;max-width:34ch}
+.note{margin-top:26px;color:var(--faint);font-size:13px;max-width:70ch}
+
+/* ---------------- faq ---------------- */
+.faq{border-top:1px solid var(--hair);max-width:960px}
+.qa{border-bottom:1px solid var(--hair)}
+.qa button{width:100%;background:none;border:0;font-family:inherit;color:var(--ink);cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;gap:24px;text-align:left;
+  padding:24px 0;font-size:19px;letter-spacing:-.015em;line-height:1.3}
+.qa i{font-style:normal;color:var(--faint);font-size:22px;line-height:1;flex:none;
+  transition:transform .22s ease}
+.qa button[aria-expanded="true"] i{transform:rotate(45deg)}
+.qa-b{padding:0 0 24px;color:var(--muted);font-size:15px;line-height:1.55;max-width:64ch}
+.qa-b[hidden]{display:none}
+
+/* ---------------- closing + footer ---------------- */
+.close{text-align:center;padding-block:clamp(90px,11vw,160px)}
+.close h2{text-wrap:balance;margin-bottom:28px}
+/* ---------------- our vision ---------------- */
+.vision{background:var(--band);padding-block:clamp(60px,7vw,96px)}
+.vision-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.34fr);
+  gap:clamp(30px,5vw,80px);align-items:start}
+.vision h2{margin-bottom:clamp(70px,12vw,190px)}
+.vision-prose{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(24px,3vw,44px)}
+.vision-prose p{color:#2C2A26;font-size:15px;line-height:1.5}
+.vision-prose p + p{margin-top:18px}
+.vision-photo{margin-top:clamp(30px,4vw,58px);aspect-ratio:16/9;border-radius:2px;overflow:hidden;
+  background:#D3D1CC;position:relative}
+.vision-photo img{width:100%;height:100%;object-fit:cover}
+.vision-by{margin-top:auto}
+.portrait{width:min(100%,320px);aspect-ratio:4/5;border-radius:2px;background:#D3D1CC;
+  display:grid;place-items:center;text-align:center;padding:20px;
+  color:#6E6B65;font-size:12px;line-height:1.5;letter-spacing:.02em}
+.vision-name{margin-top:16px;font-size:15px}
+.vision-role{color:var(--muted);font-size:13px;margin-top:2px}
+
+/* ---------------- security: the one dark section ---------------- */
+.sec-dark{background:#0B0E12;color:#EDEFF2;padding-block:clamp(70px,8vw,116px)}
+.sec-dark h2{color:#fff;max-width:22ch}
+.sec-dark .read{color:#9AA1AA;font-size:24px;letter-spacing:-.02em;margin-top:10px}
+.sec-dark .read:hover{color:#fff}
+.sec-dark .fine{margin-top:clamp(34px,4vw,58px);color:#9AA1AA;font-size:13px;line-height:1.6}
+.certs{margin-top:clamp(60px,8vw,124px);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+  border:1px solid #1E242B}
+.cert{padding:26px 22px 24px;border-right:1px solid #1E242B;min-height:270px;
+  display:flex;flex-direction:column}
+.cert:last-child{border-right:0}
+.cert b{font-weight:400;font-size:15px;color:#fff;margin-bottom:12px}
+.cert p{color:#9AA1AA;font-size:13px;line-height:1.55}
+.cert .seal{margin-top:auto;padding-top:26px;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.cert .seal i{font-style:normal;display:inline-grid;place-items:center;width:52px;height:52px;
+  border-radius:50%;border:1px solid #2C343D;color:#8A929B;font-size:8px;letter-spacing:.04em;
+  text-align:center;line-height:1.15;padding:4px}
+.cert .seal.pending i{border-style:dashed;border-color:#4A3B22;color:#B98A3E}
+
+/* ---------------- footer ---------------- */
+.foot{border-top:1px solid var(--hair);padding-block:clamp(48px,6vw,78px) 0;color:var(--ink)}
+.foot-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(22px,3vw,44px)}
+.foot-col h3{font-size:14px;letter-spacing:-.01em;margin-bottom:16px}
+.foot-col a{display:block;font-size:14px;color:var(--deep);padding:4px 0}
+.foot-col a:hover{color:var(--ink)}
+/* The reference sets this wordmark in a serif — its one break from the
+   grotesque. Ours stays in the site face: PT Serif was dropped in August at
+   the founder's instruction, and reintroducing a serif for one lockup is a
+   design-system decision, not a styling one. Scale and colour match. */
+/* Drawn as SVG with textLength/lengthAdjust rather than a vw font-size.
+   "HYPERPORTER" is 11 characters where "LEGORA" is 6, so the reference's
+   15vw overflowed at every width; and a vw value would still overflow
+   whenever the webfont falls back to a wider face. This fits the container
+   exactly, always. */
+.wordmark{padding-block:clamp(50px,8vw,120px) clamp(34px,5vw,72px);user-select:none}
+.wordmark svg{display:block;width:100%;height:auto;fill:var(--deep)}
+.foot-bar{border-top:1px solid var(--hair);padding-block:22px 30px;
+  display:flex;gap:18px 26px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  color:var(--muted);font-size:13px}
+.foot-bar nav{display:flex;gap:18px;flex-wrap:wrap}
+.foot-bar a:hover{color:var(--ink)}
+
+.crib{background:var(--ink);color:#C9CCD1;font-size:13px;line-height:1.55}
+.crib-in{max-width:var(--max);margin:0 auto;padding:26px var(--pad);
+  display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.crib b{color:var(--white);font-weight:500}
+
+@media (max-width:1180px){
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+  .gal-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .certs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cert{border-bottom:1px solid #1E242B}
+  .cert:nth-child(2n){border-right:0}
+}
+@media (max-width:820px){
+  .statwrap,.vision-grid,.vision-prose{grid-template-columns:1fr}
+  .foot-cols{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px}
+  .top-in{grid-template-columns:auto 1fr;gap:14px}
+  .nav{display:none}
+  .mark{justify-self:start}
+  .strow{grid-template-columns:1fr;gap:10px}
+}
+@media (max-width:560px){
+  .certs{grid-template-columns:1fr}
+  .cert{border-right:0;min-height:0}
+  .grid4{grid-template-columns:1fr}
+  .gal-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .acts .lg{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .gal-i:hover{transform:none}
+  .car-t,.car-art{transition:none}
+  .car-row{scroll-behavior:auto}
+  .hero-img{animation:none;transform:scale(1.06)}
+  /* the blanket rule above doesn't cover scroll-behavior */
+  .dest-row{scroll-behavior:auto}
+}

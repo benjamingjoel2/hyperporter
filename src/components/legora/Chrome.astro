@@ -1,0 +1,85 @@
+---
+/**
+ * Announcement bar and the top bar, in one fixed shell.
+ *
+ * The shell is what carries the scroll state: transparent over the hero,
+ * translucent-and-blurred below it. The reference's own bar is opaque the
+ * whole way down; over a full-bleed photograph the transparent state reads
+ * better, so this is a deliberate departure.
+ *
+ * The scrim is not decoration. White nav over the hero's pale sky measured
+ * 2.7:1 — below the 4.5:1 minimum. With the scrim it measures 12.6:1, and
+ * because the scrim rides with the bar rather than the hero, that survives
+ * a change of photograph.
+ */
+import { NAV } from '../../lib/content/nav';
+---
+
+<div class="chrome" id="chrome">
+  <div class="ann">
+    <div class="ann-in">
+      <b>Showcase is free — for agencies and suppliers both.</b>
+      <a href="/pricing">See pricing <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+
+  <header class="top">
+    <div class="top-in">
+      <nav class="nav" aria-label="Primary">
+        {NAV.filter((n) => n.id !== 'destinations').map((n) => <a href={n.href}>{n.label}</a>)}
+      </nav>
+      <a class="mark" href="/">HYPERPORTER</a>
+      <div class="acts">
+        <a href="/signup" class="lg">Log in</a>
+        <a class="btn" href="/signup">Get started free <i aria-hidden="true">&rarr;</i></a>
+      </div>
+    </div>
+  </header>
+</div>
+
+<script>
+  const chrome = document.getElementById('chrome');
+  const heroTitle = document.querySelector<HTMLElement>('.hero h1');
+
+  if (chrome && heroTitle) {
+    let ticking = false;
+    let trigger = 0;
+
+    /* Solidify the moment the hero headline would slide under the bar.
+       White-on-photo nav text over a white headline is unreadable, and the
+       wordmark lands directly on top of it. Measured off the headline
+       itself rather than the hero's height, so it stays correct at any
+       viewport where the hero's min-height clamps differently. */
+    const measure = (): void => {
+      const was = chrome.classList.contains('solid');
+      chrome.classList.remove('solid');
+      trigger = Math.max(
+        heroTitle.getBoundingClientRect().top + window.scrollY - chrome.offsetHeight - 16,
+        0
+      );
+      chrome.classList.toggle('solid', was);
+    };
+
+    const apply = (): void => {
+      ticking = false;
+      chrome.classList.toggle('solid', window.scrollY > trigger);
+    };
+
+    measure();
+    apply();
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(apply);
+        }
+      },
+      { passive: true }
+    );
+    window.addEventListener('resize', () => {
+      measure();
+      apply();
+    });
+  }
+</script>

@@ -1,0 +1,125 @@
+---
+/**
+ * The reference's carousel: arrows pinned left and right, a dot pager
+ * centred above, short tiles running off both edges, and one ACTIVE slide
+ * that grows and carries its own title, body and link beneath the row.
+ *
+ * A flat strip of equal tiles is a different component — it reads as a
+ * gallery. The active slide is the whole point, so it lives here rather
+ * than being approximated with a scroll container.
+ *
+ * Artwork is the site's own landmark generator. It is seeded on each item's
+ * own label rather than on a country: mapping "Travel agents" onto, say,
+ * Peru would assert something the site does not claim. The generator gives
+ * an unknown name hue 215 +/- 15, which produced six near-identical blues,
+ * so each scene's hues are rotated to pull them apart. Placeholder standing
+ * in until photography is licensed — see CLAUDE.md.
+ */
+import { destArt } from '../../lib/landmark/generator';
+
+export interface CarouselItem {
+  name: string;
+  kind: string;
+  body: string;
+}
+
+interface Props {
+  items: CarouselItem[];
+  active?: number;
+  uid: string;
+}
+
+const { items, active = 0, uid } = Astro.props;
+
+/** Evenly spaced around the wheel, so no two tiles read as the same place. */
+const hueStep = Math.round(360 / items.length);
+const spread = (svg: string, i: number): string =>
+  svg.replace(/hsl\((\d+),/g, (_m, h) => `hsl(${(Number(h) + i * hueStep) % 360},`);
+
+const art = items.map((it, i) => spread(destArt(it.name, `${uid}${i}`, 'light'), i));
+---
+
+<div class="car-bar">
+  <button class="car-prev" type="button" data-car={uid} data-dir="-1" aria-label="Previous">&larr;</button>
+  <div class="dots" aria-hidden="true">
+    {items.map((_, i) => <span class:list={['dot', { on: i === active }]} data-i={i} />)}
+  </div>
+  <button class="car-next" type="button" data-car={uid} data-dir="1" aria-label="Next">&rarr;</button>
+</div>
+
+<div class="car-row" id={`car-${uid}`} data-car-row={uid}>
+  {
+    items.map((it, i) => (
+      <button
+        class:list={['car-t', { on: i === active }]}
+        type="button"
+        data-i={i}
+        aria-pressed={i === active ? 'true' : 'false'}
+      >
+        <span class="car-art" set:html={art[i]} />
+        <span class="car-n">{it.name}</span>
+        <span class="car-k">{it.kind}</span>
+      </button>
+    ))
+  }
+</div>
+
+<div class="car-panels">
+  {
+    items.map((it, i) => (
+      <div class="car-p" data-i={i} hidden={i !== active}>
+        <b>{it.name}</b>
+        <p>{it.body}</p>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  /**
+   * Arrows step the selection rather than nudging scroll position, so the
+   * active tile, the panel and the dots can never disagree — which is the
+   * failure mode of a scroll-driven carousel.
+   */
+  document.querySelectorAll<HTMLElement>('[data-car-row]').forEach((row) => {
+    const uid = row.dataset.carRow;
+    const scope = row.parentElement;
+    if (!uid || !scope) return;
+
+    const tiles = Array.from(row.querySelectorAll<HTMLButtonElement>('.car-t'));
+    const panels = Array.from(scope.querySelectorAll<HTMLElement>('.car-p'));
+    const dots = Array.from(scope.querySelectorAll<HTMLElement>('.dot'));
+    if (!tiles.length) return;
+
+    let active = Math.max(
+      tiles.findIndex((t) => t.classList.contains('on')),
+      0
+    );
+
+    const select = (i: number, scroll: boolean): void => {
+      active = (i + tiles.length) % tiles.length;
+      tiles.forEach((t, n) => {
+        t.classList.toggle('on', n === active);
+        t.setAttribute('aria-pressed', String(n === active));
+      });
+      panels.forEach((p, n) => {
+        p.hidden = n !== active;
+      });
+      dots.forEach((d, n) => d.classList.toggle('on', n === active));
+      if (scroll) {
+        tiles[active].scrollIntoView({
+          inline: 'center',
+          block: 'nearest',
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+            ? 'auto'
+            : 'smooth',
+        });
+      }
+    };
+
+    tiles.forEach((t, i) => t.addEventListener('click', () => select(i, true)));
+    scope.querySelectorAll<HTMLButtonElement>(`[data-car="${uid}"]`).forEach((btn) =>
+      btn.addEventListener('click', () => select(active + Number(btn.dataset.dir), true))
+    );
+  });
+</script>
