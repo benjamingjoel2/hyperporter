@@ -1,5 +1,10 @@
 # syntax=docker/dockerfile:1
 
+# NOT the production path any more. Production is built by GitHub Actions
+# (.github/workflows/deploy.yml) and served from a checkout of the `deploy`
+# branch — the server no longer builds anything. This image is kept for
+# building the site locally in one step; docker-compose.yml does not use it.
+
 # ---- build ----------------------------------------------------------------
 # Node 22 to match .nvmrc and the engines range in package.json, so the image
 # builds on the same major the CI workflow uses.
