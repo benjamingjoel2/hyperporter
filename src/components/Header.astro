@@ -9,6 +9,7 @@
  */
 import { FEED } from '../lib/feed';
 import { NAV, DRAWER } from '../lib/content/nav';
+import { destArt } from '../lib/landmark/generator';
 
 interface Props {
   current?:
@@ -34,10 +35,6 @@ const stream = row + row;
 ---
 
 <header class="top">
-  {/* Dims and blurs the page while a panel is open. Sits inside the header
-      on a negative z-index, so it paints above the page but behind the
-      header's own opaque background — the bar and the panel stay crisp. */}
-  <div class="mega-scrim" aria-hidden="true"></div>
   <div class="bar">
     <a class="mark" href="/">
       <span class="glyph"
@@ -55,7 +52,7 @@ const stream = row + row;
     <nav class="links" id="links">
       {
         NAV.map((n) =>
-          n.tabs ? (
+          n.columns ? (
             <div class="mega-wrap" data-mega={n.id}>
               <a
                 class:list={['mega-trigger', { act: current === n.id }]}
@@ -70,43 +67,33 @@ const stream = row + row;
               </a>
 
               <div class="mega" hidden>
-                <div class="mega-rail" role="tablist" aria-label={`${n.label} sections`}>
-                  {n.tabs.map((t, i) => (
-                    <button
-                      type="button"
-                      role="tab"
-                      class:list={['mega-tab', { on: i === 0 }]}
-                      data-tab={t.id}
-                      aria-selected={i === 0 ? 'true' : 'false'}
-                      tabindex={i === 0 ? 0 : -1}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
-                </div>
-
-                <div class="mega-views">
-                  {n.tabs.map((t, i) => (
-                    <div class="mega-view" data-view={t.id} hidden={i !== 0}>
-                      <p class="mega-head">{t.heading}</p>
-                      <div class="mega-list">
-                        {t.rows.map((r, j) => (
+                <div class="mega-in">
+                  <div class="mega-cols">
+                    {n.columns.map((col) => (
+                      <div class="mega-col">
+                        {col.heading && <p class="mega-ch">{col.heading}</p>}
+                        {col.rows.map((r) => (
                           <a class="mega-row" href={r.href}>
-                            <span class="mega-n">{String(j + 1).padStart(2, '0')}</span>
-                            <span class="mega-txt">
-                              <b>{r.label}</b>
-                              <em>{r.desc}</em>
-                            </span>
-                            <span class="mega-go">&rarr;</span>
+                            <b>{r.label}</b>
+                            <em>{r.desc}</em>
                           </a>
                         ))}
                       </div>
-                      <a class="mega-foot" href={t.footHref}>
-                        <span>{t.footLabel}</span>
-                        <em>{t.footCta} &rarr;</em>
-                      </a>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+
+                  {n.feature && (
+                    <a class="mega-feat" href={n.feature.href}>
+                      <span
+                        class="mega-feat-art"
+                        aria-hidden="true"
+                        set:html={destArt(n.feature.art, `nav-${n.id}`)}
+                      />
+                      <span class="mega-feat-eye">{n.feature.eyebrow}</span>
+                      <b>{n.feature.title}</b>
+                      <em>{n.feature.desc}</em>
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -139,6 +126,13 @@ const stream = row + row;
     <a href="/signup">Get started free &rarr;</a>
   </div>
 </header>
+
+{/* Dims the page while a panel is open. A sibling of the header, not a
+    child: as a child on a negative z-index it painted ABOVE the header's
+    own background — a negative z-index child sits above its parent's
+    background, not behind it — and greyed out the bar. Out here it is
+    simply below the header's stacking layer. */}
+<div class="mega-scrim" aria-hidden="true"></div>
 
 <script>
   /**
@@ -193,36 +187,6 @@ const stream = row + row;
       setOpen(wrap, open);
     });
 
-    // Tabs inside the panel.
-    const tabs = Array.from(wrap.querySelectorAll<HTMLButtonElement>('.mega-tab'));
-    const views = Array.from(wrap.querySelectorAll<HTMLElement>('.mega-view'));
-
-    const select = (id: string) => {
-      tabs.forEach((t) => {
-        const on = t.dataset.tab === id;
-        t.classList.toggle('on', on);
-        t.setAttribute('aria-selected', on ? 'true' : 'false');
-        t.tabIndex = on ? 0 : -1;
-      });
-      views.forEach((v) => {
-        v.hidden = v.dataset.view !== id;
-      });
-    };
-
-    tabs.forEach((tab, i) => {
-      // pointerenter, not click: the reference switches on hover, and a
-      // click would feel like a dead button to anyone using a mouse
-      tab.addEventListener('pointerenter', () => tab.dataset.tab && select(tab.dataset.tab));
-      tab.addEventListener('click', () => tab.dataset.tab && select(tab.dataset.tab));
-      tab.addEventListener('keydown', (e) => {
-        const k = e.key;
-        if (k !== 'ArrowDown' && k !== 'ArrowUp') return;
-        e.preventDefault();
-        const next = tabs[(i + (k === 'ArrowDown' ? 1 : tabs.length - 1)) % tabs.length];
-        if (next.dataset.tab) select(next.dataset.tab);
-        next.focus();
-      });
-    });
   });
 
   document.addEventListener('keydown', (e) => {

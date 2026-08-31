@@ -1,17 +1,14 @@
 /**
- * Navigation, including the two mega-menu panels.
+ * Navigation, and the three mega-menu panels.
  *
- * Product and Customers each open a panel with a rail of tabs on the left
- * and the rows for the selected tab on the right — the arrangement in the
- * founder's content file.
+ * Rebuilt on the harvey.ai arrangement: a panel is a full-bleed band flush
+ * under the bar, holding columns of links and one featured cell on the
+ * right. No tab rail, no numbers, no icons — a name in ink and a line of
+ * description under it, with a lot of air.
  *
- * Solutions is a tab inside the Product panel rather than a top-level item,
- * as in that file. Having it in both places would give the same six pages
- * two entry points in the same bar.
- *
- * Rows are numbered rather than iconed: the site already numbers its
- * ladders, stages and feature lists, so a number reads as part of the same
- * system where a tinted icon tile would read as borrowed from elsewhere.
+ * That arrangement is why Solutions is a top-level item again rather than a
+ * tab inside Product: the reference gives every group its own trigger, and
+ * without a rail there is nowhere for a second group to live.
  */
 
 export interface MegaRow {
@@ -20,23 +17,32 @@ export interface MegaRow {
   href: string;
 }
 
-export interface MegaTab {
-  id: string;
-  label: string;
-  /** Small caps heading above the rows. */
-  heading: string;
+export interface MegaColumn {
+  /** Small caps heading. Only used where a panel holds two distinct groups. */
+  heading?: string;
   rows: MegaRow[];
-  /** The strip closing the panel — one concrete next step, never filler. */
-  footLabel: string;
-  footCta: string;
-  footHref: string;
+}
+
+/**
+ * The cell on the right of a panel. Illustration rather than a product
+ * screenshot: the landmark artwork is ours and already carries the
+ * destination pages, where a fabricated interface shot would not be.
+ */
+export interface MegaFeature {
+  /** Country name, passed to the landmark generator. */
+  art: string;
+  eyebrow: string;
+  title: string;
+  desc: string;
+  href: string;
 }
 
 export interface NavItem {
   id: string;
   label: string;
   href: string;
-  tabs?: MegaTab[];
+  columns?: MegaColumn[];
+  feature?: MegaFeature;
 }
 
 export const NAV: NavItem[] = [
@@ -44,76 +50,92 @@ export const NAV: NavItem[] = [
     id: 'product',
     label: 'Product',
     href: '/product',
-    tabs: [
+    columns: [
       {
-        id: 'products',
-        label: 'Products',
-        heading: 'The four capabilities',
         rows: [
-          { label: 'Overview', desc: 'All four products, one connected system', href: '/product' },
-          { label: 'OS', desc: 'The foundation everyone gets, free forever', href: '/os' },
-          { label: 'Autopilot', desc: 'Automation that still knows when to stop', href: '/autopilot' },
-          { label: 'Intelligence', desc: 'An AI layer trained on your own data', href: '/intelligence' },
-          { label: 'Horizon', desc: 'A vetted list of DMCs and suppliers', href: '/horizon' },
+          { label: 'Overview', desc: 'All four products, one connected system.', href: '/product' },
+          { label: 'OS', desc: 'The foundation everyone gets, free forever.', href: '/os' },
+          { label: 'Autopilot', desc: 'Automation that still knows when to stop.', href: '/autopilot' },
         ],
-        footLabel: 'Every tier is strictly additive',
-        footCta: 'See what each one costs',
-        footHref: '/pricing',
       },
       {
-        id: 'solutions',
-        label: 'Solutions',
-        heading: 'Every feature, by category',
         rows: [
-          { label: 'Overview', desc: 'Six categories, from inquiry to getting paid', href: '/solutions' },
-          { label: 'Inquiry', desc: 'How a new lead enters the CRM', href: '/solutions/inquiry' },
-          { label: 'Operations', desc: 'CRM and stage automation', href: '/solutions/operations' },
-          { label: 'Branding', desc: 'Your identity on everything customers see', href: '/solutions/branding' },
-          { label: 'Communication', desc: 'Talking to travelers and partners, everywhere', href: '/solutions/communication' },
-          { label: 'Payments', desc: 'Money in, money out, fully automated', href: '/solutions/payments' },
-          { label: 'Marketing', desc: 'Outbound reach beyond a single trip', href: '/solutions/marketing' },
+          { label: 'Intelligence', desc: 'An AI layer trained on your own data, not anyone else’s.', href: '/intelligence' },
+          { label: 'Horizon', desc: 'A vetted list of DMCs and suppliers, ready to quote.', href: '/horizon' },
+          { label: 'Pricing', desc: 'Three tiers, strictly additive. Showcase is free.', href: '/pricing' },
         ],
-        footLabel: 'Every feature, with the tier it lands on',
-        footCta: 'Compare all six',
-        footHref: '/solutions',
       },
     ],
+    feature: {
+      art: 'Peru',
+      eyebrow: 'Where the network reaches',
+      title: '130+ countries on Horizon',
+      desc: 'Vetted DMCs and suppliers you can search, quote and book from inside the CRM — on every tier, including free.',
+      href: '/horizon',
+    },
+  },
+
+  {
+    id: 'solutions',
+    label: 'Solutions',
+    href: '/solutions',
+    columns: [
+      {
+        rows: [
+          { label: 'Overview', desc: 'Six categories, from inquiry to getting paid.', href: '/solutions' },
+          { label: 'Inquiry', desc: 'How a new lead enters the CRM.', href: '/solutions/inquiry' },
+          { label: 'Operations', desc: 'CRM and stage automation.', href: '/solutions/operations' },
+          { label: 'Branding', desc: 'Your identity on everything customers see.', href: '/solutions/branding' },
+        ],
+      },
+      {
+        rows: [
+          { label: 'Communication', desc: 'Talking to travelers and partners, everywhere.', href: '/solutions/communication' },
+          { label: 'Payments', desc: 'Money in, money out, fully automated.', href: '/solutions/payments' },
+          { label: 'Marketing', desc: 'Outbound reach beyond a single trip.', href: '/solutions/marketing' },
+        ],
+      },
+    ],
+    feature: {
+      art: 'Japan',
+      eyebrow: 'Every feature, with its tier',
+      title: 'What you get, and where',
+      desc: 'Each category lists exactly what is included and which tier it lands on — no feature hidden behind a sales call.',
+      href: '/pricing',
+    },
   },
 
   {
     id: 'customers',
     label: 'Customers',
     href: '/customers',
-    tabs: [
+    columns: [
       {
-        id: 'reseller',
-        label: 'Resellers',
         heading: 'For Resellers',
         rows: [
-          { label: 'Agent OS', desc: 'The full walkthrough, for agencies', href: '/customers/agent-os' },
-          { label: 'Travel agencies', desc: 'Multi-agent teams, one shared CRM and brand', href: '/customers/travel-agencies' },
-          { label: 'Travel agents', desc: 'Run your book of clients from one thread', href: '/customers/travel-agents' },
-          { label: 'Independent advisors', desc: 'Look like a full agency, without the overhead', href: '/customers/independent-advisors' },
-          { label: 'Creators', desc: 'Turn your audience into bookings', href: '/customers/creators' },
+          { label: 'Agent OS', desc: 'The full walkthrough, for agencies.', href: '/customers/agent-os' },
+          { label: 'Travel agencies', desc: 'Multi-agent teams, one shared CRM and brand.', href: '/customers/travel-agencies' },
+          { label: 'Travel agents', desc: 'Run your book of clients from one thread.', href: '/customers/travel-agents' },
+          { label: 'Independent advisors', desc: 'Look like a full agency, without the overhead.', href: '/customers/independent-advisors' },
+          { label: 'Creators', desc: 'Turn your audience into bookings.', href: '/customers/creators' },
         ],
-        footLabel: 'Resellers run the full ladder',
-        footCta: 'Showcase, Autopilot, Intelligence',
-        footHref: '/pricing',
       },
       {
-        id: 'supplier',
-        label: 'Suppliers',
         heading: 'For Suppliers',
         rows: [
-          { label: 'Supplier OS', desc: 'The full walkthrough, for suppliers', href: '/customers/supplier-os' },
-          { label: 'DMCs', desc: 'Reply your way, get discovered as the network grows', href: '/customers/dmcs' },
-          { label: 'Tour operators', desc: 'Build and quote packages from your own rates', href: '/customers/tour-operators' },
+          { label: 'Supplier OS', desc: 'The full walkthrough, for suppliers.', href: '/customers/supplier-os' },
+          { label: 'DMCs', desc: 'Reply your way, get discovered as the network grows.', href: '/customers/dmcs' },
+          { label: 'Tour operators', desc: 'Build and quote packages from your own rates.', href: '/customers/tour-operators' },
         ],
-        footLabel: 'Suppliers skip straight to Intelligence',
-        footCta: 'Free on Showcase, forever',
-        footHref: '/pricing',
       },
     ],
+    feature: {
+      art: 'Kenya',
+      eyebrow: 'Two sides, one product',
+      title: 'Whichever side you are on',
+      desc: 'Resellers run the full ladder and source suppliers. Suppliers are the ones being sourced, and go free on Showcase forever.',
+      href: '/customers',
+    },
   },
 
   { id: 'pricing', label: 'Pricing', href: '/pricing' },
@@ -123,8 +145,8 @@ export const NAV: NavItem[] = [
 ];
 
 /**
- * The drawer, for screens with no hover. It lists every link the panels
- * hold, grouped — flattened alone would give two bare "Overview" rows with
+ * The drawer, for screens with no hover. Every link the panels hold,
+ * grouped — flattened it would give three bare "Overview" rows with
  * nothing to tell them apart.
  */
 export interface DrawerGroup {
@@ -133,14 +155,12 @@ export interface DrawerGroup {
 }
 
 export const DRAWER: DrawerGroup[] = [
-  ...NAV.filter((n) => n.tabs).flatMap((n) =>
-    n.tabs!.map((t) => ({
-      heading: `${n.label} — ${t.label}`,
-      links: t.rows.map((r) => ({ label: r.label, href: r.href })),
-    }))
-  ),
+  ...NAV.filter((n) => n.columns).map((n) => ({
+    heading: n.label,
+    links: n.columns!.flatMap((c) => c.rows.map((r) => ({ label: r.label, href: r.href }))),
+  })),
   {
     heading: null,
-    links: NAV.filter((n) => !n.tabs).map((n) => ({ label: n.label, href: n.href })),
+    links: NAV.filter((n) => !n.columns).map((n) => ({ label: n.label, href: n.href })),
   },
 ];

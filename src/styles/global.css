@@ -872,17 +872,15 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
 /* ============================================================
    MEGA MENU
    ============================================================
-   Product and Customers open a panel: a rail of tabs on the left, a
-   numbered list on the right, closing on one concrete next step.
+   On the harvey.ai arrangement: a full-bleed band flush under the bar, not
+   a floating card. No shadow, no corner radius, no tab rail, no icons —
+   the panel is part of the header, and the work is done by columns of
+   names with a line of description each, and a lot of air.
 
-   Numbers rather than icon tiles. The site already numbers its product
-   ladder, its stages and its feature lists, so a number belongs to the
-   same system; a grid of tinted icon squares would read as borrowed from
-   somewhere else. The only colour in here is the accent, on the row you
-   are pointing at.
+   Full width is the whole point of the look, so the panel breaks out of
+   the bar's centred container: pinned left:0/right:0 against the header,
+   with its own inner container aligning the columns to the page grid.
 
-   The panel is positioned against the header rather than the trigger, so
-   it cannot run off the right edge on a narrow desktop window.
    `header.top` is already `position:sticky`, which is a positioned value
    and therefore the containing block — adding `position:relative` here
    would silently un-stick the header. */
@@ -890,72 +888,67 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
 .mega-trigger{display:inline-flex;align-items:center;gap:6px}
 .mega-trigger .chev{width:9px;height:6px;opacity:.45;transition:transform .25s,opacity .25s}
 .mega-wrap.open .chev{transform:rotate(180deg);opacity:.9}
-.mega-wrap.open>.mega-trigger{color:var(--paper);background:rgba(12,22,34,.05)}
+/* The reference marks the open item with a rule under the trigger rather
+   than a filled chip. */
+.mega-wrap.open>.mega-trigger{color:var(--paper);background:none;box-shadow:inset 0 -2px 0 var(--paper)}
 
 .mega{
-  /* 72px is the bar height. Hanging the panel off the bar rather than
-     the whole header puts it over the dispatch rail instead of below it,
-     so the bar and the panel read as one surface. */
-  position:absolute;top:72px;left:50%;transform:translateX(-50%);
-  z-index:60;display:grid;grid-template-columns:170px minmax(0,1fr);
-  min-width:660px;max-width:min(94vw,820px);
+  position:absolute;top:72px;left:0;right:0;
+  z-index:60;
   background:var(--raise);
-  border:1px solid var(--line);
-  border-top:0;
-  box-shadow:0 30px 70px -20px rgba(12,22,34,.22);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
 }
 .mega[hidden]{display:none}
 
-/* Left rail: mono labels, a rule marking the live one. No filled pill. */
-.mega-rail{display:flex;flex-direction:column;padding:26px 0;border-right:1px solid var(--line)}
-.mega-tab{
-  background:none;border:0;border-left:2px solid transparent;
-  padding:11px 22px;text-align:left;cursor:pointer;
-  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--dim);transition:color .2s,border-color .2s;
+.mega-in{
+  max-width:var(--max);margin:0 auto;
+  padding:clamp(36px,4vw,62px) var(--pad) clamp(40px,4.6vw,70px);
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 320px;
+  gap:clamp(28px,4vw,72px);
+  align-items:start;
 }
-.mega-tab:hover{color:var(--muted)}
-.mega-tab.on{color:var(--signal);border-left-color:var(--signal)}
-.mega-tab:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
 
-.mega-views{padding:26px 30px 0}
-.mega-view[hidden]{display:none}
-.mega-head{
-  margin:0 0 4px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
+.mega-cols{display:contents}
+.mega-col{display:flex;flex-direction:column;gap:clamp(22px,2.4vw,34px)}
+.mega-ch{
+  margin:0 0 -8px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--dim);
 }
 
-/* Rows: number, name, description, separated by hairlines. */
-.mega-list{border-top:1px solid var(--line);margin-top:14px}
-.mega-row{
-  display:grid;grid-template-columns:34px minmax(0,1fr) 16px;align-items:baseline;gap:0 14px;
-  padding:13px 0;border-bottom:1px solid var(--line);
-  transition:background .18s;
+/* A row is a name and a line. Nothing else. */
+.mega-row{display:block;max-width:40ch}
+.mega-row b{
+  display:block;font-weight:500;font-size:16.5px;color:var(--paper);
+  letter-spacing:-.012em;transition:color .18s;
 }
-.mega-row:last-child{border-bottom:0}
-.mega-n{
-  font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--dim);
-  font-variant-numeric:tabular-nums;transition:color .18s;
+.mega-row em{
+  display:block;margin-top:5px;font-style:normal;font-size:14.5px;
+  color:var(--dim);line-height:1.5;
 }
-.mega-txt b{display:block;font-weight:400;font-size:16px;color:var(--paper);letter-spacing:-.012em;transition:color .18s}
-.mega-txt em{display:block;margin-top:3px;font-style:normal;font-size:13.5px;color:var(--dim);line-height:1.45}
-.mega-go{font-size:14px;color:transparent;transition:color .18s,transform .18s;transform:translateX(-4px)}
-.mega-row:hover{background:linear-gradient(90deg,rgba(27,116,126,.05),transparent 70%)}
-.mega-row:hover .mega-n,.mega-row:hover .mega-txt b,.mega-row:hover .mega-go{color:var(--signal)}
-.mega-row:hover .mega-go{transform:none}
-.mega-row:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
+.mega-row:hover b{color:var(--signal)}
+.mega-row:focus-visible{outline:2px solid var(--signal);outline-offset:4px;border-radius:2px}
 
-/* One real next step, never filler. */
-.mega-foot{
-  display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;
-  margin:0 -30px;padding:15px 30px;border-top:1px solid var(--line);background:var(--ink);
+/* The cell on the right, where the reference puts a product shot. */
+.mega-feat{display:block}
+.mega-feat-art{
+  display:block;aspect-ratio:16/10;overflow:hidden;border:1px solid var(--line);
+  background:var(--ink);margin-bottom:16px;
 }
-.mega-foot span{font-size:13.5px;color:var(--muted)}
-.mega-foot em{
-  font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--signal);
+.mega-feat-art svg{width:100%;height:100%;display:block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.mega-feat:hover .mega-feat-art svg{transform:scale(1.04)}
+.mega-feat-eye{
+  display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:9px;
 }
-.mega-foot:hover em{text-decoration:underline;text-underline-offset:3px}
+.mega-feat b{display:block;font-weight:500;font-size:16.5px;letter-spacing:-.012em;color:var(--paper);transition:color .18s}
+.mega-feat em{display:block;margin-top:6px;font-style:normal;font-size:14.5px;color:var(--dim);line-height:1.5}
+.mega-feat:hover b{color:var(--signal)}
+
+@media (max-width:1240px){
+  .mega-in{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .mega-feat{display:none}
+}
 
 /* Panels are pointer affordances; below this width the drawer lists
    everything inside them instead. */
@@ -972,12 +965,12 @@ footer{border-top:1px solid var(--line);background:var(--ink);padding:clamp(56px
 /* Scrim behind an open mega panel. Slight — enough to push the page back
    and let the panel sit forward, not enough to read as a modal. */
 .mega-scrim{
-  position:fixed;inset:0;z-index:-1;
+  position:fixed;inset:0;z-index:50;   /* under the header (70), over the page */
   background:rgba(12,18,24,.34);
   -webkit-backdrop-filter:blur(4px);
   backdrop-filter:blur(4px);
   opacity:0;pointer-events:none;
   transition:opacity .22s ease;
 }
-header.top.mega-open .mega-scrim{opacity:1}
+header.top.mega-open ~ .mega-scrim{opacity:1}
 @media (max-width:1080px){.mega-scrim{display:none}}
