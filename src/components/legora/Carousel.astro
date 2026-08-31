@@ -42,7 +42,7 @@ const art = items.map((it, i) => spread(destArt(it.name, `${uid}${i}`, 'light'),
 <div class="lg-car-bar">
   <button class="lg-car-prev" type="button" data-car={uid} data-dir="-1" aria-label="Previous">&larr;</button>
   <div class="lg-dots" aria-hidden="true">
-    {items.map((_, i) => <span class:list={['lg-dot', { on: i === active }]} data-i={i} />)}
+    {items.map((_, i) => <span class:list={['lg-dot', { 'lg-on': i === active }]} data-i={i} />)}
   </div>
   <button class="lg-car-next" type="button" data-car={uid} data-dir="1" aria-label="Next">&rarr;</button>
 </div>
@@ -51,7 +51,7 @@ const art = items.map((it, i) => spread(destArt(it.name, `${uid}${i}`, 'light'),
   {
     items.map((it, i) => (
       <button
-        class:list={['lg-car-t', { on: i === active }]}
+        class:list={['lg-car-t', { 'lg-on': i === active }]}
         type="button"
         data-i={i}
         aria-pressed={i === active ? 'true' : 'false'}
