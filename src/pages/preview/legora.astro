@@ -1,0 +1,468 @@
+---
+/**
+ * Design study: legora.com, applied to Hyperporter.
+ *
+ * The moves taken from the reference, in the order they matter:
+ *   1. warm off-white ground and a 400-weight grotesque at hard negative
+ *      tracking -- the type does the work, not colour
+ *   2. a 100vh photographic hero, headline baseline at 87% down
+ *   3. an asymmetric statement block: 312px down from the hero, then only
+ *      60px to the band below, so it reads as that band's title
+ *   4. a full-viewport grey band -- the page is built on 100vh blocks
+ *   5. 4:5 portrait card tiles with square corners, title at body size
+ *   6. one carousel with an active slide that grows and drives a panel
+ *   7. a single dark section, and an oversized footer wordmark
+ *
+ * Every number above was measured off the live site at 1440px. Content is
+ * real and comes from the content modules, not from the reference.
+ *
+ * Three of the reference's sections have no honest equivalent here and are
+ * handled rather than faked: the "Trusted by" logo wall is omitted (no named
+ * customers at pilot stage), the founder portrait is a visible placeholder
+ * as it is on /about, and the security cards carry real status instead of
+ * certification seals -- SOC 2 and GDPR are targeted post-pilot, not held.
+ *
+ * Throwaway page -- see src/layouts/Preview.astro.
+ */
+import { getCollection } from 'astro:content';
+import Preview from '../../layouts/Preview.astro';
+import Carousel from '../../components/legora/Carousel.astro';
+import Chrome from '../../components/legora/Chrome.astro';
+import { destArt } from '../../lib/landmark/generator';
+import { PRODUCTS } from '../../lib/content/products';
+import { STAGES } from '../../lib/stages';
+import { CARD_ART, CARD_ALT } from '../../lib/legoraArt';
+import { HOME_FAQ } from '../../lib/content/pricing';
+import { SECURITY } from '../../lib/content/pricing';
+import '../../styles/legora.css';
+
+/** Twelve chosen to spread the archetypes -- no two share a builder, so the
+    gallery shows what the generator actually does rather than twelve
+    variations of a cityscape. */
+const PICKS = [
+  'Japan', 'Peru', 'Kenya', 'Iceland', 'Jordan', 'Vietnam',
+  'Namibia', 'Portugal', 'Nepal', 'Brazil', 'Oman', 'Bolivia',
+];
+const all = await getCollection('destinations');
+const byName = new Map(all.map((d) => [d.data.title, d.data]));
+const places = PICKS.map((name) => {
+  const d = byName.get(name);
+  if (!d) throw new Error(`legora preview: no destination entry for ${name}`);
+  return { name, region: d.region };
+});
+
+const SEGMENTS = [
+  { name: 'Travel agencies', kind: 'Reseller', body: 'Multi-agent teams on one shared CRM and one brand — every agent, every trip, one stage engine.' },
+  { name: 'Travel agents', kind: 'Reseller', body: 'Run your whole book of clients from a single thread, without a second system to keep in sync.' },
+  { name: 'Independent advisors', kind: 'Reseller', body: 'Look like a full agency without the overhead — branded proposals, magic links, a real CRM.' },
+  { name: 'Creators', kind: 'Reseller', body: 'Turn an audience into bookings: a public inquiry form, and a pipeline that handles the rest.' },
+  { name: 'DMCs', kind: 'Supplier', body: 'Reply the way you already do, and get discovered by agencies as the network grows.' },
+  { name: 'Tour operators', kind: 'Supplier', body: 'Build and quote packages from your own rates, and keep your full quoted rate on every booking.' },
+];
+
+/** The four practices are real and in place today; the fifth card states
+    what is NOT held. Do not turn that one into a seal. */
+const CERTS = [
+  ...SECURITY.practices.map((p) => ({ ...p, status: 'IN\nPLACE', pending: false })),
+  {
+    title: 'SOC 2 & GDPR',
+    body: 'Not formally certified, not yet. Both are targeted post-pilot, once real usage volume justifies the audit. The practices above are already how the platform is built, ahead of the paperwork.',
+    status: 'TARGETED\nPOST-PILOT',
+    pending: true,
+  },
+];
+
+const STATS = [
+  ['130+', 'Countries with vetted DMCs and suppliers on Horizon.'],
+  ['9', 'Stages from Inquiry to Completed, all on one thread.'],
+  ['€0', 'To start on Showcase. Free forever for suppliers; free up to 20 trips a month for resellers.'],
+  ['10%', 'Horizon’s fee. The supplier always receives their full quoted rate.'],
+];
+
+---
+
+<Preview
+  title="Hyperporter — Legora design study"
+  fonts="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&display=swap"
+>
+  <Chrome />
+
+  <main>
+    <section class="hero">
+      <img
+        class="hero-img"
+        src="/hero.jpg"
+        alt="Aerial view of a mountain range at dawn, cloud filling the valleys below the ridgelines."
+      />
+      <div class="hero-veil"></div>
+      <div class="hero-in">
+        <h1>Inquiry to booking,<br />without the email threads.</h1>
+        <div class="hero-sub">
+          <span>One connected system for agencies, DMCs and tour operators.</span>
+          <a class="btn btn-lg" href="/signup">Get started free <i aria-hidden="true">&rarr;</i></a>
+        </div>
+      </div>
+      <button class="cue" id="cue" type="button" aria-label="Scroll to content">&darr;</button>
+    </section>
+
+    <section class="stmt wrap" id="product">
+      <h2>Introducing the Hyperporter OS</h2>
+      <p>The platform underneath every tier — free, forever, on both sides of the market.</p>
+    </section>
+
+    <section class="band">
+      <div class="wrap">
+        <div class="band-lead">
+          <p class="eyebrow">Autopilot · nine stages</p>
+          <p class="dek" style="color:#3A3833">
+            Inquiry through Post-Trip. The escalation points where a person takes over are designed
+            in, not gaps left over.
+          </p>
+        </div>
+        <div class="pills">
+          {
+            STAGES.map((s, i) => (
+              <Fragment>
+                <button class="pill" type="button" aria-expanded="false" aria-controls={`s${i}`}>
+                  <em>{s.n}</em> {s.name} <i aria-hidden="true">+</i>
+                </button>
+                <p class="pill-body" id={`s${i}`} hidden>
+                  {s.one}
+                  {s.cls === 'Human touchpoint' && <span class="tag">Human touchpoint</span>}
+                </p>
+              </Fragment>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="sec wrap">
+      <div class="sec-lead">
+        <h2>Four layers, one connected system.</h2>
+        <p class="dek">Each one sits on the one below it. Nothing is taken away as you move up.</p>
+      </div>
+      <div class="grid4">
+        {
+          PRODUCTS.map((p) => (
+            <article class="card">
+              <figure>
+                <svg viewBox="0 0 320 400" role="img" aria-label={CARD_ALT[p.slug]} set:html={CARD_ART[p.slug]} />
+              </figure>
+              <span class="avail">{p.availability}</span>
+              <h3>{p.name}</h3>
+              <p>{p.summary}</p>
+              <a class="read" href={`/${p.slug}`}>
+                <span aria-hidden="true">&#8627;</span> <span>Read more</span>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="car" id="customers">
+      <div class="wrap car-head">
+        <h2>Every side.<br />Every trip.</h2>
+        <p>
+          Resellers source suppliers and run the full ladder. Suppliers are the ones being sourced,
+          and stay free on Showcase.
+        </p>
+      </div>
+      <Carousel items={SEGMENTS} active={2} uid="seg" />
+    </section>
+
+    <section class="gal" id="destinations">
+      <div class="wrap gal-head">
+        <h2>Every destination,<br />drawn rather than stocked.</h2>
+        <p>
+          Destination artwork is generated, not stock — one scene per country, built from that
+          country’s own landmark and seeded so the palette never repeats.
+        </p>
+      </div>
+      <div class="wrap gal-grid">
+        {
+          places.map((p, i) => (
+            <a class="gal-i" href={`/destinations/${p.name.toLowerCase().replace(/\s+/g, '-')}`}>
+              <Fragment set:html={destArt(p.name, `g${i}`, 'light')} />
+              <span class="gal-n">{p.name}</span>
+              <span class="gal-r">{p.region}</span>
+            </a>
+          ))
+        }
+      </div>
+      <p class="gal-note">
+        Placeholders until photography is licensed — a real photo drops in per country without
+        touching the layout.
+      </p>
+    </section>
+
+    <section class="inter">
+      <img src="/hero.jpg" alt="" />
+      <div class="inter-in">
+        <p class="eyebrow">Horizon</p>
+        <h2>A vetted list of DMCs and suppliers, ready to quote.</h2>
+      </div>
+    </section>
+
+    <section class="sec wrap">
+      <div class="statwrap">
+        <div class="statprose">
+          <p>
+            Every trip involves the same coordination work, repeated by hand, agency by agency —
+            chasing DMCs over email, relaying messages between travellers and drivers, rebuilding
+            the same itinerary for the fifth time.
+          </p>
+          <p>
+            Hyperporter puts that work on one thread, and leaves a person exactly where judgment is
+            actually needed.
+          </p>
+        </div>
+        <div class="stats">
+          {
+            STATS.map(([n, label]) => (
+              <div class="strow">
+                <b>{n}</b>
+                <p>{label}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      <p class="note">
+        Horizon is a network, not software — suppliers are listed and sourced through it, they don’t
+        log into it.
+      </p>
+    </section>
+
+    <section class="vision">
+      <div class="wrap vision-grid">
+        <div>
+          <h2>Our vision</h2>
+          <div class="vision-by">
+            <div class="portrait">
+              Founder portrait pending — not invented here, the same way /about carries its
+              placeholders visibly.
+            </div>
+            <div class="vision-name">Name pending</div>
+            <div class="vision-role">Founder &amp; CEO</div>
+          </div>
+        </div>
+        <div>
+          <div class="vision-prose">
+            <div>
+              <p>
+                Hyperporter was built by people who’ve coordinated trips the old way — chasing DMCs
+                over email, relaying WhatsApp messages between travellers and drivers, rebuilding
+                the same itinerary PDF for the fifth time.
+              </p>
+              <p>
+                Every trip involves the same coordination work, repeated by hand, agency by agency.
+                We think that work should run itself.
+              </p>
+            </div>
+            <div>
+              <p>
+                Not all of it, though. Automation that pretends a person is never needed is
+                automation that fails quietly, at the worst moment, on someone’s holiday.
+              </p>
+              <p>
+                So the escalation points are designed in: money changing hands, and a traveller in
+                trouble. Those stay human on purpose.
+              </p>
+            </div>
+          </div>
+          <div class="vision-photo">
+            <img
+              src="/hero.jpg"
+              alt="Mountain range at dawn, cloud filling the valleys below the ridgelines."
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec-dark">
+      <div class="wrap">
+        <h2>Built to the standard your contracts and rates actually deserve.</h2>
+        <a class="read" href="/security"><span aria-hidden="true">&#8627;</span> <span>Read more</span></a>
+        <p class="fine">
+          Encryption in transit and at rest. Zero standing access. Account isolation. No training on
+          your data.<br />SOC&nbsp;2 and GDPR-formal compliance are targeted post-pilot — not held
+          today, and we won’t imply otherwise.
+        </p>
+        <div class="certs">
+          {
+            CERTS.map((c) => (
+              <div class="cert">
+                <b>{c.title}</b>
+                <p>{c.body}</p>
+                <div class:list={['seal', { pending: c.pending }]}>
+                  <i>
+                    {c.status.split('\n').map((line, i) => (
+                      <Fragment>
+                        {i > 0 && <br />}
+                        {line}
+                      </Fragment>
+                    ))}
+                  </i>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="sec wrap" style="padding-top:0">
+      <div class="faq">
+        {
+          HOME_FAQ.map((f, i) => (
+            <div class="qa">
+              <button type="button" aria-expanded="false" aria-controls={`q${i}`}>
+                {f.q} <i aria-hidden="true">+</i>
+              </button>
+              <div class="qa-b" id={`q${i}`} hidden>
+                {f.a}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="close wrap">
+      <h2>Run your next trip on<br />infrastructure, not inboxes.</h2>
+      <a class="btn btn-lg" href="/signup">Get started free <i aria-hidden="true">&rarr;</i></a>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h3>Product</h3>
+          <a href="/product">Overview</a>
+          {PRODUCTS.map((p) => <a href={`/${p.slug}`}>{p.name}</a>)}
+          <a href="/pricing">Pricing</a>
+        </div>
+        <div class="foot-col">
+          <h3>Solutions</h3>
+          <a href="/solutions">Overview</a>
+          <a href="/solutions/inquiry">Inquiry</a>
+          <a href="/solutions/operations">Operations</a>
+          <a href="/solutions/branding">Branding</a>
+          <a href="/solutions/communication">Communication</a>
+          <a href="/solutions/payments">Payments</a>
+        </div>
+        <div class="foot-col">
+          <h3>Customers</h3>
+          <a href="/customers/agent-os">Agent OS</a>
+          <a href="/customers/supplier-os">Supplier OS</a>
+          <a href="/customers/travel-agencies">Travel agencies</a>
+          <a href="/customers/independent-advisors">Independent advisors</a>
+          <a href="/customers/dmcs">DMCs</a>
+          <a href="/customers/tour-operators">Tour operators</a>
+        </div>
+        <div class="foot-col">
+          <h3>Company</h3>
+          <a href="/about">About</a>
+          <a href="/blog">Resources</a>
+          <a href="/security">Security</a>
+          <a href="/destinations">Destinations</a>
+          <a href="/signup">Get started</a>
+        </div>
+      </div>
+      <div class="wordmark">
+        {/* Drawn as SVG with textLength rather than a vw font-size:
+            "HYPERPORTER" is 11 characters where "LEGORA" is 6, so the
+            reference's 15vw overflowed the page at every width -- and a vw
+            value would break again whenever the webfont falls back to a
+            wider face. This fits the container exactly, always. */}
+        <svg viewBox="0 0 1100 132" role="img" aria-label="Hyperporter">
+          <text
+            x="0"
+            y="106"
+            textLength="1100"
+            lengthAdjust="spacingAndGlyphs"
+            font-family="'Inter Tight','Inter',system-ui,sans-serif"
+            font-size="128"
+            font-weight="400">HYPERPORTER</text>
+        </svg>
+      </div>
+    </div>
+    <div class="wrap foot-bar">
+      <nav aria-label="Legal">
+        <a href="/terms">Terms of use</a>
+        <a href="/privacy">Privacy Policy</a>
+      </nav>
+      <span>&copy; 2026 Hyperporter. All rights reserved.</span>
+    </div>
+  </footer>
+</Preview>
+
+<script>
+  /* Accordion, shared by the stage pills and the FAQ. One handler for both:
+     a second listener on the same button toggles twice per click, which
+     reads as a control that does nothing. */
+  document
+    .querySelectorAll<HTMLButtonElement>('.pill, .qa button')
+    .forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+        if (!panel) return;
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+        panel.hidden = open;
+        const icon = btn.querySelector('i');
+        if (icon && btn.classList.contains('pill')) icon.textContent = open ? '+' : '−';
+      });
+    });
+
+  /* Scroll cue: only means anything at rest, so it leaves once the page moves. */
+  const cue = document.getElementById('cue');
+  if (cue) {
+    cue.addEventListener('click', () =>
+      document.getElementById('product')?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+      })
+    );
+    window.addEventListener('scroll', () => cue.classList.toggle('gone', window.scrollY > 40), {
+      passive: true,
+    });
+  }
+
+  /* Stat numerals count up when the rows first come into view, as they do on
+     the reference. The final value lives in the markup, so with JS off the
+     real number is what shows. */
+  const stats = Array.from(document.querySelectorAll<HTMLElement>('.strow b'));
+  if (stats.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          io.unobserve(e.target);
+          const el = e.target as HTMLElement;
+          const final = el.textContent ?? '';
+          const m = final.match(/^(\D*)(\d+(?:\.\d+)?)(.*)$/);
+          if (!m) return;
+          const [, pre, num, post] = m;
+          const target = parseFloat(num);
+          const dp = (num.split('.')[1] ?? '').length;
+          let t0: number | null = null;
+          const step = (ts: number): void => {
+            if (t0 === null) t0 = ts;
+            const p = Math.min((ts - t0) / 900, 1);
+            el.textContent = pre + (target * (1 - Math.pow(1 - p, 3))).toFixed(dp) + post;
+            if (p < 1) requestAnimationFrame(step);
+            else el.textContent = final;
+          };
+          requestAnimationFrame(step);
+        }),
+      { threshold: 0.5 }
+    );
+    stats.forEach((s) => io.observe(s));
+  }
+</script>
