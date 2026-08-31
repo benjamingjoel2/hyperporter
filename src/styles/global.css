@@ -60,7 +60,26 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--void)}
 body{margin:0;background:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-a{color:inherit}button{font:inherit;cursor:pointer}
+/* Underlines off at the root. They were being switched off one selector at
+   a time, which meant every link added since — the product ladder, the
+   mega-menu rows, the tier cards — arrived with the browser default
+   underlining its heading, its body copy and its arrow all at once.
+
+   They come back below only where a link sits inside running prose, which
+   is the one place an underline is doing real work: telling a reader that
+   this word, among all the other words, is a link. */
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+
+/* Links in prose keep their underline, offset so it clears the descenders. */
+.art-body p a,
+.art-body li a,
+.art-dek a{
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:3px;
+  color:var(--signal);
+}
 ::selection{background:var(--signal);color:var(--void)}
 
 body::after{
