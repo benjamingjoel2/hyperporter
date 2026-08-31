@@ -330,3 +330,90 @@ const STATS = [
   </main>
 
 </Base>
+
+<script>
+  /* Accordion, shared by the stage pills and the FAQ. One handler for both:
+     a second listener on the same button toggles twice per click, which reads
+     as a control that does nothing. Base.astro's global handler covers
+     `.acc-i` elsewhere on the site and does not reach these. */
+  document.querySelectorAll<HTMLButtonElement>('.lg-pill, .lg-qa button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+      if (!panel) return;
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      panel.hidden = open;
+      const icon = btn.querySelector('i');
+      if (icon && btn.classList.contains('lg-pill')) icon.textContent = open ? '+' : '\u2212';
+    });
+  });
+
+  /* Scroll cue: only means anything at rest, so it leaves once the page moves. */
+  const cue = document.getElementById('lg-cue');
+  if (cue) {
+    cue.addEventListener('click', () =>
+      document.getElementById('product')?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      })
+    );
+    window.addEventListener(
+      'scroll',
+      () => cue.classList.toggle('lg-gone', window.scrollY > 40),
+      { passive: true }
+    );
+  }
+
+  /**
+   * Stat numerals count up from zero each time the rows come into view — not
+   * once per page load, so scrolling back to the section replays it. A run is
+   * re-armed only after the row has left the viewport again, otherwise a
+   * scroll that jiggles the threshold restarts it mid-count.
+   *
+   * The final value lives in the markup, so with JS off, or under
+   * prefers-reduced-motion, the real number is what shows.
+   */
+  const stats = Array.from(document.querySelectorAll<HTMLElement>('.lg-strow b'));
+  if (stats.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const finals = new WeakMap<HTMLElement, string>();
+    const armed = new WeakMap<HTMLElement, boolean>();
+    stats.forEach((el) => {
+      finals.set(el, el.textContent ?? '');
+      armed.set(el, true);
+    });
+
+    const run = (el: HTMLElement): void => {
+      const final = finals.get(el) ?? '';
+      const m = final.match(/^(\D*)(\d+(?:\.\d+)?)(.*)$/);
+      if (!m) return;
+      const [, pre, num, post] = m;
+      const target = parseFloat(num);
+      const dp = (num.split('.')[1] ?? '').length;
+      let t0: number | null = null;
+      const step = (ts: number): void => {
+        if (t0 === null) t0 = ts;
+        const p = Math.min((ts - t0) / 900, 1);
+        el.textContent = pre + (target * (1 - Math.pow(1 - p, 3))).toFixed(dp) + post;
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = final;
+      };
+      el.textContent = pre + (0).toFixed(dp) + post;
+      requestAnimationFrame(step);
+    };
+
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          const el = e.target as HTMLElement;
+          if (e.isIntersecting) {
+            if (!armed.get(el)) return;
+            armed.set(el, false);
+            run(el);
+          } else {
+            armed.set(el, true);
+          }
+        }),
+      { threshold: 0.5 }
+    );
+    stats.forEach((el) => io.observe(el));
+  }
+</script>

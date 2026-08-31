@@ -57,7 +57,14 @@
    900px viewport, object-fit:cover, headline bottom at 87% down. Matching
    the frame here — svh first so mobile browser chrome doesn't leave a gap
    when the toolbar retracts, plain vh as the fallback. */
-.lg-hero{position:relative;min-height:100vh;min-height:100svh;
+/* Fills the viewport *below* the sticky chrome. The header is in flow, so a
+   plain 100svh hero starts under it and overshoots the fold by exactly the
+   chrome's height -- which is where the sub-line and the CTA live. The
+   fallback matches the current bar plus rail; Header.astro measures the real
+   value and overwrites it. */
+.lg-hero{position:relative;
+  min-height:calc(100vh - var(--chrome-h, 111px));
+  min-height:calc(100svh - var(--chrome-h, 111px));
   display:flex;align-items:flex-end;color:var(--raise);overflow:hidden;background:#0B0F12}
 /* Their footage is low-key throughout, which is why white nav sits on it
    with no scrim at all. Ours is a bright dawn sky, so it gets graded down
