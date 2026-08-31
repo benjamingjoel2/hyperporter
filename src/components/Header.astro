@@ -5,8 +5,7 @@
  * they're real `<a href>` links now, and `current` picks the active one
  * server-side instead of `go()` toggling a `.act` class at runtime.
  * The dispatch-rail marquee is unchanged (same FEED data, doubled for the
- * CSS `march` loop); only the clock and mobile-drawer toggle still need
- * client JS, since both depend on runtime state a static build can't know.
+ * CSS `march` loop). The UTC clock that used to sit in the bar is gone.
  */
 import { FEED } from '../lib/feed';
 import { NAV, DRAWER } from '../lib/content/nav';
@@ -119,7 +118,6 @@ const stream = row + row;
         )
       }
     </nav>
-    <div class="sys"><i></i><span id="clock">00:00 UTC</span></div>
     <a class="cta-nav" href="/signup">Get started free</a>
     <button class="burger" aria-label="Menu" id="burger"><span></span><span></span><span></span></button>
   </div>
@@ -249,13 +247,4 @@ const stream = row + row;
   const drawer = document.getElementById('drawer');
   burger?.addEventListener('click', () => drawer?.classList.toggle('open'));
 
-  function tick() {
-    const el = document.getElementById('clock');
-    if (!el) return;
-    const d = new Date();
-    el.textContent =
-      String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0') + ' UTC';
-  }
-  tick();
-  setInterval(tick, 10000);
 </script>
