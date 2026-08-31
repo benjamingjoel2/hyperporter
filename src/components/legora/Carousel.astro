@@ -39,35 +39,35 @@ const spread = (svg: string, i: number): string =>
 const art = items.map((it, i) => spread(destArt(it.name, `${uid}${i}`, 'light'), i));
 ---
 
-<div class="car-bar">
-  <button class="car-prev" type="button" data-car={uid} data-dir="-1" aria-label="Previous">&larr;</button>
-  <div class="dots" aria-hidden="true">
-    {items.map((_, i) => <span class:list={['dot', { on: i === active }]} data-i={i} />)}
+<div class="lg-car-bar">
+  <button class="lg-car-prev" type="button" data-car={uid} data-dir="-1" aria-label="Previous">&larr;</button>
+  <div class="lg-dots" aria-hidden="true">
+    {items.map((_, i) => <span class:list={['lg-dot', { on: i === active }]} data-i={i} />)}
   </div>
-  <button class="car-next" type="button" data-car={uid} data-dir="1" aria-label="Next">&rarr;</button>
+  <button class="lg-car-next" type="button" data-car={uid} data-dir="1" aria-label="Next">&rarr;</button>
 </div>
 
-<div class="car-row" id={`car-${uid}`} data-car-row={uid}>
+<div class="lg-car-row" id={`car-${uid}`} data-car-row={uid}>
   {
     items.map((it, i) => (
       <button
-        class:list={['car-t', { on: i === active }]}
+        class:list={['lg-car-t', { on: i === active }]}
         type="button"
         data-i={i}
         aria-pressed={i === active ? 'true' : 'false'}
       >
-        <span class="car-art" set:html={art[i]} />
-        <span class="car-n">{it.name}</span>
-        <span class="car-k">{it.kind}</span>
+        <span class="lg-car-art" set:html={art[i]} />
+        <span class="lg-car-n">{it.name}</span>
+        <span class="lg-car-k">{it.kind}</span>
       </button>
     ))
   }
 </div>
 
-<div class="car-panels">
+<div class="lg-car-panels">
   {
     items.map((it, i) => (
-      <div class="car-p" data-i={i} hidden={i !== active}>
+      <div class="lg-car-p" data-i={i} hidden={i !== active}>
         <b>{it.name}</b>
         <p>{it.body}</p>
       </div>
@@ -86,26 +86,26 @@ const art = items.map((it, i) => spread(destArt(it.name, `${uid}${i}`, 'light'),
     const scope = row.parentElement;
     if (!uid || !scope) return;
 
-    const tiles = Array.from(row.querySelectorAll<HTMLButtonElement>('.car-t'));
-    const panels = Array.from(scope.querySelectorAll<HTMLElement>('.car-p'));
-    const dots = Array.from(scope.querySelectorAll<HTMLElement>('.dot'));
+    const tiles = Array.from(row.querySelectorAll<HTMLButtonElement>('.lg-car-t'));
+    const panels = Array.from(scope.querySelectorAll<HTMLElement>('.lg-car-p'));
+    const dots = Array.from(scope.querySelectorAll<HTMLElement>('.lg-dot'));
     if (!tiles.length) return;
 
     let active = Math.max(
-      tiles.findIndex((t) => t.classList.contains('on')),
+      tiles.findIndex((t) => t.classList.contains('lg-on')),
       0
     );
 
     const select = (i: number, scroll: boolean): void => {
       active = (i + tiles.length) % tiles.length;
       tiles.forEach((t, n) => {
-        t.classList.toggle('on', n === active);
+        t.classList.toggle('lg-on', n === active);
         t.setAttribute('aria-pressed', String(n === active));
       });
       panels.forEach((p, n) => {
         p.hidden = n !== active;
       });
-      dots.forEach((d, n) => d.classList.toggle('on', n === active));
+      dots.forEach((d, n) => d.classList.toggle('lg-on', n === active));
       if (scroll) {
         tiles[active].scrollIntoView({
           inline: 'center',
