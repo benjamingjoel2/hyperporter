@@ -221,7 +221,13 @@
   gap:clamp(32px,6vw,96px);align-items:start}
 .lg-statprose p{color:var(--paper);font-size:17px;line-height:1.5;max-width:44ch}
 .lg-statprose p + p{margin-top:22px}
-.lg-stats{border-top:1px solid var(--line)}
+/* The first numeral's cap-height lines up with the first line of the prose
+   beside it. The rule's top border and the row's top padding both pushed it
+   down, and the numeral carries leading above its caps on top of that — so
+   the first row loses its padding and the column is nudged up by the
+   remaining optical difference, measured on the built page. */
+.lg-stats{border-top:1px solid var(--line);margin-top:-6px}
+.lg-strow:first-child{padding-top:0;border-top:0}
 .lg-strow{display:grid;grid-template-columns:minmax(0,1fr) minmax(200px,270px);gap:30px;
   align-items:center;padding:clamp(26px,3.4vw,46px) 0;border-bottom:1px solid var(--line)}
 .lg-strow b{font-weight:300;font-size:clamp(52px,7.2vw,104px);line-height:.94;letter-spacing:-.045em;
