@@ -1,9 +1,10 @@
 name: CI
 
+# Guards pull requests. Pushes to main are covered by deploy.yml, which runs
+# the same check and build before publishing, so running both there would
+# just build the site twice.
 on:
   pull_request:
-  push:
-    branches: [main]
 
 jobs:
   build:

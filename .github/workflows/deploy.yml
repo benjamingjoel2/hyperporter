@@ -1,0 +1,75 @@
+# Builds the site here, on GitHub's runners, and publishes the finished
+# files to the `deploy` branch.
+#
+# The server used to run this same build itself. It has 956MB of RAM and the
+# build peaks around 740MB while nginx is also serving traffic, so it swapped
+# to disk and crawled rather than failing outright — a deploy that ran for
+# twenty minutes and never finished. GitHub's runners have 16GB, and were
+# already building this on every push anyway.
+#
+# So the server no longer builds anything. It checks out the `deploy` branch
+# and nginx serves those files directly. Deploying is a git pull.
+#
+# The branch is force-pushed as a single fresh commit each time, so it holds
+# the current build and nothing else — otherwise the repository would grow by
+# a full copy of the site on every deploy.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  # so a deploy can be re-run from the Actions tab without pushing anything
+  workflow_dispatch:
+
+# needed to push the built files back to the repository
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  build-and-publish:
+    name: Build and publish to the deploy branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: astro check
+        run: npx astro check
+
+      - name: astro build
+        run: npx astro build
+        env:
+          # Baked into canonicals, OG URLs, the sitemap and robots.txt, so it
+          # has to match the origin nginx actually serves.
+          SITE_URL: https://hyperporter.com
+
+      - name: Fail if the build looks wrong
+        # A publish of an empty or half-built dist would take the site down,
+        # and force-pushing it would leave nothing to roll back to.
+        run: |
+          test -f dist/index.html || { echo "no dist/index.html"; exit 1; }
+          count=$(find dist -name '*.html' | wc -l)
+          echo "$count HTML pages built"
+          [ "$count" -ge 150 ] || { echo "only $count pages — expected 150+"; exit 1; }
+
+      - name: Publish to the deploy branch
+        run: |
+          cd dist
+          git init -q
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Build ${GITHUB_SHA::7} from ${GITHUB_REF_NAME}"
+          git push -f \
+            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
+            HEAD:deploy
