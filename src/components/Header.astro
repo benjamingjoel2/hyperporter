@@ -156,6 +156,23 @@ const stream = row + row;
   const bar = document.querySelector<HTMLElement>('header.top');
   const heroTitle = document.querySelector<HTMLElement>('.lg-hero h1');
 
+  /**
+   * Publish the chrome's height so a full-viewport hero can subtract it.
+   * This header is sticky, which means it is still in flow: a hero set to
+   * 100svh therefore starts *below* it and runs exactly that far past the
+   * fold, taking the sub-line and the CTA with it. The reference's bar is
+   * fixed, so its hero starts at zero and this does not arise.
+   *
+   * Measured rather than hard-coded because the bar and the dispatch rail
+   * change height across breakpoints.
+   */
+  if (bar) {
+    const publishHeight = (): void =>
+      document.documentElement.style.setProperty('--chrome-h', `${bar.offsetHeight}px`);
+    publishHeight();
+    window.addEventListener('resize', publishHeight);
+  }
+
   if (bar && heroTitle) {
     let ticking = false;
     let trigger = 0;

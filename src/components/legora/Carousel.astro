@@ -121,5 +121,62 @@ const art = items.map((it, i) => spread(destArt(it.name, `${uid}${i}`, 'light'),
     scope.querySelectorAll<HTMLButtonElement>(`[data-car="${uid}"]`).forEach((btn) =>
       btn.addEventListener('click', () => select(active + Number(btn.dataset.dir), true))
     );
+
+    /**
+     * Advances on its own, and gets out of the way when someone is actually
+     * using it: hovering, focusing, or clicking all stop the timer, because
+     * a slide that moves while you are reading it is worse than one that
+     * never moves. It also idles while the section is off-screen, and never
+     * runs at all under prefers-reduced-motion.
+     */
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let timer: number | undefined;
+    let onScreen = false;
+    let paused = false;
+
+    const stop = (): void => {
+      window.clearInterval(timer);
+      timer = undefined;
+    };
+    const start = (): void => {
+      stop();
+      if (reduced.matches || !onScreen || paused) return;
+      timer = window.setInterval(() => select(active + 1, true), 4500);
+    };
+    /* A click means the viewer is driving; hand control over for good. */
+    const surrender = (): void => {
+      paused = true;
+      stop();
+    };
+
+    scope.addEventListener('pointerenter', () => {
+      paused = true;
+      stop();
+    });
+    scope.addEventListener('pointerleave', () => {
+      if (!scope.contains(document.activeElement)) {
+        paused = false;
+        start();
+      }
+    });
+    scope.addEventListener('focusin', () => {
+      paused = true;
+      stop();
+    });
+    tiles.forEach((t) => t.addEventListener('click', surrender));
+    scope
+      .querySelectorAll<HTMLButtonElement>(`[data-car="${uid}"]`)
+      .forEach((btn) => btn.addEventListener('click', surrender));
+
+    new IntersectionObserver(
+      (entries) => {
+        onScreen = entries[0].isIntersecting;
+        if (onScreen) start();
+        else stop();
+      },
+      { threshold: 0.25 }
+    ).observe(row);
+
+    reduced.addEventListener('change', start);
   });
 </script>
