@@ -10,8 +10,14 @@
 import Base from '../layouts/Base.astro';
 import ProductPage from '../components/ProductPage.astro';
 import { byProduct, AUTOPILOT_TARGETS } from '../lib/content/products';
+import { STAGES } from '../lib/stages';
 
 const product = byProduct('autopilot');
+
+// The sample thread opens at stage 3 (Quotation): 1-2 done, 3 current, the
+// rest ahead. Driven off STAGES so the card cannot drift from the nine stages
+// listed below it on this same page.
+const CURRENT_STAGE = 3;
 ---
 
 <Base
@@ -20,6 +26,80 @@ const product = byProduct('autopilot');
   currentNav="product"
 >
   <ProductPage product={product}>
+    {/* The illustrative thread, moved here from the homepage. This is the
+        page that explains the nine stages, so the card demonstrating them
+        belongs beside them rather than on the home hero. */}
+    <div slot="after-hero" class="sec-tight wrap">
+      <div class="thread-solo rv">
+        <div class="thread">
+          <div class="th"><span>Thread <b>KE-2291</b></span><span>Nairobi · 9 nights</span></div>
+          {/* Tab pattern: each chip switches the card to that stage. All
+              nine panels are rendered server-side and toggled with `hidden`,
+              so with JS off the card still shows stage 3 rather than going
+              blank. */}
+          <div class="chips" role="tablist" aria-label="Pipeline stage">
+            {
+              STAGES.map((s, i) => (
+                <button
+                  type="button"
+                  role="tab"
+                  id={`stage-tab-${i}`}
+                  aria-controls={`stage-panel-${i}`}
+                  aria-selected={i + 1 === CURRENT_STAGE ? 'true' : 'false'}
+                  tabindex={i + 1 === CURRENT_STAGE ? 0 : -1}
+                  class:list={['chip', { done: i + 1 < CURRENT_STAGE, now: i + 1 === CURRENT_STAGE }]}
+                >
+                  {s.name}
+                </button>
+              ))
+            }
+          </div>
+
+          {
+            STAGES.map((s, i) => (
+              <div
+                class="tpanel"
+                id={`stage-panel-${i}`}
+                role="tabpanel"
+                aria-labelledby={`stage-tab-${i}`}
+                data-auto-needs={s.cls === 'Automatic' ? 'nothing' : 'a person'}
+                data-manual-needs="all of it"
+                hidden={i + 1 !== CURRENT_STAGE}
+              >
+                {/* Autopilot on. Amber marks human-touchpoint states only. */}
+                <div class="v v-auto">
+                  <div class:list={['line', { amb: s.cls !== 'Automatic' }]}>
+                    <i />
+                    <span>{s.note}</span>
+                  </div>
+                  <div class="line">
+                    <i />
+                    <span>{s.one}</span>
+                  </div>
+                </div>
+                {/* Autopilot off -- the same step done by hand, so every
+                    line is a human-touchpoint state and reads amber. */}
+                <div class="v v-manual">
+                  <div class="line amb">
+                    <i />
+                    <span>{s.manual}</span>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+
+          <div class="ft">
+            <button class="toggle" id="ap-toggle" type="button" aria-pressed="true">
+              <span /> Autopilot
+            </button>
+            <span id="ap-needs">Needs you &middot; nothing</span>
+          </div>
+        </div>
+        <p class="sample-tag">Illustrative thread — not live data</p>
+      </div>
+    </div>
+
     <div slot="after-features" class="sec-tight wrap">
       <div class="mission rv">
         Automation that still knows when to stop is the whole point — not less human involvement,
@@ -67,3 +147,67 @@ const product = byProduct('autopilot');
     </div>
   </ProductPage>
 </Base>
+
+<script>
+  /**
+   * Hero thread card: the chips act as tabs over the nine stage panels.
+   * Chips to the left of the selected one read as "done", so the card still
+   * behaves as a progress display rather than a plain switcher.
+   */
+  const tablist = document.querySelector<HTMLElement>('.thread .chips[role="tablist"]');
+
+  if (tablist) {
+    const tabs = Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+
+    const select = (index: number, focus = true): void => {
+      tabs.forEach((tab, i) => {
+        const on = i === index;
+        tab.setAttribute('aria-selected', String(on));
+        tab.tabIndex = on ? 0 : -1;
+        tab.classList.toggle('now', on);
+        tab.classList.toggle('done', i < index);
+        const panel = document.getElementById(tab.getAttribute('aria-controls') ?? '');
+        if (panel) panel.hidden = !on;
+      });
+      if (focus) tabs[index].focus();
+      syncNeeds();
+    };
+
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => select(i, false)));
+
+    /* The Autopilot switch is real: off swaps every panel to the by-hand
+       version of that stage and rewrites the "needs you" state. */
+    const thread = document.querySelector<HTMLElement>('.thread');
+    const toggle = document.querySelector<HTMLButtonElement>('#ap-toggle');
+    const needs = document.querySelector<HTMLElement>('#ap-needs');
+
+    const syncNeeds = (): void => {
+      const panel = document.querySelector<HTMLElement>('.tpanel:not([hidden])');
+      if (!panel || !needs) return;
+      const on = toggle?.getAttribute('aria-pressed') !== 'false';
+      const value = on ? panel.dataset.autoNeeds : panel.dataset.manualNeeds;
+      needs.textContent = `Needs you \u00b7 ${value ?? 'nothing'}`;
+    };
+
+    toggle?.addEventListener('click', () => {
+      const on = toggle.getAttribute('aria-pressed') !== 'false';
+      toggle.setAttribute('aria-pressed', String(!on));
+      thread?.classList.toggle('manual', on);
+      syncNeeds();
+    });
+
+    tablist.addEventListener('keydown', (event: KeyboardEvent) => {
+      const current = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+      let next: number;
+      switch (event.key) {
+        case 'ArrowRight': next = (current + 1) % tabs.length; break;
+        case 'ArrowLeft':  next = (current - 1 + tabs.length) % tabs.length; break;
+        case 'Home':       next = 0; break;
+        case 'End':        next = tabs.length - 1; break;
+        default: return;
+      }
+      event.preventDefault();
+      select(next);
+    });
+  }
+</script>
