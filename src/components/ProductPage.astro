@@ -15,12 +15,26 @@ interface Props {
 
 const { product } = Astro.props;
 const { eyebrow, title, lede, features, featuresTitle, cases, casesTitle, next } = product;
+
+// A page can put something beside its hero — Autopilot puts the sample
+// thread there. Without it the hero stays a single column, so the other
+// three product pages are unaffected.
+const hasAside = Astro.slots.has('hero-aside');
 ---
 
 <div class="sec wrap">
-  <p class="eyebrow rv">{eyebrow}</p>
-  <h1 class="rv">{title}</h1>
-  <p class="lede rv">{lede}</p>
+  <div class:list={['p-hero', { 'p-hero-split': hasAside }]}>
+    <div>
+      <p class="eyebrow rv">{eyebrow}</p>
+      <h1 class="rv">{title}</h1>
+      <p class="lede rv" style="margin-bottom:0">{lede}</p>
+    </div>
+    {hasAside && (
+      <div class="p-hero-aside rv">
+        <slot name="hero-aside" />
+      </div>
+    )}
+  </div>
 </div>
 
 <slot name="after-hero" />
