@@ -62,9 +62,13 @@
    chrome's height -- which is where the sub-line and the CTA live. The
    fallback matches the current bar plus rail; Header.astro measures the real
    value and overwrites it. */
+/* Pulled up under the chrome so the photograph runs behind the bar and shows
+   through its glass, then given the full viewport height. Subtracting the
+   chrome instead would start the hero below an opaque bar — which is what it
+   did, and why the bar had nothing to be translucent over. */
 .lg-hero{position:relative;
-  min-height:calc(100vh - var(--chrome-h, 111px));
-  min-height:calc(100svh - var(--chrome-h, 111px));
+  margin-top:calc(-1 * var(--chrome-h, 111px));
+  min-height:100vh;min-height:100svh;
   display:flex;align-items:flex-end;color:var(--raise);overflow:hidden;background:#0B0F12}
 /* Their footage is low-key throughout, which is why white nav sits on it
    with no scrim at all. Ours is a bright dawn sky, so it gets graded down
@@ -79,7 +83,7 @@
 .lg-hero-veil{position:absolute;inset:0;
   background:linear-gradient(180deg,rgba(6,10,13,.5) 0%,rgba(6,10,13,.12) 38%,rgba(6,10,13,.58) 100%)}
 .lg-hero-in{position:relative;width:100%;max-width:var(--max);margin:0 auto;
-  padding:0 var(--pad) clamp(46px,4.6vw,58px);text-align:center}
+  padding:var(--chrome-h,111px) var(--pad) clamp(46px,4.6vw,58px);text-align:center}
 
 /* Scroll cue, as on the reference. Hidden once the page has moved. */
 .lg-cue{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:2;

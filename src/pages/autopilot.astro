@@ -26,79 +26,76 @@ const CURRENT_STAGE = 3;
   currentNav="product"
 >
   <ProductPage product={product}>
-    {/* The illustrative thread, moved here from the homepage. This is the
-        page that explains the nine stages, so the card demonstrating them
-        belongs beside them rather than on the home hero. */}
-    <div slot="after-hero" class="sec-tight wrap">
-      <div class="thread-solo rv">
-        <div class="thread">
-          <div class="th"><span>Thread <b>KE-2291</b></span><span>Nairobi · 9 nights</span></div>
-          {/* Tab pattern: each chip switches the card to that stage. All
-              nine panels are rendered server-side and toggled with `hidden`,
-              so with JS off the card still shows stage 3 rather than going
-              blank. */}
-          <div class="chips" role="tablist" aria-label="Pipeline stage">
-            {
-              STAGES.map((s, i) => (
-                <button
-                  type="button"
-                  role="tab"
-                  id={`stage-tab-${i}`}
-                  aria-controls={`stage-panel-${i}`}
-                  aria-selected={i + 1 === CURRENT_STAGE ? 'true' : 'false'}
-                  tabindex={i + 1 === CURRENT_STAGE ? 0 : -1}
-                  class:list={['chip', { done: i + 1 < CURRENT_STAGE, now: i + 1 === CURRENT_STAGE }]}
-                >
-                  {s.name}
-                </button>
-              ))
-            }
-          </div>
-
+    {/* Beside the headline rather than below it: the card is the hero's
+        illustration, not a section of its own. */}
+    <Fragment slot="hero-aside">
+      <div class="thread">
+        <div class="th"><span>Thread <b>KE-2291</b></span><span>Nairobi · 9 nights</span></div>
+        {/* Tab pattern: each chip switches the card to that stage. All
+            nine panels are rendered server-side and toggled with `hidden`,
+            so with JS off the card still shows stage 3 rather than going
+            blank. */}
+        <div class="chips" role="tablist" aria-label="Pipeline stage">
           {
             STAGES.map((s, i) => (
-              <div
-                class="tpanel"
-                id={`stage-panel-${i}`}
-                role="tabpanel"
-                aria-labelledby={`stage-tab-${i}`}
-                data-auto-needs={s.cls === 'Automatic' ? 'nothing' : 'a person'}
-                data-manual-needs="all of it"
-                hidden={i + 1 !== CURRENT_STAGE}
+              <button
+                type="button"
+                role="tab"
+                id={`stage-tab-${i}`}
+                aria-controls={`stage-panel-${i}`}
+                aria-selected={i + 1 === CURRENT_STAGE ? 'true' : 'false'}
+                tabindex={i + 1 === CURRENT_STAGE ? 0 : -1}
+                class:list={['chip', { done: i + 1 < CURRENT_STAGE, now: i + 1 === CURRENT_STAGE }]}
               >
-                {/* Autopilot on. Amber marks human-touchpoint states only. */}
-                <div class="v v-auto">
-                  <div class:list={['line', { amb: s.cls !== 'Automatic' }]}>
-                    <i />
-                    <span>{s.note}</span>
-                  </div>
-                  <div class="line">
-                    <i />
-                    <span>{s.one}</span>
-                  </div>
-                </div>
-                {/* Autopilot off -- the same step done by hand, so every
-                    line is a human-touchpoint state and reads amber. */}
-                <div class="v v-manual">
-                  <div class="line amb">
-                    <i />
-                    <span>{s.manual}</span>
-                  </div>
-                </div>
-              </div>
+                {s.name}
+              </button>
             ))
           }
-
-          <div class="ft">
-            <button class="toggle" id="ap-toggle" type="button" aria-pressed="true">
-              <span /> Autopilot
-            </button>
-            <span id="ap-needs">Needs you &middot; nothing</span>
-          </div>
         </div>
-        <p class="sample-tag">Illustrative thread — not live data</p>
+
+        {
+          STAGES.map((s, i) => (
+            <div
+              class="tpanel"
+              id={`stage-panel-${i}`}
+              role="tabpanel"
+              aria-labelledby={`stage-tab-${i}`}
+              data-auto-needs={s.cls === 'Automatic' ? 'nothing' : 'a person'}
+              data-manual-needs="all of it"
+              hidden={i + 1 !== CURRENT_STAGE}
+            >
+              {/* Autopilot on. Amber marks human-touchpoint states only. */}
+              <div class="v v-auto">
+                <div class:list={['line', { amb: s.cls !== 'Automatic' }]}>
+                  <i />
+                  <span>{s.note}</span>
+                </div>
+                <div class="line">
+                  <i />
+                  <span>{s.one}</span>
+                </div>
+              </div>
+              {/* Autopilot off -- the same step done by hand, so every
+                  line is a human-touchpoint state and reads amber. */}
+              <div class="v v-manual">
+                <div class="line amb">
+                  <i />
+                  <span>{s.manual}</span>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+
+        <div class="ft">
+          <button class="toggle" id="ap-toggle" type="button" aria-pressed="true">
+            <span /> Autopilot
+          </button>
+          <span id="ap-needs">Needs you &middot; nothing</span>
+        </div>
       </div>
-    </div>
+      <p class="sample-tag">Illustrative thread — not live data</p>
+    </Fragment>
 
     <div slot="after-features" class="sec-tight wrap">
       <div class="mission rv">

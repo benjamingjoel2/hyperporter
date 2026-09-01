@@ -145,11 +145,19 @@ header.top{position:sticky;top:0;z-index:70;
    escapes to behind the parent entirely. */
 header.top::before{content:"";position:absolute;inset:0 0 -34px;z-index:0;pointer-events:none;
   opacity:0;transition:opacity .28s ease;
-  background:linear-gradient(180deg,rgba(6,10,13,.72) 0%,rgba(6,10,13,.66) 76%,rgba(6,10,13,0) 100%)}
-header.top.over{background:transparent;border-bottom-color:transparent}
+  background:linear-gradient(180deg,rgba(6,10,13,.34) 0%,rgba(6,10,13,.26) 76%,rgba(6,10,13,0) 100%)}
+/* Translucent over the dark regions rather than fully transparent: the
+   photograph reads through the bar as glass, which is the effect asked for,
+   and it holds white text without needing the heavier gradient. */
+header.top.over{background:rgba(10,14,18,.42);
+  -webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);
+  border-bottom-color:rgba(255,255,255,.14)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  header.top.over{background:rgba(10,14,18,.72)}
+}
 header.top.over::before{opacity:1}
 
-header.top.over .links a,header.top.over .mark,header.top.over .bar-acts .login{color:#fff;opacity:.94}
+header.top.over .links > a,header.top.over .mega-trigger,header.top.over .mark,header.top.over .bar-acts .login{color:#fff;opacity:.94}
 header.top.over .links a:hover,header.top.over .mark:hover .glyph{opacity:1}
 header.top.over .mark .glyph{color:#fff}
 header.top.over .rail{border-color:rgba(255,255,255,.22)}
@@ -278,11 +286,18 @@ p{margin:0 0 16px}
 .routes .wp{fill:var(--signal)}
 .routes .wp-ring{fill:none;stroke:rgba(27,116,126,.45);stroke-width:1}
 
-/* The thread card used to sit in the homepage's two-column hero, which gave
-   it its width. Standing on its own on /autopilot it needs a measure of its
-   own, or it stretches to the full 1680px container and the stage chips
-   spread into a single thin line. */
-.thread-solo{max-width:680px;margin-inline:auto}
+/* Product hero. One column by default; two when the page passes something
+   for `hero-aside`, which is how the sample thread sits beside Autopilot's
+   headline instead of stranded underneath it. The copy column is capped so
+   the lede keeps a readable measure rather than stretching to meet the card. */
+.p-hero{display:grid;gap:clamp(28px,4vw,64px)}
+.p-hero-split{grid-template-columns:minmax(0,1fr) minmax(0,600px);align-items:center}
+.p-hero-split .lede{max-width:46ch}
+.p-hero-aside{min-width:0}
+@media (max-width:980px){
+  .p-hero-split{grid-template-columns:1fr}
+  .p-hero-split .lede{max-width:62ch}
+}
 
 /* The arcs were drawn for a light ground. Over the hero photograph the
    original teal-on-white values sit at roughly 1.2:1 and vanish, so on that
@@ -1036,20 +1051,24 @@ header.top:not(.over) .mega-wrap.open>.mega-trigger{background:rgba(13,16,22,.07
 }
 .mega[hidden]{display:none}
 .mega-col{display:flex;flex-direction:column;min-width:0}
-.mega-head{
+.mega .mega-head{
   font-family:var(--mono);font-size:11px;letter-spacing:.04em;font-weight:400;
   color:rgba(255,255,255,.66);margin:6px 0 6px 10px;white-space:nowrap;
 }
 /* The first heading in each column sits flush; later ones get air above so
    a second group reads as separate rather than as a run-on list. */
 .mega-col .mega-head + a{margin-top:0}
-.mega-row{
+/* Scoped under .mega so these beat `.links a`, which is (0,1,1) and would
+   otherwise hand the panel the bar's dark ink — invisible on dark glass.
+   That was the bug: the panel links were rendering at 3:1, not the 6.3:1 I
+   had measured, because I measured the background and assumed the text. */
+.mega .mega-row{
   display:block;padding:7px 10px;border-radius:8px;white-space:nowrap;
-  font-size:14px;letter-spacing:-.01em;color:rgba(255,255,255,.92);
+  font-size:14px;letter-spacing:-.01em;color:rgba(255,255,255,.92);opacity:1;
   transition:background .16s ease,color .16s ease;
 }
-.mega-row:hover{background:rgba(255,255,255,.12);color:#fff}
-.mega-row:focus-visible{outline:2px solid rgba(255,255,255,.6);outline-offset:-2px}
+.mega .mega-row:hover{background:rgba(255,255,255,.12);color:#fff}
+.mega .mega-row:focus-visible{outline:2px solid rgba(255,255,255,.6);outline-offset:-2px}
 
 /* Panels are pointer affordances; below this width the drawer lists
    everything inside them instead. */
