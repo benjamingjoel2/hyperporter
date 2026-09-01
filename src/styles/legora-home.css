@@ -106,9 +106,25 @@
 /* ---------------- grey band of stage pills ---------------- */
 /* The reference builds on full-viewport blocks: its grey band is exactly
    100vh, same as the hero. Ours was 715px and content-height. */
+/* The band is a scroll track, not a block: it is tall enough to give each of
+   the nine stages a slice of scroll, and its child pins to the top while you
+   move through them. Pinning is opt-in rather than default — under
+   prefers-reduced-motion, and on short or narrow screens where a pinned
+   full-height panel traps the reader, it stays an ordinary section that the
+   pills' own click handler drives. */
 .lg-band{background:var(--steel);padding:clamp(54px,6vw,84px) 0;
   min-height:100vh;min-height:100svh;display:flex;align-items:center}
-.lg-band > .wrap{width:100%}
+.lg-band-stick{width:100%}
+.lg-band > .lg-band-stick > .wrap{width:100%}
+
+@media (prefers-reduced-motion:no-preference) and (min-width:861px) and (min-height:640px){
+  .lg-band{display:block;padding:0;min-height:0;
+    --lg-stage-step:44vh;
+    height:calc(100svh - var(--chrome-h,111px) + 9 * var(--lg-stage-step))}
+  .lg-band-stick{position:sticky;top:var(--chrome-h,111px);
+    height:calc(100svh - var(--chrome-h,111px));
+    display:flex;align-items:center;overflow:hidden}
+}
 .lg-band-lead{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;
   margin-bottom:38px}
 .eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
@@ -119,6 +135,11 @@
   font-size:15px;letter-spacing:-.01em;transition:background .18s ease}
 .lg-pill:hover{background:#6A6864}
 .lg-pill[aria-expanded="true"]{background:var(--signal)}
+/* Stages behind the current one stay legible but recede, so the column reads
+   as a position in a sequence rather than as nine equal buttons. */
+.lg-pill{opacity:.55;transition:background .18s ease,opacity .28s ease}
+.lg-pill[aria-expanded="true"],.lg-pill:hover,.lg-pill:focus-visible{opacity:1}
+.lg-band:not(.lg-pinned) .lg-pill{opacity:1}
 .lg-pill em{font-style:normal;font-variant-numeric:tabular-nums;opacity:.6;font-size:13px}
 .lg-pill i{font-style:normal;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.2);
   display:grid;place-items:center;font-size:13px;line-height:1;flex:none}

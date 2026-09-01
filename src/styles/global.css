@@ -67,8 +67,16 @@
   --photo:url("/hero.jpg");
 }
 *{box-sizing:border-box}
+
 html{scroll-behavior:smooth;background:var(--void)}
-body{margin:0;background:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{margin:0;background:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
+  /* `clip`, not `hidden`. This was `overflow-x:hidden` — a safety net against
+     sideways scroll that also made body a scroll container, which silently
+     broke `position:sticky` for every descendant and capped programmatic
+     scrolling at scrollY 1018 on a 14110px page. `clip` guards the same axis
+     without establishing a scroll container. It must not go on `html`: there
+     it stops the page scrolling altogether. */
+  overflow-x:clip}
 /* Underlines off at the root. They were being switched off one selector at
    a time, which meant every link added since — the product ladder, the
    mega-menu rows, the tier cards — arrived with the browser default
@@ -111,46 +119,43 @@ body::after{
    visible, which is what makes the bar read as glass rather than as a
    painted strip. saturate() before blur keeps colour underneath from going
    muddy. */
+/* Fully transparent on every page, as on the reference: the page scrolls
+   under the bar with nothing behind it, no glass and no rule.
+   
+   That only works while what passes underneath stays light. This site has
+   genuinely dark regions — the homepage hero and its photo interstitial, the
+   dark security band, the world map on /destinations — and dark nav text over
+   any of them is invisible. So the bar watches for them and flips to light
+   with a scrim behind it; see Header.astro, which adds `.over` when a region
+   marked `data-chrome="dark"` is under the bar. */
 header.top{position:sticky;top:0;z-index:70;
-  background:rgba(255,255,255,.72);
-  -webkit-backdrop-filter:saturate(1.8) blur(14px);backdrop-filter:saturate(1.8) blur(14px);
-  border-bottom:1px solid var(--line);
-  transition:background .28s ease,border-color .28s ease}
+  background:transparent;border-bottom:1px solid transparent;
+  transition:color .28s ease}
 
-/* Transparent over a full-bleed hero, solid once past it. Only engages on a
-   page that actually has one — `.over` is added by the header's own script
-   when it finds a `.lg-hero`, so the other 184 pages keep the opaque bar and
-   nothing has to opt out.
-
-   The scrim is not decoration: white nav over the homepage hero's pale sky
+/* The scrim is not decoration. White nav over the homepage hero's pale sky
    measured 2.7:1, under the 4.5:1 minimum, and 12.6:1 with it. It rides with
-   the bar rather than the hero, so legibility survives a change of
-   photograph. Positive z-index on the children rather than a negative one on
-   the scrim — a negative-z child escapes to behind the parent entirely. */
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  header.top{background:var(--raise)}
-}
-header.top.over{background:transparent;border-bottom-color:transparent;
-  -webkit-backdrop-filter:none;backdrop-filter:none}
-header.top.over::before{content:"";position:absolute;inset:0 0 -34px;z-index:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(6,10,13,.72) 0%,rgba(6,10,13,.66) 76%,rgba(6,10,13,0) 100%);
-  transition:opacity .28s ease}
+   the bar rather than with any one section, so it holds over every dark
+   region and survives a change of photograph. Positive z-index on the
+   children rather than a negative one on the scrim — a negative-z child
+   escapes to behind the parent entirely. */
+header.top::before{content:"";position:absolute;inset:0 0 -34px;z-index:0;pointer-events:none;
+  opacity:0;transition:opacity .28s ease;
+  background:linear-gradient(180deg,rgba(6,10,13,.72) 0%,rgba(6,10,13,.66) 76%,rgba(6,10,13,0) 100%)}
+header.top.over::before{opacity:1}
 
 header.top.over .links a,header.top.over .mark,header.top.over .bar-acts .login{color:#fff;opacity:.94}
 header.top.over .links a:hover,header.top.over .mark:hover .glyph{opacity:1}
 header.top.over .mark .glyph{color:#fff}
-header.top.over .rail{background:transparent;border-color:rgba(255,255,255,.22)}
-/* The tag carries its own opaque ground so the marquee scrolls behind it
-   rather than under the text; over the hero that reads as a white block, so
-   it goes transparent and keeps only its divider. */
+header.top.over .rail{border-color:rgba(255,255,255,.22)}
 /* The tag needs a ground of its own or the marquee scrolls visibly behind
-   the label and the two sets of letters interleave. Transparent was wrong;
-   it takes a darker tint of the header scrim instead, so it reads as a chip
-   rather than a white block. */
+   the label and the two sets of letters interleave. */
 header.top.over .rail .tag{color:#fff;background:rgba(6,10,13,.86);
   border-right-color:rgba(255,255,255,.22)}
 header.top.over .rail .ent{color:rgba(255,255,255,.82)}
 header.top.over .rail .ent b{color:#fff}
+/* Over light content the tag still needs its own ground, for the same
+   reason — but tinted to the page, not to a scrim. */
+header.top:not(.over) .rail .tag{background:rgba(250,250,249,.92)}
 /* Nav left, wordmark centred, actions right — the reference's arrangement.
    Three grid columns rather than flex, so the wordmark is centred on the
    viewport and not merely "after the nav": with flex it drifts whenever the

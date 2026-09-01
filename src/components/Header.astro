@@ -131,45 +131,46 @@ const stream = row + row;
    * wordmark lands directly on top of it.
    */
   const bar = document.querySelector<HTMLElement>('header.top');
-  const heroTitle = document.querySelector<HTMLElement>('.lg-hero h1');
 
-  /**
-   * Publish the chrome's height so a full-viewport hero can subtract it.
-   * This header is sticky, which means it is still in flow: a hero set to
-   * 100svh therefore starts *below* it and runs exactly that far past the
-   * fold, taking the sub-line and the CTA with it. The reference's bar is
-   * fixed, so its hero starts at zero and this does not arise.
-   *
-   * Measured rather than hard-coded because the bar and the dispatch rail
-   * change height across breakpoints.
-   */
   if (bar) {
+    /**
+     * Publish the chrome's height so a full-viewport hero can subtract it.
+     * This header is sticky, which means it is still in flow: a hero set to
+     * 100svh therefore starts *below* it and runs exactly that far past the
+     * fold, taking the sub-line and the CTA with it. Measured rather than
+     * hard-coded because the bar and the rail change height across
+     * breakpoints.
+     */
     const publishHeight = (): void =>
       document.documentElement.style.setProperty('--chrome-h', `${bar.offsetHeight}px`);
-    publishHeight();
-    window.addEventListener('resize', publishHeight);
-  }
 
-  if (bar && heroTitle) {
+    /**
+     * The bar is transparent on every page, so its text has to survive
+     * whatever scrolls under it. Sections that are genuinely dark carry
+     * `data-chrome="dark"` — the hero, the photo interstitial, the security
+     * band, the world map — and while any of them is behind the bar it
+     * switches to light text over a scrim.
+     *
+     * Read against the bar's own box rather than the viewport top: the rail
+     * sits at the bottom of the chrome, and a section that has only reached
+     * the bar's midpoint is already behind that rail.
+     */
+    const darks = Array.from(document.querySelectorAll<HTMLElement>('[data-chrome="dark"]'));
     let ticking = false;
-    let trigger = 0;
-
-    const measure = (): void => {
-      const was = bar.classList.contains('over');
-      bar.classList.add('over');
-      trigger = Math.max(
-        heroTitle.getBoundingClientRect().top + window.scrollY - bar.offsetHeight - 16,
-        0
-      );
-      bar.classList.toggle('over', was || window.scrollY <= trigger);
-    };
 
     const apply = (): void => {
       ticking = false;
-      bar.classList.toggle('over', window.scrollY <= trigger);
+      const h = bar.offsetHeight;
+      bar.classList.toggle(
+        'over',
+        darks.some((el) => {
+          const r = el.getBoundingClientRect();
+          return r.top < h && r.bottom > 0;
+        })
+      );
     };
 
-    measure();
+    publishHeight();
     apply();
     window.addEventListener(
       'scroll',
@@ -182,7 +183,7 @@ const stream = row + row;
       { passive: true }
     );
     window.addEventListener('resize', () => {
-      measure();
+      publishHeight();
       apply();
     });
   }
