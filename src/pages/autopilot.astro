@@ -120,8 +120,8 @@ const CURRENT_STAGE = 3;
               AUTOPILOT_TARGETS.map((t) => (
                 <tr>
                   <td>{t.metric}</td>
-                  <td class="pm-cell">{t.before}</td>
-                  <td class="pm-cell pm-yes">{t.after}</td>
+                  <td class="pm-cell" data-col="Before Autopilot">{t.before}</td>
+                  <td class="pm-cell pm-yes" data-col="After Autopilot">{t.after}</td>
                 </tr>
               ))
             }
