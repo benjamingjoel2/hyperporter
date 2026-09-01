@@ -128,9 +128,14 @@ body::after{
    any of them is invisible. So the bar watches for them and flips to light
    with a scrim behind it; see Header.astro, which adds `.over` when a region
    marked `data-chrome="dark"` is under the bar. */
+/* Solid by default. Transparent everywhere was wrong: page content —
+   card artwork, the pipeline dots, the destination tiles — scrolled straight
+   through the bar and collided with the nav and the ticker. The bar only goes
+   transparent over the dark photographic regions, where there is a scrim
+   behind it and nothing to read through. */
 header.top{position:sticky;top:0;z-index:70;
-  background:transparent;border-bottom:1px solid transparent;
-  transition:color .28s ease}
+  background:var(--raise);border-bottom:1px solid var(--line);
+  transition:background .28s ease,border-color .28s ease,color .28s ease}
 
 /* The scrim is not decoration. White nav over the homepage hero's pale sky
    measured 2.7:1, under the 4.5:1 minimum, and 12.6:1 with it. It rides with
@@ -141,6 +146,7 @@ header.top{position:sticky;top:0;z-index:70;
 header.top::before{content:"";position:absolute;inset:0 0 -34px;z-index:0;pointer-events:none;
   opacity:0;transition:opacity .28s ease;
   background:linear-gradient(180deg,rgba(6,10,13,.72) 0%,rgba(6,10,13,.66) 76%,rgba(6,10,13,0) 100%)}
+header.top.over{background:transparent;border-bottom-color:transparent}
 header.top.over::before{opacity:1}
 
 header.top.over .links a,header.top.over .mark,header.top.over .bar-acts .login{color:#fff;opacity:.94}
