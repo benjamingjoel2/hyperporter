@@ -84,7 +84,7 @@ const STATS = [
   currentNav="home"
 >
   <main>
-    <section class="lg-hero">
+    <section class="lg-hero" data-chrome="dark">
       <img
         class="lg-hero-img"
         src="/hero.jpg"
@@ -106,7 +106,12 @@ const STATS = [
       <p>The platform underneath every tier — free, forever, on both sides of the market.</p>
     </section>
 
-    <section class="lg-band">
+    {/* Pinned while the nine stages advance: the section holds still and the
+        stages open one at a time as you scroll through it, as on the
+        reference. The outer element is the scroll track; `.lg-band-stick` is
+        what stays put. */}
+    <section class="lg-band" id="stages">
+      <div class="lg-band-stick">
       <div class="wrap">
         <div class="lg-band-lead">
           <p class="eyebrow">Autopilot · nine stages</p>
@@ -130,6 +135,7 @@ const STATS = [
             ))
           }
         </div>
+      </div>
       </div>
     </section>
 
@@ -193,7 +199,7 @@ const STATS = [
       </p>
     </section>
 
-    <section class="lg-inter">
+    <section class="lg-inter" data-chrome="dark">
       <img src="/hero.jpg" alt="" />
       <div class="lg-inter-in">
         <p class="eyebrow">Horizon</p>
@@ -274,7 +280,7 @@ const STATS = [
       </div>
     </section>
 
-    <section class="lg-sec-dark">
+    <section class="lg-sec-dark" data-chrome="dark">
       <div class="wrap">
         <h2>Built to the standard your contracts and rates actually deserve.</h2>
         <a class="lg-read" href="/security"><span aria-hidden="true">&#8627;</span> <span>Read more</span></a>
@@ -347,6 +353,88 @@ const STATS = [
       if (icon && btn.classList.contains('lg-pill')) icon.textContent = open ? '+' : '\u2212';
     });
   });
+
+  /**
+   * The nine stages advance with the scroll while the band is pinned: the
+   * section holds still and each stage opens in turn, as on the reference.
+   *
+   * Gated on the same conditions as the CSS that does the pinning — a media
+   * query, so the two cannot disagree. Under prefers-reduced-motion, or on a
+   * screen too short or narrow to pin without trapping the reader, the band
+   * stays an ordinary section and the pills work as a plain accordion.
+   *
+   * Clicking a pill still works while pinned; the next scroll simply takes
+   * the sequence back over.
+   */
+  const band = document.querySelector<HTMLElement>('.lg-band');
+  const stick = document.querySelector<HTMLElement>('.lg-band-stick');
+  const canPin = window.matchMedia(
+    '(prefers-reduced-motion: no-preference) and (min-width: 861px) and (min-height: 640px)'
+  );
+
+  if (band && stick) {
+    const pills = Array.from(band.querySelectorAll<HTMLButtonElement>('.lg-pill'));
+    let pinning = false;
+    let queued = false;
+    let shown = -1;
+
+    const show = (i: number): void => {
+      if (i === shown) return;
+      shown = i;
+      pills.forEach((btn, n) => {
+        const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+        const on = n === i;
+        btn.setAttribute('aria-expanded', String(on));
+        if (panel) panel.hidden = !on;
+        const icon = btn.querySelector('i');
+        if (icon) icon.textContent = on ? '\u2212' : '+';
+      });
+    };
+
+    const step = (): void => {
+      queued = false;
+      if (!pinning) return;
+      const track = band.getBoundingClientRect();
+      const chrome = stick.getBoundingClientRect().top;
+      const span = band.offsetHeight - stick.offsetHeight;
+      if (span <= 0) return;
+      const progress = Math.min(Math.max((chrome - track.top) / span, 0), 1);
+      show(Math.min(Math.floor(progress * pills.length), pills.length - 1));
+    };
+
+    const setMode = (): void => {
+      pinning = canPin.matches;
+      band.classList.toggle('lg-pinned', pinning);
+      if (pinning) {
+        shown = -1;
+        step();
+      } else {
+        /* Hand the pills back to the click handler, all closed. */
+        shown = -1;
+        pills.forEach((btn) => {
+          const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+          btn.setAttribute('aria-expanded', 'false');
+          if (panel) panel.hidden = true;
+          const icon = btn.querySelector('i');
+          if (icon) icon.textContent = '+';
+        });
+      }
+    };
+
+    setMode();
+    canPin.addEventListener('change', setMode);
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!queued) {
+          queued = true;
+          requestAnimationFrame(step);
+        }
+      },
+      { passive: true }
+    );
+    window.addEventListener('resize', setMode);
+  }
 
   /* Scroll cue: only means anything at rest, so it leaves once the page moves. */
   const cue = document.getElementById('lg-cue');
