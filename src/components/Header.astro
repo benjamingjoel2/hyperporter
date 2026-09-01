@@ -56,45 +56,22 @@ const stream = row + row;
                 </svg>
               </a>
 
-              <div class="mega" hidden>
-                <div class="mega-rail" role="tablist" aria-label={`${n.label} sections`}>
-                  {n.tabs.map((t, i) => (
-                    <button
-                      type="button"
-                      role="tab"
-                      class:list={['mega-tab', { on: i === 0 }]}
-                      data-tab={t.id}
-                      aria-selected={i === 0 ? 'true' : 'false'}
-                      tabindex={i === 0 ? 0 : -1}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
-                </div>
-
-                <div class="mega-views">
-                  {n.tabs.map((t, i) => (
-                    <div class="mega-view" data-view={t.id} hidden={i !== 0}>
-                      <p class="mega-head">{t.heading}</p>
-                      <div class="mega-list">
-                        {t.rows.map((r, j) => (
-                          <a class="mega-row" href={r.href}>
-                            <span class="mega-n">{String(j + 1).padStart(2, '0')}</span>
-                            <span class="mega-txt">
-                              <b>{r.label}</b>
-                              <em>{r.desc}</em>
-                            </span>
-                            <span class="mega-go">&rarr;</span>
-                          </a>
-                        ))}
-                      </div>
-                      <a class="mega-foot" href={t.footHref}>
-                        <span>{t.footLabel}</span>
-                        <em>{t.footCta} &rarr;</em>
+              {/* One column per tab group, plain links only — the reference's
+                  panel carries no descriptions, numbers or icons. The tabs in
+                  the data become column headings, so the same content that
+                  drove the old rail drives the columns without a second
+                  structure to keep in sync. */}
+              <div class="mega" hidden style={`--mega-cols:${n.tabs.length}`}>
+                {n.tabs.map((t) => (
+                  <div class="mega-col">
+                    <p class="mega-head">{t.label}</p>
+                    {t.rows.map((r) => (
+                      <a class="mega-row" href={r.href}>
+                        {r.label}
                       </a>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ))}
               </div>
             </div>
           ) : (
@@ -264,36 +241,6 @@ const stream = row + row;
       setOpen(wrap, open);
     });
 
-    // Tabs inside the panel.
-    const tabs = Array.from(wrap.querySelectorAll<HTMLButtonElement>('.mega-tab'));
-    const views = Array.from(wrap.querySelectorAll<HTMLElement>('.mega-view'));
-
-    const select = (id: string) => {
-      tabs.forEach((t) => {
-        const on = t.dataset.tab === id;
-        t.classList.toggle('on', on);
-        t.setAttribute('aria-selected', on ? 'true' : 'false');
-        t.tabIndex = on ? 0 : -1;
-      });
-      views.forEach((v) => {
-        v.hidden = v.dataset.view !== id;
-      });
-    };
-
-    tabs.forEach((tab, i) => {
-      // pointerenter, not click: the reference switches on hover, and a
-      // click would feel like a dead button to anyone using a mouse
-      tab.addEventListener('pointerenter', () => tab.dataset.tab && select(tab.dataset.tab));
-      tab.addEventListener('click', () => tab.dataset.tab && select(tab.dataset.tab));
-      tab.addEventListener('keydown', (e) => {
-        const k = e.key;
-        if (k !== 'ArrowDown' && k !== 'ArrowUp') return;
-        e.preventDefault();
-        const next = tabs[(i + (k === 'ArrowDown' ? 1 : tabs.length - 1)) % tabs.length];
-        if (next.dataset.tab) select(next.dataset.tab);
-        next.focus();
-      });
-    });
   });
 
   document.addEventListener('keydown', (e) => {

@@ -107,7 +107,14 @@ body::after{
    backdrop-filter may not apply at all, it shows through completely
    unblurred. The bar's job is to stay legible over anything, so it is
    opaque and the question does not arise. */
-header.top{position:sticky;top:0;z-index:70;background:var(--raise);border-bottom:1px solid var(--line);
+/* Translucent, not opaque: content passes under it and stays faintly
+   visible, which is what makes the bar read as glass rather than as a
+   painted strip. saturate() before blur keeps colour underneath from going
+   muddy. */
+header.top{position:sticky;top:0;z-index:70;
+  background:rgba(255,255,255,.72);
+  -webkit-backdrop-filter:saturate(1.8) blur(14px);backdrop-filter:saturate(1.8) blur(14px);
+  border-bottom:1px solid var(--line);
   transition:background .28s ease,border-color .28s ease}
 
 /* Transparent over a full-bleed hero, solid once past it. Only engages on a
@@ -120,11 +127,15 @@ header.top{position:sticky;top:0;z-index:70;background:var(--raise);border-botto
    the bar rather than the hero, so legibility survives a change of
    photograph. Positive z-index on the children rather than a negative one on
    the scrim — a negative-z child escapes to behind the parent entirely. */
-header.top.over{background:transparent;border-bottom-color:transparent}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  header.top{background:var(--raise)}
+}
+header.top.over{background:transparent;border-bottom-color:transparent;
+  -webkit-backdrop-filter:none;backdrop-filter:none}
 header.top.over::before{content:"";position:absolute;inset:0 0 -34px;z-index:0;pointer-events:none;
   background:linear-gradient(180deg,rgba(6,10,13,.72) 0%,rgba(6,10,13,.66) 76%,rgba(6,10,13,0) 100%);
   transition:opacity .28s ease}
-header.top.over .bar,header.top.over .rail{position:relative;z-index:1}
+
 header.top.over .links a,header.top.over .mark,header.top.over .bar-acts .login{color:#fff;opacity:.94}
 header.top.over .links a:hover,header.top.over .mark:hover .glyph{opacity:1}
 header.top.over .mark .glyph{color:#fff}
@@ -144,7 +155,12 @@ header.top.over .rail .ent b{color:#fff}
    Three grid columns rather than flex, so the wordmark is centred on the
    viewport and not merely "after the nav": with flex it drifts whenever the
    nav or the actions change width. */
+/* The bar sits above the rail so the dropdown, which is anchored inside it,
+   paints over the ticker rather than under it. Safe now that the panel is
+   anchored to its trigger — it was not when the panel was full-bleed, since
+   a positioned .bar became its containing block and boxed it in. */
 .bar{max-width:var(--max);margin:0 auto;padding:0 var(--pad);height:76px;
+  position:relative;z-index:2;
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px}
 .mark{display:flex;align-items:center;gap:11px;text-decoration:none;justify-self:center;white-space:nowrap}
 .mark .glyph{width:24px;height:24px;display:block;color:var(--paper);transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
@@ -176,8 +192,8 @@ header.top.over .rail .ent b{color:#fff}
 .drawer a:last-child{color:var(--paper);font-weight:400;border-bottom:0}
 
 /* ---- dispatch rail (signature) ---- */
-.rail{height:34px;display:flex;align-items:center;overflow:hidden;border-top:1px solid var(--line);background:var(--raise)}
-.rail .tag{flex-shrink:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);padding:0 18px;height:100%;display:flex;align-items:center;border-right:1px solid var(--line);background:var(--void);position:relative;z-index:1}
+.rail{height:34px;position:relative;z-index:1;display:flex;align-items:center;overflow:hidden;border-top:1px solid var(--line);background:transparent}
+.rail .tag{flex-shrink:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);padding:0 18px;height:100%;display:flex;align-items:center;border-right:1px solid var(--line);background:rgba(250,250,249,.92);position:relative;z-index:1}
 /* 2900s, not 58s: the strip now carries 600 entries instead of 12, and
    the duration has to scale with it or the text would blur past. */
 .rail .stream{display:flex;white-space:nowrap;animation:march 2900s linear infinite}
@@ -959,76 +975,55 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
    `header.top` is already `position:sticky`, which is a positioned value
    and therefore the containing block — adding `position:relative` here
    would silently un-stick the header. */
-.mega-wrap{position:static;display:inline-flex}
-.mega-trigger{display:inline-flex;align-items:center;gap:6px}
+/* Dropdown panel, on the reference's arrangement rather than the full-bleed
+   band this replaced. Measured off it at 1440px: 280px wide, rgba(0,0,0,.4),
+   15px radius, blur(20px), no border and no shadow — the blur alone
+   separates it from the page, which is why adding a shadow makes it look
+   like a different component.
+
+   `position:relative` on the wrapper so the panel anchors under its own
+   trigger; the old panel was full-bleed and anchored to the bar. */
+.mega-wrap{position:relative;display:inline-flex}
+.mega-trigger{display:inline-flex;align-items:center;gap:6px;border-radius:999px}
 .mega-trigger .chev{width:9px;height:6px;opacity:.45;transition:transform .25s,opacity .25s}
 .mega-wrap.open .chev{transform:rotate(180deg);opacity:.9}
-.mega-wrap.open>.mega-trigger{color:var(--paper);background:rgba(12,22,34,.05)}
+/* The trigger takes a pill while its panel is open, as on the reference. */
+.mega-wrap.open>.mega-trigger{background:rgba(255,255,255,.16);opacity:1}
+header.top:not(.over) .mega-wrap.open>.mega-trigger{background:rgba(13,16,22,.07)}
 
 .mega{
-  /* 72px is the bar height. Hanging the panel off the bar rather than
-     the whole header puts it over the dispatch rail instead of below it,
-     so the bar and the panel read as one surface. */
-  position:absolute;top:72px;left:50%;transform:translateX(-50%);
-  z-index:60;display:grid;grid-template-columns:170px minmax(0,1fr);
-  min-width:660px;max-width:min(94vw,820px);
-  background:var(--raise);
-  border:1px solid var(--line);
-  border-top:0;
-  box-shadow:0 30px 70px -20px rgba(12,22,34,.22);
+  position:absolute;top:calc(100% + 10px);left:0;z-index:80;
+  min-width:280px;padding:14px;border-radius:15px;
+  /* The reference uses .4 black. Over a light page that composites to a mid
+     grey and puts its white links at 2.75:1 — under the 4.5 minimum, on
+     their site as much as ours. .66 is the least that clears it: measured
+     5.9:1 here, and it still reads as the same smoked-glass panel. */
+  background:rgba(13,16,22,.66);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  display:grid;grid-template-columns:repeat(var(--mega-cols,2),minmax(120px,max-content));
+  gap:4px 26px;
+}
+/* No backdrop-filter: the panel would be 40% black over live text and
+   unreadable, so it goes near-solid instead. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .mega{background:rgba(13,16,22,.94)}
 }
 .mega[hidden]{display:none}
-
-/* Left rail: mono labels, a rule marking the live one. No filled pill. */
-.mega-rail{display:flex;flex-direction:column;padding:26px 0;border-right:1px solid var(--line)}
-.mega-tab{
-  background:none;border:0;border-left:2px solid transparent;
-  padding:11px 22px;text-align:left;cursor:pointer;
-  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--dim);transition:color .2s,border-color .2s;
-}
-.mega-tab:hover{color:var(--muted)}
-.mega-tab.on{color:var(--signal);border-left-color:var(--signal)}
-.mega-tab:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
-
-.mega-views{padding:26px 30px 0}
-.mega-view[hidden]{display:none}
+.mega-col{display:flex;flex-direction:column;min-width:0}
 .mega-head{
-  margin:0 0 4px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--dim);
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;font-weight:400;
+  color:rgba(255,255,255,.66);margin:6px 0 6px 10px;white-space:nowrap;
 }
-
-/* Rows: number, name, description, separated by hairlines. */
-.mega-list{border-top:1px solid var(--line);margin-top:14px}
+/* The first heading in each column sits flush; later ones get air above so
+   a second group reads as separate rather than as a run-on list. */
+.mega-col .mega-head + a{margin-top:0}
 .mega-row{
-  display:grid;grid-template-columns:34px minmax(0,1fr) 16px;align-items:baseline;gap:0 14px;
-  padding:13px 0;border-bottom:1px solid var(--line);
-  transition:background .18s;
+  display:block;padding:7px 10px;border-radius:8px;white-space:nowrap;
+  font-size:14px;letter-spacing:-.01em;color:rgba(255,255,255,.92);
+  transition:background .16s ease,color .16s ease;
 }
-.mega-row:last-child{border-bottom:0}
-.mega-n{
-  font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--dim);
-  font-variant-numeric:tabular-nums;transition:color .18s;
-}
-.mega-txt b{display:block;font-weight:400;font-size:16px;color:var(--paper);letter-spacing:-.012em;transition:color .18s}
-.mega-txt em{display:block;margin-top:3px;font-style:normal;font-size:13.5px;color:var(--dim);line-height:1.45}
-.mega-go{font-size:14px;color:transparent;transition:color .18s,transform .18s;transform:translateX(-4px)}
-.mega-row:hover{background:linear-gradient(90deg,rgba(27,116,126,.05),transparent 70%)}
-.mega-row:hover .mega-n,.mega-row:hover .mega-txt b,.mega-row:hover .mega-go{color:var(--signal)}
-.mega-row:hover .mega-go{transform:none}
-.mega-row:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
-
-/* One real next step, never filler. */
-.mega-foot{
-  display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;
-  margin:0 -30px;padding:15px 30px;border-top:1px solid var(--line);background:var(--ink);
-}
-.mega-foot span{font-size:13.5px;color:var(--muted)}
-.mega-foot em{
-  font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--signal);
-}
-.mega-foot:hover em{text-decoration:underline;text-underline-offset:3px}
+.mega-row:hover{background:rgba(255,255,255,.12);color:#fff}
+.mega-row:focus-visible{outline:2px solid rgba(255,255,255,.6);outline-offset:-2px}
 
 /* Panels are pointer affordances; below this width the drawer lists
    everything inside them instead. */
@@ -1044,11 +1039,15 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
 
 /* Scrim behind an open mega panel. Slight — enough to push the page back
    and let the panel sit forward, not enough to read as a modal. */
+/* Kept, but much lighter than it was. It was tuned for a full-bleed band
+   that covered the width of the page; dimming the whole viewport by a third
+   behind a 280px dropdown reads as heavy-handed, and the reference has no
+   scrim at all — its panel's own blur does the separating. */
 .mega-scrim{
   position:fixed;inset:0;z-index:-1;
-  background:rgba(12,18,24,.34);
-  -webkit-backdrop-filter:blur(4px);
-  backdrop-filter:blur(4px);
+  background:rgba(12,18,24,.14);
+  -webkit-backdrop-filter:blur(2px);
+  backdrop-filter:blur(2px);
   opacity:0;pointer-events:none;
   transition:opacity .22s ease;
 }
