@@ -170,3 +170,21 @@ Port the design system and the landmark SVG generator across as-is. They work.
 - Make targeted edits. Do not rebuild or "improve" things that weren't asked about.
 - Push back on overstatement, wordiness, and visual clutter.
 - Short punchy lines for positioning copy. Cleanly structured prose for spec documents.
+
+### Always preview before merging
+
+**Any visual change gets a preview link before the PR is merged, not after.**
+Build the site, inline the page into a single self-contained file, and publish
+it as an artifact so it can be opened in a browser without cloning, installing
+or running anything locally.
+
+This is not optional politeness — it is how the review actually works here.
+Screenshots taken by the agent are a poor substitute: several faults in this
+site's history were invisible in a screenshot and obvious the moment a person
+clicked something. A dropdown that renders under the ticker, a hero whose CTA
+falls below the fold on a shorter screen, an entire missing `<script>` block —
+all shipped past agent-side checks, all would have been caught in ten seconds
+of clicking.
+
+So: preview link first, merge second, deploy third. Never reverse that order,
+and never ask for a merge without a link to look at.
