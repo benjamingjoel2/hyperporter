@@ -277,6 +277,21 @@ p{margin:0 0 16px}
 .routes .arc-lit{fill:none;stroke:var(--signal);stroke-width:1.6;stroke-linecap:round;stroke-dasharray:0 1200;animation:fly 9s ease-in-out infinite}
 .routes .wp{fill:var(--signal)}
 .routes .wp-ring{fill:none;stroke:rgba(27,116,126,.45);stroke-width:1}
+
+/* The thread card used to sit in the homepage's two-column hero, which gave
+   it its width. Standing on its own on /autopilot it needs a measure of its
+   own, or it stretches to the full 1680px container and the stage chips
+   spread into a single thin line. */
+.thread-solo{max-width:680px;margin-inline:auto}
+
+/* The arcs were drawn for a light ground. Over the hero photograph the
+   original teal-on-white values sit at roughly 1.2:1 and vanish, so on that
+   one dark surface they invert to light strokes. Geometry is untouched. */
+.lg-hero .routes .grat{stroke:rgba(255,255,255,.14)}
+.lg-hero .routes .arc{stroke:rgba(255,255,255,.34)}
+.lg-hero .routes .arc-lit{stroke:rgba(255,255,255,.92)}
+.lg-hero .routes .wp{fill:#fff}
+.lg-hero .routes .wp-ring{stroke:rgba(255,255,255,.5)}
 @keyframes fly{0%{stroke-dasharray:0 60 0 1140;opacity:0}12%{opacity:1}55%{stroke-dasharray:0 900 62 300;opacity:1}75%{opacity:0}100%{stroke-dasharray:0 900 62 300;opacity:0}}
 .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:200px;background:linear-gradient(180deg,transparent,var(--void));pointer-events:none}
 .hero .wrap{position:relative;z-index:3}
