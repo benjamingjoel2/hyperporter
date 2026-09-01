@@ -77,8 +77,9 @@ import { LADDERS } from '../lib/content/pricing';
                     {g.rows.map((r) => (
                       <tr>
                         <td>{r.feature}</td>
-                        {r.cells.map((cell) => (
+                        {r.cells.map((cell, i) => (
                           <td
+                            data-col={l.columns[i]}
                             class:list={[
                               'pm-cell',
                               { 'pm-yes': cell === '✓', 'pm-no': cell === '—' },
