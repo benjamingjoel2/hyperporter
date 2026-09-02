@@ -97,6 +97,53 @@ const CURRENT_STAGE = 3;
       <p class="sample-tag">Illustrative thread — not live data</p>
     </Fragment>
 
+    {/* The nine stages, moved here from the homepage — this is the page they
+        belong to. Dark glass on a photograph rather than a panel on the page
+        ground, matching the nav dropdown: the stage list is chrome over the
+        product, not a section of prose.
+
+        The outer element is the scroll track; `.ap-band-stick` is what stays
+        put while the stages advance. */}
+    <section slot="after-hero" class="ap-band" id="stages" data-chrome="dark">
+      <div class="ap-band-stick">
+        <img class="ap-band-bg" src="/hero.jpg" alt="" />
+        <div class="wrap">
+          <div class="ap-glass">
+            <div class="ap-band-lead">
+              <p class="eyebrow">Autopilot · nine stages</p>
+              <p class="dek">
+                Inquiry through Post-Trip. The escalation points where a person takes over are
+                designed in, not gaps left over.
+              </p>
+            </div>
+            <div class="ap-pills">
+              {
+                STAGES.map((s, i) => (
+                  <button class="ap-pill" type="button" aria-expanded="false" aria-controls={`s${i}`}>
+                    <em>{s.n}</em> {s.name} <i aria-hidden="true">+</i>
+                  </button>
+                ))
+              }
+            </div>
+            {/* The bodies sit in their own column rather than under their pill.
+                The stage list is a fixed nine items tall, so a body opening
+                beside it changes nothing about the panel's height — inline,
+                every stage shifted the eight below it. */}
+            <div class="ap-detail">
+              {
+                STAGES.map((s, i) => (
+                  <p class="ap-pill-body" id={`s${i}`} hidden>
+                    {s.one}
+                    {s.cls === 'Human touchpoint' && <span class="ap-tag">Human touchpoint</span>}
+                  </p>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div slot="after-features" class="sec-tight wrap">
       <div class="mission rv">
         Automation that still knows when to stop is the whole point — not less human involvement,
@@ -206,5 +253,109 @@ const CURRENT_STAGE = 3;
       event.preventDefault();
       select(next);
     });
+  }
+</script>
+
+<script>
+  /* Clicking a pill opens it. While the band is pinned the next scroll takes
+     the sequence back over — that is deliberate: the pointer wins for as long
+     as the reader is not scrolling. */
+  document.querySelectorAll<HTMLButtonElement>('.ap-pill').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+      if (!panel) return;
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      panel.hidden = open;
+      const icon = btn.querySelector('i');
+      if (icon) icon.textContent = open ? '+' : '\u2212';
+      /* Unpinned, the detail sits below all nine pills — tapping an early
+         stage would otherwise write its text off the bottom of the screen. */
+      if (!open && !document.querySelector('.ap-band')?.classList.contains('ap-pinned')) {
+        panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    });
+  });
+
+  /**
+   * The nine stages advance with the scroll while the band is pinned: the
+   * section holds still and each stage opens in turn, as on the reference.
+   *
+   * Gated on the same conditions as the CSS that does the pinning — a media
+   * query, so the two cannot disagree. Under prefers-reduced-motion, or on a
+   * screen too short or narrow to pin without trapping the reader, the band
+   * stays an ordinary section and the pills work as a plain accordion.
+   *
+   * Clicking a pill still works while pinned; the next scroll simply takes
+   * the sequence back over.
+   */
+  const band = document.querySelector<HTMLElement>('.ap-band');
+  const stick = document.querySelector<HTMLElement>('.ap-band-stick');
+  const canPin = window.matchMedia(
+    '(prefers-reduced-motion: no-preference) and (min-width: 861px) and (min-height: 640px)'
+  );
+
+  if (band && stick) {
+    const pills = Array.from(band.querySelectorAll<HTMLButtonElement>('.ap-pill'));
+    let pinning = false;
+    let queued = false;
+    let shown = -1;
+
+    const show = (i: number): void => {
+      if (i === shown) return;
+      shown = i;
+      pills.forEach((btn, n) => {
+        const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+        const on = n === i;
+        btn.setAttribute('aria-expanded', String(on));
+        if (panel) panel.hidden = !on;
+        const icon = btn.querySelector('i');
+        if (icon) icon.textContent = on ? '\u2212' : '+';
+      });
+    };
+
+    const step = (): void => {
+      queued = false;
+      if (!pinning) return;
+      const track = band.getBoundingClientRect();
+      const chrome = stick.getBoundingClientRect().top;
+      const span = band.offsetHeight - stick.offsetHeight;
+      if (span <= 0) return;
+      const progress = Math.min(Math.max((chrome - track.top) / span, 0), 1);
+      show(Math.min(Math.floor(progress * pills.length), pills.length - 1));
+    };
+
+    const setMode = (): void => {
+      pinning = canPin.matches;
+      band.classList.toggle('ap-pinned', pinning);
+      if (pinning) {
+        shown = -1;
+        step();
+      } else {
+        /* Hand the pills back to the click handler, all closed. */
+        shown = -1;
+        pills.forEach((btn) => {
+          const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+          btn.setAttribute('aria-expanded', 'false');
+          if (panel) panel.hidden = true;
+          const icon = btn.querySelector('i');
+          if (icon) icon.textContent = '+';
+        });
+      }
+    };
+
+    setMode();
+    canPin.addEventListener('change', setMode);
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!queued) {
+          queued = true;
+          requestAnimationFrame(step);
+        }
+      },
+      { passive: true }
+    );
+    window.addEventListener('resize', setMode);
   }
 </script>

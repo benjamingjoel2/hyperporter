@@ -286,3 +286,16 @@ export const AUTOPILOT_TARGETS: { metric: string; before: string; after: string 
   { metric: 'Manual errors, reprice & confirmation', before: 'Human-paced', after: '<5%' },
   { metric: 'Headcount for same volume', before: 'Baseline', after: '–30%' },
 ];
+
+/**
+ * The homepage's system overview — the whole thing in four moves, above the
+ * nine stages rather than instead of them. Horizon supplies operators; it is
+ * not software and nobody logs into it, so the move is what the agency gets
+ * from it, not a product they open.
+ */
+export const MOVES: { name: string; body: string }[] = [
+  { name: 'Inquiry received', body: 'Any channel — form, email or WhatsApp — arrives as one structured brief.' },
+  { name: 'Autopilot runs it', body: 'Planning, quoting, booking and live support, with escalation points built in.' },
+  { name: 'Horizon fills gaps', body: 'A vetted operator wherever the trip is going, on any tier including free.' },
+  { name: 'Trip goes live', body: 'Relay handled end to end; only the exceptions reach a person.' },
+];
