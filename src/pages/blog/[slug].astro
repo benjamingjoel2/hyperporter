@@ -11,13 +11,13 @@ export async function getStaticPaths() {
     params: { slug: entry.id },
     // Wraps around, matching the prototype: the oldest post's "next" is the
     // newest, so the article page never dead-ends.
-    props: { entry, next: posts[(i + 1) % posts.length] },
+    props: { entry, next: posts[(i + 1) % posts.length], others: posts },
   }));
 }
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { entry, next } = Astro.props;
+const { entry, next, others } = Astro.props;
 ---
 
-<BlogPost entry={entry} next={next} />
+<BlogPost entry={entry} next={next} others={others} />

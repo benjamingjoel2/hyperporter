@@ -1,25 +1,32 @@
 ---
 /**
- * Blog index. Ported from hyperporter-3.html's #view-blog: the newest post
- * gets the featured treatment (with decorative artwork), the rest fall into
- * the numbered list below. Ordering is by date descending rather than the
- * prototype's hardcoded array order, so a new post lands in the right place
- * on its date alone.
+ * Blog index, on the reference's structure: one featured piece against a
+ * dividing rule, a category filter, a three-up grid, then the rest as a run
+ * of list rows under a "More stories" rail label.
+ *
+ * Ordering is by date descending rather than a hardcoded array, so a new post
+ * lands in the right place on its date alone. Covers are generated per post —
+ * see lib/blogArt.ts for why they are drawn rather than photographed.
  */
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import EmailCapture from '../../components/EmailCapture.astro';
-import { blogArtwork } from '../../lib/blogArtwork';
+import { blogCover } from '../../lib/blogArt';
 import { readingTime } from '../../lib/readingTime';
-import PageArt from '../../components/PageArt.astro';
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
 
-const fmt = (d: Date) => d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
 const [featured, ...rest] = posts;
+const grid = rest.slice(0, 3);
+const more = rest.slice(3);
+
+/** Filter chips, in the order the categories first appear. */
+const cats = ['All', ...Array.from(new Set(posts.map((p) => p.data.cat)))];
 ---
 
 <Base
@@ -27,64 +34,80 @@ const [featured, ...rest] = posts;
   description="Product updates, pilot progress, and what we're learning about automation in travel."
   currentNav="blog"
 >
-  <div class="sec wrap page-hero">
-    <div class="page-hero-copy">
-      <p class="eyebrow rv">Resources</p>
-      <div class="b-head rv">
-        <h1 style="margin:0">The latest from<br />Hyperporter.</h1>
-        <span class="b-count">{posts.length} posts</span>
-      </div>
-      <p class="lede rv" style="margin-top:18px">
-        Product updates, pilot progress, and what we're learning about automation in travel.
-      </p>
-    </div>
-    <PageArt name="blog" />
+  <div class="sec wrap bx-head">
+    <p class="eyebrow rv">Resources</p>
+    <h1 class="bx-title rv">The latest from Hyperporter</h1>
   </div>
 
-  <div class="sec-tight wrap" style="padding-top:0">
-
-    {
-      featured && (
-        <div id="featured">
-          <a class="feat rv" href={`/blog/${featured.id}`}>
-            <div>
-              <div class="b-meta">
-                <em>{featured.data.cat}</em>
-                <span>{fmt(featured.data.date)}</span>
-                <span>{readingTime(featured.body ?? '')}</span>
-              </div>
-              <div class="feat-t">{featured.data.title}</div>
+  {
+    featured && (
+      <div class="wrap">
+        <a class="bx-feat rv" href={`/blog/${featured.id}`} data-cat={featured.data.cat}>
+          <div class="bx-feat-side">
+            <div class="bx-feat-meta">
+              <span class="bx-label">Featured</span>
+              <time datetime={featured.data.date.toISOString()}>{fmt(featured.data.date)}</time>
+            </div>
+            <div class="bx-feat-copy">
+              <span class="bx-kicker">{featured.data.cat}</span>
+              <h2>{featured.data.title}</h2>
               <p>{featured.data.dek}</p>
+              <span class="bx-read">{readingTime(featured.body ?? '')}</span>
             </div>
-            <div class="feat-art" set:html={blogArtwork(0)} />
-          </a>
-        </div>
-      )
-    }
+          </div>
+          <div class="bx-cover" set:html={blogCover(featured.id, featured.data.cat)} />
+        </a>
+      </div>
+    )
+  }
 
-    <div class="plist">
+  <div class="wrap">
+    {/* Filters the grid and the list below without a page load. With JS off
+        every post is shown, which is the correct fallback for a filter. */}
+    <div class="bx-filters rv" role="group" aria-label="Filter by category">
       {
-        rest.map((p, i) => (
-          <a class="prow rv" href={`/blog/${p.id}`}>
-            <div class="pn">{String(i + 2).padStart(2, '0')}</div>
-            {/* Every card gets artwork, not just the featured one -- the
-                generator was already there and only the top post used it. */}
-            <span class="prow-art" set:html={blogArtwork(i + 2, 'compact')} />
-            <div>
-              <div class="b-meta">
-                <em>{p.data.cat}</em>
-                <span>{readingTime(p.body ?? '')}</span>
-              </div>
-              <h3>{p.data.title}</h3>
-            </div>
-            <div style="display:flex;gap:20px;align-items:flex-start;padding-top:6px">
-              <p>{p.data.dek}</p>
-              <span class="arrow">&rarr;</span>
-            </div>
+        cats.map((c) => (
+          <button type="button" class:list={['bx-chip', { on: c === 'All' }]} data-filter={c}>
+            {c}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="bx-grid">
+      {
+        grid.map((p) => (
+          <a class="bx-card rv" href={`/blog/${p.id}`} data-cat={p.data.cat}>
+            <div class="bx-cover" set:html={blogCover(p.id, p.data.cat)} />
+            <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+            <h3>{p.data.title}</h3>
+            <p>{p.data.dek}</p>
           </a>
         ))
       }
     </div>
+
+    {
+      more.length > 0 && (
+        <div class="bx-more">
+          <span class="bx-label bx-more-label">More stories</span>
+          <div class="bx-rows">
+            {more.map((p) => (
+              <a class="bx-row rv" href={`/blog/${p.id}`} data-cat={p.data.cat}>
+                <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+                <div class="bx-row-copy">
+                  <h3>{p.data.title}</h3>
+                  <p>{p.data.dek}</p>
+                </div>
+                <div class="bx-cover" set:html={blogCover(p.id, p.data.cat)} />
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    <p class="bx-empty" id="bx-empty" hidden>No posts in this category yet.</p>
   </div>
 
   <div class="sec-tight wrap fcta">
@@ -92,3 +115,36 @@ const [featured, ...rest] = posts;
     <EmailCapture uid="blog-cta" marginTop="30px" />
   </div>
 </Base>
+
+<script>
+  /* Category filter. Hides non-matching posts rather than re-rendering, so
+     the reveal-on-scroll state and the generated covers survive a filter. */
+  const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('.bx-chip'));
+  /* Posts only. The chips carry their own `data-filter`, because when they
+     shared `data-cat` with the posts a filter hid every chip but one. */
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-cat]'));
+  const empty = document.getElementById('bx-empty');
+  const more = document.querySelector<HTMLElement>('.bx-more');
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const cat = chip.dataset.filter ?? 'All';
+      chips.forEach((c) => c.classList.toggle('on', c === chip));
+
+      let shown = 0;
+      items.forEach((el) => {
+        const hit = cat === 'All' || el.dataset.cat === cat;
+        el.hidden = !hit;
+        if (hit) shown++;
+      });
+
+      /* The rail label is a heading for rows that may all be hidden. */
+      if (more) {
+        more.hidden = !Array.from(more.querySelectorAll<HTMLElement>('[data-cat]')).some(
+          (el) => !el.hidden
+        );
+      }
+      if (empty) empty.hidden = shown > 0;
+    });
+  });
+</script>

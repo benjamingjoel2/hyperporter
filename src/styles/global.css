@@ -89,9 +89,9 @@ a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer}
 
 /* Links in prose keep their underline, offset so it clears the descenders. */
-.art-body p a,
-.art-body li a,
-.art-dek a{
+.post-body p a,
+.post-body li a,
+.post-lede a{
   text-decoration:underline;
   text-decoration-thickness:1px;
   text-underline-offset:3px;
@@ -557,57 +557,177 @@ p{margin:0 0 16px}
 .fcta .iform{margin:0 auto;justify-content:center}
 .fcta .msg{text-align:center}
 
-/* ============ BLOG ============ */
-.b-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;padding-bottom:34px;border-bottom:1px solid var(--line)}
-.b-count{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
-.feat{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,4vw,64px);align-items:center;padding:clamp(34px,4.6vw,64px) 0;border-bottom:1px solid var(--line);cursor:pointer}
-.feat:hover .feat-t{color:var(--signal)}
-.feat-t{font-family:var(--display);font-weight:400;letter-spacing:-.022em;line-height:1.05;font-size:clamp(28px,3.9vw,50px);margin:16px 0 18px;transition:color .3s}
-.feat p{color:var(--muted);font-size:17px;max-width:52ch}
-.feat-art{position:relative;aspect-ratio:4/3;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:linear-gradient(150deg,#EDF3F5,#E1E8ED)}
-.feat-art svg{position:absolute;inset:0;width:100%;height:100%}
-.b-meta{display:flex;gap:16px;align-items:center;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
-.b-meta em{font-style:normal;color:var(--signal)}
-.plist{border-bottom:1px solid var(--line)}
-.prow{display:grid;grid-template-columns:52px 108px 1fr 1.05fr;gap:clamp(18px,3vw,48px);align-items:start;padding:clamp(26px,3.2vw,40px) 0;border-top:1px solid var(--line);cursor:pointer;transition:padding-left .35s cubic-bezier(.2,.8,.2,1),background .3s}
-.prow:first-child{border-top:0}
-.prow-art{display:block;aspect-ratio:4/3;overflow:hidden;border-radius:3px;border:1px solid var(--line);background:var(--steel);margin-top:4px}
-.prow-art svg{width:100%;height:100%;display:block}
-.prow:hover{padding-left:14px;background:rgba(12,22,34,.022)}
-.prow .pn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);padding-top:6px}
-.prow h3{font-size:clamp(19px,1.9vw,25px);letter-spacing:-.015em;line-height:1.3;margin:12px 0 0;transition:color .3s}
-.prow:hover h3{color:var(--signal)}
-.prow p{color:var(--dim);font-size:14.5px;margin:0;max-width:46ch}
-.prow .arrow{color:var(--dim);transition:color .3s,transform .3s}
-.prow:hover .arrow{color:var(--signal);transform:translateX(5px)}
+/* ============ BLOG ============
+   Index and article both hang off a rail of small caps labels with the
+   content in an offset column, which is what makes a post read as a
+   document rather than a page. Covers are generated (lib/blogArt.ts) —
+   there is no licensed photography yet. */
+
+.bx-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);margin:0}
+.bx-title{font-size:clamp(38px,5vw,66px);letter-spacing:-.035em;line-height:1.02;
+  margin:14px 0 0;max-width:16ch}
+/* The title band sets its own bottom edge — .sec's padding plus the
+   featured block's margin left a screen of nothing between them. */
+.bx-head{padding-bottom:0}
+
+/* The cover frame. `slice` on the SVG, so a cover fills whatever aspect the
+   slot asks for rather than letterboxing inside it. */
+.bx-cover{position:relative;overflow:hidden;background:var(--ink);
+  border:1px solid var(--line);border-radius:3px}
+.bx-cover svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* ---- featured ---- */
+.bx-feat{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);
+  gap:clamp(26px,3.4vw,54px);align-items:stretch;
+  padding:clamp(30px,3.6vw,52px) 0 clamp(34px,4vw,60px);
+  border-top:1px solid var(--line);margin-top:clamp(30px,4vw,54px)}
+.bx-feat-side{display:flex;flex-direction:column;justify-content:space-between;
+  gap:40px;border-right:1px solid var(--line);padding-right:clamp(22px,2.6vw,40px)}
+.bx-feat-meta{display:flex;flex-direction:column;gap:7px}
+.bx-feat-meta time{font-size:13px;color:var(--dim);font-variant-numeric:tabular-nums}
+.bx-kicker{display:block;font-size:14px;color:var(--muted);margin-bottom:10px}
+.bx-feat h2{font-size:clamp(24px,2.5vw,34px);letter-spacing:-.025em;line-height:1.14;
+  margin:0 0 14px;transition:color .25s}
+.bx-feat:hover h2{color:var(--signal)}
+.bx-feat p{font-size:14.5px;line-height:1.6;color:var(--muted);margin:0 0 14px}
+.bx-read{font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim)}
+/* A height rather than a ratio: at this column width 16/10 made the cover
+   nearly 600px tall and pushed the filters and the grid off the page. */
+.bx-feat .bx-cover{height:clamp(280px,29vw,410px)}
+
+/* ---- filters ---- */
+.bx-filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center;
+  padding:0 0 clamp(26px,3vw,40px);border-top:1px solid var(--line);padding-top:22px}
+.bx-chip{background:none;border:0;border-radius:3px;padding:7px 13px;
+  font-size:13.5px;color:var(--muted);transition:background .2s,color .2s}
+.bx-chip:hover{color:var(--paper)}
+.bx-chip.on{background:var(--paper);color:var(--raise)}
+
+/* ---- three-up grid ---- */
+.bx-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(20px,2.4vw,34px)}
+.bx-card .bx-cover{aspect-ratio:4/3;margin-bottom:16px}
+.bx-card time{display:block;font-size:12.5px;color:var(--dim);margin-bottom:9px;
+  font-variant-numeric:tabular-nums}
+.bx-card h3{font-size:19px;letter-spacing:-.018em;line-height:1.26;margin:0 0 10px;
+  transition:color .25s}
+.bx-card:hover h3{color:var(--signal)}
+.bx-card p{font-size:14px;line-height:1.55;color:var(--muted);margin:0;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+
+/* ---- more stories ---- */
+.bx-more{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);
+  gap:clamp(24px,4vw,70px);margin-top:clamp(48px,6vw,90px)}
+.bx-more-label{padding-top:26px}
+.bx-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px);
+  gap:clamp(20px,3vw,44px);align-items:end;
+  border-top:1px solid var(--line);padding:24px 0}
+.bx-row time{grid-column:1;font-size:12.5px;color:var(--dim);
+  font-variant-numeric:tabular-nums;align-self:start}
+.bx-row-copy{grid-column:1}
+.bx-row h3{font-size:clamp(19px,1.9vw,23px);letter-spacing:-.018em;line-height:1.26;
+  margin:14px 0 9px;transition:color .25s}
+.bx-row:hover h3{color:var(--signal)}
+.bx-row p{font-size:14px;line-height:1.55;color:var(--muted);margin:0;max-width:56ch}
+.bx-row .bx-cover{grid-column:2;grid-row:1 / span 2;aspect-ratio:16/9;align-self:center}
+.bx-empty{color:var(--dim);font-size:15px;padding:40px 0}
 
 /* ---- article ---- */
-.art-top{border-bottom:1px solid var(--line);padding-bottom:clamp(30px,4vw,48px)}
-.back{background:none;border:0;color:var(--dim);font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;padding:0;margin-bottom:30px;transition:color .25s}
-.back:hover{color:var(--signal)}
-.art-title{font-family:var(--display);font-weight:400;letter-spacing:-.022em;line-height:1.03;font-size:clamp(32px,5.2vw,64px);margin:18px 0 22px;max-width:20ch}
-.art-dek{font-size:clamp(17px,1.7vw,21px);color:var(--muted);max-width:58ch;line-height:1.5;margin:0}
-.art-body{max-width:68ch;padding-top:clamp(34px,4.4vw,58px);font-size:17.5px;line-height:1.78;color:var(--muted)}
-.art-body p{margin:0 0 26px}
-.art-body h2{font-size:clamp(23px,2.5vw,30px);color:var(--paper);text-transform:none;font-weight:400;margin:52px 0 18px;letter-spacing:-.02em;line-height:1.3}
-.art-body h3{font-size:19px;color:var(--paper);margin:38px 0 12px}
-.art-body strong{color:var(--paper);font-weight:400}
-.art-body ul{margin:0 0 26px;padding-left:0;list-style:none}
-.art-body li{position:relative;padding-left:26px;margin-bottom:13px}
-.art-body li::before{content:"";position:absolute;left:0;top:11px;width:8px;height:1px;background:var(--signal)}
-.art-body .pull{border-left:2px solid var(--signal);padding:8px 0 8px 26px;margin:40px 0;font-family:var(--display);font-size:clamp(20px,2.2vw,26px);line-height:1.35;letter-spacing:-.022em;color:var(--paper);max-width:32ch}
-.art-body .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);margin:0 0 8px}
-.art-end{max-width:68ch;margin-top:20px;padding-top:34px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:24px;align-items:center;flex-wrap:wrap}
-.art-next{background:none;border:0;padding:0;text-align:left;cursor:pointer}
-.art-next span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
-.art-next b{font-family:var(--display);font-size:19px;font-weight:400;transition:color .25s}
-.art-next:hover b{color:var(--signal)}
+.post{padding-top:clamp(26px,3vw,42px);padding-bottom:clamp(60px,7vw,110px)}
+.post-back{font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);display:inline-block;margin-bottom:26px}
+.post-back:hover{color:var(--signal)}
+.post-head h1{font-size:clamp(32px,4.4vw,56px);letter-spacing:-.032em;line-height:1.05;
+  margin:12px 0 clamp(28px,3.4vw,44px);max-width:20ch}
+.post-cover{position:relative;overflow:hidden;aspect-ratio:16/7;
+  border:1px solid var(--line);border-radius:3px;background:var(--ink)}
+.post-cover svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* The rail. Every band of the article uses it, so the label column stays on
+   one axis from the meta at the top to "Up next" at the bottom. */
+.post-rail{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);
+  gap:clamp(24px,4vw,70px);padding-top:clamp(30px,4vw,52px)}
+.post-meta{display:grid;grid-template-columns:auto 1fr;gap:8px 20px;margin:0;
+  align-content:start}
+.post-meta dt{font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim)}
+.post-meta dd{margin:0;font-size:13.5px;color:var(--muted)}
+.post-lede{font-size:clamp(19px,2vw,25px);line-height:1.4;letter-spacing:-.02em;
+  color:var(--paper);margin:0;max-width:34ch}
+/* Article prose. Quieter than the old article page: the reference sets its
+   body around 15px with subheads barely larger than the text, which is what
+   makes a post read as a document. Ours sits a little above that, because
+   this typeface runs smaller than theirs at the same size. */
+.post-body{max-width:64ch;font-size:16.5px;line-height:1.72;color:var(--muted)}
+.post-body > *:first-child{margin-top:0}
+.post-body p{margin:0 0 22px}
+.post-body h2{font-size:clamp(20px,2vw,24px);color:var(--paper);font-weight:400;
+  text-transform:none;letter-spacing:-.018em;line-height:1.28;margin:44px 0 14px}
+.post-body h3{font-size:17.5px;color:var(--paper);font-weight:400;margin:32px 0 10px;
+  letter-spacing:-.012em}
+.post-body strong{color:var(--paper);font-weight:400}
+.post-body em{font-style:italic}
+.post-body ul,.post-body ol{margin:0 0 22px;padding-left:0;list-style:none}
+.post-body li{position:relative;padding-left:24px;margin-bottom:11px}
+/* A rule, not a disc — the site has no other round bullet in it. */
+.post-body ul li::before{content:"";position:absolute;left:0;top:.72em;
+  width:9px;height:1px;background:var(--signal)}
+.post-body ol{counter-reset:s}
+.post-body ol li{counter-increment:s}
+.post-body ol li::before{content:counter(s);position:absolute;left:0;top:0;
+  font-family:var(--mono);font-size:11px;color:var(--signal);
+  font-variant-numeric:tabular-nums}
+.post-body blockquote{margin:34px 0;padding:2px 0 2px 22px;
+  border-left:2px solid var(--signal);color:var(--paper);
+  font-size:clamp(18px,1.8vw,21px);line-height:1.4;letter-spacing:-.018em;max-width:34ch}
+.post-body blockquote p:last-child{margin-bottom:0}
+.post-body code{font-family:var(--mono);font-size:.88em;background:var(--ink);
+  padding:2px 5px;border-radius:3px;color:var(--paper)}
+.post-body pre{background:var(--ink);border:1px solid var(--line);border-radius:4px;
+  padding:18px;overflow-x:auto;margin:0 0 22px}
+.post-body pre code{background:none;padding:0}
+.post-body hr{border:0;border-top:1px solid var(--line);margin:38px 0}
+.post-body img{width:100%;height:auto;border-radius:3px;margin:30px 0}
+.post-body p a,.post-body li a,.post-lede a{text-decoration:underline;
+  text-decoration-thickness:1px;text-underline-offset:3px;color:var(--signal)}
+.post-body p a:hover,.post-body li a:hover{color:var(--signal-hi)}
+
+.post-sub{margin-top:clamp(46px,5.5vw,80px);border-top:1px solid var(--line)}
+.post-sub-line{font-size:15px;color:var(--muted);margin:0;max-width:44ch}
+.post-more{margin-top:clamp(46px,5.5vw,80px);border-top:1px solid var(--line)}
+.post-more-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(20px,2.6vw,36px)}
+.post-more-card .bx-cover{aspect-ratio:16/9;margin-bottom:14px}
+.post-more-card time{display:block;font-size:12.5px;color:var(--dim);margin-bottom:8px;
+  font-variant-numeric:tabular-nums}
+.post-more-card h3{font-size:18px;letter-spacing:-.018em;line-height:1.26;margin:0 0 9px;
+  transition:color .25s}
+.post-more-card:hover h3{color:var(--signal)}
+.post-more-card p{font-size:13.5px;line-height:1.55;color:var(--muted);margin:0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.post-next{margin-top:clamp(40px,5vw,70px);border-top:1px solid var(--line)}
+.post-next-link b{display:block;font-size:clamp(21px,2.3vw,28px);font-weight:400;
+  letter-spacing:-.022em;line-height:1.2;max-width:22ch;transition:color .25s}
+.post-next-link:hover b{color:var(--signal)}
+.post-next-link span{display:block;margin-top:10px;font-size:14.5px;color:var(--muted);
+  max-width:52ch}
+
 @media (max-width:900px){
-  .feat{grid-template-columns:1fr}
-  .feat-art{order:-1}
-  .prow{grid-template-columns:38px 1fr}
-  .prow p{grid-column:2}
-  .prow .pn{padding-top:2px}
+  .bx-feat{grid-template-columns:1fr;gap:22px}
+  .bx-feat-side{border-right:0;padding-right:0;order:2;gap:18px;
+    flex-direction:column-reverse;justify-content:flex-start}
+  .bx-feat-meta{flex-direction:row;gap:14px;align-items:baseline}
+  .bx-grid{grid-template-columns:1fr;gap:34px}
+  .bx-more,.post-rail{grid-template-columns:1fr;gap:16px}
+  .bx-more-label{padding-top:0}
+  .bx-row{grid-template-columns:1fr;gap:14px}
+  .bx-row .bx-cover{grid-column:1;grid-row:auto;order:-1}
+  .post-more-grid{grid-template-columns:1fr;gap:30px}
+  /* The rail's empty spacer column collapses to a zero-height row rather
+     than a gap the width of the page. */
+  .post-rail > div:empty{display:none}
 }
 
 /* ============ FOOTER ============ */
