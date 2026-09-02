@@ -188,3 +188,13 @@ of clicking.
 
 So: preview link first, merge second, deploy third. Never reverse that order,
 and never ask for a merge without a link to look at.
+
+    npm run build && python3 scripts/build-preview.py preview-site.html
+
+That bundles all 181 routes into one self-contained file — every route
+browsable through its real links, at phone, tablet or full width. Publish it
+as an artifact. Preview the whole site, not the one page you changed: several
+of the faults in this site's history were on a page nobody thought to look at.
+The generator drops `/how` (a redirect stub) and `/preview/*` (design studies),
+and leaves `/photos/*` unresolved because that photography is still
+unlicensed — those tiles are blank in the preview exactly as they are live.
