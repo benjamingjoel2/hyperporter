@@ -11,6 +11,7 @@ import Base from '../../layouts/Base.astro';
 import EmailCapture from '../../components/EmailCapture.astro';
 import { blogArtwork } from '../../lib/blogArtwork';
 import { readingTime } from '../../lib/readingTime';
+import PageArt from '../../components/PageArt.astro';
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -26,15 +27,21 @@ const [featured, ...rest] = posts;
   description="Product updates, pilot progress, and what we're learning about automation in travel."
   currentNav="blog"
 >
-  <div class="sec wrap">
-    <p class="eyebrow rv">Resources</p>
-    <div class="b-head rv">
-      <h1 style="margin:0">The latest from<br />Hyperporter.</h1>
-      <span class="b-count">{posts.length} posts</span>
+  <div class="sec wrap page-hero">
+    <div class="page-hero-copy">
+      <p class="eyebrow rv">Resources</p>
+      <div class="b-head rv">
+        <h1 style="margin:0">The latest from<br />Hyperporter.</h1>
+        <span class="b-count">{posts.length} posts</span>
+      </div>
+      <p class="lede rv" style="margin-top:18px">
+        Product updates, pilot progress, and what we're learning about automation in travel.
+      </p>
     </div>
-    <p class="lede rv" style="margin-top:18px">
-      Product updates, pilot progress, and what we're learning about automation in travel.
-    </p>
+    <PageArt name="blog" />
+  </div>
+
+  <div class="sec-tight wrap" style="padding-top:0">
 
     {
       featured && (

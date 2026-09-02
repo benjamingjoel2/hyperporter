@@ -9,6 +9,7 @@
  */
 import Base from '../layouts/Base.astro';
 import ProductPage from '../components/ProductPage.astro';
+import PageArt from '../components/PageArt.astro';
 import { byProduct, HORIZON_SUPPLIER_TYPES } from '../lib/content/products';
 import WorldMap from '../components/WorldMap.astro';
 
@@ -21,6 +22,9 @@ const product = byProduct('horizon');
   currentNav="product"
 >
   <ProductPage product={product}>
+    <Fragment slot="hero-aside">
+      <PageArt name="horizon" />
+    </Fragment>
     <section slot="after-hero" class="mapband">
       <div class="wrap">
         <p class="eyebrow rv" style="color:rgba(255,255,255,.66)">Where the network reaches</p>

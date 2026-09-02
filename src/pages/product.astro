@@ -8,6 +8,7 @@
  */
 import Base from '../layouts/Base.astro';
 import { PRODUCTS } from '../lib/content/products';
+import PageArt from '../components/PageArt.astro';
 ---
 
 <Base
@@ -15,13 +16,17 @@ import { PRODUCTS } from '../lib/content/products';
   description="OS is the foundation everyone gets. Autopilot and Intelligence layer on top as you grow. Horizon runs underneath, on every tier."
   currentNav="product"
 >
-  <div class="sec wrap">
-    <p class="eyebrow rv">Product</p>
-    <h1 class="rv">Every capability, in one connected system.</h1>
-    <p class="lede rv">
-      OS is the foundation everyone gets. Autopilot and Intelligence layer on top as you grow.
-      Horizon runs underneath both, always on.
-    </p>
+  <div class="sec wrap page-hero">
+    <div class="page-hero-copy">
+
+      <p class="eyebrow rv">Product</p>
+      <h1 class="rv">Every capability, in one connected system.</h1>
+      <p class="lede rv">
+        OS is the foundation everyone gets. Autopilot and Intelligence layer on top as you grow.
+        Horizon runs underneath both, always on.
+      </p>
+    </div>
+    <PageArt name="product" />
   </div>
 
   <div class="sec-tight wrap">

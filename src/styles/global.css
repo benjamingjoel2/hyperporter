@@ -1028,6 +1028,25 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
 .tier ul{margin:0 0 24px;padding:0;list-style:none;flex:1}
 .tier li{font-size:14px;color:var(--muted);padding:8px 0;border-top:1px solid var(--line)}
 
+/* ---- page illustrations ------------------------------------------------
+   Every hero is the same three elements — eyebrow, h1, lede — sometimes with
+   a control or a link after them. Rather than restructure twenty templates,
+   `.page-hero` turns the hero into two columns and drops the drawing into the
+   second, whatever else the first happens to hold. */
+.page-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);
+  gap:clamp(30px,4.5vw,80px);align-items:center}
+/* Two children, not four. Left as separate grid items the eyebrow, headline
+   and lede each got a row, the rows shared the drawing's height, and the
+   three of them ended up spread half a screen apart. */
+.page-hero-copy{min-width:0}
+.pgart svg{display:block;width:100%;height:auto}
+@media (max-width:900px){
+  /* Below this the drawing is competing with the headline for the fold, and
+     the headline wins. */
+  .page-hero{grid-template-columns:1fr;gap:clamp(26px,4vw,42px)}
+  .page-hero > .pgart{grid-column:1;grid-row:auto;max-width:440px}
+}
+
 /* ---- /autopilot: the nine stages -------------------------------------
    Moved off the homepage. Dark glass on a photograph rather than a panel on
    the page ground — the same material as the nav dropdown, because the stage

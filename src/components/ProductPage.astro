@@ -39,22 +39,27 @@ const hasAside = Astro.slots.has('hero-aside');
 
 <slot name="after-hero" />
 
-<div class="sec-tight wrap">
-  {featuresTitle && <h2 class="rv">{featuresTitle}</h2>}
-  <div class="flist rv">
-    {
-      features.map((f) => (
-        <div class="fitem">
-          <div class="fn">{f.n}</div>
-          <div>
-            <b>{f.name}</b>
-            <p>{f.body}</p>
+{
+  /* A product whose page shows its own list some other way passes none —
+     /autopilot draws the nine stages off STAGES, and this list repeated
+     five of them a screen further down. */
+  features.length > 0 && (
+    <div class="sec-tight wrap">
+      {featuresTitle && <h2 class="rv">{featuresTitle}</h2>}
+      <div class="flist rv">
+        {features.map((f) => (
+          <div class="fitem">
+            <div class="fn">{f.n}</div>
+            <div>
+              <b>{f.name}</b>
+              <p>{f.body}</p>
+            </div>
           </div>
-        </div>
-      ))
-    }
-  </div>
-</div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 <slot name="after-features" />
 

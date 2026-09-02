@@ -1,0 +1,27 @@
+---
+/**
+ * The page's own illustration. One per route, drawn to a shared 480x360 frame
+ * and a shared construction kit — see lib/pageArt.ts for the family rules.
+ *
+ * An unknown name throws rather than rendering an empty frame: a hero with a
+ * silent hole in it is worse than a build that stops.
+ */
+import { PAGE_ART, PAGE_ART_ALT } from '../lib/pageArt';
+
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+const art = PAGE_ART[name];
+
+if (!art) {
+  throw new Error(
+    `PageArt: no illustration for "${name}". Add one to lib/pageArt.ts, or drop the component.`
+  );
+}
+---
+
+<div class="pgart">
+  <svg viewBox="0 0 480 360" role="img" aria-label={PAGE_ART_ALT[name]} set:html={art} />
+</div>

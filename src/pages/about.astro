@@ -7,6 +7,7 @@
  * page saying "Placeholder bio" can't end up in search results.
  */
 import Base from '../layouts/Base.astro';
+import PageArt from '../components/PageArt.astro';
 ---
 
 <Base
@@ -15,17 +16,21 @@ import Base from '../layouts/Base.astro';
   currentNav="about"
   noindex
 >
-  <div class="sec wrap">
-    <p class="eyebrow rv">About</p>
-    <h1 class="rv">We used to run this<br />by hand too.</h1>
-    <p class="lede rv">
-      Hyperporter was built by people who've coordinated trips the old way — chasing DMCs over email, relaying
-      WhatsApp messages between travellers and drivers, rebuilding the same itinerary PDF for the fifth time.
-    </p>
-    <p class="mission rv">
-      Every trip involves the same coordination work, repeated by hand, agency by agency. We think that work should
-      run itself — with a human only where real judgment is needed.
-    </p>
+  <div class="sec wrap page-hero">
+    <div class="page-hero-copy">
+
+      <p class="eyebrow rv">About</p>
+      <h1 class="rv">We used to run this<br />by hand too.</h1>
+      <p class="lede rv">
+        Hyperporter was built by people who've coordinated trips the old way — chasing DMCs over email, relaying
+        WhatsApp messages between travellers and drivers, rebuilding the same itinerary PDF for the fifth time.
+      </p>
+      <p class="mission rv">
+        Every trip involves the same coordination work, repeated by hand, agency by agency. We think that work should
+        run itself — with a human only where real judgment is needed.
+      </p>
+    </div>
+    <PageArt name="about" />
   </div>
   <div class="sec-tight wrap">
     <p class="eyebrow rv">Team</p>
