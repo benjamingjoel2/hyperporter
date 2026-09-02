@@ -34,15 +34,36 @@ const os =
     (w, i) => `<rect x="62" y="${116 + i * 32}" width="${w}" height="7" rx="3.5" fill="${RULE}"/>`
   ).join('');
 
+/*
+ * A bare spine of dots left the frame almost empty — its three siblings each
+ * fill their 320 width and this one used about 20px of it, so on the card it
+ * read as a broken illustration rather than a diagram. Same nine stages, but
+ * alternating either side of the spine, which is also the arrangement the
+ * /autopilot zigzag itself uses.
+ */
+const AP_PITCH = 38;
+const AP_TOP = 200 - ((STAGES.length - 1) * AP_PITCH) / 2;
+/** Chip contents, varied so the run reads as work items rather than a scale. */
+const AP_FILL = [30, 22, 34, 26, 30, 20, 32, 24, 28];
+
 const autopilot =
   ground +
-  `<path d="M160 70v280" stroke="#D2D0CB" stroke-width="2"/>` +
+  `<path d="M160 ${AP_TOP - 24}v${(STAGES.length - 1) * AP_PITCH + 48}" stroke="#D2D0CB" stroke-width="2"/>` +
   STAGES.map((s, i) => {
-    const y = 70 + i * 35;
-    return s.cls === 'Human touchpoint'
-      ? `<circle cx="160" cy="${y}" r="10" fill="${AMBER}"/>` +
-          `<rect x="188" y="${y - 3}" width="30" height="6" rx="3" fill="${AMBER}" opacity=".45"/>`
-      : `<circle cx="160" cy="${y}" r="7" fill="${TEAL}"/>`;
+    const y = AP_TOP + i * AP_PITCH;
+    const human = s.cls === 'Human touchpoint';
+    const right = i % 2 === 0;
+    const key = human ? AMBER : TEAL;
+    const stub = right ? `M170 ${y}H206` : `M150 ${y}H114`;
+    const cx = right ? 206 : 56;
+    return (
+      `<path d="${stub}" stroke="${key}" stroke-width="2" opacity=".45"/>` +
+      `<rect x="${cx}" y="${y - 9}" width="58" height="18" rx="4" ` +
+      `fill="${human ? AMBER : PAPER}" stroke="${human ? AMBER : EDGE}"/>` +
+      `<rect x="${cx + 9}" y="${y - 2.5}" width="${AP_FILL[i]}" height="5" rx="2.5" ` +
+      `fill="${human ? '#FFF' : RULE}" opacity="${human ? '.85' : '1'}"/>` +
+      `<circle cx="160" cy="${y}" r="${human ? 9 : 6}" fill="${key}"/>`
+    );
   }).join('');
 
 const intelligence =
@@ -80,7 +101,7 @@ export const CARD_ART: Record<string, string> = { os, autopilot, intelligence, h
 export const CARD_ALT: Record<string, string> = {
   os: 'Abstract mark: a CRM record card with a header bar and seven ruled rows.',
   autopilot:
-    'Abstract mark: a nine-stage vertical pipeline, with the two human-touchpoint stages marked in amber.',
+    'Abstract mark: a nine-stage pipeline running down a spine, each stage a card set alternately either side, with the two human-touchpoint stages marked in amber.',
   intelligence: 'Abstract mark: a stack of contract documents feeding a single query.',
   horizon: 'Abstract mark: a radial network of supplier nodes around a centre point.',
 };
