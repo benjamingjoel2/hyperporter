@@ -6,6 +6,7 @@
  */
 import Base from '../../layouts/Base.astro';
 import { CATEGORIES } from '../../lib/content/solutions';
+import PageArt from '../../components/PageArt.astro';
 
 export function getStaticPaths() {
   return CATEGORIES.map((c) => ({ params: { slug: c.slug }, props: { c } }));
@@ -19,10 +20,14 @@ const { c } = Astro.props;
   description={`${c.title} ${c.lede}`}
   currentNav="solutions"
 >
-  <div class="sec wrap">
-    <p class="eyebrow rv">Solutions &mdash; {c.name}</p>
-    <h1 class="rv">{c.title}</h1>
-    <p class="lede rv">{c.lede}</p>
+  <div class="sec wrap page-hero">
+    <div class="page-hero-copy">
+
+      <p class="eyebrow rv">Solutions &mdash; {c.name}</p>
+      <h1 class="rv">{c.title}</h1>
+      <p class="lede rv">{c.lede}</p>
+    </div>
+    <PageArt name={`solutions/${c.slug}`} />
   </div>
 
   <div class="sec-tight wrap">

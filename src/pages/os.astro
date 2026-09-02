@@ -2,6 +2,7 @@
 /** OS — the platform layer, free on every tier. */
 import Base from '../layouts/Base.astro';
 import ProductPage from '../components/ProductPage.astro';
+import PageArt from '../components/PageArt.astro';
 import { byProduct } from '../lib/content/products';
 
 const product = byProduct('os');
@@ -12,5 +13,9 @@ const product = byProduct('os');
   description="CRM, quote builder, itinerary tool — a clean, modern interface replacing spreadsheets and email threads. Free, forever, on every tier."
   currentNav="product"
 >
-  <ProductPage product={product} />
+  <ProductPage product={product}>
+    <Fragment slot="hero-aside">
+      <PageArt name="os" />
+    </Fragment>
+  </ProductPage>
 </Base>

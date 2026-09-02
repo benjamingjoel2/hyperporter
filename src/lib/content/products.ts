@@ -113,34 +113,10 @@ export const PRODUCTS: Product[] = [
       "Communication automation — inquiry through booking, automated based on what's actually being said. Two-sided workflows only, with human escalation built in.",
     title: 'Automation that still knows when to stop.',
     lede: 'Full nine-stage automation, from Inquiry through Post-Trip — with human escalation points built in by design, not bolted on.',
-    featuresTitle: 'Nine stages, one thread.',
-    features: [
-      {
-        n: '01',
-        name: 'Inquiry',
-        body: 'A lead arrives — public form, email, or WhatsApp — and lands directly in the CRM.',
-      },
-      {
-        n: '02',
-        name: 'Planning',
-        body: 'Autopilot drafts the itinerary shape from your own past trips and available suppliers.',
-      },
-      {
-        n: '03',
-        name: 'Quotation',
-        body: 'Requests go out to sourced DMCs automatically; replies get parsed back into the thread.',
-      },
-      {
-        n: '04',
-        name: 'Confirmation',
-        body: 'Repricing and date changes loop automatically, capped before they need a human call.',
-      },
-      {
-        n: '05',
-        name: 'Booking → Support',
-        body: 'Payment instructions, live coordination, and post-trip wrap-up, still one connected thread.',
-      },
-    ],
+    /* No feature list: /autopilot renders all nine stages off STAGES in the
+       band below its hero. This was a five-item retelling of the same
+       thing, a screen further down the same page. */
+    features: [],
     casesTitle: 'Same agency, three weeks later.',
     cases: [
       {

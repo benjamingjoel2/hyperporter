@@ -7,6 +7,7 @@
  */
 import Base from '../layouts/Base.astro';
 import ProductPage from '../components/ProductPage.astro';
+import PageArt from '../components/PageArt.astro';
 import { byProduct } from '../lib/content/products';
 
 const product = byProduct('intelligence');
@@ -18,6 +19,9 @@ const product = byProduct('intelligence');
   currentNav="product"
 >
   <ProductPage product={product}>
+    <Fragment slot="hero-aside">
+      <PageArt name="intelligence" />
+    </Fragment>
     <div slot="after-features" class="sec-tight wrap">
       <p class="eyebrow rv">How it processes your documents</p>
       <h2 class="rv">Every contract, every rate sheet — organized and queryable in minutes, not weeks.</h2>
