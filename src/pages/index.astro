@@ -12,7 +12,7 @@
  * rows, the vision block, the dark security band and the FAQ.
  *
  * Content comes from the content modules, as everywhere else on this site —
- * PRODUCTS, STAGES, SECURITY, HOME_FAQ and the destinations collection — so
+ * PRODUCTS, MOVES, SECURITY, HOME_FAQ and the destinations collection — so
  * the page stays thin and cannot drift from /product, /autopilot or
  * /security.
  *
@@ -27,8 +27,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Carousel from '../components/legora/Carousel.astro';
 import { destArt } from '../lib/landmark/generator';
-import { PRODUCTS } from '../lib/content/products';
-import { STAGES } from '../lib/stages';
+import { PRODUCTS, MOVES } from '../lib/content/products';
 import { HOME_FAQ, SECURITY } from '../lib/content/pricing';
 import { CARD_ART, CARD_ALT } from '../lib/legoraArt';
 import '../styles/legora-home.css';
@@ -135,37 +134,32 @@ const STATS = [
       <p>The platform underneath every tier — free, forever, on both sides of the market.</p>
     </section>
 
-    {/* Pinned while the nine stages advance: the section holds still and the
-        stages open one at a time as you scroll through it, as on the
-        reference. The outer element is the scroll track; `.lg-band-stick` is
-        what stays put. */}
-    <section class="lg-band" id="stages">
-      <div class="lg-band-stick">
-      <div class="wrap">
-        <div class="lg-band-lead">
-          <p class="eyebrow">Autopilot · nine stages</p>
-          <p class="dek" style="color:#3A3833">
-            Inquiry through Post-Trip. The escalation points where a person takes over are designed
-            in, not gaps left over.
-          </p>
-        </div>
-        <div class="lg-pills">
+    {/* Four moves, not nine stages. The nine live on /autopilot now; this is
+        the shape of the whole system, and the light running the rail is the
+        one from the pre-Astro build. */}
+    <section class="lg-pipe-sec wrap" id="stages">
+      <div class="lg-sec-lead">
+        <p class="eyebrow rv">System overview</p>
+        <h2 class="rv">Four moves, start to finish.</h2>
+      </div>
+      <div class="lg-pipe rv">
+        <div class="lg-pipe-rail"><span aria-hidden="true"></span></div>
+        <ol class="lg-pipe-row">
           {
-            STAGES.map((s, i) => (
-              <Fragment>
-                <button class="lg-pill" type="button" aria-expanded="false" aria-controls={`s${i}`}>
-                  <em>{s.n}</em> {s.name} <i aria-hidden="true">+</i>
-                </button>
-                <p class="lg-pill-body" id={`s${i}`} hidden>
-                  {s.one}
-                  {s.cls === 'Human touchpoint' && <span class="lg-tag">Human touchpoint</span>}
-                </p>
-              </Fragment>
+            MOVES.map((m, i) => (
+              <li class="lg-pnode">
+                <span class="lg-pcode">Step {String(i + 1).padStart(2, '0')}</span>
+                <span class="lg-pdot" aria-hidden="true" />
+                <h3>{m.name}</h3>
+                <p>{m.body}</p>
+              </li>
             ))
           }
-        </div>
+        </ol>
       </div>
-      </div>
+      <a class="lg-read rv" href="/autopilot">
+        <span aria-hidden="true">&#8627;</span> <span>All nine stages, on Autopilot</span>
+      </a>
     </section>
 
     <section class="lg-sec wrap">
@@ -367,103 +361,17 @@ const STATS = [
 </Base>
 
 <script>
-  /* Accordion, shared by the stage pills and the FAQ. One handler for both:
-     a second listener on the same button toggles twice per click, which reads
-     as a control that does nothing. Base.astro's global handler covers
-     `.acc-i` elsewhere on the site and does not reach these. */
-  document.querySelectorAll<HTMLButtonElement>('.lg-pill, .lg-qa button').forEach((btn) => {
+  /* The FAQ accordion. Base.astro's global handler covers `.acc-i` elsewhere
+     on the site and does not reach these. */
+  document.querySelectorAll<HTMLButtonElement>('.lg-qa button').forEach((btn) => {
     btn.addEventListener('click', () => {
       const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
       if (!panel) return;
       const open = btn.getAttribute('aria-expanded') === 'true';
       btn.setAttribute('aria-expanded', String(!open));
       panel.hidden = open;
-      const icon = btn.querySelector('i');
-      if (icon && btn.classList.contains('lg-pill')) icon.textContent = open ? '+' : '\u2212';
     });
   });
-
-  /**
-   * The nine stages advance with the scroll while the band is pinned: the
-   * section holds still and each stage opens in turn, as on the reference.
-   *
-   * Gated on the same conditions as the CSS that does the pinning — a media
-   * query, so the two cannot disagree. Under prefers-reduced-motion, or on a
-   * screen too short or narrow to pin without trapping the reader, the band
-   * stays an ordinary section and the pills work as a plain accordion.
-   *
-   * Clicking a pill still works while pinned; the next scroll simply takes
-   * the sequence back over.
-   */
-  const band = document.querySelector<HTMLElement>('.lg-band');
-  const stick = document.querySelector<HTMLElement>('.lg-band-stick');
-  const canPin = window.matchMedia(
-    '(prefers-reduced-motion: no-preference) and (min-width: 861px) and (min-height: 640px)'
-  );
-
-  if (band && stick) {
-    const pills = Array.from(band.querySelectorAll<HTMLButtonElement>('.lg-pill'));
-    let pinning = false;
-    let queued = false;
-    let shown = -1;
-
-    const show = (i: number): void => {
-      if (i === shown) return;
-      shown = i;
-      pills.forEach((btn, n) => {
-        const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
-        const on = n === i;
-        btn.setAttribute('aria-expanded', String(on));
-        if (panel) panel.hidden = !on;
-        const icon = btn.querySelector('i');
-        if (icon) icon.textContent = on ? '\u2212' : '+';
-      });
-    };
-
-    const step = (): void => {
-      queued = false;
-      if (!pinning) return;
-      const track = band.getBoundingClientRect();
-      const chrome = stick.getBoundingClientRect().top;
-      const span = band.offsetHeight - stick.offsetHeight;
-      if (span <= 0) return;
-      const progress = Math.min(Math.max((chrome - track.top) / span, 0), 1);
-      show(Math.min(Math.floor(progress * pills.length), pills.length - 1));
-    };
-
-    const setMode = (): void => {
-      pinning = canPin.matches;
-      band.classList.toggle('lg-pinned', pinning);
-      if (pinning) {
-        shown = -1;
-        step();
-      } else {
-        /* Hand the pills back to the click handler, all closed. */
-        shown = -1;
-        pills.forEach((btn) => {
-          const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
-          btn.setAttribute('aria-expanded', 'false');
-          if (panel) panel.hidden = true;
-          const icon = btn.querySelector('i');
-          if (icon) icon.textContent = '+';
-        });
-      }
-    };
-
-    setMode();
-    canPin.addEventListener('change', setMode);
-    window.addEventListener(
-      'scroll',
-      () => {
-        if (!queued) {
-          queued = true;
-          requestAnimationFrame(step);
-        }
-      },
-      { passive: true }
-    );
-    window.addEventListener('resize', setMode);
-  }
 
   /* Scroll cue: only means anything at rest, so it leaves once the page moves. */
   const cue = document.getElementById('lg-cue');

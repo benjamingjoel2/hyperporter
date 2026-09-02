@@ -743,7 +743,7 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
 .dp-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(var(--scrim),.30),rgba(var(--scrim),.68))}
 .dp-tile .tw,.dp-tile .tn{position:relative;z-index:2}
 .dp-tile .tw{font-family:var(--display);font-weight:400;font-size:11px;letter-spacing:.04em;color:rgba(12,22,34,.62);margin-bottom:12px}
-.dp-tile .tn{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.2vw,56px);letter-spacing:-.022em;line-height:.98}
+.dp-tile .tn{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.2vw,56px);letter-spacing:-.022em;line-height:.98;margin:0}
 .dp-badges{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:24px}
 .dp-badge{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);border:1px solid var(--line-2);border-radius:99px;padding:8px 15px;background:rgba(255,255,255,.70);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .dp-h{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.5vw,44px);letter-spacing:-.022em;line-height:1.08;margin:0 0 16px}
@@ -1027,6 +1027,86 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
 .tier .tnote{color:var(--dim);font-size:13.5px;margin:0 0 20px}
 .tier ul{margin:0 0 24px;padding:0;list-style:none;flex:1}
 .tier li{font-size:14px;color:var(--muted);padding:8px 0;border-top:1px solid var(--line)}
+
+/* ---- /autopilot: the nine stages -------------------------------------
+   Moved off the homepage. Dark glass on a photograph rather than a panel on
+   the page ground — the same material as the nav dropdown, because the stage
+   list is chrome over the product rather than a passage of prose.
+
+   The outer element is the scroll track and `.ap-band-stick` is what holds
+   still while the stages advance. Both the pinning and the script that drives
+   it are gated on the same media query, so the two cannot disagree: on a
+   short or narrow screen, or under reduced motion, the band is an ordinary
+   section and the pills are a plain accordion. */
+/* No `overflow:hidden` here, however much it looks like it wants one: it
+   makes this element the sticky child's scrollport, and the panel below
+   silently stops sticking. The photograph is inset:0 inside the sticky
+   element, so there is nothing to clip anyway. */
+.ap-band{position:relative;background:#1A1D21}
+/* The photograph lives inside the element that gets pinned, so it holds still
+   with the panel. It cannot be a sibling pulled up with a negative margin:
+   percentage margins resolve against the container's *width*, so -100% there
+   is about 1300px, not one viewport. */
+.ap-band-stick{position:relative;width:100%;display:flex;align-items:center;
+  padding:clamp(54px,6vw,84px) 0}
+.ap-band-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:grayscale(.4) brightness(.5)}
+.ap-band-stick > .wrap{position:relative;z-index:1;width:100%}
+
+@media (prefers-reduced-motion:no-preference) and (min-width:861px) and (min-height:640px){
+  .ap-band{--ap-stage-step:40vh;
+    height:calc(100svh - var(--chrome-h,111px) + 9 * var(--ap-stage-step))}
+  .ap-band-stick{position:sticky;top:var(--chrome-h,111px);padding:0;
+    height:calc(100svh - var(--chrome-h,111px));overflow:hidden}
+}
+
+/* Two columns: the lead holds the left, the stages take the rest. In one
+   column the pills are a thin strip down the side of a mostly empty panel. */
+.ap-glass{display:grid;grid-template-columns:minmax(0,280px) auto minmax(0,1fr);
+  gap:clamp(26px,3.4vw,56px);align-items:start;
+  border-radius:18px;padding:clamp(26px,3.2vw,44px);
+  background:rgba(13,16,22,.66);border:1px solid rgba(255,255,255,.12);
+  -webkit-backdrop-filter:saturate(1.3) blur(20px);backdrop-filter:saturate(1.3) blur(20px)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .ap-glass{background:rgba(13,16,22,.9)}
+}
+.ap-band-lead .eyebrow{color:rgba(255,255,255,.62);margin:0 0 14px}
+.ap-band-lead .dek{color:rgba(255,255,255,.82);margin:0;font-size:15.5px;line-height:1.6}
+@media (max-width:1100px){
+  /* Three columns need about 1100px. Below that the detail goes under the
+     stages, where it still reads in order. */
+  .ap-glass{grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:28px}
+  .ap-detail{grid-column:1 / -1;border-left:0;border-top:1px solid rgba(255,255,255,.14);
+    padding:18px 0 0}
+}
+@media (max-width:860px){
+  .ap-glass{grid-template-columns:1fr;gap:24px}
+  .ap-band-lead{padding-bottom:22px;border-bottom:1px solid rgba(255,255,255,.12)}
+}
+
+.ap-pills{display:flex;flex-direction:column;align-items:flex-start;gap:9px}
+.ap-pill{border:1px solid rgba(255,255,255,.16);font-family:inherit;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.07);color:#fff;border-radius:999px;
+  padding:10px 15px 10px 19px;display:flex;align-items:center;gap:13px;
+  font-size:15px;letter-spacing:-.01em;
+  transition:background .18s ease,border-color .18s ease,opacity .28s ease}
+.ap-pill:hover{background:rgba(255,255,255,.13)}
+/* Stages behind the current one stay legible but recede, so the column reads
+   as a position in a sequence rather than nine equal buttons. */
+.ap-pinned .ap-pill{opacity:.5}
+.ap-pill[aria-expanded="true"],.ap-pill:hover,.ap-pill:focus-visible{opacity:1}
+.ap-pill[aria-expanded="true"]{background:var(--signal-hi);border-color:transparent}
+.ap-pill em{font-style:normal;font-variant-numeric:tabular-nums;opacity:.65;font-size:13px}
+.ap-pill i{font-style:normal;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.18);
+  display:grid;place-items:center;font-size:13px;line-height:1;flex:none}
+.ap-detail{border-left:1px solid rgba(255,255,255,.14);padding-left:clamp(24px,3vw,44px);
+  align-self:stretch}
+.ap-pill-body{max-width:34ch;color:#fff;font-size:clamp(17px,1.5vw,21px);line-height:1.5;
+  letter-spacing:-.012em;margin:0;padding-top:4px}
+.ap-pill-body[hidden]{display:none}
+/* Amber marks the human touchpoints and nothing else, here as everywhere. */
+.ap-pill-body .ap-tag{display:block;margin-top:9px;font-size:12px;letter-spacing:.08em;
+  text-transform:uppercase;color:#E2A94E}
 
 /* Feature comparison matrix. Scrolls on its own so the page never does. */
 .pm-scroll{overflow-x:auto;margin-top:clamp(28px,3.4vw,44px);border-top:1px solid var(--line-2)}

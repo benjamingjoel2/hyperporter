@@ -116,42 +116,48 @@
    prefers-reduced-motion, and on short or narrow screens where a pinned
    full-height panel traps the reader, it stays an ordinary section that the
    pills' own click handler drives. */
-.lg-band{background:var(--steel);padding:clamp(54px,6vw,84px) 0;
-  min-height:100vh;min-height:100svh;display:flex;align-items:center}
-.lg-band-stick{width:100%}
-.lg-band > .lg-band-stick > .wrap{width:100%}
+/* ---------------- system overview: four moves ----------------
+   The nine stages moved to /autopilot; this is the shape of the whole system.
+   The light running the rail is the one from the pre-Astro build — it travels
+   in the reading direction, which is the only thing it is there to say. */
+.lg-pipe-sec{padding-block:clamp(80px,9vw,140px)}
+.lg-pipe{position:relative;margin-top:clamp(30px,3.6vw,52px)}
+.lg-pipe-sec > .lg-read{margin-top:clamp(30px,3.4vw,46px)}
 
-@media (prefers-reduced-motion:no-preference) and (min-width:861px) and (min-height:640px){
-  .lg-band{display:block;padding:0;min-height:0;
-    --lg-stage-step:44vh;
-    height:calc(100svh - var(--chrome-h,111px) + 9 * var(--lg-stage-step))}
-  .lg-band-stick{position:sticky;top:var(--chrome-h,111px);
-    height:calc(100svh - var(--chrome-h,111px));
-    display:flex;align-items:center;overflow:hidden}
+.lg-pipe-rail{position:absolute;left:0;right:0;top:58px;height:1px;
+  background:var(--line);overflow:hidden}
+.lg-pipe-rail span{position:absolute;top:-2px;left:0;width:20%;height:5px;
+  border-radius:99px;background:linear-gradient(90deg,transparent,var(--signal));
+  animation:lg-run 6.5s linear infinite}
+/* The streak is 20% of the rail, so translating it from -100% to 500% of its
+   own width carries it from just off the left edge to the right one, at any
+   viewport width. */
+@keyframes lg-run{from{transform:translateX(-100%)}to{transform:translateX(500%)}}
+
+.lg-pipe-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:clamp(18px,2.4vw,34px);list-style:none;margin:0;padding:0;position:relative}
+.lg-pnode{margin:0}
+.lg-pcode{display:flex;align-items:flex-start;height:58px;font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+  font-variant-numeric:tabular-nums}
+.lg-pdot{display:block;width:11px;height:11px;border-radius:50%;
+  background:var(--void);border:1px solid var(--signal);
+  margin:-6px 0 24px;position:relative;z-index:2}
+.lg-pnode h3{font-size:18px;letter-spacing:-.015em;margin:0 0 8px}
+.lg-pnode p{font-size:14.5px;color:var(--muted);margin:0;max-width:30ch}
+
+@media (max-width:820px){
+  /* Vertical below the fold width: a four-column rail at 390px gives each
+     move about 80px, which is narrower than its own heading. */
+  .lg-pipe-rail{left:5px;right:auto;top:0;bottom:0;width:1px;height:auto}
+  .lg-pipe-rail span{display:none}
+  .lg-pipe-row{grid-template-columns:1fr;gap:0}
+  .lg-pnode{display:grid;grid-template-columns:auto 1fr;gap:0 20px;padding-bottom:26px}
+  .lg-pcode{height:auto;grid-column:2;margin-bottom:6px}
+  .lg-pdot{margin:5px 0 0}
+  .lg-pnode h3,.lg-pnode p{grid-column:2}
+  .lg-pnode p{max-width:52ch}
 }
-.lg-band-lead{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;
-  margin-bottom:38px}
-.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.lg-pills{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
-.lg-pill{border:0;font-family:inherit;text-align:left;cursor:pointer;
-  background:#7C7A75;color:var(--raise);border-radius:999px;
-  padding:11px 16px 11px 20px;display:flex;align-items:center;gap:14px;
-  font-size:15px;letter-spacing:-.01em;transition:background .18s ease}
-.lg-pill:hover{background:#6A6864}
-.lg-pill[aria-expanded="true"]{background:var(--signal)}
-/* Stages behind the current one stay legible but recede, so the column reads
-   as a position in a sequence rather than as nine equal buttons. */
-.lg-pill{opacity:.55;transition:background .18s ease,opacity .28s ease}
-.lg-pill[aria-expanded="true"],.lg-pill:hover,.lg-pill:focus-visible{opacity:1}
-.lg-band:not(.lg-pinned) .lg-pill{opacity:1}
-.lg-pill em{font-style:normal;font-variant-numeric:tabular-nums;opacity:.6;font-size:13px}
-.lg-pill i{font-style:normal;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.2);
-  display:grid;place-items:center;font-size:13px;line-height:1;flex:none}
-.lg-pill-body{max-width:58ch;color:#3A3833;font-size:15px;line-height:1.5;
-  padding:2px 0 12px 20px;margin:0}
-.lg-pill-body[hidden]{display:none}
-.lg-pill-body .lg-tag{display:inline-block;margin-top:9px;font-size:12px;letter-spacing:.08em;
-  text-transform:uppercase;color:#7A5A18}
 
 /* ---------------- 4-up cards ---------------- */
 .lg-sec{padding-block:clamp(80px,9vw,140px)}
