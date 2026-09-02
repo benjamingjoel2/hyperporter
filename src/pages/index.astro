@@ -134,32 +134,35 @@ const STATS = [
       <p>The platform underneath every tier — free, forever, on both sides of the market.</p>
     </section>
 
-    {/* Four moves, not nine stages. The nine live on /autopilot now; this is
-        the shape of the whole system, and the light running the rail is the
-        one from the pre-Astro build. */}
-    <section class="lg-pipe-sec wrap" id="stages">
-      <div class="lg-sec-lead">
-        <p class="eyebrow rv">System overview</p>
-        <h2 class="rv">Four moves, start to finish.</h2>
+    {/* Four moves, not nine stages — the nine live on /autopilot now. Dark,
+        because this is the pipeline diagram from the pre-Astro build and that
+        build was dark: on the light ground a hairline rail and a #0E4B52
+        streak are all but invisible, which is the whole point of the thing. */}
+    <section class="lg-pipe-sec" id="stages" data-chrome="dark">
+      <div class="wrap">
+        <div class="lg-pipe-lead">
+          <p class="eyebrow rv">System overview</p>
+          <h2 class="rv">Four moves, start to finish.</h2>
+        </div>
+        <div class="lg-pipe rv">
+          <div class="lg-pipe-rail"><span aria-hidden="true"></span></div>
+          <ol class="lg-pipe-row">
+            {
+              MOVES.map((m, i) => (
+                <li class="lg-pnode">
+                  <span class="lg-pnum" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="lg-pdot" aria-hidden="true" />
+                  <h3>{m.name}</h3>
+                  <p>{m.body}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+        <a class="lg-read rv" href="/autopilot">
+          <span aria-hidden="true">&#8627;</span> <span>All nine stages, on Autopilot</span>
+        </a>
       </div>
-      <div class="lg-pipe rv">
-        <div class="lg-pipe-rail"><span aria-hidden="true"></span></div>
-        <ol class="lg-pipe-row">
-          {
-            MOVES.map((m, i) => (
-              <li class="lg-pnode">
-                <span class="lg-pcode">Step {String(i + 1).padStart(2, '0')}</span>
-                <span class="lg-pdot" aria-hidden="true" />
-                <h3>{m.name}</h3>
-                <p>{m.body}</p>
-              </li>
-            ))
-          }
-        </ol>
-      </div>
-      <a class="lg-read rv" href="/autopilot">
-        <span aria-hidden="true">&#8627;</span> <span>All nine stages, on Autopilot</span>
-      </a>
     </section>
 
     <section class="lg-sec wrap">
