@@ -1,30 +1,27 @@
 ---
-import Side from './Side.astro';
-import Top from './Top.astro';
+/** Autopilot — the nine stages of one trip, ticked off as they happen. */
 import { STAGES } from '../../lib/stages';
-const CARDS: Record<string, [string, string, string?][]> = {
-  Inquiry: [['Lisbon', '5 nights · 2 travellers', 'Brief confirmed']],
-  Planning: [['Cusco', '6 nights · family of 4', 'Draft v2 live'], ['Palermo', '7 nights · 2 travellers']],
-  Quotation: [['Nairobi', '9 nights · 2 travellers', '2 of 3 quotes in'], ['Oaxaca', '5 nights · 3 travellers', 'Requested 4 suppliers'], ['Luang Prabang', '6 nights']],
-  Confirmation: [['Tbilisi', '7 nights · 2 travellers', 'Re-verifying']],
-  Booking: [['Marrakesh', '4 nights · Priya Nair', 'Mark payment received']],
-  Ready: [['Hanoi', '11 nights · 3 travellers', 'Vouchers sent']],
-  Traveling: [['Kyoto', 'Day 4 of 8', 'Relay active']],
-};
+const CURRENT = 4;
 ---
-<Side active="Trips" />
-<div class="mk-main">
-  <Top title="Pipeline" sub="Autopilot on"><span class="mk-tag">7 of 9 stages automatic</span><span class="mk-btn">New trip</span></Top>
-  <div class="mk-body">
-    <div class="mk-board">
-      {STAGES.map((s) => (
-        <div class="mk-col">
-          <div class:list={['mk-col-h', { amb: s.cls !== 'Automatic' }]}><span>{s.n} {s.name}</span><i>{(CARDS[s.name] ?? []).length}</i></div>
-          {(CARDS[s.name] ?? []).map(([c, m, st]) => (
-            <div class="mk-tcard"><b>{c}</b><span>{m}</span>{st && <span class:list={['mk-tag', { amb: s.cls !== 'Automatic' }]}>{st}</span>}</div>
-          ))}
-        </div>
-      ))}
-    </div>
-  </div>
+<div class="mk-back rows">
+  <b>Nairobi — 9 nights</b>
+  <div class="row"><span>Brief confirmed</span><span>Mon</span></div>
+  <div class="row"><span>Itinerary v2 live</span><span>Tue</span></div>
+  <div class="row"><span>3 quotes requested</span><span>Tue</span></div>
+  <div class="row"><span>Rift Valley · €4,180</span><span>Wed</span></div>
+  <div class="row"><span>Re-verifying availability</span><span>now</span></div>
+</div>
+<div class="mk-panel right">
+  <div class="mk-head"><b>Autopilot</b><small>{CURRENT - 1} of {STAGES.length} done</small></div>
+  {STAGES.map((s, i) => {
+    const n = i + 1;
+    const human = s.cls !== 'Automatic';
+    return (
+      <div class:list={['mk-row', { done: n < CURRENT, dimmed: n > CURRENT + 3 }]}>
+        <span class:list={['mk-chk', { now: n === CURRENT, wait: n > CURRENT, amb: human && n < CURRENT }]}></span>
+        <div><b>{s.name}</b>{n === CURRENT && <small>Re-verifying with the supplier</small>}</div>
+        {human ? <span class="mk-tag amb">Needs a person</span> : <span class="mk-fine">Automatic</span>}
+      </div>
+    );
+  })}
 </div>

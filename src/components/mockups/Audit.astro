@@ -1,31 +1,15 @@
 ---
-import Side from './Side.astro';
-import Top from './Top.astro';
-const LOG = [
-  ['09:31', 'Magic link opened', 'Priya Nair · MA-0937 · proposal v3', 'Traveller'],
-  ['09:15', 'Supplier reply filed', 'Atlas Maroc DMC · via email', 'Automatic'],
-  ['08:52', 'Payment marked received', 'Kyoto · JP-1420 · €6,470 · by Lena Ortiz', 'Human'],
-  ['08:40', 'Sign-in', 'Daniel Achebe · magic link · Lisbon, PT', 'Agent'],
-  ['Yesterday', 'Vault upload', 'Caucasus Journeys 2026.pdf · indexed to this account only', 'Owner'],
-  ['Yesterday', 'Export', 'Trips CSV · 7 rows · by Lena Ortiz', 'Owner'],
-  ['Yesterday', 'Magic link revoked', 'GE-0612 · replaced with v2', 'Automatic'],
+/** Security — who did what, and what is automatic versus a person. */
+const L = [
+  ['09:31', 'Magic link opened', 'Priya Nair · proposal v3', 'Traveller'],
+  ['08:52', 'Payment marked received', 'Kyoto · €6,470 · Lena Ortiz', 'Human'],
+  ['08:40', 'Sign-in by magic link', 'Daniel Achebe · Lisbon, PT', 'Agent'],
+  ['Yesterday', 'Vault upload', 'Indexed to this account only', 'Owner'],
 ];
 ---
-<Side active="Settings" />
-<div class="mk-main">
-  <Top title="Access &amp; audit" crumb="Settings · Security"><span class="mk-btn o">Export log</span></Top>
-  <div class="mk-body tight">
-    <div class="mk-kpis">
-      <div class="mk-kpi"><span>Sign-in</span><b style="font-size:1.2em">Magic links only</b></div>
-      <div class="mk-kpi"><span>Data residency</span><b style="font-size:1.2em">EU · Frankfurt</b></div>
-      <div class="mk-kpi"><span>Active sessions</span><b>5</b></div>
-      <div class="mk-kpi"><span>SOC 2 · GDPR</span><b style="font-size:1.2em">Targeted post-pilot</b></div>
-    </div>
-    <table class="mk-tbl">
-      <thead><tr><th>When</th><th>Event</th><th>Detail</th><th class="r">By</th></tr></thead>
-      <tbody>{LOG.map(([t, e, d, by]) => (
-        <tr><td class="mk-mono">{t}</td><td><b>{e}</b></td><td>{d}</td><td class="r"><span class:list={['mk-tag', { grey: by !== 'Human', amb: by === 'Human' }]}>{by}</span></td></tr>
-      ))}</tbody>
-    </table>
-  </div>
+<div class="mk-panel wide">
+  <div class="mk-head"><b>Access &amp; audit</b><small>SOC 2 · GDPR — targeted post-pilot</small></div>
+  {L.map(([t, e, d, by]) => (
+    <div class="mk-row"><span class="mk-fine mk-mono" style="min-width:5em">{t}</span><div><b>{e}</b><small>{d}</small></div><span class:list={['mk-tag', { grey: by !== 'Human', amb: by === 'Human' }]}>{by}</span></div>
+  ))}
 </div>

@@ -1,36 +1,18 @@
 ---
-import Side from './Side.astro';
-import Top from './Top.astro';
+/** A branded proposal and the magic link that carries it. */
 ---
-<Side active="Proposals" workspace="Ines Ferreira Travel" who="Ines Ferreira" />
-<div class="mk-main">
-  <Top title="Nairobi — 9 nights" crumb="Proposals · KE-2291 · v3"><span class="mk-btn o">Preview as traveller</span><span class="mk-btn">Send magic link</span></Top>
-  <div class="mk-body">
-    <div class="mk-split w">
-      <div class="mk-doc">
-        <div class="logo"><i></i>Ines Ferreira Travel</div>
-        <div><h5>The Mara in March</h5><span class="mk-fine">Lena &amp; Mark · 3 – 12 March · one live version</span></div>
-        <div>
-          <div class="mk-day"><span>Day 1</span><div><b>Nairobi arrival</b><em>Private transfer · Hemingways, 1 night</em></div></div>
-          <div class="mk-day"><span>Day 2–5</span><div><b>Mara North Conservancy</b><em>Rift Valley Ground Services · Offbeat Mara camp · full board</em></div></div>
-          <div class="mk-day"><span>Day 6–8</span><div><b>Naboisho</b><em>Encounter Mara · walking safaris · sundowners</em></div></div>
-          <div class="mk-day"><span>Day 9</span><div><b>Fly back, depart</b><em>Wilson – JKIA · evening flight</em></div></div>
-        </div>
-        <div class="mk-sum"><span>Per person</span><b class="mk-mono">€4,180</b></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:1.2em">
-        <div class="mk-card">
-          <div class="mk-h"><b>Magic link</b></div>
-          <p class="mk-p">The traveller opens, comments and approves from one link. No login, no PDF.</p>
-          <div class="mk-field"><div class="ph">hyp.link/ines/ke-2291</div></div>
-          <span class="mk-fine">Opened twice · last 2 h ago</span>
-        </div>
-        <div class="mk-card fill">
-          <div class="mk-h"><b>Branding</b></div>
-          <div class="mk-item"><span class="mk-tog"></span><div><b>Your logo on the proposal</b></div></div>
-          <div class="mk-item" style="border:0"><span class="mk-tog"></span><div><b>Reply-to your own address</b></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="mk-back">
+  <b>The Mara in March</b>
+  <p>Day 1 — Nairobi arrival. Private transfer, Hemingways, one night.</p>
+  <p>Day 2–5 — Mara North Conservancy. Offbeat Mara camp, full board, shared game drives.</p>
+  <p>Day 6–8 — Naboisho. Walking safaris, sundowners.</p>
+  <i class="l"></i><i class="m"></i><i class="l"></i>
+</div>
+<div class="mk-panel right">
+  <div class="mk-head"><b>Magic link</b><small>Proposal v3</small></div>
+  <div class="mk-field"><div>hyp.link/ines/ke-2291<span class="mk-tag">Live</span></div></div>
+  <div class="mk-row"><span class="mk-chk"></span><div><b>Opened twice</b><small>Last 2 h ago · no login needed</small></div></div>
+  <div class="mk-row"><span class="mk-chk wait"></span><div><b>Approval</b><small>Traveller comments and approves from the link</small></div></div>
+  <div class="mk-row plain"><div><b>Your logo, your reply-to</b></div><span class="mk-tog"></span></div>
+  <span class="mk-btn block">Send to Lena &amp; Mark</span>
 </div>

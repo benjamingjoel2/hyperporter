@@ -1,26 +1,27 @@
 ---
 /**
- * A rendering of Hyperporter's interface, in a frame.
+ * A snippet of Hyperporter's interface, composed as a product shot.
  *
- * The reference anchors its sections with product screenshots; that is most
- * of why its pages feel like they are about a real thing. We have no
- * screenshots yet, so this draws the screens — see styles/mockup.css for how
- * they scale, and components/mockups/ for the screens themselves.
+ * The reference anchors its sections with one piece of its product at a
+ * time — a review panel, a chat, a list — floating on a ground, large enough
+ * to read. We have no screenshots yet, so this draws the pieces: see
+ * styles/mockup.css for the composition and components/mockups/ for the
+ * snippets themselves, one per placement on the site.
  *
  * Everything shown is illustrative: the agency, the suppliers, the trips and
  * the prices are invented, and the caption under each placement says so.
- * The frame is `role="img"` with the screen's description as its label; the
+ * The frame is `role="img"` with the snippet's description as its label; the
  * interface inside is hidden from assistive tech, because reading a fake
  * table aloud helps nobody.
  *
  * An unknown screen name throws rather than rendering an empty frame.
  */
 import '../styles/mockup.css';
-import { SCREENS, SCREEN_ALT, SOLO } from './mockups/index';
+import { SCREENS, SCREEN_ALT, SCREEN_META } from './mockups/index';
 
 interface Props {
   screen: string;
-  /** 4:5 portrait crop for the homepage cards; the default is 4:3. */
+  /** 4:5 portrait for the homepage cards; the default is 4:3. */
   tall?: boolean;
   /** Show the "illustrative" line under the frame. Off inside cards. */
   caption?: boolean;
@@ -32,13 +33,18 @@ const Screen = SCREENS[screen];
 if (!Screen) {
   throw new Error(`Mockup: no screen named "${screen}". Add one to components/mockups/index.ts.`);
 }
+const meta = SCREEN_META[screen];
 ---
 
 <div class:list={['mockup', klass]}>
-  <div class:list={['mk', { tall }]} role="img" aria-label={SCREEN_ALT[screen]}>
-    <div class:list={['mk-win', { solo: SOLO.has(screen) }]} aria-hidden="true">
+  <div class:list={['mk', { tall }]} data-ground={meta.ground} role="img" aria-label={SCREEN_ALT[screen]}>
+    <div class="mk-stage" aria-hidden="true">
       <Screen />
     </div>
+    <span class="mk-app" aria-hidden="true">
+      <svg viewBox="0 0 100 100"><circle class="ring" cx="50" cy="50" r="44" /><rect x="32.5" y="26" width="7.5" height="47" /><rect x="60" y="26" width="7.5" height="47" /><rect x="32.5" y="46.5" width="35" height="7.5" /></svg>
+      {meta.app}
+    </span>
   </div>
   {caption && <p class="sample-tag">Illustrative screens — not live data</p>}
 </div>

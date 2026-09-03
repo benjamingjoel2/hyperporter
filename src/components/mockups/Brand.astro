@@ -1,37 +1,15 @@
 ---
-import Side from './Side.astro';
-import Top from './Top.astro';
+/** Branding — what the traveller sees carries the agency's name, not ours. */
 ---
-<Side active="Settings" />
-<div class="mk-main">
-  <Top title="Branding" crumb="Settings"><span class="mk-btn o">Preview</span><span class="mk-btn">Save</span></Top>
-  <div class="mk-body">
-    <div class="mk-split w">
-      <div style="display:flex;flex-direction:column;gap:1.2em">
-        <div class="mk-card">
-          <div class="mk-h"><b>Identity</b></div>
-          <div class="mk-item" style="grid-template-columns:auto minmax(0,1fr) auto"><span class="mk-ico" style="width:2.8em;height:2.8em;background:var(--paper);color:#fff">M</span><div><b>meridian-mark.svg</b><small>On proposals, magic links, emails and the inquiry form</small></div><span class="mk-btn o">Replace</span></div>
-          <div class="mk-row2">
-            <div class="mk-field"><label>Accent</label><div><span>#0E4B52</span><i style="width:1em;height:1em;border-radius:50%;background:var(--signal)"></i></div></div>
-            <div class="mk-field"><label>Reply-to</label><div>hello@meridiantravel.co</div></div>
-          </div>
-        </div>
-        <div class="mk-card">
-          <div class="mk-h"><b>Domain</b></div>
-          <div class="mk-item"><span class="mk-tog"></span><div><b>Domain masking</b><small>Links read plan.meridiantravel.co, not hyp.link</small></div><span class="mk-tag grey">€19/mo add-on</span></div>
-          <div class="mk-item" style="border:0"><span class="mk-tog off"></span><div><b>Custom domain</b><small>Your whole workspace on your domain</small></div><span class="mk-tag grey">Intelligence</span></div>
-        </div>
-      </div>
-      <div class="mk-card fill">
-        <div class="mk-h"><b>What a traveller sees</b></div>
-        <div class="mk-doc" style="padding:1.2em">
-          <div class="logo"><i></i>Meridian Travel Co.</div>
-          <h5 style="font-size:1.2em">Your proposal is ready</h5>
-          <p class="mk-p">Lena, here is the first version of the Mara in March. Comment anywhere, approve when it is right.</p>
-          <span class="mk-btn" style="align-self:flex-start">Open proposal</span>
-        </div>
-        <div class="mk-item" style="border:0"><span class="mk-tog"></span><div><b>Remove “Powered by Hyperporter”</b></div><span class="mk-tag">Autopilot up</span></div>
-      </div>
-    </div>
-  </div>
+<div class="mk-back">
+  <b>Meridian Travel Co.</b>
+  <p>Lena, here is the first version of the Mara in March. Comment anywhere, approve when it is right.</p>
+  <i class="m"></i><i class="l"></i><i class="s"></i>
+</div>
+<div class="mk-panel right">
+  <div class="mk-head"><b>Branding</b><small>Settings</small></div>
+  <div class="mk-row"><span class="mk-ico" style="background:var(--paper);color:#fff">M</span><div><b>meridian-mark.svg</b><small>Proposals, links, emails, the form</small></div><span class="mk-btn o">Replace</span></div>
+  <div class="mk-row plain"><div><b>Remove “Powered by Hyperporter”</b><small>Autopilot up</small></div><span class="mk-tog"></span></div>
+  <div class="mk-row plain"><div><b>Domain masking</b><small>plan.meridiantravel.co · €19/mo</small></div><span class="mk-tog"></span></div>
+  <div class="mk-row plain"><div><b>Custom domain</b><small>Intelligence</small></div><span class="mk-tog off"></span></div>
 </div>

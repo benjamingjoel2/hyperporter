@@ -1,33 +1,15 @@
 ---
-import Side from './Side.astro';
-import Top from './Top.astro';
-const ROWS = [
-  ['Priya Nair', 'Traveller', 'Marrakesh · Booking', '2 trips', 'PN'],
-  ['Rift Valley Ground Services', 'DMC · Kenya', 'Quote for KE-2291', '11 trips', 'RV'],
-  ['The Halvorsen family', 'Traveller', 'Cusco · Planning', '1 trip', 'H'],
-  ['Andes Trail Operators', 'Tour operator · Peru', 'Awaiting reply', '4 trips', 'AT'],
-  ['Anneke de Vries', 'Traveller', 'Lisbon · Inquiry', 'New', 'AV'],
-  ['Atlas Maroc DMC', 'DMC · Morocco', 'Confirmed Dar Zitoune', '7 trips', 'AM'],
-  ['Ruth Adeyemi', 'Traveller', 'Tbilisi · Confirmation', '3 trips', 'RA'],
+/** Customers — both sides of the market in one list. */
+const R = [
+  ['Priya Nair', 'Traveller · Marrakesh, Booking', 'PN', false],
+  ['Rift Valley Ground Services', 'DMC · Kenya · 11 trips together', 'RV', true],
+  ['The Halvorsen family', 'Traveller · Cusco, Planning', 'H', false],
+  ['Andes Trail Operators', 'Tour operator · Peru · 4 trips', 'AT', true],
 ];
 ---
-<Side active="Trips" />
-<div class="mk-main">
-  <Top title="People" sub="Travellers and suppliers"><span class="mk-search"><i></i>Search</span><span class="mk-btn">Add</span></Top>
-  <div class="mk-body tight">
-    <div class="mk-tabs"><span class="on">All <i>212</i></span><span>Travellers <i>168</i></span><span>Suppliers <i>44</i></span></div>
-    <table class="mk-tbl">
-      <thead><tr><th>Name</th><th>Kind</th><th>Latest thread</th><th class="r">History</th></tr></thead>
-      <tbody>
-        {ROWS.map(([n, k, t, h, ini]) => (
-          <tr>
-            <td><div style="display:flex;gap:.6em;align-items:center"><span class:list={['mk-av', { ghost: !k.startsWith('Traveller') }]}>{ini}</span><b>{n}</b></div></td>
-            <td><span class:list={['mk-tag', { grey: !k.startsWith('Traveller') }]}>{k}</span></td>
-            <td>{t}</td>
-            <td class="r">{h}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+<div class="mk-panel wide">
+  <div class="mk-head"><b>People</b><small>168 travellers · 44 suppliers</small></div>
+  {R.map(([n, m, ini, sup]) => (
+    <div class="mk-row"><span class:list={['mk-av', { ghost: sup }]}>{ini}</span><div><b>{n}</b><small>{m}</small></div><span class:list={['mk-tag', { grey: sup }]}>{sup ? 'Supplier' : 'Traveller'}</span></div>
+  ))}
 </div>

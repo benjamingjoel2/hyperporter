@@ -143,8 +143,12 @@ wanted back.
 - **Software mock-ups, not illustrations** (Sep 2026, founder's instruction).
   Every page hero and the four homepage product cards show a screen of
   Hyperporter's own interface — OS, Autopilot, Atlas and Vault, and the
-  supplier's side of a Horizon request — drawn in markup, the way the
-  reference site anchors its sections with product screenshots. The frame is
+  supplier's side of a Horizon request — drawn in markup and composed the way
+  the reference composes its product shots: one frosted panel with a single
+  idea in it, floating at legible size on a coloured or photographic ground,
+  sometimes a faded sheet behind it for depth, and a small chip in the corner
+  naming the layer. Never a whole application shrunk into a tile — that reads
+  as a diagram. The frame is
   `components/Mockup.astro`; the screens are `components/mockups/*.astro`,
   named in `mockups/index.ts`; the primitives are `styles/mockup.css`. All
   measurements inside a screen are in em off a font-size that is a fraction
