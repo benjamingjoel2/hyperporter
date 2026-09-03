@@ -1,28 +1,15 @@
 ---
-import Side from './Side.astro';
-import Top from './Top.astro';
-const SUPPLIERS = [
-  ['Rift Valley Ground Services', 'Nairobi · DMC', 'Mara North · Laikipia · Amboseli', '40 min', 'RV'],
-  ['Acacia Safari Logistics', 'Nairobi · DMC', 'Mara · Tsavo · coast', '2 h', 'AS'],
-  ['Karen Overland Co.', 'Karen · Tour operator', 'Overland · camping · self-drive support', '1 day', 'KO'],
-  ['Lamu Dhow Collective', 'Lamu · Tour operator', 'Coast · dhow · small-group', '3 h', 'LD'],
+/** Horizon — the vetted list, searched by destination. */
+const S = [
+  ['Rift Valley Ground Services', 'Nairobi · DMC · replies in 40 min', 'RV'],
+  ['Acacia Safari Logistics', 'Nairobi · DMC · replies in 2 h', 'AS'],
+  ['Lamu Dhow Collective', 'Lamu · tour operator · coast', 'LD'],
 ];
 ---
-<Side active="Suppliers" />
-<div class="mk-main">
-  <Top title="Horizon" sub="Vetted suppliers, 130+ countries"><span class="mk-search" style="min-width:16em"><i></i><span style="color:var(--paper)">Kenya</span></span></Top>
-  <div class="mk-body tight">
-    <div class="mk-tabs"><span class="on">Kenya <i>12</i></span><span>DMCs <i>7</i></span><span>Tour operators <i>5</i></span><span>Quoted before <i>3</i></span></div>
-    <div class="mk-list">
-      {SUPPLIERS.map(([n, w, spec, turn, ini], i) => (
-        <div class="mk-item" style="grid-template-columns:auto minmax(0,1fr) auto auto;padding-block:.9em">
-          <span class="mk-av ghost">{ini}</span>
-          <div><b>{n}</b><small>{w} · {spec}</small></div>
-          <span class="mk-fine">Typically replies in {turn}</span>
-          <span class:list={['mk-btn', { o: i !== 0 }]}>{i === 0 ? 'Quote requested' : 'Request quote'}</span>
-        </div>
-      ))}
-    </div>
-    <p class="mk-fine">Every supplier here is vetted. Horizon adds 10% on top of the quote; the supplier receives their full quoted rate.</p>
-  </div>
+<div class="mk-panel wide">
+  <div class="mk-search"><i></i>Kenya<span>12 vetted suppliers</span></div>
+  {S.map(([n, m, ini], i) => (
+    <div class="mk-row"><span class="mk-av ghost">{ini}</span><div><b>{n}</b><small>{m}</small></div>{i === 0 ? <span class="mk-tag">Quote requested</span> : <span class="mk-btn o">Request quote</span>}</div>
+  ))}
+  <span class="mk-fine">Horizon adds 10% on the quote. The supplier receives their full quoted rate.</span>
 </div>

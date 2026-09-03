@@ -1,30 +1,10 @@
 ---
-import Side from './Side.astro';
-import Top from './Top.astro';
+/** Pricing — the plan an agency is on, and what it carries. */
 ---
-<Side active="Settings" />
-<div class="mk-main">
-  <Top title="Plan &amp; billing" crumb="Settings"><span class="mk-btn o">Change plan</span></Top>
-  <div class="mk-body">
-    <div class="mk-split w">
-      <div class="mk-card">
-        <div class="mk-h"><b>Autopilot</b><span>Reseller ladder</span></div>
-        <div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font-size:1.9em;font-weight:400;letter-spacing:-.02em" class="mk-mono">€49<span class="mk-fine"> /mo</span></b><span class="mk-tag">Active</span></div>
-        <div class="mk-list">
-          <div class="mk-item"><span class="mk-chk"></span><div><b>OS — CRM, magic links, inquiry form, proposals</b><small>Free on every tier</small></div><span class="mk-fine">included</span></div>
-          <div class="mk-item"><span class="mk-chk"></span><div><b>Horizon supplier network</b><small>Free on every tier</small></div><span class="mk-fine">included</span></div>
-          <div class="mk-item"><span class="mk-chk"></span><div><b>Nine-stage automation</b><small>Unlimited bookings</small></div><span class="mk-fine">included</span></div>
-          <div class="mk-item" style="border:0"><span class="mk-chk wait"></span><div><b>Intelligence — Atlas and Vault</b><small>Custom pricing</small></div><span class="mk-btn o">Talk to us</span></div>
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:1.2em">
-        <div class="mk-card fill"><div class="mk-h"><b>Usage this month</b></div>
-          <div style="display:flex;justify-content:space-between"><span class="mk-p">Trips</span><b class="mk-mono">23</b></div><div class="mk-meter"><i style="width:100%"></i></div><span class="mk-fine">Unlimited on Autopilot · Showcase allows 20</span></div>
-        <div class="mk-card"><div class="mk-h"><b>Add-ons</b></div>
-          <div class="mk-item"><span class="mk-tog"></span><div><b>Domain masking</b></div><span class="mk-fine mk-mono">€19 /mo</span></div>
-          <div class="mk-item" style="border:0"><span class="mk-tog off"></span><div><b>WhatsApp integration</b></div><span class="mk-fine">add-on</span></div></div>
-        <div class="mk-item" style="border:0;font-size:.85em"><div><b>Next invoice</b><small>1 March · card ending 4471</small></div><b class="mk-mono">€68</b></div>
-      </div>
-    </div>
-  </div>
+<div class="mk-panel">
+  <div class="mk-head"><b>Autopilot</b><span class="mk-tag">Active</span></div>
+  <div style="display:flex;align-items:baseline;gap:.4em"><span class="mk-title mk-mono" style="font-size:2em">€49</span><span class="mk-fine">per month · unlimited bookings</span></div>
+  <div class="mk-row"><span class="mk-chk"></span><div><b>OS — CRM, magic links, proposals</b><small>Free on every tier</small></div></div>
+  <div class="mk-row"><span class="mk-chk"></span><div><b>Horizon and nine-stage automation</b><small>Horizon free on every tier</small></div></div>
+  <div class="mk-row"><span class="mk-chk wait"></span><div><b>Intelligence — Atlas and Vault</b><small>Custom pricing</small></div><span class="mk-btn o">Talk to us</span></div>
 </div>

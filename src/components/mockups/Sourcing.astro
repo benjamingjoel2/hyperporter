@@ -1,31 +1,10 @@
 ---
-import Side from './Side.astro';
-import Top from './Top.astro';
+/** Agent OS — quotes back, margin applied, one approval waiting. */
 ---
-<Side active="Trips" />
-<div class="mk-main">
-  <Top title="Nairobi — 9 nights" sub="KE-2291" crumb="Trips · Quotation"><span class="mk-tag">Autopilot on</span><span class="mk-btn o">Open thread</span></Top>
-  <div class="mk-body">
-    <div class="mk-rail">{[1,2,3,4,5,6,7,8,9].map((n) => <i class:list={{ done: n < 3, now: n === 3, amb: n === 5 || n === 7 }}></i>)}</div>
-    <div class="mk-split w">
-      <div class="mk-card">
-        <div class="mk-h"><b>Supplier quotes</b><span>per person</span></div>
-        <div class="mk-item" style="grid-template-columns:auto minmax(0,1fr) auto"><span class="mk-chk"></span><div><b>Rift Valley Ground Services</b><small>Replied in 40 min · from Horizon</small></div><b class="mk-mono">€4,180</b></div>
-        <div class="mk-item" style="grid-template-columns:auto minmax(0,1fr) auto"><span class="mk-chk"></span><div><b>Acacia Safari Logistics</b><small>Replied in 2 h · from Horizon</small></div><b class="mk-mono">€4,505</b></div>
-        <div class="mk-item" style="grid-template-columns:auto minmax(0,1fr) auto;border:0"><span class="mk-chk wait"></span><div><b>Karen Overland Co.</b><small>Requested yesterday · your own list</small></div><span class="mk-fine">awaiting</span></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:1.2em">
-        <div class="mk-card fill">
-          <div class="mk-h"><b>Margin</b></div>
-          <div style="display:flex;justify-content:space-between;align-items:baseline"><b style="font-size:1.6em;font-weight:400">18%</b><span class="mk-fine">applied before the traveller sees a number</span></div>
-          <div class="mk-meter"><i style="width:18%"></i></div>
-        </div>
-        <div class="mk-card">
-          <div class="mk-h"><b>Next</b></div>
-          <p class="mk-p">Approve the Rift Valley quote and Autopilot sends the proposal on.</p>
-          <span class="mk-btn" style="align-self:flex-start">Approve €4,180</span>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="mk-panel wide">
+  <div class="mk-head"><b>Supplier quotes</b><small>Nairobi · 9 nights · per person</small></div>
+  <div class="mk-row"><span class="mk-chk"></span><div><b>Rift Valley Ground Services</b><small>Replied in 40 min · from Horizon</small></div><span class="r">€4,180</span></div>
+  <div class="mk-row"><span class="mk-chk"></span><div><b>Acacia Safari Logistics</b><small>Replied in 2 h · from Horizon</small></div><span class="r">€4,505</span></div>
+  <div class="mk-sum"><span class="mk-p">With your 18% margin</span><b>€4,932</b></div>
+  <div class="mk-foot"><span class="mk-fine">Autopilot sends it on once you approve.</span><span class="mk-btn sig">Approve</span></div>
 </div>

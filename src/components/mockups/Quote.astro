@@ -1,33 +1,11 @@
 ---
-import Side from './Side.astro';
-import Top from './Top.astro';
+/** DMCs — a quote, line by line; the total is what they receive. */
 ---
-<Side active="Quotes" kind="supplier" />
-<div class="mk-main">
-  <Top title="Mara North — 4 nights" crumb="Requests · Meridian Travel Co. · 2 travellers"><span class="mk-btn o">Save draft</span><span class="mk-btn">Send quote</span></Top>
-  <div class="mk-body">
-    <div class="mk-split w">
-      <div class="mk-card">
-        <div class="mk-h"><b>Your quote</b><span>per person · USD</span></div>
-        <div class="mk-item" style="grid-template-columns:minmax(0,1fr) auto"><div><b>Offbeat Mara camp · 4 nights full board</b><small>From your 2026 rate sheet</small></div><b class="mk-mono">2,480</b></div>
-        <div class="mk-item" style="grid-template-columns:minmax(0,1fr) auto"><div><b>Shared game drives · 4 days</b></div><b class="mk-mono">380</b></div>
-        <div class="mk-item" style="grid-template-columns:minmax(0,1fr) auto"><div><b>Conservancy fees · 4 nights</b></div><b class="mk-mono">464</b></div>
-        <div class="mk-item" style="grid-template-columns:minmax(0,1fr) auto"><div><b>Wilson – Mara North flights, return</b></div><b class="mk-mono">410</b></div>
-        <div class="mk-item" style="grid-template-columns:minmax(0,1fr) auto;border:0"><div><b>Airstrip transfers</b></div><b class="mk-mono">80</b></div>
-        <div class="mk-sum"><span>You receive, in full</span><b class="mk-mono">USD 3,814</b></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:1.2em">
-        <div class="mk-card fill">
-          <div class="mk-h"><b>Reply on</b></div>
-          <div class="mk-item"><span class="mk-chk"></span><div><b>Hyperporter OS</b><small>Lands in the agency's trip thread</small></div></div>
-          <div class="mk-item" style="border:0"><span class="mk-chk"></span><div><b>WhatsApp copy</b><small>To the agent's number</small></div></div>
-        </div>
-        <div class="mk-card">
-          <div class="mk-h"><b>Availability</b></div>
-          <div class="mk-field"><label>Hold until</label><div>Thu 6 Feb, 18:00</div></div>
-          <p class="mk-fine">Horizon's 10% is added on the agency's side. Your quoted rate is what you are paid.</p>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="mk-panel">
+  <div class="mk-head"><b>Your quote</b><small>per person · USD</small></div>
+  <div class="mk-row plain"><div><b>Offbeat Mara camp · 4 nights</b><small>From your 2026 rate sheet</small></div><span class="r">2,480</span></div>
+  <div class="mk-row plain"><div><b>Shared game drives · 4 days</b></div><span class="r">380</span></div>
+  <div class="mk-row plain"><div><b>Conservancy fees, flights, transfers</b></div><span class="r">954</span></div>
+  <div class="mk-sum"><span class="mk-p">You receive, in full</span><b>USD 3,814</b></div>
+  <div class="mk-foot"><span class="mk-fine">Horizon's 10% is added on the agency's side.</span><span class="mk-btn sig">Send quote</span></div>
 </div>

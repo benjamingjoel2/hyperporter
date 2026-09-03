@@ -1,24 +1,11 @@
 ---
-import Side from './Side.astro';
-import Top from './Top.astro';
+/** Intelligence — Atlas answering from the account's own Vault. */
 ---
-<Side active="Atlas" />
-<div class="mk-main">
-  <Top title="Atlas" sub="Trained on your Vault only"><span class="mk-tag grey">Vault · 61 documents</span></Top>
-  <div class="mk-body">
-    <div class="mk-msgs">
-      <div class="mk-msg"><span class="mk-av">LO</span><div><p>What did we agree with Rift Valley for Mara North game drives this March, and is the park fee included?</p></div></div>
-      <div class="mk-msg"><span class="mk-av ghost">A</span><div>
-        <p>Your 2026 agreement sets shared game drives at <b>USD 95 per person per day</b> from 1 Nov to 31 Mar, private vehicle at USD 320 per day. Mara North conservancy fees are <b>not</b> included — USD 116 per adult per night, payable through them. Your March quote for KE-2291 should add USD 928 for two.</p>
-        <span class="mk-cite"><i></i>Rift Valley GS — rates 2026.pdf · p.2, p.5</span>
-        <small>From your Vault · no outside data</small>
-      </div></div>
-      <div class="mk-msg"><span class="mk-av">LO</span><div><p>Draft the quote line with our 18% margin.</p></div></div>
-      <div class="mk-msg"><span class="mk-av ghost">A</span><div>
-        <p>Drafted into KE-2291 → Quotation. Four game-drive days plus fees, USD 1,688 net, <b>USD 1,992 quoted</b>. Not sent — it waits for you.</p>
-        <small>Added to the trip · you approve before the traveller sees it</small>
-      </div></div>
-    </div>
-    <div class="mk-compose"><span>Ask about your contracts, rates and past trips…</span><span class="mk-btn">Ask</span></div>
-  </div>
+<div class="mk-panel wide">
+  <div class="mk-msg me"><p>What did we agree with Rift Valley for Mara North game drives this March — and is the park fee included?</p></div>
+  <svg class="mk-spark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.6 5.4 4.6 9.4 10 10-5.4.6-9.4 4.6-10 10-.6-5.4-4.6-9.4-10-10 5.4-.6 9.4-4.6 10-10z"/></svg>
+  <div class="mk-msg"><p>Your 2026 agreement sets shared game drives at <b>USD 95</b> per person per day through 31 March. Conservancy fees are <b>not</b> included — USD 116 per adult per night. For two, add USD 928 to the March quote.</p>
+    <span class="mk-cite"><i></i>Rift Valley GS — rates 2026.pdf · p.2, p.5</span>
+    <span class="mk-fine">From your Vault only · no outside data</span></div>
+  <div class="mk-foot"><span class="mk-btn o">Copy</span><span class="mk-btn">Add to quote</span></div>
 </div>

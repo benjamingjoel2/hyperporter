@@ -1,20 +1,15 @@
 ---
-import Side from './Side.astro';
-import Top from './Top.astro';
+/** Supplier OS — a structured request arriving, with a deadline. */
 ---
-<Side active="Requests" kind="supplier" />
-<div class="mk-main">
-  <Top title="Requests" sub="2 new"><span class="mk-search"><i></i>Search</span></Top>
-  <div class="mk-body tight">
-    <div class="mk-tabs"><span class="on">New <i>2</i></span><span>Quoted <i>5</i></span><span>Booked <i>11</i></span></div>
-    <div class="mk-list">
-      <div class="mk-item sel" style="grid-template-columns:auto minmax(0,1fr) auto auto;padding-block:.9em"><span class="mk-av ghost">MT</span><div><b>Mara North · 4 nights · 2 travellers</b><small>Meridian Travel Co. · 3 – 7 March · shared game drives, one camp</small></div><span class="mk-fine">Quote by Thu</span><span class="mk-btn">Quote</span></div>
-      <div class="mk-item" style="grid-template-columns:auto minmax(0,1fr) auto auto;padding-block:.9em"><span class="mk-av ghost">IF</span><div><b>Laikipia · 3 nights · family of 5</b><small>Ines Ferreira Travel · 22 – 25 April · walking, one conservancy</small></div><span class="mk-fine">Quote by Fri</span><span class="mk-btn o">Quote</span></div>
-      <div class="mk-item" style="grid-template-columns:auto minmax(0,1fr) auto auto;padding-block:.9em"><span class="mk-av ghost">NV</span><div><b>Amboseli · 2 nights · 2 travellers</b><small>Northlight Voyages · 9 – 11 Feb</small></div><span class="mk-tag">Quoted €1,120</span><span class="mk-fine">awaiting agency</span></div>
-    </div>
-    <div class="mk-card fill">
-      <div class="mk-h"><b>How requests reach you</b></div>
-      <p class="mk-p">Agencies find you on Horizon's vetted list and send structured requests here, or to your email and WhatsApp — reply wherever you already work. You quote your rate; you receive that rate in full.</p>
-    </div>
-  </div>
+<div class="mk-back rows">
+  <b>Requests · 2 new</b>
+  <div class="row"><span>Laikipia · 3 nights · family of 5</span><span>Quote by Fri</span></div>
+  <div class="row"><span>Amboseli · 2 nights · 2 travellers</span><span>Quoted</span></div>
+  <div class="row"><span>Mara North · 6 nights</span><span>Booked</span></div>
+</div>
+<div class="mk-panel right">
+  <div><span class="mk-lbl">New request · Meridian Travel Co.</span><p class="mk-title">Mara North — 4 nights</p></div>
+  <div class="mk-row plain"><div><b>2 travellers · 3 – 7 March</b><small>Shared game drives, one camp, full board</small></div></div>
+  <div class="mk-row plain"><div><b>Reply on</b><small>OS · email · WhatsApp — wherever you already work</small></div></div>
+  <div class="mk-foot"><span class="mk-tag amb">Quote by Thursday</span><span class="mk-btn sig">Quote</span></div>
 </div>
