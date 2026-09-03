@@ -22,8 +22,10 @@ const fmt = (d: Date) =>
   d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
 const [featured, ...rest] = posts;
-const grid = rest.slice(0, 3);
-const more = rest.slice(3);
+/* Two rows of three, as on the reference; anything past that falls into
+   the list rows below. */
+const grid = rest.slice(0, 6);
+const more = rest.slice(6);
 
 /** Filter chips, in the order the categories first appear. */
 const cats = ['All', ...Array.from(new Set(posts.map((p) => p.data.cat)))];
