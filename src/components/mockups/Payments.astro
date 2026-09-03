@@ -1,0 +1,34 @@
+---
+import Side from './Side.astro';
+import Top from './Top.astro';
+const ROWS = [
+  ['Marrakesh · MA-0937', 'Deposit · Priya Nair', 'Requested 09:31', '€880', 'Mark received', true],
+  ['Kyoto · JP-1420', 'Balance · Brandt', 'Received · marked by you', '€6,470', 'Received', false],
+  ['Hanoi · VN-2203', 'Supplier · Indochina Ground', 'Due 14 Apr', '€4,120', 'Scheduled', false],
+  ['Nairobi · KE-2291', 'Deposit · Ortiz', 'Sent with proposal', '€2,510', 'Awaiting', false],
+  ['Tbilisi · GE-0612', 'Supplier · Caucasus Journeys', 'Sent · marked by you', '€2,240', 'Sent', false],
+];
+---
+<Side active="Payments" />
+<div class="mk-main">
+  <Top title="Payments" sub="Money in, money out"><span class="mk-btn o">Export</span></Top>
+  <div class="mk-body tight">
+    <div class="mk-kpis">
+      <div class="mk-kpi"><span>Awaiting from travellers</span><b>€3,390</b></div>
+      <div class="mk-kpi"><span>Due to suppliers</span><b>€4,120</b></div>
+      <div class="mk-kpi"><span>Needs marking</span><b>1<em class="amb">manual, always</em></b></div>
+    </div>
+    <table class="mk-tbl">
+      <thead><tr><th>Trip</th><th>Payment</th><th>Status</th><th class="r">Amount</th><th class="r"></th></tr></thead>
+      <tbody>
+        {ROWS.map(([trip, what, st, amt, act, hot]) => (
+          <tr class:list={{ sel: hot }}>
+            <td><b>{trip}</b></td><td>{what}</td><td>{st}</td><td class="r num">{amt}</td>
+            <td class="r">{hot ? <span class="mk-btn amb">{act}</span> : <span class:list={['mk-tag', { grey: act !== 'Received' }]}>{act}</span>}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="mk-fine">Requests go out on their own. Marking money received or sent is a deliberate, human action every time.</p>
+  </div>
+</div>

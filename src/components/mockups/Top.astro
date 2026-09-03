@@ -1,0 +1,17 @@
+---
+/** The header of a screen: title, optional crumb, and whatever sits on the right. */
+interface Props {
+  title: string;
+  sub?: string;
+  crumb?: string;
+}
+const { title, sub, crumb } = Astro.props;
+---
+
+<div class="mk-top">
+  <div>
+    {crumb && <div class="mk-crumb">{crumb}</div>}
+    <h4>{title}{sub && <small>{sub}</small>}</h4>
+  </div>
+  <div class="mk-acts"><slot /></div>
+</div>

@@ -1,0 +1,28 @@
+---
+import Side from './Side.astro';
+import Top from './Top.astro';
+const CLIENTS: [string, string, string, boolean][] = [
+  ['Ortiz family', '3 trips · next: Nairobi, March', 'Quotation', false],
+  ['Priya Nair', '2 trips · Marrakesh, Feb', 'Booking', true],
+  ['Whitfields', '1 trip · Hanoi, May', 'Ready', false],
+  ['Brandt', '4 trips · Kyoto, now', 'Traveling', true],
+  ['Anneke de Vries', 'New · Lisbon, June', 'Inquiry', false],
+  ['Ruth Adeyemi', '3 trips · Tbilisi, Sept', 'Confirmation', false],
+];
+---
+<Side active="Trips" workspace="Mira Sato Travel" who="Mira Sato" />
+<div class="mk-main">
+  <Top title="My book" sub="41 clients · 6 trips open"><span class="mk-search"><i></i>Search clients</span><span class="mk-btn">New trip</span></Top>
+  <div class="mk-body tight">
+    <div class="mk-kpis">
+      <div class="mk-kpi"><span>Open trips</span><b>6</b></div>
+      <div class="mk-kpi"><span>Waiting on you</span><b>2<em class="amb">today</em></b></div>
+      <div class="mk-kpi"><span>Quotes out</span><b>5<em>3 back</em></b></div>
+    </div>
+    <div class="mk-list">
+      {CLIENTS.map(([n, m, st, amb]) => (
+        <div class="mk-item" style="grid-template-columns:auto minmax(0,1fr) auto"><span class="mk-av ghost">{n.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}</span><div><b>{n}</b><small>{m}</small></div><span class:list={['mk-tag', { amb }]}>{st}</span></div>
+      ))}
+    </div>
+  </div>
+</div>

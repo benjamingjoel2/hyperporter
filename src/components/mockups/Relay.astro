@@ -1,0 +1,18 @@
+---
+import Side from './Side.astro';
+import Top from './Top.astro';
+---
+<Side active="Trips" />
+<div class="mk-main">
+  <Top title="Kyoto — day 4 of 8" sub="JP-1420" crumb="Trips · Traveling"><span class="mk-tag amb">Human touchpoint · live</span></Top>
+  <div class="mk-body">
+    <div class="mk-rail">{[1,2,3,4,5,6,7,8,9].map((n) => <i class:list={{ done: n < 7, now: n === 7, amb: n === 5 || n === 7 }}></i>)}</div>
+    <div class="mk-msgs">
+      <div class="mk-msg"><span class="mk-av">SB</span><div><small class="via">WhatsApp · traveller</small><p>Train from Kyoto was delayed, we'll reach Arashiyama around 10:40 instead of 10. Is the driver okay to wait?</p><small>Sofia · 09:52</small></div></div>
+      <div class="mk-msg sys"><span class="mk-av ghost">A</span><div><p>Relayed to Kansai Ground Partners in Japanese. Driver Ito-san confirmed: waiting at the north exit, no charge for the delay.</p><small>Automatic · 09:53</small></div></div>
+      <div class="mk-msg me"><span class="mk-av ghost">A</span><div><small class="via">WhatsApp · traveller</small><p>No problem at all — Ito-san will be at the north exit at 10:40. Take your time.</p><small>Sent to Sofia · 09:53</small></div></div>
+      <div class="mk-msg sys"><span class="mk-av amb">!</span><div><p>Sofia asked whether the 14:00 tea ceremony can move to 15:00. That changes a booked supplier — flagged for you rather than answered.</p><small>Escalated · needs a person</small></div></div>
+    </div>
+    <div class="mk-compose"><span>Reply to Sofia — relayed on WhatsApp</span><span class="mk-btn amb">Take over</span></div>
+  </div>
+</div>

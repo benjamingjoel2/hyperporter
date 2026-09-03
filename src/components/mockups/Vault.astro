@@ -1,0 +1,35 @@
+---
+import Side from './Side.astro';
+import Top from './Top.astro';
+const DOCS = [
+  ['Rift Valley GS — rates 2026.pdf', 'Kenya · DMC', 'Nov 2025 – Oct 2026', '48 rates', 'Indexed'],
+  ['Atlas Maroc 2026.pdf', 'Morocco · DMC', 'Jan – Dec 2026', '112 rates', 'Indexed'],
+  ['Andes Trail — Sacred Valley tariff.xlsx', 'Peru · Tour operator', 'Apr – Dec 2026', '36 rates', 'Indexed'],
+  ['Indochina Ground — FIT contract.pdf', 'Vietnam · DMC', 'Expired Dec 2025', '—', 'Archived'],
+  ['Caucasus Journeys 2026.pdf', 'Georgia · DMC', 'Jan – Dec 2026', '27 rates', 'Indexing'],
+];
+---
+<Side active="Atlas" workspace="Andes Trail Operators" who="Camila Rojas" />
+<div class="mk-main">
+  <Top title="Vault" sub="Your contracts and rates"><span class="mk-search"><i></i>Search rates</span><span class="mk-btn">Upload</span></Top>
+  <div class="mk-body tight">
+    <div class="mk-kpis">
+      <div class="mk-kpi"><span>Documents</span><b>61</b></div>
+      <div class="mk-kpi"><span>Rates extracted</span><b>1,204</b></div>
+      <div class="mk-kpi"><span>Expiring in 90 days</span><b>3<em class="amb">review</em></b></div>
+    </div>
+    <table class="mk-tbl">
+      <thead><tr><th>Document</th><th>Supplier</th><th>Valid</th><th>Rates</th><th class="r">Status</th></tr></thead>
+      <tbody>
+        {DOCS.map(([d, s, v, r, st]) => (
+          <tr>
+            <td><div style="display:flex;gap:.6em;align-items:center"><span class:list={['mk-ico', { pdf: d.endsWith('.pdf') }]}>{d.endsWith('.pdf') ? 'PDF' : 'XLS'}</span><b>{d}</b></div></td>
+            <td>{s}</td><td>{v}</td><td>{r}</td>
+            <td class="r"><span class:list={['mk-tag', { grey: st !== 'Indexed', amb: st === 'Indexing' }]}>{st}</span></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="mk-fine">Atlas answers from these documents and nothing else. Nothing here is shared with any other account.</p>
+  </div>
+</div>

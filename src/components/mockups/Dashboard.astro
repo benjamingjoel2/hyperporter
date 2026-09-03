@@ -1,0 +1,45 @@
+---
+import Side from './Side.astro';
+import Top from './Top.astro';
+import { STAGES } from '../../lib/stages';
+const COUNTS = [1, 2, 3, 1, 1, 2, 2, 1, 1];
+---
+<Side active="Trips" />
+<div class="mk-main">
+  <Top title="Overview" sub="This week"><span class="mk-search"><i></i>Search trips, people, suppliers</span><span class="mk-btn">New trip</span></Top>
+  <div class="mk-body">
+    <div class="mk-kpis">
+      <div class="mk-kpi"><span>Trips in progress</span><b>14<em>+3</em></b></div>
+      <div class="mk-kpi"><span>Needs a person</span><b>2<em class="amb">Booking</em></b></div>
+      <div class="mk-kpi"><span>Quotes back this week</span><b>9<em>of 11</em></b></div>
+      <div class="mk-kpi"><span>Horizon suppliers matched</span><b>31</b></div>
+    </div>
+    <div class="mk-split w">
+      <div class="mk-card">
+        <div class="mk-h"><b>Trips by stage</b><span>Autopilot on</span></div>
+        <div class="mk-list">
+          {STAGES.map((s, i) => (
+            <div class="mk-item" style="grid-template-columns:2em minmax(0,1fr) auto">
+              <span class="mk-fine mk-mono">{s.n}</span>
+              <div><b>{s.name}</b></div>
+              <span class:list={['mk-tag', { amb: s.cls !== 'Automatic', grey: s.cls === 'Automatic' }]}>{COUNTS[i]} {COUNTS[i] === 1 ? 'trip' : 'trips'}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1.2em">
+        <div class="mk-card fill">
+          <div class="mk-h"><b>Atlas</b><span>Your Vault</span></div>
+          <p class="mk-p">“Marrakesh riads under €180 with breakfast, from our own contracts?”</p>
+          <p class="mk-p" style="color:var(--paper)">Three, all in the 2026 Atlas Maroc agreement. Dar Zitoune is the best value in February.</p>
+          <span class="mk-cite"><i></i>Atlas Maroc 2026.pdf · p.4</span>
+        </div>
+        <div class="mk-card">
+          <div class="mk-h"><b>Horizon</b><span>Kenya</span></div>
+          <div class="mk-item"><span class="mk-av ghost">RV</span><div><b>Rift Valley Ground Services</b><small>Replied in 40 min · vetted</small></div><span class="mk-tag">Quote in</span></div>
+          <div class="mk-item"><span class="mk-av ghost">AS</span><div><b>Acacia Safari Logistics</b><small>Replied in 2 h · vetted</small></div><span class="mk-tag">Quote in</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

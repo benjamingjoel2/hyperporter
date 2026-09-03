@@ -1,0 +1,30 @@
+---
+import Side from './Side.astro';
+import Top from './Top.astro';
+import { STAGES } from '../../lib/stages';
+const CARDS: Record<string, [string, string, string?][]> = {
+  Inquiry: [['Lisbon', '5 nights · 2 travellers', 'Brief confirmed']],
+  Planning: [['Cusco', '6 nights · family of 4', 'Draft v2 live'], ['Palermo', '7 nights · 2 travellers']],
+  Quotation: [['Nairobi', '9 nights · 2 travellers', '2 of 3 quotes in'], ['Oaxaca', '5 nights · 3 travellers', 'Requested 4 suppliers'], ['Luang Prabang', '6 nights']],
+  Confirmation: [['Tbilisi', '7 nights · 2 travellers', 'Re-verifying']],
+  Booking: [['Marrakesh', '4 nights · Priya Nair', 'Mark payment received']],
+  Ready: [['Hanoi', '11 nights · 3 travellers', 'Vouchers sent']],
+  Traveling: [['Kyoto', 'Day 4 of 8', 'Relay active']],
+};
+---
+<Side active="Trips" />
+<div class="mk-main">
+  <Top title="Pipeline" sub="Autopilot on"><span class="mk-tag">7 of 9 stages automatic</span><span class="mk-btn">New trip</span></Top>
+  <div class="mk-body">
+    <div class="mk-board">
+      {STAGES.map((s) => (
+        <div class="mk-col">
+          <div class:list={['mk-col-h', { amb: s.cls !== 'Automatic' }]}><span>{s.n} {s.name}</span><i>{(CARDS[s.name] ?? []).length}</i></div>
+          {(CARDS[s.name] ?? []).map(([c, m, st]) => (
+            <div class="mk-tcard"><b>{c}</b><span>{m}</span>{st && <span class:list={['mk-tag', { amb: s.cls !== 'Automatic' }]}>{st}</span>}</div>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+</div>

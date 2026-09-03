@@ -1,0 +1,23 @@
+---
+/** The public inquiry form, as a traveller sees it on the agency's own page. */
+interface Props { brand?: string }
+const { brand = 'Meridian Travel Co.' } = Astro.props;
+---
+<div class="mk-main" style="background:var(--ink)">
+  <div class="mk-top" style="background:var(--raise)"><h4><i style="width:1.3em;height:1.3em;border-radius:.3em;background:var(--paper);display:inline-block"></i>{brand}</h4><span class="mk-fine">meridiantravel.co/plan</span></div>
+  <div class="mk-body" style="align-items:center">
+    <div class="mk-card" style="width:min(100%,34em);gap:1em;padding:1.6em">
+      <div><div class="mk-h"><b style="font-size:1.5em">Tell us about the trip</b></div><p class="mk-p">A few questions, then a first itinerary within the day.</p></div>
+      <div class="mk-row2">
+        <div class="mk-field"><label>Where to</label><div>Kenya — the Mara</div></div>
+        <div class="mk-field"><label>When</label><div>First week of March</div></div>
+      </div>
+      <div class="mk-row2">
+        <div class="mk-field"><label>Travellers</label><div>2 adults</div></div>
+        <div class="mk-field"><label>Budget, per person</label><div class="focus">€4,000 – 4,500</div></div>
+      </div>
+      <div class="mk-field"><label>Anything we should know</label><div class="ta ph">Somewhere we can see the migration without a six-hour drive every morning.</div></div>
+      <div style="display:flex;justify-content:space-between;align-items:center"><span class="mk-fine">Powered by Hyperporter</span><span class="mk-btn">Send inquiry</span></div>
+    </div>
+  </div>
+</div>

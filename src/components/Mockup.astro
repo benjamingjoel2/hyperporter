@@ -1,0 +1,44 @@
+---
+/**
+ * A rendering of Hyperporter's interface, in a frame.
+ *
+ * The reference anchors its sections with product screenshots; that is most
+ * of why its pages feel like they are about a real thing. We have no
+ * screenshots yet, so this draws the screens — see styles/mockup.css for how
+ * they scale, and components/mockups/ for the screens themselves.
+ *
+ * Everything shown is illustrative: the agency, the suppliers, the trips and
+ * the prices are invented, and the caption under each placement says so.
+ * The frame is `role="img"` with the screen's description as its label; the
+ * interface inside is hidden from assistive tech, because reading a fake
+ * table aloud helps nobody.
+ *
+ * An unknown screen name throws rather than rendering an empty frame.
+ */
+import '../styles/mockup.css';
+import { SCREENS, SCREEN_ALT, SOLO } from './mockups/index';
+
+interface Props {
+  screen: string;
+  /** 4:5 portrait crop for the homepage cards; the default is 4:3. */
+  tall?: boolean;
+  /** Show the "illustrative" line under the frame. Off inside cards. */
+  caption?: boolean;
+  class?: string;
+}
+
+const { screen, tall = false, caption = !tall, class: klass = '' } = Astro.props;
+const Screen = SCREENS[screen];
+if (!Screen) {
+  throw new Error(`Mockup: no screen named "${screen}". Add one to components/mockups/index.ts.`);
+}
+---
+
+<div class:list={['mockup', klass]}>
+  <div class:list={['mk', { tall }]} role="img" aria-label={SCREEN_ALT[screen]}>
+    <div class:list={['mk-win', { solo: SOLO.has(screen) }]} aria-hidden="true">
+      <Screen />
+    </div>
+  </div>
+  {caption && <p class="sample-tag">Illustrative screens — not live data</p>}
+</div>

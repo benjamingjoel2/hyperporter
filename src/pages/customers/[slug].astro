@@ -13,7 +13,21 @@
 import Base from '../../layouts/Base.astro';
 import { OVERVIEWS, SEGMENTS } from '../../lib/content/customers';
 import type { Overview, Segment } from '../../lib/content/customers';
-import PageArt from '../../components/PageArt.astro';
+import Mockup from '../../components/Mockup.astro';
+
+// The screen each segment opens on: the part of the product that segment
+// actually lives in. Suppliers see their own side — requests and quotes —
+// never Horizon, which is not something they log into.
+const SCREEN: Record<string, string> = {
+  'agent-os': 'sourcing',
+  'supplier-os': 'request',
+  'travel-agencies': 'team',
+  'travel-agents': 'book',
+  'independent-advisors': 'proposal',
+  creators: 'inquiry',
+  dmcs: 'quote',
+  'tour-operators': 'vault',
+};
 
 export function getStaticPaths() {
   return [
@@ -49,7 +63,7 @@ const features = page.features;
         </a>
       </div>
     </div>
-    <PageArt name={`customers/${page.slug}`} />
+    <Mockup screen={SCREEN[page.slug]} />
   </div>
 
   {
