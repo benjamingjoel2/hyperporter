@@ -116,63 +116,37 @@ the page files. Pages are thin; edit the content modules.
 
 ## Design direction (current)
 
-Apple's current design language — apple.com, Liquid Glass — applied as a
-visual and interaction pass (Sep 2026) at the founder's instruction. No
-routes, copy or component structure changed. The whole pass lives in two
-places: the semantic tokens at the top of `src/styles/global.css`, and
-`src/styles/apple.css`, loaded after it, which restates the primitives and
-overrides page rules. Selectors in `apple.css` are prefixed `:root` on
-purpose: the homepage's `legora-home.css` is bundled *after* it, and the
-extra specificity is what lets the override win.
+Light base with teal as the accent. Reverted (Aug 2026) to the pre-Harvey
+direction at commit `28d708a` at the founder's instruction — the harvey.ai /
+starlink.com rebuild is preserved in git history at `d05cc73` if it is ever
+wanted back.
 
-- **Type**: the system stack — `-apple-system, BlinkMacSystemFont, "SF Pro
-  Display", "SF Pro Text", "Inter", system-ui`. No webfont is loaded. Four
-  sizes site-wide, as tokens: `--t-display` (48–88px, 600, −.03em),
-  `--t-title` (28–40px, 600), `--t-body` (17px), `--t-caption` (13px).
-  Everything maps onto one of them; a fifth size is a bug. Headlines are
-  weight 600. Eyebrows are caption size, uppercase, +.06em.
-- **Colour**: `#1D1D1F` on `#FBFBFD`. Secondary text is primary at 60%
-  alpha, tertiary at 55% — never a grey hex. Dark mode follows the OS:
-  `#000` ground, `#1C1C1E` elevated, defined on `:root` under
-  `prefers-color-scheme` and again on `:root.dark` so a manual class wins.
-  One accent: the brand teal, `--signal` `#0E4B52` light / `#4FB3BD` dark.
-  Primary action and current selection only. Amber is still a state, not a
-  colour — human-touchpoint / manual, nowhere decorative.
-- **Space**: sections take `--sec-y`, 64px on a phone to 128px on desktop.
-  Content max 1200px. Whitespace separates; boxes and rules that only
-  separated things are gone. Separators survive only inside lists and
-  tables, at the translucent `--line`.
-- **Surfaces**: cards are a lift, not an outline — 20px radius, no border,
-  `0 4px 24px rgb(0 0 0 / .06)`; in dark they get lighter instead of a
-  shadow. Buttons are pills, 44px, weight 600; secondary buttons are
-  tinted-transparent with no border. Inputs are filled `--ink`, 12px
-  radius, no border, a focus ring. Concentric radii: a 24px container
-  padded 8px holds 16px children.
-- **Liquid Glass**: chrome only. The bar floats — 12px off the top and
-  sides, 24px radius, `rgb(255 255 255 / .70)` over light content and
-  `rgb(28 28 30 / .62)` over dark (it takes the region under it via the
-  `data-chrome="dark"` observer in Header.astro), `blur(24px)
-  saturate(180%)`, a soft lift, and a 1px inset highlight on the top edge.
-  The nav dropdown and the mobile sheet are the other two glass elements;
-  nothing else blurs. Solid fallbacks under `@supports not` and
-  `prefers-reduced-transparency`.
-- Full-bleed heroes pull under the bar by `--chrome-h` plus twice
-  `--chrome-gap`; `--chrome-h` is still measured by Header.astro.
-- The illustrations (`lib/pageArt.ts`, `lib/blogArt.ts`, `lib/legoraArt.ts`)
-  paint literal fills. `apple.css` re-points those attribute values at the
-  tokens so the drawings follow the theme — a white panel must not glow on
-  black.
-- `WorldMap.astro` + `lib/worldMap.ts` unchanged: real Natural Earth
-  geometry, its own dark ground, hover green deliberately not `--signal`.
+- **Type**: Hyperlocal ROM throughout — display, body and labels — with Inter
+  as the single fallback. PT Serif and IBM Plex Mono were dropped (Aug 2026)
+  at the founder's instruction; the only Google Fonts request left is Inter.
+  Labels and eyebrows stay in capitals with their wide tracking.
+  Two things the switch needed: display sizes carry `-.022em` tracking (the
+  serif wanted `+.006em`; a grotesque at 108px wants the opposite), and
+  anything with digits that line up or tick over gets
+  `font-variant-numeric:tabular-nums`, since the labels are no longer
+  monospaced. Hyperlocal ROM ships real `tnum` figures.
+- **Accent**: `--signal` is teal `#1B747E`. Amber `#9A5F0B` is still reserved
+  for human-touchpoint / manual states — never decorative.
+- Homepage opens on the photo band with the flight-arc overlay, as it did
+  before the rebuild.
+- `WorldMap.astro` + `lib/worldMap.ts` survived the revert: real Natural Earth
+  geometry projected to SVG at build time. 110m shapes plus centroid dots for
+  the 13 island states 110m drops. Two states only — covered or not. The build
+  **fails** if any destination has no geometry, so the map can never
+  under-report. It lives on `/destinations` and keeps its own dark ground;
+  hover green is deliberately not `--signal`.
+- Removed with the revert: `AppShot.astro` (the Autopilot interface drawn in
+  markup) and `lib/counts.ts`. Both are recoverable from `d05cc73`.
 
-The previous directions are in history: the Legora-based light build at
-`d65b6c1`, the harvey.ai / starlink.com rebuild at `d05cc73`.
-
-### Font licence — resolved
-Hyperlocal ROM was supplied under a desktop licence that forbids web use,
-and was live regardless. It is no longer loaded or referenced; the
-`@font-face` is gone and the system stack is used throughout. The `.woff2`
-is still in `public/fonts/` and can be deleted.
+### Font licence — outstanding
+Hyperlocal ROM was supplied under a **desktop** licence, whose terms forbid
+"storing on publicly available servers". It is live on hyperporter.com at the
+founder's explicit instruction. A Dinamo **web** licence is still required.
 
 ## Migration target
 
