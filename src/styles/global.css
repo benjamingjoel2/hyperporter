@@ -578,12 +578,13 @@ p{margin:0 0 16px}
 .bx-cover svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 
 /* ---- featured ---- */
-.bx-feat{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);
-  gap:clamp(26px,3.4vw,54px);align-items:stretch;
-  padding:clamp(30px,3.6vw,52px) 0 clamp(34px,4vw,60px);
-  border-top:1px solid var(--line);margin-top:clamp(30px,4vw,54px)}
+.bx-feat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);
+  gap:clamp(14px,1.2vw,20px);align-items:stretch;
+  padding:0 0 clamp(34px,4vw,60px);margin-top:clamp(30px,4vw,54px)}
+/* The rules bracket the side column and stop at the cover, as on the
+   reference — no full-width rule across the top of the image. */
 .bx-feat-side{display:flex;flex-direction:column;justify-content:space-between;
-  gap:40px;border-right:1px solid var(--line);padding-right:clamp(22px,2.6vw,40px)}
+  gap:40px;padding:28px 0 26px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .bx-feat-meta{display:flex;flex-direction:column;gap:7px}
 .bx-feat-meta time{font-size:13px;color:var(--dim);font-variant-numeric:tabular-nums}
 .bx-kicker{display:block;font-size:14px;color:var(--muted);margin-bottom:10px}
@@ -595,7 +596,7 @@ p{margin:0 0 16px}
   text-transform:uppercase;color:var(--dim)}
 /* A height rather than a ratio: at this column width 16/10 made the cover
    nearly 600px tall and pushed the filters and the grid off the page. */
-.bx-feat .bx-cover{height:clamp(280px,29vw,410px)}
+.bx-feat .bx-cover{aspect-ratio:16/9}
 
 /* ---- filters ---- */
 .bx-filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center;
@@ -606,9 +607,11 @@ p{margin:0 0 16px}
 .bx-chip.on{background:var(--paper);color:var(--raise)}
 
 /* ---- three-up grid ---- */
+/* Square and nearly touching: the reference's grid is 458px squares with a
+   9px gutter, and the images are what carry the page. */
 .bx-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:clamp(20px,2.4vw,34px)}
-.bx-card .bx-cover{aspect-ratio:4/3;margin-bottom:16px}
+  gap:36px clamp(9px,.8vw,12px)}
+.bx-card .bx-cover{aspect-ratio:1/1;margin-bottom:16px}
 .bx-card time{display:block;font-size:12.5px;color:var(--dim);margin-bottom:9px;
   font-variant-numeric:tabular-nums}
 .bx-card h3{font-size:19px;letter-spacing:-.018em;line-height:1.26;margin:0 0 10px;
@@ -621,8 +624,8 @@ p{margin:0 0 16px}
 .bx-more{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);
   gap:clamp(24px,4vw,70px);margin-top:clamp(48px,6vw,90px)}
 .bx-more-label{padding-top:26px}
-.bx-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px);
-  gap:clamp(20px,3vw,44px);align-items:end;
+.bx-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(16px,1.4vw,24px);align-items:end;
   border-top:1px solid var(--line);padding:24px 0}
 .bx-row time{grid-column:1;font-size:12.5px;color:var(--dim);
   font-variant-numeric:tabular-nums;align-self:start}
@@ -1167,6 +1170,48 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
   .page-hero > .pgart{grid-column:1;grid-row:auto;max-width:440px}
 }
 
+/* ---- photo hero for product pages -------------------------------------
+   The hero and the band under it sit on one photograph, as the homepage
+   opens. The image is sticky rather than absolute: absolute over a section
+   this tall would stretch a landscape photo to a few thousand pixels, and
+   fixed attachment does not work on iOS. Sticky at the top with its own
+   height pulled back out of the flow, it holds still while the hero and the
+   pinned stage panel scroll over it, and leaves with the section. */
+.p-top-photo{position:relative;background:#1A1D21;color:#fff;
+  margin-top:calc(-1 * var(--chrome-h,111px));padding-top:var(--chrome-h,111px)}
+.p-photo-bg{position:sticky;top:0;z-index:0;display:block;width:100%;
+  height:100vh;height:100svh;object-fit:cover;
+  filter:grayscale(.4) brightness(.5);margin-bottom:-100vh;margin-bottom:-100svh}
+.p-top-photo > :not(.p-photo-bg){position:relative;z-index:1}
+.p-top-photo .eyebrow{color:rgba(255,255,255,.62)}
+.p-top-photo h1{color:#fff}
+.p-top-photo .lede{color:rgba(255,255,255,.82)}
+
+/* The thread card on the photograph: the nav dropdown's glass, not a white
+   card — a white card on a dark photograph is a dialog box. */
+.p-top-photo .thread{background:rgba(13,16,22,.66);border-color:rgba(255,255,255,.12);
+  -webkit-backdrop-filter:saturate(1.3) blur(20px);backdrop-filter:saturate(1.3) blur(20px);
+  box-shadow:none;color:#fff}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .p-top-photo .thread{background:rgba(13,16,22,.9)}
+}
+.p-top-photo .thread .th{color:rgba(255,255,255,.6);border-bottom-color:rgba(255,255,255,.12)}
+.p-top-photo .thread .th b{color:#fff}
+.p-top-photo .chip{border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.62)}
+.p-top-photo .chip:hover{color:#fff;border-color:rgba(255,255,255,.4)}
+.p-top-photo .chip.done{color:rgba(255,255,255,.78);border-color:rgba(255,255,255,.3)}
+.p-top-photo .chip.now{color:#fff;background:var(--signal-hi);border-color:var(--signal-hi)}
+.p-top-photo .thread .line{color:rgba(255,255,255,.84);border-top-color:rgba(255,255,255,.12)}
+.p-top-photo .thread .line i{background:#4FB3BD}
+.p-top-photo .thread .line.amb i{background:#E2A94E}
+.p-top-photo .thread .ft{color:rgba(255,255,255,.6);border-top-color:rgba(255,255,255,.12)}
+.p-top-photo .toggle{color:#4FB3BD}
+.p-top-photo .toggle span{background:rgba(79,179,189,.18);border-color:#4FB3BD}
+.p-top-photo .toggle span::after{background:#4FB3BD}
+.p-top-photo .toggle[aria-pressed="false"]{color:rgba(255,255,255,.55)}
+.p-top-photo .toggle[aria-pressed="false"] span{background:none;border-color:rgba(255,255,255,.3)}
+.p-top-photo .sample-tag{color:rgba(255,255,255,.5)}
+
 /* ---- /autopilot: the nine stages -------------------------------------
    Moved off the homepage. Dark glass on a photograph rather than a panel on
    the page ground — the same material as the nav dropdown, because the stage
@@ -1181,15 +1226,13 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
    makes this element the sticky child's scrollport, and the panel below
    silently stops sticking. The photograph is inset:0 inside the sticky
    element, so there is nothing to clip anyway. */
-.ap-band{position:relative;background:#1A1D21}
+.ap-band{position:relative}
 /* The photograph lives inside the element that gets pinned, so it holds still
    with the panel. It cannot be a sibling pulled up with a negative margin:
    percentage margins resolve against the container's *width*, so -100% there
    is about 1300px, not one viewport. */
 .ap-band-stick{position:relative;width:100%;display:flex;align-items:center;
   padding:clamp(54px,6vw,84px) 0}
-.ap-band-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  filter:grayscale(.4) brightness(.5)}
 .ap-band-stick > .wrap{position:relative;z-index:1;width:100%}
 
 @media (prefers-reduced-motion:no-preference) and (min-width:861px) and (min-height:640px){
