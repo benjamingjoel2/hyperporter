@@ -26,93 +26,50 @@
    Teal and amber are darkened well below their dark-theme values: #46C6B9
    sits at ~1.9:1 against white, nowhere near readable. Amber is still
    reserved for human-touchpoint / manual states — never decorative. */
+@font-face{
+  font-family:'Hyperlocal ROM';
+  src:url('/fonts/hyperlocal-rom-regular.woff2') format('woff2');
+  font-weight:400;font-style:normal;font-display:swap;
+}
 :root{
-  color-scheme:light dark;
-  /* Semantic tokens. Names keep their original roles — `--void` is still
-     "page ground", `--paper` still "primary text" — so every rule written
-     against them stays correct; only the values change. Light is the
-     default; dark is defined below, twice, so a manual `.light`/`.dark`
-     on <html> wins in both directions. No component touches a raw hex. */
-  --void:#FBFBFD;
+  /* Ground is warm off-white, not white, and the greys are warm with it —
+     measured off the reference at 1440px, where the ground reads
+     rgb(250,250,249), ink rgb(13,16,22) and secondary text rgb(104,101,94).
+     A neutral-grey secondary on this ground looks dirty; the warm one is
+     what makes the page read as considered. */
+  --void:#FAFAF9;
+  --ink:#F1F2F0;
+  --steel:#E6E5E3;
   --raise:#FFFFFF;
-  --ink:#F5F5F7;
-  --steel:#EDEDF0;
-  --line:rgb(60 60 67 / .18);
-  --line-2:rgb(60 60 67 / .29);
-  --paper:#1D1D1F;
-  /* Secondary is primary at 60%, tertiary at 55%: alpha over the ground,
-     never a muddy grey hex, so both composite correctly over materials.
-     Tertiary is held above the 4.5:1 floor for the caption-size labels
-     that use it. */
-  --muted:rgb(29 29 31 / .60);
-  --dim:rgb(29 29 31 / .55);
-  /* One accent, the brand teal. Primary action and current selection only. */
+  --line:#E1DFDA;
+  --line-2:#C8C5BF;
+  --paper:#0D1016;
+  --muted:#68655E;
+  --dim:#8F8D8A;
+  /* Teal darkened from #1B747E so it holds white text in the structural
+     role the reference gives its forest green: announcement bar, buttons,
+     and nothing decorative. */
   --signal:#0E4B52;
   --signal-hi:#12606A;
-  --signal-dim:rgb(14 75 82 / .12);
-  /* Amber is a state, not a colour: human-touchpoint / manual only. */
+  --signal-dim:rgba(14,75,82,.10);
   --amber:#9A5F0B;
+  /* Photo scrim base. Light again, so the hero bands whiten the photograph
+     rather than darkening it. */
   --scrim:255,255,255;
-  --display:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Inter",system-ui,sans-serif;
-  --body:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Inter",system-ui,sans-serif;
-  --mono:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif;
-  /* Four type sizes, site-wide. Everything maps onto one of these. */
-  --t-display:clamp(3rem,2rem + 3.5vw,5.5rem);
-  --t-title:clamp(1.75rem,1.25rem + 1.6vw,2.5rem);
-  --t-body:1.0625rem;
-  --t-caption:.8125rem;
-  /* Radii, concentric: a 20px surface padded 8px holds a 12px child. */
-  --radius:12px;
-  --radius-card:20px;
-  --radius-pill:9999px;
-  --pad:clamp(16px,3.2vw,40px);
-  --max:1200px;
-  /* Section rhythm: 64px at phone width, 128px on desktop. */
-  --sec-y:clamp(4rem,3rem + 5vw,8rem);
-  --sec-y-tight:clamp(3rem,2rem + 4vw,6rem);
-  --chrome-gap:12px;
-  --shadow-card:0 4px 24px rgb(0 0 0 / .06);
-  --shadow-float:0 8px 32px rgb(0 0 0 / .10),0 1px 2px rgb(0 0 0 / .04);
-  --glass-bg:rgb(255 255 255 / .70);
-  --glass-bg-dark:rgb(28 28 30 / .62);
-  --glass-rim:inset 0 1px 0 rgb(255 255 255 / .20);
+  --display:'Hyperlocal ROM','Inter',system-ui,sans-serif;
+  --body:'Hyperlocal ROM','Inter',system-ui,sans-serif;
+  --mono:'Hyperlocal ROM','Inter',system-ui,sans-serif;
+  /* Buttons, inputs and segmented controls. Not pills — a small, even
+     corner, as on the reference. Label chips keep their own pill radius. */
+  --radius:6px;
+  --pad:clamp(20px,3.2vw,48px);
+  --max:1680px;
   --photo:url("/hero.jpg");
-}
-@media (prefers-color-scheme:dark){
-  :root:not(.light){
-    --void:#000000;
-    --raise:#1C1C1E;
-    --ink:#1C1C1E;
-    --steel:#2C2C2E;
-    --line:rgb(84 84 88 / .55);
-    --line-2:rgb(84 84 88 / .75);
-    --paper:#F5F5F7;
-    --muted:rgb(245 245 247 / .60);
-    --dim:rgb(245 245 247 / .55);
-    --signal:#4FB3BD;
-    --signal-hi:#6CC5CD;
-    --signal-dim:rgb(79 179 189 / .16);
-    --amber:#E2A94E;
-    --scrim:0,0,0;
-    --shadow-card:none;
-    --shadow-float:0 1px 0 rgb(255 255 255 / .06);
-    --glass-bg:rgb(28 28 30 / .70);
-    --glass-bg-dark:rgb(28 28 30 / .70);
-    --glass-rim:inset 0 1px 0 rgb(255 255 255 / .10);
-  }
-}
-:root.dark{
-  --void:#000000;--raise:#1C1C1E;--ink:#1C1C1E;--steel:#2C2C2E;
-  --line:rgb(84 84 88 / .55);--line-2:rgb(84 84 88 / .75);
-  --paper:#F5F5F7;--muted:rgb(245 245 247 / .60);--dim:rgb(245 245 247 / .55);
-  --signal:#4FB3BD;--signal-hi:#6CC5CD;--signal-dim:rgb(79 179 189 / .16);--amber:#E2A94E;
-  --scrim:0,0,0;--shadow-card:none;--shadow-float:0 1px 0 rgb(255 255 255 / .06);
-  --glass-bg:rgb(28 28 30 / .70);--glass-bg-dark:rgb(28 28 30 / .70);--glass-rim:inset 0 1px 0 rgb(255 255 255 / .10);
 }
 *{box-sizing:border-box}
 
 html{scroll-behavior:smooth;background:var(--void)}
-body{margin:0;background:var(--void);color:var(--paper);font-family:var(--body);font-size:var(--t-body);line-height:1.5;letter-spacing:0;
+body{margin:0;background:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
   /* `clip`, not `hidden`. This was `overflow-x:hidden` — a safety net against
      sideways scroll that also made body a scroll container, which silently
      broke `position:sticky` for every descendant and capped programmatic
@@ -142,6 +99,11 @@ button{font:inherit;cursor:pointer}
 }
 ::selection{background:var(--signal);color:var(--void)}
 
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+}
 
 .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
 .view{display:none}
