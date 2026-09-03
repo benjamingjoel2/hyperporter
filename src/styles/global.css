@@ -573,22 +573,17 @@ p{margin:0 0 16px}
 
 /* The cover frame. `slice` on the SVG, so a cover fills whatever aspect the
    slot asks for rather than letterboxing inside it. */
-/* No frame and no radius: the reference's covers are photographs running
-   edge to edge, and a hairline box around a drawing is what made ours read
-   as empty panels rather than images. */
-.bx-cover{position:relative;overflow:hidden;background:var(--paper)}
+.bx-cover{position:relative;overflow:hidden;background:var(--ink);
+  border:1px solid var(--line);border-radius:3px}
 .bx-cover svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 
 /* ---- featured ---- */
 .bx-feat{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);
   gap:clamp(26px,3.4vw,54px);align-items:stretch;
-  padding:0 0 clamp(34px,4vw,60px);margin-top:clamp(30px,4vw,54px)}
-/* The rules bracket the side column only and stop at the cover — a
-   full-width rule above a photograph is not what the reference does. */
+  padding:clamp(30px,3.6vw,52px) 0 clamp(34px,4vw,60px);
+  border-top:1px solid var(--line);margin-top:clamp(30px,4vw,54px)}
 .bx-feat-side{display:flex;flex-direction:column;justify-content:space-between;
-  gap:40px;border-right:1px solid var(--line);padding-right:clamp(22px,2.6vw,40px);
-  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-  padding-top:26px;padding-bottom:26px}
+  gap:40px;border-right:1px solid var(--line);padding-right:clamp(22px,2.6vw,40px)}
 .bx-feat-meta{display:flex;flex-direction:column;gap:7px}
 .bx-feat-meta time{font-size:13px;color:var(--dim);font-variant-numeric:tabular-nums}
 .bx-kicker{display:block;font-size:14px;color:var(--muted);margin-bottom:10px}
@@ -600,7 +595,7 @@ p{margin:0 0 16px}
   text-transform:uppercase;color:var(--dim)}
 /* A height rather than a ratio: at this column width 16/10 made the cover
    nearly 600px tall and pushed the filters and the grid off the page. */
-.bx-feat .bx-cover{height:clamp(280px,30vw,430px)}
+.bx-feat .bx-cover{height:clamp(280px,29vw,410px)}
 
 /* ---- filters ---- */
 .bx-filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center;
@@ -611,12 +606,9 @@ p{margin:0 0 16px}
 .bx-chip.on{background:var(--paper);color:var(--raise)}
 
 /* ---- three-up grid ---- */
-/* Three up, square, and nearly touching — measured off the reference at
-   1440: 458px images with a 9px gutter. Wide gutters and a 4/3 crop were
-   what made our grid read as a row of small tiles. */
 .bx-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:10px clamp(9px,.9vw,14px)}
-.bx-card .bx-cover{aspect-ratio:1/1;margin-bottom:16px}
+  gap:clamp(20px,2.4vw,34px)}
+.bx-card .bx-cover{aspect-ratio:4/3;margin-bottom:16px}
 .bx-card time{display:block;font-size:12.5px;color:var(--dim);margin-bottom:9px;
   font-variant-numeric:tabular-nums}
 .bx-card h3{font-size:19px;letter-spacing:-.018em;line-height:1.26;margin:0 0 10px;
@@ -649,7 +641,8 @@ p{margin:0 0 16px}
 .post-back:hover{color:var(--signal)}
 .post-head h1{font-size:clamp(32px,4.4vw,56px);letter-spacing:-.032em;line-height:1.05;
   margin:12px 0 clamp(28px,3.4vw,44px);max-width:20ch}
-.post-cover{position:relative;overflow:hidden;aspect-ratio:16/7;background:var(--paper)}
+.post-cover{position:relative;overflow:hidden;aspect-ratio:16/7;
+  border:1px solid var(--line);border-radius:3px;background:var(--ink)}
 .post-cover svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 
 /* The rail. Every band of the article uses it, so the label column stays on

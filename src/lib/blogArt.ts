@@ -13,18 +13,12 @@
  * inside the archetype comes from the slug, so no two posts collide.
  */
 
-/* The reference's covers are photographs: edge-to-edge colour, no frame, and
-   dark enough to carry the page. Drawn covers on a pale ground read as empty
-   panels next to them, so these are dark grounds with the composition in
-   light — the same weight a photograph has on a light page. */
-const GROUNDS = ['#0D1016', '#12242A', '#1B2024', '#0E2C31', '#151A21'];
+const GROUND = '#F1F2F0';
 const INK = '#0D1016';
-const SIG = '#2E8C97';
-const SIG_HI = '#4FB3BD';
-const LINE = 'rgba(255,255,255,.22)';
-const PANEL = 'rgba(255,255,255,.90)';
-const PANEL_DIM = 'rgba(255,255,255,.13)';
-const AMBER = '#C98A2E';
+const SIG = '#0E4B52';
+const SIG_HI = '#12606A';
+const LINE = '#D8D6D1';
+const AMBER = '#9A5F0B';
 
 const W = 960;
 const H = 540;
@@ -56,33 +50,33 @@ const stroke = (d: string, color: string, w = 3, o = 1): string =>
 /* ---------------------------------------------------------------- */
 
 /** Product — interface planes, one lit. Panels of a thing being built. */
-function product(r: () => number, ground: string): string {
+function product(r: () => number): string {
   const cols = 3 + Math.floor(r() * 2);
   const lit = Math.floor(r() * cols);
   const gap = 26;
   const cw = (W - 160 - gap * (cols - 1)) / cols;
-  let s = rect(0, 0, W, H, ground);
+  let s = rect(0, 0, W, H, GROUND);
   for (let i = 0; i < cols; i++) {
     const x = 80 + i * (cw + gap);
     const h = 190 + r() * 190;
     const y = (H - h) / 2;
-    s += rect(x, y, cw, h, i === lit ? SIG : PANEL_DIM);
-    s += rect(x, y, cw, 34, i === lit ? SIG_HI : 'rgba(255,255,255,.26)');
+    s += rect(x, y, cw, h, i === lit ? SIG : '#FFFFFF');
+    s += rect(x, y, cw, 34, i === lit ? SIG_HI : LINE);
     const rowsN = 3 + Math.floor(r() * 3);
     for (let k = 0; k < rowsN; k++) {
       const rw = cw * (0.34 + r() * 0.44);
-      s += rect(x + 22, y + 68 + k * 30, rw, 9, i === lit ? INK : 'rgba(255,255,255,.34)', i === lit ? 0.45 : 1);
+      s += rect(x + 22, y + 68 + k * 30, rw, 9, i === lit ? '#FFFFFF' : LINE, i === lit ? 0.5 : 1);
     }
   }
   return s;
 }
 
 /** Operations — a run of stages across the frame, with the human ones marked. */
-function operations(r: () => number, ground: string): string {
+function operations(r: () => number): string {
   const n = 7 + Math.floor(r() * 3);
   const y = H / 2;
   const human = new Set([1 + Math.floor(r() * (n - 2)), 1 + Math.floor(r() * (n - 2))]);
-  let s = rect(0, 0, W, H, ground);
+  let s = rect(0, 0, W, H, GROUND);
   s += stroke(`M70 ${y}H${W - 70}`, LINE, 4);
   for (let i = 0; i < n; i++) {
     const x = 70 + (i * (W - 140)) / (n - 1);
@@ -90,16 +84,16 @@ function operations(r: () => number, ground: string): string {
     const up = i % 2 === 0;
     const len = 60 + r() * 70;
     s += stroke(`M${x} ${y}V${up ? y - len : y + len}`, isH ? AMBER : LINE, 3, isH ? 0.9 : 1);
-    s += rect(x - 46, up ? y - len - 44 : y + len, 92, 44, isH ? AMBER : PANEL_DIM, isH ? 0.3 : 1);
-    s += rect(x - 30, up ? y - len - 28 : y + len + 16, 60, 9, isH ? AMBER : 'rgba(255,255,255,.42)');
+    s += rect(x - 46, up ? y - len - 44 : y + len, 92, 44, isH ? AMBER : '#FFFFFF', isH ? 0.16 : 1);
+    s += rect(x - 30, up ? y - len - 28 : y + len + 16, 60, 9, isH ? AMBER : LINE);
     s += circ(x, y, isH ? 18 : 12, isH ? AMBER : SIG);
   }
   return s;
 }
 
 /** Industry — a field of actors, some connected, most not. The market. */
-function industry(r: () => number, ground: string): string {
-  let s = rect(0, 0, W, H, ground);
+function industry(r: () => number): string {
+  let s = rect(0, 0, W, H, GROUND);
   const pts: [number, number][] = [];
   for (let i = 0; i < 26; i++) {
     pts.push([70 + r() * (W - 140), 60 + r() * (H - 120)]);
@@ -111,15 +105,15 @@ function industry(r: () => number, ground: string): string {
   }
   for (const [x, y] of pts) {
     const near = Math.hypot(x - hub[0], y - hub[1]) < 300;
-    s += circ(x, y, near ? 11 : 8, near ? SIG_HI : 'rgba(255,255,255,.30)');
+    s += circ(x, y, near ? 11 : 8, near ? SIG : LINE);
   }
-  s += circ(hub[0], hub[1], 30, SIG_HI);
+  s += circ(hub[0], hub[1], 30, INK);
   return s;
 }
 
 /** Principles — containment. Concentric bands around one held centre. */
-function principles(r: () => number, ground: string): string {
-  let s = rect(0, 0, W, H, ground);
+function principles(r: () => number): string {
+  let s = rect(0, 0, W, H, GROUND);
   const cx = W / 2 + (r() - 0.5) * 180;
   const cy = H / 2;
   const bands = 4 + Math.floor(r() * 3);
@@ -127,20 +121,20 @@ function principles(r: () => number, ground: string): string {
     const rad = 60 + i * 42;
     s += `<circle cx="${cx.toFixed(1)}" cy="${cy}" r="${rad}" fill="none" stroke="${i === bands ? LINE : SIG}" stroke-width="${i === bands ? 4 : 3}" opacity="${i === bands ? 1 : 0.2 + (bands - i) * 0.12}"${i === bands ? ' stroke-dasharray="14 12"' : ''}/>`;
   }
-  s += circ(cx, cy, 46, SIG_HI);
+  s += circ(cx, cy, 46, SIG);
   const spokes = 5 + Math.floor(r() * 3);
   for (let i = 0; i < spokes; i++) {
     const a = (i / spokes) * Math.PI * 2 + r() * 0.4;
     const rad = 102 + Math.floor(r() * 3) * 42;
-    s += circ(cx + Math.cos(a) * rad, cy + Math.sin(a) * rad, 13, ground);
+    s += circ(cx + Math.cos(a) * rad, cy + Math.sin(a) * rad, 13, '#FFFFFF');
     s += `<circle cx="${(cx + Math.cos(a) * rad).toFixed(1)}" cy="${(cy + Math.sin(a) * rad).toFixed(1)}" r="13" fill="none" stroke="${SIG}" stroke-width="3"/>`;
   }
   return s;
 }
 
 /** Growth — a field that climbs. Columns, and the line drawn through them. */
-function growth(r: () => number, ground: string): string {
-  let s = rect(0, 0, W, H, ground);
+function growth(r: () => number): string {
+  let s = rect(0, 0, W, H, GROUND);
   const n = 8 + Math.floor(r() * 4);
   const base = H - 90;
   const cw = (W - 160) / n;
@@ -152,18 +146,18 @@ function growth(r: () => number, ground: string): string {
   }
   for (let i = 0; i < n; i++) {
     const x = 80 + i * cw;
-    s += rect(x + 6, tops[i], cw - 12, base - tops[i], i === n - 1 ? SIG_HI : PANEL_DIM);
-    if (i !== n - 1) s += rect(x + 6, tops[i], cw - 12, 8, 'rgba(255,255,255,.34)');
+    s += rect(x + 6, tops[i], cw - 12, base - tops[i], i === n - 1 ? SIG : '#FFFFFF');
+    if (i !== n - 1) s += rect(x + 6, tops[i], cw - 12, 8, LINE);
   }
-  s += stroke(`M${tops.map((t, i) => `${(80 + i * cw + cw / 2).toFixed(1)} ${t.toFixed(1)}`).join('L')}`, SIG_HI, 4);
+  s += stroke(`M${tops.map((t, i) => `${(80 + i * cw + cw / 2).toFixed(1)} ${t.toFixed(1)}`).join('L')}`, SIG, 4);
   tops.forEach((t, i) => {
-    s += circ(80 + i * cw + cw / 2, t, 9, i === n - 1 ? PANEL : SIG_HI);
+    s += circ(80 + i * cw + cw / 2, t, 9, i === n - 1 ? INK : SIG);
   });
   s += stroke(`M70 ${base}H${W - 70}`, LINE, 4);
   return s;
 }
 
-const ARCHETYPES: Record<string, (r: () => number, ground: string) => string> = {
+const ARCHETYPES: Record<string, (r: () => number) => string> = {
   Product: product,
   Operations: operations,
   Industry: industry,
@@ -177,9 +171,7 @@ const ARCHETYPES: Record<string, (r: () => number, ground: string) => string> = 
  */
 export function blogCover(slug: string, cat: string): string {
   const draw = ARCHETYPES[cat] ?? industry;
-  const r = seeded(slug + cat);
-  const ground = GROUNDS[Math.floor(r() * GROUNDS.length)];
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${draw(r, ground)}</svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${draw(seeded(slug + cat))}</svg>`;
 }
 
 /** Covers are decorative — the headline beside them carries the meaning — so
