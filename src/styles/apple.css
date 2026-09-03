@@ -1,0 +1,332 @@
+/* ============ APPLE PASS ============
+   Loaded after global.css. Visual and interaction only: no routes, copy or
+   markup change. Where a rule here has to beat a page-level sheet (the
+   homepage's legora-home.css is bundled after this file), the selector is
+   prefixed `:root` for the extra specificity — that is deliberate, not a
+   typo. Everything consumes the semantic tokens in global.css.
+
+   The language: content is the interface; one accent; hierarchy from size,
+   weight and colour; depth from material and a soft lift, not from borders.
+   Glass is chrome only — the bar, its menu, the mobile sheet — never a
+   surface that carries body text. */
+
+:root{
+  /* The two dark bands on the homepage and /autopilot's stage panel. In
+     dark mode they lift to the elevated surface rather than sinking below
+     the page. */
+  --dk-bg:#0B0E12;
+  --dk-text:#F5F5F7;
+  --dk-muted:rgb(245 245 247 / .60);
+  --dk-line:rgb(255 255 255 / .12);
+  --dk-lit:#4FB3BD;
+  --focus:0 0 0 4px var(--signal-dim),0 0 0 1px var(--signal);
+}
+@media (prefers-color-scheme:dark){
+  :root:not(.light){--dk-bg:#1C1C1E;--dk-line:rgb(255 255 255 / .10)}
+}
+:root.dark{--dk-bg:#1C1C1E;--dk-line:rgb(255 255 255 / .10)}
+
+/* ---------------- type: four sizes ---------------- */
+:root body{font-family:var(--body);font-size:var(--t-body);line-height:1.5;letter-spacing:0;
+  -webkit-font-smoothing:auto}
+:root h1,:root .bx-title,:root .post-head h1{
+  font-family:var(--display);font-size:var(--t-display);font-weight:600;
+  letter-spacing:-.03em;line-height:1.05;text-wrap:balance}
+:root h2,:root .f-cta h2,:root .bx-feat h2,:root .nextup h3,:root .post-next-link b,
+:root .lg-stmt h2,:root .lg-close h2{
+  font-family:var(--display);font-size:var(--t-title);font-weight:600;
+  letter-spacing:-.02em;line-height:1.1;text-wrap:balance}
+:root h3,:root .fitem b,:root .bx-card h3,:root .bx-row h3,:root .post-more-card h3,
+:root .lg-card h3,:root .lg-pnode h3,:root .lg-car-p b,:root .lg-cert b,:root .tier h3,
+:root .case h3,:root .lg-qa button,:root .drow,:root .mark .word,:root .f-col h4{
+  font-family:var(--display);font-size:var(--t-body);font-weight:600;letter-spacing:-.01em;line-height:1.3}
+:root p,:root .lede,:root .dek,:root .lg-card p,:root .lg-pnode p,:root .lg-strow p,
+:root .lg-qa-b,:root .lg-car-p p,:root .lg-gal-head p,:root .lg-car-head p,:root .lg-stmt p,
+:root .fitem p,:root .nextup p,:root .tier li,:root .case p,:root .callout p,:root .bx-feat p,
+:root .bx-card p,:root .bx-row p,:root .post-more-card p,:root .post-body,:root .f-con,
+:root .links a,:root .bar-acts .login,:root .mega .mega-row,:root .dsub a,:root .drawer-login,
+:root .lg-hero-sub span,:root .lg-vision-prose p,:root .lg-statprose p,:root .post-meta dd,
+:root .bx-kicker,:root .thread .line,:root .lg-cert p,:root .lg-sec-dark .lg-fine,
+:root .lg-read,:root .ap-pill,:root .tname,:root .lg-qa i{
+  font-size:var(--t-body);line-height:1.5;letter-spacing:0}
+:root .mission,:root .tamt{font-family:var(--display);font-size:var(--t-title);font-weight:600;letter-spacing:-.02em;line-height:1.15}
+:root .tname{font-weight:600}
+/* Three that outrank the lists above by specificity or file order. */
+:root .switch button{font-family:var(--body);font-size:var(--t-caption);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+:root .lg-sec-dark .lg-read{font-family:var(--display);font-size:var(--t-title);font-weight:600;letter-spacing:-.02em}
+:root .pm tbody tr:not(.pm-group) > td:first-child{font-size:var(--t-body);font-weight:600}
+:root .lede,:root .dek{font-size:var(--t-body);font-weight:400;line-height:1.5;letter-spacing:0;color:var(--muted);max-width:60ch}
+/* The article standfirst keeps the title size: a reader's first paragraph,
+   not a section's caption. */
+:root .post-lede{font-size:var(--t-title);font-weight:400;line-height:1.3;letter-spacing:-.01em;color:var(--muted)}
+:root .post-body{max-width:65ch}
+:root .post-body h2{font-size:var(--t-title);font-weight:600;margin:48px 0 16px}
+:root .post-body h3{margin:32px 0 12px}
+:root .post-body p{margin:0 0 24px}
+/* Caption: eyebrows, labels, dates, chips, the ticker. Uppercase only where
+   it was already an eyebrow, and then with +.06em. */
+:root .eyebrow,:root .hint,:root .bx-label,:root .note,:root .msg,:root .tag-p,:root .chip,
+:root .rail .ent,:root .rail .tag,:root .mega .mega-head,:root .dsub-h,:root .fitem .fn,
+:root .fitem .tierpill,:root .lg-avail,:root .lg-car-k,:root .lg-gal-r,:root .lg-car-n,:root .lg-gal-n,
+:root .bx-read,:root .bx-feat-meta time,:root .bx-card time,:root .bx-row time,:root .post-more-card time,
+:root .post-meta dt,:root .post-back,:root .sample-tag,:root .thread .th,:root .thread .ft,
+:root .lg-note,:root .lg-gal-note,:root .bx-chip,:root .f-col a,:root .f-bottom,:root .f-bottom a,
+:root .lg-cert .lg-seal,:root .lg-vision-role,:root .lg-vision-name,:root .lg-pipe-lead .eyebrow,
+:root .ap-band-lead .eyebrow,:root .lg-pcode,:root .pm thead th,:root .pm .pm-group td,
+:root .tier .tnote,:root .dp-badge,:root .dp-tile .tw,:root .kind,:root .b-count,
+:root .pm td,:root .pm th,:root .ap-tag,:root .lock,:root .tkind,:root .lg-portrait,:root .lg-cert .lg-seal i,
+:root .lg-toggle button,:root .seg button,:root .ladder button,:root .bx-more-label{
+  font-family:var(--body);font-size:var(--t-caption);line-height:1.4;font-weight:400;
+  letter-spacing:0;text-transform:none}
+:root .eyebrow,:root .hint,:root .bx-label,:root .post-meta dt,:root .post-back,:root .lg-avail,
+:root .lg-car-k,:root .lg-gal-r,:root .rail .tag,:root .mega .mega-head,:root .dsub-h,:root .kind,
+:root .fitem .fn,:root .lg-cert .lg-seal,:root .pm thead th,:root .pm .pm-group td,:root .dp-tile .tw,
+:root .tkind,:root .lock,:root .ap-tag{
+  text-transform:uppercase;letter-spacing:.06em;font-weight:600;color:var(--muted)}
+:root .eyebrow{margin:0 0 16px}
+:root .rail .ent{text-transform:uppercase;letter-spacing:.04em;font-weight:500}
+:root .hint,:root .note,:root .lg-note,:root .lg-gal-note,:root .sample-tag,:root .bx-read{color:var(--muted)}
+:root .dim,:root .lg-read span:first-child{color:var(--muted)}
+
+/* Prefer weight over colour for emphasis. */
+:root strong,:root b{font-weight:600}
+:root .post-body strong{font-weight:600;color:var(--paper)}
+
+/* ---------------- rhythm ---------------- */
+:root .sec,:root .lg-sec,:root .lg-car,:root .lg-gal,:root .lg-close,:root .lg-vision,
+:root .lg-sec-dark,:root .lg-pipe-sec,:root .post,:root footer{padding-block:var(--sec-y)}
+:root .sec-tight{padding-block:var(--sec-y-tight)}
+:root .sec + .sec-tight{padding-top:0}
+:root .sec:has(+ .sec-tight){padding-bottom:var(--sec-y-tight)}
+:root .lg-stmt{padding-top:var(--sec-y);padding-bottom:calc(var(--sec-y-tight) / 2)}
+:root .lg-sec-lead{margin-bottom:48px}
+:root footer{padding-bottom:0}
+:root .wrap{max-width:var(--max);padding-inline:var(--pad)}
+
+/* ---------------- chrome: liquid glass ----------------
+   The bar floats: margin off the top and sides, a 24px radius, a soft lift,
+   translucency with a saturation boost, and a 1px inner highlight on the
+   top edge for the refractive rim. It is the one persistent glass element;
+   the menu and the mobile sheet are the other two. Nothing else blurs. */
+:root header.top{position:sticky;top:var(--chrome-gap);z-index:70;
+  width:calc(100% - 2 * var(--pad));max-width:var(--max);margin:var(--chrome-gap) auto 0;
+  border:0;border-radius:24px;
+  background:var(--glass-bg);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:var(--shadow-float),var(--glass-rim);
+  transition:background .28s ease,box-shadow .28s ease}
+:root header.top::before{display:none}
+/* Over a dark region the glass darkens rather than lightens — it takes what
+   is behind it, it does not paint over it. */
+:root header.top.over{background:var(--glass-bg-dark);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:var(--shadow-float),inset 0 1px 0 rgb(255 255 255 / .16);border:0}
+:root body.drawer-open header.top{background:var(--glass-bg-dark);border:0}
+:root header.top .bar{height:60px;padding:0 8px 0 16px;gap:16px;
+  /* Not 1fr/auto/1fr: at 1200px the nav column is wider than its share, so
+     the mark was pinned to the viewport centre and "Resources" ran into the
+     glyph. The mark now centres in whatever is left between nav and actions. */
+  grid-template-columns:auto minmax(0,1fr) auto}
+:root .mark{justify-self:center;padding-inline:16px}
+:root .links a,:root .bar-acts .login{font-size:var(--t-caption);font-weight:500;letter-spacing:0}
+:root .links a{padding:8px 10px;border-radius:16px;opacity:1;color:var(--paper)}
+:root .links{gap:0}
+:root .mark .word{font-size:var(--t-caption);font-weight:600;letter-spacing:.14em}
+:root .links a:hover{background:var(--signal-dim);color:var(--signal)}
+:root .links a.act::after{display:none}
+:root .links a.act{color:var(--signal)}
+:root header.top.over .links a.act{color:#fff}
+:root .mega-trigger{border-radius:16px}
+:root .rail{height:32px;border-top:1px solid var(--line);border-radius:0 0 24px 24px}
+:root header.top.over .rail{border-top-color:rgb(255 255 255 / .14)}
+:root .rail .tag{background:var(--raise);border-right:1px solid var(--line);color:var(--signal);
+  border-radius:0 0 0 24px;padding:0 16px}
+:root header.top.over .rail .tag{background:#1C1C1E;color:#fff;border-right-color:rgb(255 255 255 / .14)}
+/* Opaque on purpose: at the glass alpha the marquee shows through the
+   label and the two sets of letters interleave. */
+:root .mega{top:calc(100% + 8px);border-radius:16px;padding:8px;
+  background:var(--glass-bg-dark);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:var(--shadow-float),inset 0 1px 0 rgb(255 255 255 / .14)}
+:root .mega .mega-row{border-radius:8px;padding:8px 12px}
+:root .drawer{top:calc(var(--chrome-h,111px) + var(--chrome-gap) * 2);left:var(--pad);right:var(--pad);
+  bottom:var(--chrome-gap);border-radius:20px;
+  background:var(--glass-bg-dark);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:var(--shadow-float),inset 0 1px 0 rgb(255 255 255 / .12)}
+:root .drow,:root .dsub{border-bottom-color:rgb(255 255 255 / .10)}
+:root .burger{border:0;background:var(--signal-dim);border-radius:var(--radius-pill);
+  width:44px;height:44px;padding:0;display:none;place-items:center}
+:root .burger span{margin:2px auto}
+:root .burger.on{background:rgb(255 255 255 / .16)}
+/* Over a dark region the burger inherits the bar's white ink, or it is an
+   ink-on-ink ghost — the phone hero had a menu button you could not see. */
+:root header.top.over .burger{background:rgb(255 255 255 / .16)}
+:root header.top.over .burger span{background:#fff}
+/* Solid fallbacks: no backdrop-filter, or the user has asked for no
+   transparency. Legibility outranks the effect. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  :root header.top{background:var(--raise)}
+  :root header.top.over,:root .mega,:root .drawer,:root body.drawer-open header.top{background:#1C1C1E}
+}
+@media (prefers-reduced-transparency:reduce){
+  :root header.top{background:var(--raise);-webkit-backdrop-filter:none;backdrop-filter:none}
+  :root header.top.over,:root .mega,:root .drawer,:root body.drawer-open header.top{
+    background:#1C1C1E;-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+/* Full-bleed heroes pull under the floating bar plus its gap. */
+:root .lg-hero,:root .p-top-photo{margin-top:calc(-1 * (var(--chrome-h,111px) + var(--chrome-gap) * 2))}
+:root .lg-hero-in{padding-top:calc(var(--chrome-h,111px) + var(--chrome-gap) * 2 + 24px)}
+:root .p-top-photo{padding-top:calc(var(--chrome-h,111px) + var(--chrome-gap) * 2)}
+:root .lg-band-stick,:root .ap-band-stick,:root .p-photo-bg{top:0}
+:root .ap-band-stick{top:calc(var(--chrome-h,111px) + var(--chrome-gap) * 2)}
+/* Between the phone breakpoint and ~1100px six links, the wordmark and the
+   actions do not fit in one 24px-radius bar. The glyph stays; the word goes. */
+@media (max-width:1100px){
+  :root .mark .word{display:none}
+  :root .mark{padding-inline:8px}
+}
+@media (max-width:980px){
+  :root .bar-acts .login{display:none}
+  :root .links a{padding:8px 8px}
+}
+@media (max-width:860px){
+  :root header.top .bar{height:56px;padding:0 6px 0 14px}
+  :root .burger{display:grid}
+  /* The pill rule above outranks global.css's phone-width `display:none` by
+     source order; restated here or the nav CTA comes back on phones, wraps,
+     and pushes the burger 24px off the edge. */
+  :root .links,:root .bar .cta-nav,:root .bar-acts .login,:root .sys{display:none}
+}
+
+/* ---------------- controls ----------------
+   Primary: solid accent pill. Secondary: tinted transparent, no border.
+   44px minimum, so every control is a touch target as well as a button. */
+:root .btn,:root .cta-nav,:root .f-pill,:root .dp-explore,:root .drawer-cta,:root .lg-car-bar button{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:44px;padding:0 22px;border:0;border-radius:var(--radius-pill);
+  background:var(--signal);color:#fff;font-family:var(--body);font-size:var(--t-body);font-weight:600;
+  letter-spacing:0;box-shadow:none;
+  transition:background .15s ease,transform .15s ease}
+:root .btn:hover,:root .cta-nav:hover,:root .f-pill:hover,:root .drawer-cta:hover{background:var(--signal-hi);transform:none;box-shadow:none}
+:root .btn:active,:root .cta-nav:active{transform:scale(.98)}
+:root .btn i,:root .cta-nav i{width:20px;height:20px;background:rgb(255 255 255 / .18)}
+:root .cta-nav{min-height:40px;padding:0 18px}
+:root .btn-o,:root .dp-explore,:root .lg-car-bar button,:root .plink{
+  background:var(--signal-dim);color:var(--signal);border:0;border-radius:var(--radius-pill);
+  min-height:44px;padding:0 22px;font-weight:600;font-size:var(--t-body)}
+:root .btn-o:hover,:root .dp-explore:hover,:root .lg-car-bar button:hover{background:rgb(14 75 82 / .18);color:var(--signal);border:0}
+:root .plink{display:inline-flex;align-items:center;min-height:40px;padding:0 18px;gap:8px}
+:root .plink:hover{gap:8px;background:rgb(14 75 82 / .18)}
+:root .lg-car-bar button{width:44px;height:44px;padding:0;color:var(--paper);background:var(--ink)}
+:root .lg-read{color:var(--signal);font-weight:500}
+:root .lg-read:hover{color:var(--signal-hi)}
+:root .bx-chip{border-radius:var(--radius-pill);padding:8px 14px;min-height:36px;color:var(--muted)}
+:root .bx-chip.on{background:var(--paper);color:var(--void)}
+:root .chip{border:0;background:var(--signal-dim);border-radius:var(--radius-pill);padding:8px 12px;
+  color:var(--muted);text-transform:none;letter-spacing:0;font-weight:500}
+:root .chip.now{background:var(--signal);color:#fff}
+:root .chip.done{background:var(--ink);color:var(--paper)}
+:root .tag-p{border:0;background:var(--signal-dim);color:var(--signal);border-radius:var(--radius-pill);font-weight:600}
+:root .switch{border:0;background:var(--steel);padding:4px;border-radius:var(--radius-pill);gap:2px}
+:root .switch button{border:0;border-radius:var(--radius-pill);min-height:36px;padding:0 18px;color:var(--muted);background:none}
+:root .switch button.on{background:var(--raise);color:var(--paper);box-shadow:var(--shadow-card)}
+:root .lg-dots{background:var(--ink)}
+:root .lg-dot{background:var(--line-2)}
+:root .lg-dot.lg-on{background:var(--paper)}
+
+/* Inputs: filled, no hard border, a real focus ring. */
+:root .iform input,:root input[type="email"],:root input[type="text"],:root input[type="search"],:root textarea{
+  background:var(--ink);border:0;border-radius:var(--radius);color:var(--paper);
+  min-height:44px;padding:0 16px;font-family:var(--body);font-size:var(--t-body);
+  transition:box-shadow .15s ease,background .15s ease}
+:root .iform input::placeholder,:root input::placeholder{color:var(--muted)}
+:root .iform input:focus,:root input:focus,:root textarea:focus{outline:none;background:var(--ink);box-shadow:var(--focus)}
+:root .iform{gap:8px}
+:root :is(a,button,[tabindex]):focus-visible{outline:none;box-shadow:var(--focus);border-radius:var(--radius)}
+:root .btn:focus-visible,:root .cta-nav:focus-visible,:root .btn-o:focus-visible,:root .bx-chip:focus-visible,:root .chip:focus-visible{border-radius:var(--radius-pill)}
+
+/* ---------------- surfaces ----------------
+   A card is a lift, not an outline: no border, a 20px radius, a soft
+   shadow in light, a lighter surface in dark. Inner elements padded 8px sit
+   at 12px. */
+:root .tier,:root .callout,:root .thread,:root .lg-cert,:root .dp-tile,:root .lg-card figure,
+:root .post-cover,:root .bx-cover,:root .lg-vision-photo,:root .lg-portrait{
+  border:0;border-radius:var(--radius-card);background:var(--raise);box-shadow:var(--shadow-card)}
+:root .callout{background:var(--ink);box-shadow:none;padding:24px;border-radius:var(--radius-card)}
+:root .tier{padding:24px}
+:root .thread{background:var(--raise);padding:20px;border-radius:var(--radius-card)}
+:root .p-top-photo .thread{background:rgb(28 28 30 / .62);box-shadow:var(--shadow-float),inset 0 1px 0 rgb(255 255 255 / .16)}
+:root .lg-card figure,:root .bx-cover,:root .lg-gal-i,:root .lg-car-art{border-radius:16px;box-shadow:none;border:0}
+:root .lg-card figure{background:var(--ink)}
+:root .bx-cover,:root .post-cover{background:var(--ink)}
+:root .lg-cert{background:var(--dk-line);box-shadow:none;border-radius:16px;min-height:0}
+:root .lg-certs{border:0;gap:8px;background:none}
+:root .lg-cert:last-child,:root .lg-cert:nth-child(2n){border:0}
+:root .lg-cert .lg-seal i{border-color:var(--dk-line);color:var(--dk-muted)}
+:root .lg-cert .lg-seal.lg-pending i{border-color:var(--amber);color:var(--amber)}
+:root .pgart{border-radius:var(--radius-card)}
+:root .ap-glass{border-radius:var(--radius-card);padding:24px;border:0;
+  box-shadow:var(--shadow-float),inset 0 1px 0 rgb(255 255 255 / .12)}
+:root .ap-pill{border-radius:var(--radius-pill);border:0;background:rgb(255 255 255 / .10)}
+:root .ap-pill[aria-expanded="true"]{background:var(--signal)}
+:root .ap-detail{border-left-color:var(--dk-line)}
+:root .lg-cue{border:0;background:rgb(255 255 255 / .18);width:40px;height:40px}
+
+/* ---------------- whitespace, not rules ----------------
+   Section edges, card outlines and boundary rules go. Separators stay only
+   inside lists, where a row needs to end and the next begin, and there they
+   are the translucent separator token. */
+:root .nextup,:root .case,:root .post-sub,:root .post-more,:root .post-next,:root .bx-filters,
+:root .bx-feat-side,:root .lg-faq,:root .lg-stats,:root .art-top,:root footer,:root .dp-hero,
+:root .dp-marq,:root .b-head,:root .callout,:root .lg-strow:first-child{border:0}
+:root .f-hr{height:0;background:none}
+:root .bx-feat-side{padding-top:0;padding-bottom:0}
+:root .lg-strow,:root .lg-qa,:root .bx-row,:root .fitem,:root .drow,:root .dsub,:root .thread .line,
+:root .pm th,:root .pm td,:root .tier li{border-color:var(--line)}
+:root .bx-feat-side{border-right:0;padding-right:0}
+:root .nextup{padding-top:0}
+
+/* ---------------- homepage bands: tokens for the raw values ---------------- */
+:root .lg-pipe-sec,:root .lg-sec-dark{background:var(--dk-bg);color:var(--dk-text)}
+:root .lg-pipe-sec{--lg-lit:var(--dk-lit)}
+:root .lg-pipe-lead .eyebrow,:root .lg-pnode p,:root .lg-sec-dark .lg-read,:root .lg-sec-dark .lg-fine,
+:root .lg-cert p,:root .lg-pipe-sec > .wrap > .lg-read{color:var(--dk-muted)}
+:root .lg-pipe-lead h2,:root .lg-pnode h3,:root .lg-sec-dark h2,:root .lg-cert b,
+:root .lg-sec-dark .lg-read:hover,:root .lg-pipe-sec > .wrap > .lg-read:hover{color:var(--dk-text)}
+:root .lg-pipe-rail{background:var(--dk-line)}
+:root .lg-pnum{-webkit-text-stroke-color:var(--dk-line);font-weight:600}
+:root .lg-pdot{background:var(--dk-bg)}
+:root .lg-hero,:root .lg-inter{background:var(--dk-bg)}
+:root .lg-vision-prose p{color:var(--paper)}
+:root .lg-strow b{font-family:var(--display);font-size:var(--t-display);font-weight:600;letter-spacing:-.03em}
+:root .lg-car-bar button:hover{background:var(--steel)}
+
+/* ---------------- drawn artwork follows the theme ----------------
+   The illustrations and covers are inline SVG with literal fills. A white
+   panel that is right on #FBFBFD glows on #000. CSS outranks an SVG
+   presentation attribute, so the literal values are re-pointed at the
+   tokens here — a no-op in light, where the tokens are those values. */
+:root .pgart svg [fill="#FFFFFF"],:root .lg-card figure svg [fill="#FCFCFB"],:root .bx-cover svg [fill="#FFFFFF"],:root .post-cover svg [fill="#FFFFFF"]{fill:var(--raise)}
+:root .pgart svg [fill="#F1F2F0"],:root .lg-card figure svg [fill="#EAE9E6"],:root .bx-cover svg [fill="#F1F2F0"],:root .post-cover svg [fill="#F1F2F0"]{fill:var(--steel)}
+:root .pgart svg [fill="#E1DFDA"],:root .pgart svg [fill="#C8C5BF"],:root .lg-card figure svg [fill="#C8C6C1"],:root .lg-card figure svg [fill="#D6D4CF"],
+:root .bx-cover svg [fill="#D8D6D1"],:root .post-cover svg [fill="#D8D6D1"]{fill:var(--line-2)}
+:root .pgart svg [stroke="#E1DFDA"],:root .pgart svg [stroke="#C8C5BF"],:root .lg-card figure svg [stroke="#D6D4CF"],:root .lg-card figure svg [stroke="#C8C6C1"],
+:root .bx-cover svg [stroke="#D8D6D1"],:root .post-cover svg [stroke="#D8D6D1"]{stroke:var(--line-2)}
+:root .pgart svg [fill="#0D1016"],:root .lg-card figure svg [fill="#0D1016"],:root .bx-cover svg [fill="#0D1016"],:root .post-cover svg [fill="#0D1016"]{fill:var(--paper)}
+:root .pgart svg [fill="#0E4B52"],:root .lg-card figure svg [fill="#0E4B52"],:root .bx-cover svg [fill="#0E4B52"],:root .post-cover svg [fill="#0E4B52"]{fill:var(--signal)}
+:root .pgart svg [stroke="#0E4B52"],:root .lg-card figure svg [stroke="#0E4B52"],:root .bx-cover svg [stroke="#0E4B52"],:root .post-cover svg [stroke="#0E4B52"]{stroke:var(--signal)}
+:root .bx-cover svg [fill="#12606A"],:root .post-cover svg [fill="#12606A"],:root .bx-cover svg [stroke="#12606A"]{fill:var(--signal-hi);stroke:var(--signal-hi)}
+:root .pgart svg [fill="#9A5F0B"],:root .lg-card figure svg [fill="#9A5F0B"],:root .bx-cover svg [fill="#9A5F0B"]{fill:var(--amber)}
+:root .pgart svg [stroke="#9A5F0B"],:root .bx-cover svg [stroke="#9A5F0B"]{stroke:var(--amber)}
+:root .pgart svg text,:root .lg-card figure svg text{fill:var(--muted)}
+
+/* ---------------- motion ---------------- */
+:root .rv{transition-duration:.35s;transition-timing-function:cubic-bezier(.16,1,.3,1)}
+@media (prefers-reduced-motion:reduce){
+  :root *,:root *::before,:root *::after{animation:none!important;transition:none!important}
+}
+@media (prefers-contrast:more){
+  :root{--muted:rgb(29 29 31 / .85);--line:rgb(60 60 67 / .55)}
+  :root .btn-o,:root .plink{box-shadow:inset 0 0 0 1px var(--signal)}
+}
