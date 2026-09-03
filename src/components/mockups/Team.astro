@@ -1,0 +1,28 @@
+---
+import Side from './Side.astro';
+import Top from './Top.astro';
+const TEAM = [
+  ['Lena Ortiz', 'Owner', 'LO', '6 open trips', 'Kenya · Morocco'],
+  ['Daniel Achebe', 'Agent', 'DA', '4 open trips', 'Southern Africa'],
+  ['Mira Sato', 'Agent', 'MS', '5 open trips', 'Japan · Vietnam'],
+  ['Jonas Feld', 'Agent', 'JF', '3 open trips', 'Andes · Patagonia'],
+  ['Ops inbox', 'Shared', 'OI', 'Payments · vouchers', ''],
+];
+---
+<Side active="Settings" />
+<div class="mk-main">
+  <Top title="Team" sub="4 agents · one CRM" crumb="Settings"><span class="mk-btn">Invite agent</span></Top>
+  <div class="mk-body tight">
+    <table class="mk-tbl">
+      <thead><tr><th>Person</th><th>Role</th><th>Working on</th><th>Regions</th><th class="r">Access</th></tr></thead>
+      <tbody>{TEAM.map(([n, r, ini, w, reg], i) => (
+        <tr><td><div style="display:flex;gap:.6em;align-items:center"><span class:list={['mk-av', { ghost: i === 4 }]}>{ini}</span><b>{n}</b></div></td>
+        <td><span class:list={['mk-tag', { grey: r !== 'Owner' }]}>{r}</span></td><td>{w}</td><td>{reg}</td><td class="r"><span class="mk-tog"></span></td></tr>
+      ))}</tbody>
+    </table>
+    <div class="mk-split">
+      <div class="mk-card fill"><div class="mk-h"><b>Shared</b></div><p class="mk-p">Every trip, contact and supplier in one place. Any agent can pick up any thread; the stage engine is the same for all of them.</p></div>
+      <div class="mk-card fill"><div class="mk-h"><b>One brand</b></div><p class="mk-p">Proposals, magic links and the inquiry form carry Meridian's identity whoever sends them.</p></div>
+    </div>
+  </div>
+</div>

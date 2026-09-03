@@ -190,7 +190,7 @@
    which is why the row read completely differently. */
 .lg-card figure{margin:0 0 16px;aspect-ratio:4/5;background:var(--steel);border-radius:0;
   overflow:hidden;position:relative}
-.lg-card figure svg{position:absolute;inset:0;width:100%;height:100%}
+.lg-card figure .mk{position:absolute;inset:0}
 .lg-card h3{font-size:15px;letter-spacing:-.01em;margin-bottom:12px}
 .lg-card p{color:var(--muted);font-size:15px;line-height:1.5}
 .lg-read{display:inline-flex;gap:7px;align-items:center;margin-top:20px;font-size:14px;color:var(--paper)}

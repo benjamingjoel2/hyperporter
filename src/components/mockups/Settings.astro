@@ -1,0 +1,27 @@
+---
+import Side from './Side.astro';
+import Top from './Top.astro';
+import { CATEGORIES } from '../../lib/content/solutions';
+const ops = CATEGORIES.find((c) => c.slug === 'operations')!;
+const br = CATEGORIES.find((c) => c.slug === 'branding')!;
+const isOn = (t: string) => t === 'Showcase' || t.startsWith('Autopilot');
+---
+<Side active="Settings" />
+<div class="mk-main">
+  <Top title="Features" sub="Autopilot plan"><span class="mk-btn o">Compare plans</span></Top>
+  <div class="mk-body tight">
+    <div class="mk-tabs">{CATEGORIES.map((c) => <span class:list={{ on: c.slug === 'operations' }}>{c.name}</span>)}</div>
+    <div class="mk-h" style="margin-top:.4em"><b>{ops.name}</b><span>{ops.features.length} features</span></div>
+    <div class="mk-list">
+      {ops.features.map((f) => (
+        <div class="mk-item"><span class:list={['mk-tog', { off: !isOn(f.tier) }]}></span><div><b>{f.name}</b></div><span class:list={['mk-tag', { grey: !isOn(f.tier) }]}>{f.tier}</span></div>
+      ))}
+    </div>
+    <div class="mk-h" style="margin-top:.6em"><b>{br.name}</b><span>{br.features.length} features</span></div>
+    <div class="mk-list">
+      {br.features.slice(0, 3).map((f) => (
+        <div class="mk-item"><span class:list={['mk-tog', { off: !isOn(f.tier) }]}></span><div><b>{f.name}</b></div><span class:list={['mk-tag', { grey: !isOn(f.tier) }]}>{f.tier}</span></div>
+      ))}
+    </div>
+  </div>
+</div>

@@ -6,7 +6,7 @@
  */
 import Base from '../layouts/Base.astro';
 import { SECURITY } from '../lib/content/pricing';
-import PageArt from '../components/PageArt.astro';
+import Mockup from '../components/Mockup.astro';
 ---
 
 <Base
@@ -21,7 +21,7 @@ import PageArt from '../components/PageArt.astro';
       <h1 class="rv">{SECURITY.title}</h1>
       <p class="lede rv">{SECURITY.lede}</p>
     </div>
-    <PageArt name="security" />
+    <Mockup screen="audit" />
   </div>
 
   <div class="sec-tight wrap">

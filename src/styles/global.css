@@ -1162,12 +1162,12 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
    and lede each got a row, the rows shared the drawing's height, and the
    three of them ended up spread half a screen apart. */
 .page-hero-copy{min-width:0}
-.pgart svg{display:block;width:100%;height:auto}
+.mockup{min-width:0}
 @media (max-width:900px){
   /* Below this the drawing is competing with the headline for the fold, and
      the headline wins. */
   .page-hero{grid-template-columns:1fr;gap:clamp(26px,4vw,42px)}
-  .page-hero > .pgart{grid-column:1;grid-row:auto;max-width:440px}
+  .page-hero > .mockup{grid-column:1;grid-row:auto;max-width:440px}
 }
 
 /* ---- photo hero for product pages -------------------------------------

@@ -1,0 +1,27 @@
+---
+import Side from './Side.astro';
+import Top from './Top.astro';
+const ROWS = [
+  ['March in the Mara — four places left', 'Past Kenya travellers', 'Sent 2 Feb', '1,184', '61%', '9 replies'],
+  ['Portugal in shoulder season', 'Europe list', 'Sent 19 Jan', '3,402', '48%', '14 replies'],
+  ['Your 2026 travel wishlist', 'Everyone', 'Sent 6 Jan', '4,910', '44%', '27 replies'],
+  ['Andes by rail', 'Peru inquiries', 'Draft', '—', '—', '—'],
+];
+---
+<Side active="Settings" />
+<div class="mk-main">
+  <Top title="Campaigns" sub="Email marketing"><span class="mk-tag grey">Intelligence</span><span class="mk-btn">New campaign</span></Top>
+  <div class="mk-body tight">
+    <div class="mk-split w">
+      <div class="mk-card"><div class="mk-h"><b>Opens, last 12 sends</b><span>avg 51%</span></div>
+        <div class="mk-bars">{[38,44,41,52,47,55,49,61,44,48,58,61].map((h, i) => <i style={`height:${h}%`} class:list={{ hi: i === 11 }}></i>)}</div></div>
+      <div class="mk-card fill"><div class="mk-h"><b>Reach</b></div><b style="font-size:1.7em;font-weight:400">4,910</b><span class="mk-fine">contacts from your CRM · replies land back in the trip thread</span></div>
+    </div>
+    <table class="mk-tbl">
+      <thead><tr><th>Campaign</th><th>Audience</th><th>Sent</th><th class="r">Recipients</th><th class="r">Opened</th><th class="r">Outcome</th></tr></thead>
+      <tbody>{ROWS.map(([n, a, s, r, o, out]) => (
+        <tr><td><b>{n}</b></td><td>{a}</td><td>{s}</td><td class="r num">{r}</td><td class="r num">{o}</td><td class="r">{out}</td></tr>
+      ))}</tbody>
+    </table>
+  </div>
+</div>

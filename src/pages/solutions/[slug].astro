@@ -6,7 +6,17 @@
  */
 import Base from '../../layouts/Base.astro';
 import { CATEGORIES } from '../../lib/content/solutions';
-import PageArt from '../../components/PageArt.astro';
+import Mockup from '../../components/Mockup.astro';
+
+// One screen per category: the part of OS where that category's features live.
+const SCREEN: Record<string, string> = {
+  inquiry: 'inquiry',
+  operations: 'pipeline',
+  branding: 'brand',
+  communication: 'inbox',
+  payments: 'payments',
+  marketing: 'campaign',
+};
 
 export function getStaticPaths() {
   return CATEGORIES.map((c) => ({ params: { slug: c.slug }, props: { c } }));
@@ -27,7 +37,7 @@ const { c } = Astro.props;
       <h1 class="rv">{c.title}</h1>
       <p class="lede rv">{c.lede}</p>
     </div>
-    <PageArt name={`solutions/${c.slug}`} />
+    <Mockup screen={SCREEN[c.slug]} />
   </div>
 
   <div class="sec-tight wrap">

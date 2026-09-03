@@ -140,8 +140,25 @@ wanted back.
   **fails** if any destination has no geometry, so the map can never
   under-report. It lives on `/destinations` and keeps its own dark ground;
   hover green is deliberately not `--signal`.
-- Removed with the revert: `AppShot.astro` (the Autopilot interface drawn in
-  markup) and `lib/counts.ts`. Both are recoverable from `d05cc73`.
+- **Software mock-ups, not illustrations** (Sep 2026, founder's instruction).
+  Every page hero and the four homepage product cards show a screen of
+  Hyperporter's own interface — OS, Autopilot, Atlas and Vault, and the
+  supplier's side of a Horizon request — drawn in markup, the way the
+  reference site anchors its sections with product screenshots. The frame is
+  `components/Mockup.astro`; the screens are `components/mockups/*.astro`,
+  named in `mockups/index.ts`; the primitives are `styles/mockup.css`. All
+  measurements inside a screen are in em off a font-size that is a fraction
+  of the frame width, so a screen scales like a photograph of itself.
+  Everything in them is invented, and the caption under each says so. The
+  rules that hold inside a screen are the site's: amber only on human /
+  manual states, suppliers never shown inside Horizon, Atlas answering from
+  the account's own Vault, the supplier receiving their full quoted rate,
+  SOC 2 / GDPR shown as targeted. The line-drawn `pageArt.ts` and
+  `legoraArt.ts` families they replaced are at `1848a30`.
+- An Apple / Liquid Glass restyle was tried and rejected (`039fad9`,
+  reverted at `1848a30`). Do not bring it back.
+- Removed with the earlier revert: `AppShot.astro` and `lib/counts.ts`, both
+  recoverable from `d05cc73`.
 
 ### Font licence — outstanding
 Hyperlocal ROM was supplied under a **desktop** licence, whose terms forbid

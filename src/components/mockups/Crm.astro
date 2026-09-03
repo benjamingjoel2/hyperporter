@@ -1,0 +1,34 @@
+---
+import Side from './Side.astro';
+import Top from './Top.astro';
+const TRIPS = [
+  ['Nairobi', '9 nights · KE-2291', 'Quotation', 'Lena & Mark Ortiz', 'Mar 3 – 12', '€8,360', false],
+  ['Cusco', '6 nights · PE-1184', 'Planning', 'The Halvorsen family', 'Apr 18 – 24', '€5,120', false],
+  ['Marrakesh', '4 nights · MA-0937', 'Booking', 'Priya Nair', 'Feb 9 – 13', '€2,940', true],
+  ['Hanoi', '11 nights · VN-2203', 'Ready', 'Tom & Jae Whitfield', 'May 2 – 13', '€7,780', false],
+  ['Lisbon', '5 nights · PT-0451', 'Inquiry', 'Anneke de Vries', 'Jun 1 – 6', '—', false],
+  ['Tbilisi', '7 nights · GE-0612', 'Confirmation', 'Ruth Adeyemi', 'Sep 14 – 21', '€3,610', false],
+  ['Kyoto', '8 nights · JP-1420', 'Traveling', 'Sofia & Elias Brandt', 'Now', '€9,240', true],
+];
+---
+<Side active="Trips" />
+<div class="mk-main">
+  <Top title="Trips" sub="7 open"><span class="mk-search"><i></i>Search</span><span class="mk-btn o">Filter</span><span class="mk-btn">New trip</span></Top>
+  <div class="mk-body tight">
+    <div class="mk-tabs"><span class="on">Open <i>7</i></span><span>Awaiting a person <i>2</i></span><span>Completed <i>48</i></span></div>
+    <table class="mk-tbl">
+      <thead><tr><th>Trip</th><th>Stage</th><th>Travellers</th><th>Dates</th><th class="r">Value</th></tr></thead>
+      <tbody>
+        {TRIPS.map(([city, meta, stage, who, dates, val, amb], i) => (
+          <tr class:list={{ sel: i === 0 }}>
+            <td><b>{city}</b><small>{meta}</small></td>
+            <td><span class:list={['mk-tag', { amb }]}>{stage}</span></td>
+            <td>{who}</td>
+            <td>{dates}</td>
+            <td class="r num">{val}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -29,7 +29,10 @@ import Carousel from '../components/legora/Carousel.astro';
 import { destArt } from '../lib/landmark/generator';
 import { PRODUCTS, MOVES } from '../lib/content/products';
 import { HOME_FAQ, SECURITY } from '../lib/content/pricing';
-import { CARD_ART, CARD_ALT } from '../lib/legoraArt';
+import Mockup from '../components/Mockup.astro';
+
+// The screen each product card shows — the part of the interface that layer is.
+const CARD_SCREEN: Record<string, string> = { os: 'crm', autopilot: 'pipeline', intelligence: 'atlas', horizon: 'horizon' };
 import '../styles/legora-home.css';
 
 /** Twelve chosen to spread the archetypes -- no two share a builder, so the
@@ -175,7 +178,7 @@ const STATS = [
           PRODUCTS.map((p) => (
             <article class="lg-card">
               <figure>
-                <svg viewBox="0 0 320 400" role="img" aria-label={CARD_ALT[p.slug]} set:html={CARD_ART[p.slug]} />
+                <Mockup screen={CARD_SCREEN[p.slug]} tall />
               </figure>
               <span class="lg-avail">{p.availability}</span>
               <h3>{p.name}</h3>
