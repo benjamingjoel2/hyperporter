@@ -217,9 +217,8 @@ section.lg-sec{padding-block:var(--sec-gap)}
    row by row. The shot bleeds toward the outer edge, so the row reads as
    the product coming in from off the page rather than a card in a grid. */
 .lg-segs{background:#0B0E12;color:#EDEFF2;padding-block:calc(var(--sec-gap) - clamp(36px,4.5vw,64px))}
-/* Two dark bands back to back read as one; the page ground between them
-   is the spacing. */
-.lg-segs + .lg-sec-dark{margin-top:var(--sec-gap)}
+/* Two dark bands back to back: the spacing between them stays dark. */
+.lg-segs + .lg-sec-dark{padding-top:0}
 .lg-seg{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(36px,6vw,110px);
   align-items:center;padding-block:clamp(36px,4.5vw,64px)}
 .lg-seg-shot{margin-left:calc(-1 * var(--pad))}
@@ -242,9 +241,6 @@ section.lg-close{text-align:center;padding-block:var(--sec-gap)}
 .lg-sec-dark h2{color:#fff;max-width:22ch}
 .lg-sec-dark .lg-read{color:#9AA1AA;font-size:24px;letter-spacing:-.02em;margin-top:10px}
 .lg-sec-dark .lg-read:hover{color:#fff}
-.lg-sec-dark .lg-fine{margin-top:clamp(28px,3vw,40px);color:#9AA1AA;font-size:13px;line-height:1.6}
-.lg-sec-dark .lg-fine a{color:#EDEFF2;margin-left:6px}
-.lg-sec-dark .lg-fine a:hover{color:#fff;text-decoration:underline}
 .lg-certs{margin-top:clamp(60px,8vw,124px);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
   border:1px solid #1E242B}
 .lg-cert{padding:26px 22px 24px;border-right:1px solid #1E242B;min-height:270px;
