@@ -60,9 +60,11 @@
 .mk-app svg .ring{fill:none;stroke:var(--paper);stroke-width:6}
 .mk-app svg rect{fill:var(--paper)}
 /* Narrow frames — the homepage cards — give a right-anchored panel more room. */
-@container (max-width:380px){
+@container (max-width:420px){
   .mk-panel.right{width:72%;right:5%}
   .mk-foot .mk-fine{display:none}
+  /* A phone-width frame has no room beside the panel for the chip. */
+  .mk-app{display:none}
 }
 
 /* Panel anatomy. */

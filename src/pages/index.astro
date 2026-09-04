@@ -27,7 +27,7 @@ import { PRODUCTS, MOVES } from '../lib/content/products';
 import { HOME_FAQ, SECURITY } from '../lib/content/pricing';
 import Mockup from '../components/Mockup.astro';
 
-// The screen each product card shows — the part of the interface that layer is.
+// The screen each layer shows — the part of the interface that layer is.
 const CARD_SCREEN: Record<string, string> = { portal: 'crm', autopilot: 'pipeline', intelligence: 'atlas', horizon: 'horizon' };
 import '../styles/legora-home.css';
 
@@ -129,22 +129,45 @@ const CERTS = [
         <h2>Four layers, one connected system.</h2>
         <p class="dek">Each one sits on the one below it. Nothing is taken away as you move up.</p>
       </div>
-      <div class="lg-grid4">
-        {
-          PRODUCTS.map((p) => (
-            <article class="lg-card">
-              <figure>
-                <Mockup screen={CARD_SCREEN[p.slug]} tall />
-              </figure>
-              <span class="lg-avail">{p.availability}</span>
-              <h3>{p.name}</h3>
-              <p>{p.summary}</p>
-              <a class="lg-read" href={`/${p.slug}`}>
-                <span aria-hidden="true">&#8627;</span> <span>Read more</span>
-              </a>
-            </article>
-          ))
-        }
+      {/* The reference's layout for this: a hairline list of the layers on
+          the left, one open with its description and link, and the matching
+          product snippet large on the right. All four snippets are rendered
+          and toggled with `hidden`, so with JS off the page still shows the
+          first layer rather than an empty frame. */}
+      <div class="lg-acc">
+        <div class="lg-acc-list">
+          {
+            PRODUCTS.map((p, i) => (
+              <div class:list={['lg-acc-item', { on: i === 0 }]}>
+                <button
+                  type="button"
+                  class="lg-acc-btn"
+                  id={`layer-tab-${i}`}
+                  aria-expanded={i === 0 ? 'true' : 'false'}
+                  aria-controls={`layer-body-${i}`}
+                >
+                  {p.name}
+                </button>
+                <div class="lg-acc-body" id={`layer-body-${i}`} hidden={i !== 0}>
+                  <span class="lg-avail">{p.availability}</span>
+                  <p>{p.summary}</p>
+                  <a class="lg-read" href={`/${p.slug}`}>
+                    <span aria-hidden="true">&#8627;</span> <span>Learn more</span>
+                  </a>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+        <div class="lg-acc-shot">
+          {
+            PRODUCTS.map((p, i) => (
+              <div id={`layer-shot-${i}`} hidden={i !== 0}>
+                <Mockup screen={CARD_SCREEN[p.slug]} />
+              </div>
+            ))
+          }
+        </div>
       </div>
     </section>
 
@@ -204,6 +227,29 @@ const CERTS = [
   </main>
 
 </Base>
+
+<script>
+  /**
+   * Four layers: the list on the left opens one layer at a time and swaps
+   * the snippet on the right to match. Server-rendered open state is the
+   * first layer, so this only has to move it.
+   */
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.lg-acc-item'));
+  const shots = Array.from(document.querySelectorAll<HTMLElement>('.lg-acc-shot > div'));
+  items.forEach((item, i) => {
+    const btn = item.querySelector<HTMLButtonElement>('.lg-acc-btn');
+    btn?.addEventListener('click', () => {
+      items.forEach((it, j) => {
+        const on = j === i;
+        it.classList.toggle('on', on);
+        it.querySelector('.lg-acc-btn')?.setAttribute('aria-expanded', on ? 'true' : 'false');
+        const body = it.querySelector<HTMLElement>('.lg-acc-body');
+        if (body) body.hidden = !on;
+        if (shots[j]) shots[j].hidden = !on;
+      });
+    });
+  });
+</script>
 
 <script>
   /* The FAQ accordion. Base.astro's global handler covers `.acc-i` elsewhere
