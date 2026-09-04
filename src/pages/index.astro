@@ -7,19 +7,19 @@
  * src/styles/legora-home.css at the rule that uses them. The shape, in
  * order: a 100vh photographic hero with the headline at 87% down, a
  * statement block pinned to the grey band beneath it, a full-viewport band
- * of the nine stages, the four layers as 4:5 portrait cards, one carousel
- * with an active slide, the destination gallery, an interstitial, the stat
- * rows, the vision block, the dark security band and the FAQ.
+ * of the nine stages, the four layers as 4:5 portrait cards, the dark
+ * security band and the FAQ. The reference's carousel, gallery,
+ * interstitial, stat rows and vision block were removed (Sep 2026) at the
+ * founder's instruction.
  *
  * Content comes from the content modules, as everywhere else on this site —
- * PRODUCTS, MOVES, SECURITY, HOME_FAQ and the destinations collection — so
+ * PRODUCTS, MOVES, SECURITY and HOME_FAQ — so
  * the page stays thin and cannot drift from /product, /autopilot or
  * /security.
  *
- * Three of the reference's sections have no honest equivalent here and are
+ * Two of the reference's sections have no honest equivalent here and are
  * handled rather than faked: its "Trusted by" logo wall is omitted, since
- * there are no named customers at pilot stage; the founder portrait is a
- * visible placeholder, as on /about; and the security cards carry real
+ * there are no named customers at pilot stage; and the security cards carry real
  * status instead of certification seals — SOC 2 and GDPR are targeted
  * post-pilot, not held. Do not turn that last one into a seal.
  */
@@ -155,53 +155,6 @@ const CERTS = [
             </article>
           ))
         }
-      </div>
-    </section>
-
-    <section class="lg-vision">
-      <div class="wrap lg-vision-grid">
-        <div>
-          <h2>Our vision</h2>
-          <div class="lg-vision-by">
-            <div class="lg-portrait">
-              Founder portrait pending — not invented here, the same way /about carries its
-              placeholders visibly.
-            </div>
-            <div class="lg-vision-name">Name pending</div>
-            <div class="lg-vision-role">Founder &amp; CEO</div>
-          </div>
-        </div>
-        <div>
-          <div class="lg-vision-prose">
-            <div>
-              <p>
-                Hyperporter was built by people who’ve coordinated trips the old way — chasing DMCs
-                over email, relaying WhatsApp messages between travellers and drivers, rebuilding
-                the same itinerary PDF for the fifth time.
-              </p>
-              <p>
-                Every trip involves the same coordination work, repeated by hand, agency by agency.
-                We think that work should run itself.
-              </p>
-            </div>
-            <div>
-              <p>
-                Not all of it, though. Automation that pretends a person is never needed is
-                automation that fails quietly, at the worst moment, on someone’s holiday.
-              </p>
-              <p>
-                So the escalation points are designed in: money changing hands, and a traveller in
-                trouble. Those stay human on purpose.
-              </p>
-            </div>
-          </div>
-          <div class="lg-vision-photo">
-            <img
-              src="/hero.jpg"
-              alt="Mountain range at dawn, cloud filling the valleys below the ridgelines."
-            />
-          </div>
-        </div>
       </div>
     </section>
 
