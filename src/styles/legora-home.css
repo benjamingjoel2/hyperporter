@@ -177,20 +177,31 @@
 /* The reference's layout for the layers: a list on hairlines, the open
    item in ink with its body under it, the snippet beside. The open item's
    top rule is drawn heavier, as on the reference. */
-.lg-acc{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(40px,7vw,120px);align-items:start}
+.lg-acc{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(40px,7vw,120px);align-items:start;
+  --acc-ease:cubic-bezier(.2,.7,.2,1)}
 .lg-acc-list{border-bottom:1px solid var(--line)}
-.lg-acc-item{border-top:1px solid var(--line);transition:border-color .2s}
-.lg-acc-item.on{border-top:1.5px solid var(--paper)}
+.lg-acc-item{border-top:1px solid var(--line);transition:border-color .5s var(--acc-ease)}
+.lg-acc-item.on{border-top-color:var(--paper)}
 .lg-acc-btn{display:block;width:100%;margin:0;padding:24px 0;border:0;background:none;text-align:left;
   font-family:var(--display);font-size:clamp(22px,2.1vw,28px);letter-spacing:-.02em;line-height:1.15;
-  color:var(--muted);cursor:pointer;transition:color .2s}
+  color:var(--muted);cursor:pointer;transition:color .5s var(--acc-ease),padding .6s var(--acc-ease)}
 .lg-acc-btn:hover{color:var(--paper)}
 .lg-acc-item.on .lg-acc-btn{color:var(--paper);padding-bottom:14px}
-.lg-acc-body{padding:0 0 30px;max-width:44ch}
-.lg-acc-body[hidden]{display:none}
+/* The body opens by growing a grid row from 0fr to 1fr — the one way to
+   animate to an unknown height without measuring it — and fades in a beat
+   behind the height so the text arrives into space that already exists. */
+.lg-acc-body{display:grid;grid-template-rows:0fr;opacity:0;max-width:44ch;
+  transition:grid-template-rows .65s var(--acc-ease),opacity .45s var(--acc-ease)}
+.lg-acc-body > div{min-height:0;overflow:hidden}
+.lg-acc-item.on .lg-acc-body{grid-template-rows:1fr;opacity:1;transition:grid-template-rows .65s var(--acc-ease),opacity .6s var(--acc-ease) .15s}
+.lg-acc-item.on .lg-acc-body > div{padding-bottom:30px}
 .lg-acc-body p{margin:8px 0 0;color:var(--muted);font-size:16px;line-height:1.5}
-.lg-acc-shot{position:sticky;top:calc(var(--chrome-h,111px) + 24px)}
-.lg-acc-shot > div[hidden]{display:none}
+/* The snippets share one grid cell; the open one fades and settles in over
+   the one leaving, so the frame never blinks empty. */
+.lg-acc-shot{position:sticky;top:calc(var(--chrome-h,111px) + 24px);display:grid}
+.lg-acc-shot > div{grid-area:1/1;opacity:0;transform:translateY(10px) scale(.985);visibility:hidden;
+  transition:opacity .7s var(--acc-ease),transform .8s var(--acc-ease),visibility 0s .7s}
+.lg-acc-shot > div.on{opacity:1;transform:none;visibility:visible;transition:opacity .7s var(--acc-ease) .1s,transform .8s var(--acc-ease) .1s,visibility 0s}
 .lg-read{display:inline-flex;gap:7px;align-items:center;margin-top:20px;font-size:14px;color:var(--paper)}
 .lg-read:hover{color:var(--signal)}
 .lg-read span:first-child{color:var(--dim)}

@@ -132,8 +132,8 @@ const CERTS = [
       {/* The reference's layout for this: a hairline list of the layers on
           the left, one open with its description and link, and the matching
           product snippet large on the right. All four snippets are rendered
-          and toggled with `hidden`, so with JS off the page still shows the
-          first layer rather than an empty frame. */}
+          and stacked in one cell, so a switch is a cross-fade rather than a
+          swap, and with JS off the page still shows the first layer. */}
       <div class="lg-acc">
         <div class="lg-acc-list">
           {
@@ -148,12 +148,14 @@ const CERTS = [
                 >
                   {p.name}
                 </button>
-                <div class="lg-acc-body" id={`layer-body-${i}`} hidden={i !== 0}>
-                  <span class="lg-avail">{p.availability}</span>
-                  <p>{p.summary}</p>
-                  <a class="lg-read" href={`/${p.slug}`}>
-                    <span aria-hidden="true">&#8627;</span> <span>Learn more</span>
-                  </a>
+                <div class="lg-acc-body" id={`layer-body-${i}`} inert={i !== 0}>
+                  <div>
+                    <span class="lg-avail">{p.availability}</span>
+                    <p>{p.summary}</p>
+                    <a class="lg-read" href={`/${p.slug}`}>
+                      <span aria-hidden="true">&#8627;</span> <span>Learn more</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             ))
@@ -162,7 +164,7 @@ const CERTS = [
         <div class="lg-acc-shot">
           {
             PRODUCTS.map((p, i) => (
-              <div id={`layer-shot-${i}`} hidden={i !== 0}>
+              <div id={`layer-shot-${i}`} class:list={{ on: i === 0 }} inert={i !== 0}>
                 <Mockup screen={CARD_SCREEN[p.slug]} />
               </div>
             ))
@@ -230,9 +232,10 @@ const CERTS = [
 
 <script>
   /**
-   * Four layers: the list on the left opens one layer at a time and swaps
-   * the snippet on the right to match. Server-rendered open state is the
-   * first layer, so this only has to move it.
+   * Four layers: the list on the left opens one layer at a time and
+   * cross-fades the snippet on the right to match. Open state is a class;
+   * the transitions live in CSS. Closed bodies and snippets are `inert` so
+   * they are out of the tab order and the accessibility tree.
    */
   const items = Array.from(document.querySelectorAll<HTMLElement>('.lg-acc-item'));
   const shots = Array.from(document.querySelectorAll<HTMLElement>('.lg-acc-shot > div'));
@@ -244,8 +247,11 @@ const CERTS = [
         it.classList.toggle('on', on);
         it.querySelector('.lg-acc-btn')?.setAttribute('aria-expanded', on ? 'true' : 'false');
         const body = it.querySelector<HTMLElement>('.lg-acc-body');
-        if (body) body.hidden = !on;
-        if (shots[j]) shots[j].hidden = !on;
+        if (body) body.inert = !on;
+        if (shots[j]) {
+          shots[j].classList.toggle('on', on);
+          shots[j].inert = !on;
+        }
       });
     });
   });
