@@ -6,10 +6,10 @@ Context for any Claude Code session working in this repo. Read this first.
 
 Travel-tech company. **Four product layers**, and they are not interchangeable:
 
-- **OS** — the *platform*. CRM, magic links, public inquiry form, proposal generator.
+- **Portal** — the *platform*. CRM, magic links, public inquiry form, proposal generator.
   Free on every tier, for both sides. This is the software; when you mean "the platform",
-  the word is **OS**, not Autopilot.
-- **Autopilot** — the *automation layer* on top of OS. The nine-stage engine, Inquiry
+  the word is **Portal**, not Autopilot.
+- **Autopilot** — the *automation layer* on top of Portal. The nine-stage engine, Inquiry
   through Post-Trip, with human escalation points by design.
 - **Intelligence** — the *AI layer* on top of Autopilot. Atlas is the assistant, Vault is
   where an account's own contracts and rates live. Trained on the account's own data only.
@@ -29,7 +29,7 @@ tier names collide with two of the product-layer names; that is the founder's na
 ### Terminology rules — do not break these
 
 - Never describe Horizon as software, and never as something a supplier logs into.
-- Never call Autopilot the platform. OS is the platform; Autopilot is automation on top.
+- Never call Autopilot the platform. Portal is the platform; Autopilot is automation on top.
 - Intelligence trains on the account's own Vault only — never on anyone else's data.
   This claim appears on /intelligence and /security and must stay identical on both.
 - Do not overstate automation. Escalation to a human is a designed feature, not a gap.
@@ -142,7 +142,7 @@ wanted back.
   hover green is deliberately not `--signal`.
 - **Software mock-ups, not illustrations** (Sep 2026, founder's instruction).
   Every page hero and the four homepage product cards show a screen of
-  Hyperporter's own interface — OS, Autopilot, Atlas and Vault, and the
+  Hyperporter's own interface — Portal, Autopilot, Atlas and Vault, and the
   supplier's side of a Horizon request — drawn in markup and composed the way
   the reference composes its product shots: one frosted panel with a single
   idea in it, floating at legible size on a coloured or photographic ground,

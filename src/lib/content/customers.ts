@@ -56,7 +56,7 @@ export interface Overview {
   lede: string;
   sectionEyebrow: string;
   sectionTitle: string;
-  /** Only Supplier OS carries this — the honest "why now" framing. */
+  /** Only Supplier Portal carries this — the honest "why now" framing. */
   note?: string;
   features: SegmentFeature[];
   pricingHref: string;
@@ -65,9 +65,9 @@ export interface Overview {
 
 export const OVERVIEWS: Overview[] = [
   {
-    slug: 'agent-os',
+    slug: 'agent-portal',
     side: 'reseller',
-    name: 'Agent OS',
+    name: 'Agent Portal',
     eyebrow: 'Solutions — For Resellers',
     title: 'Built for the agency stuck between two inboxes.',
     lede: 'Travel agencies, independent advisors, content creators — coordinate your traveler and your supplier in one thread, not three apps.',
@@ -100,9 +100,9 @@ export const OVERVIEWS: Overview[] = [
   },
 
   {
-    slug: 'supplier-os',
+    slug: 'supplier-portal',
     side: 'supplier',
-    name: 'Supplier OS',
+    name: 'Supplier Portal',
     eyebrow: 'Solutions — For Suppliers',
     title: 'A free workflow tool, built for how DMCs already reply.',
     lede: 'Organize inbound requests and quote from one place — Showcase is free, useful on day one, not contingent on network size. Intelligence is there when you want AI-assisted quoting from your own rates.',

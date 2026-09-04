@@ -2,7 +2,7 @@
  * The four product layers, from the founder's content file.
  *
  * This supersedes the two-product model the site carried before. The
- * platform is now **OS** — not Autopilot. Autopilot is only the automation
+ * platform is now **Portal** — not Autopilot. Autopilot is only the automation
  * layer that sits on top of it, Intelligence is the AI layer above that, and
  * Horizon is still the supplier network, never software.
  *
@@ -50,10 +50,10 @@ export interface Product {
 
 export const PRODUCTS: Product[] = [
   {
-    slug: 'os',
+    slug: 'portal',
     n: '01',
-    name: 'OS',
-    eyebrow: 'Product — OS',
+    name: 'Portal',
+    eyebrow: 'Product — Portal',
     availability: 'Always included',
     summary:
       'The modern operating system and toolkit — CRM, quote builder, itinerary tool, a clean interface replacing spreadsheets and email threads. Every tier starts here.',
@@ -97,7 +97,7 @@ export const PRODUCTS: Product[] = [
     next: {
       eyebrow: 'Up next',
       title: 'Ready to automate the back-and-forth?',
-      desc: 'Autopilot layers stage-based automation on top of everything OS already does — same CRM, same magic links, less manual chasing.',
+      desc: 'Autopilot layers stage-based automation on top of everything Portal already does — same CRM, same magic links, less manual chasing.',
       cta: 'See Autopilot',
       href: '/autopilot',
     },
@@ -122,7 +122,7 @@ export const PRODUCTS: Product[] = [
       {
         kind: 'Case — Travel agency',
         title: 'Same agency, three weeks later.',
-        body: "An agency running 20 trips a month on OS alone hits a ceiling — every reprice, every confirmation chase, every status update is a human doing it manually. Autopilot doesn't change what they offer travelers, it changes how much of it one person can run at once.",
+        body: "An agency running 20 trips a month on Portal alone hits a ceiling — every reprice, every confirmation chase, every status update is a human doing it manually. Autopilot doesn't change what they offer travelers, it changes how much of it one person can run at once.",
       },
     ],
     next: {
@@ -228,7 +228,7 @@ export const PRODUCTS: Product[] = [
     cases: [],
     next: {
       eyebrow: 'Up next',
-      title: 'All of this, directly inside OS — even on Showcase.',
+      title: 'All of this, directly inside Portal — even on Showcase.',
       desc: 'No separate app, no upgrade required to search the network. See what each tier actually costs.',
       cta: 'See pricing',
       href: '/pricing',

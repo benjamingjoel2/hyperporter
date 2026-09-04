@@ -15,8 +15,8 @@
  * render in amber, which on this site means exactly one thing: a human
  * touchpoint. Keep that mapping — do not colour anything else with it.
  *
- * This is illustrative marketing copy, not live data, and the sample-tag
- * under the hero thread says so.
+ * This is marketing copy, not live data. There is no caption saying so on
+ * the page — the founder asked for none.
  */
 
 /** Cities the network actually reaches — all present in the destinations set. */

@@ -137,7 +137,7 @@ export const CATEGORIES: Category[] = [
     lede: 'Four features, from in-platform messaging through a full WhatsApp relay.',
     features: [
       {
-        name: 'Inquire directly inside Hyperporter OS',
+        name: 'Inquire directly inside Hyperporter Portal',
         body: 'A native in-platform channel for inquiries — no email or WhatsApp round-trip needed.',
         tier: 'Showcase',
       },
