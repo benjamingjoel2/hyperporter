@@ -7,12 +7,12 @@
  * src/styles/legora-home.css at the rule that uses them. The shape, in
  * order: a 100vh photographic hero with the headline at 87% down, a
  * full-viewport band of the nine stages, the four layers as 4:5 portrait
- * cards, the dark security band and the FAQ. The reference's statement
+ * cards, the dark security band and the close. The reference's statement
  * block, carousel, gallery, interstitial, stat rows and vision block were
  * removed (Sep 2026) at the founder's instruction.
  *
  * Content comes from the content modules, as everywhere else on this site —
- * PRODUCTS, MOVES, SECURITY and HOME_FAQ — so
+ * PRODUCTS, MOVES and SECURITY — so
  * the page stays thin and cannot drift from /product, /autopilot or
  * /security.
  *
@@ -24,7 +24,7 @@
  */
 import Base from '../layouts/Base.astro';
 import { PRODUCTS, MOVES } from '../lib/content/products';
-import { HOME_FAQ, SECURITY } from '../lib/content/pricing';
+import { SECURITY } from '../lib/content/pricing';
 import Mockup from '../components/Mockup.astro';
 
 // The screen each layer shows — the part of the interface that layer is.
@@ -205,23 +205,6 @@ const CERTS = [
       </div>
     </section>
 
-    <section class="lg-sec wrap" style="padding-top:0">
-      <div class="lg-faq">
-        {
-          HOME_FAQ.map((f, i) => (
-            <div class="lg-qa">
-              <button type="button" aria-expanded="false" aria-controls={`q${i}`}>
-                {f.q} <i aria-hidden="true">+</i>
-              </button>
-              <div class="lg-qa-b" id={`q${i}`} hidden>
-                {f.a}
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </section>
-
     <section class="lg-close wrap">
       <h2>Run your next trip on<br />infrastructure, not inboxes.</h2>
       <a class="btn btn-lg" href="/signup">Get started free <i aria-hidden="true">&rarr;</i></a>
@@ -258,18 +241,6 @@ const CERTS = [
 </script>
 
 <script>
-  /* The FAQ accordion. Base.astro's global handler covers `.acc-i` elsewhere
-     on the site and does not reach these. */
-  document.querySelectorAll<HTMLButtonElement>('.lg-qa button').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
-      if (!panel) return;
-      const open = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!open));
-      panel.hidden = open;
-    });
-  });
-
   /* Scroll cue: only means anything at rest, so it leaves once the page moves. */
   const cue = document.getElementById('lg-cue');
   if (cue) {
