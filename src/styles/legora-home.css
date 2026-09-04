@@ -208,18 +208,6 @@
 .lg-avail{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);
   display:block;margin-bottom:8px}
 
-/* ---------------- faq ---------------- */
-.lg-faq{border-top:1px solid var(--line);max-width:960px}
-.lg-qa{border-bottom:1px solid var(--line)}
-.lg-qa button{width:100%;background:none;border:0;font-family:inherit;color:var(--paper);cursor:pointer;
-  display:flex;justify-content:space-between;align-items:center;gap:24px;text-align:left;
-  padding:24px 0;font-size:19px;letter-spacing:-.015em;line-height:1.3}
-.lg-qa i{font-style:normal;color:var(--dim);font-size:22px;line-height:1;flex:none;
-  transition:transform .22s ease}
-.lg-qa button[aria-expanded="true"] i{transform:rotate(45deg)}
-.lg-qa-b{padding:0 0 24px;color:var(--muted);font-size:15px;line-height:1.55;max-width:64ch}
-.lg-qa-b[hidden]{display:none}
-
 /* ---------------- closing + footer ---------------- */
 .lg-close{text-align:center;padding-block:clamp(90px,11vw,160px)}
 .lg-close h2{text-wrap:balance;margin-bottom:28px}
