@@ -122,7 +122,7 @@ export const LADDERS: Ladder[] = [
       {
         group: 'Communication',
         rows: [
-          { feature: 'Inquire directly inside OS', cells: [YES, YES, YES] },
+          { feature: 'Inquire directly inside Portal', cells: [YES, YES, YES] },
           { feature: 'Email integration', cells: [NO, YES, YES] },
           { feature: 'WhatsApp integration', cells: [NO, 'Add-on', 'Add-on'] },
           { feature: 'WhatsApp Support Orchestrator', cells: [NO, 'Add-on', 'Add-on'] },
@@ -202,7 +202,7 @@ export const LADDERS: Ladder[] = [
       {
         group: 'Communication',
         rows: [
-          { feature: 'Inquire directly inside OS', cells: [YES, YES] },
+          { feature: 'Inquire directly inside Portal', cells: [YES, YES] },
           { feature: 'WhatsApp & email integration', cells: [NO, YES] },
         ],
       },

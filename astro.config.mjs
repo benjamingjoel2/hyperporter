@@ -44,6 +44,11 @@ export default defineConfig({
   // existing links and any indexed copy keep working.
   redirects: {
     '/how': '/autopilot',
+    // The platform layer was renamed from OS to Portal (Sep 2026); the old
+    // routes redirect so nothing already linked breaks.
+    '/os': '/portal',
+    '/customers/agent-os': '/customers/agent-portal',
+    '/customers/supplier-os': '/customers/supplier-portal',
   },
   integrations: [
     mdx(),

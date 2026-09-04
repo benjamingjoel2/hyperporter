@@ -263,7 +263,6 @@
 .lg-gal-n{position:absolute;z-index:1;left:13px;bottom:28px;font-size:14px;letter-spacing:-.01em}
 .lg-gal-r{position:absolute;z-index:1;left:13px;bottom:11px;font-size:10px;letter-spacing:.09em;
   text-transform:uppercase;color:rgba(255,255,255,.72)}
-.lg-gal-note{text-align:center;margin-top:clamp(26px,3vw,40px);color:var(--dim);font-size:13px}
 
 /* ---------------- full-bleed interstitial ---------------- */
 /* Copy sits at the top of the frame on the reference, not centred in it. */
