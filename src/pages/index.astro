@@ -6,11 +6,10 @@
  * 1440px rather than eyeballing it; the numbers are noted in
  * src/styles/legora-home.css at the rule that uses them. The shape, in
  * order: a 100vh photographic hero with the headline at 87% down, a
- * statement block pinned to the grey band beneath it, a full-viewport band
- * of the nine stages, the four layers as 4:5 portrait cards, the dark
- * security band and the FAQ. The reference's carousel, gallery,
- * interstitial, stat rows and vision block were removed (Sep 2026) at the
- * founder's instruction.
+ * full-viewport band of the nine stages, the four layers as 4:5 portrait
+ * cards, the dark security band and the FAQ. The reference's statement
+ * block, carousel, gallery, interstitial, stat rows and vision block were
+ * removed (Sep 2026) at the founder's instruction.
  *
  * Content comes from the content modules, as everywhere else on this site —
  * PRODUCTS, MOVES, SECURITY and HOME_FAQ — so
@@ -98,15 +97,6 @@ const CERTS = [
       <button class="lg-cue" id="lg-cue" type="button" aria-label="Scroll to content">&darr;</button>
     </section>
 
-    <section class="lg-stmt wrap" id="product">
-      <h2>Introducing the Hyperporter Portal</h2>
-      <p>The platform underneath every tier — free, forever, on both sides of the market.</p>
-    </section>
-
-    {/* Four moves, not nine stages — the nine live on /autopilot now. Dark,
-        because this is the pipeline diagram from the pre-Astro build and that
-        build was dark: on the light ground a hairline rail and a #0E4B52
-        streak are all but invisible, which is the whole point of the thing. */}
     <section class="lg-pipe-sec" id="stages" data-chrome="dark">
       <div class="wrap">
         <div class="lg-pipe-lead">
