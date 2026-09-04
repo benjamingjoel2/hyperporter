@@ -7,7 +7,7 @@
  * src/styles/legora-home.css at the rule that uses them. The shape, in
  * order: a 100vh photographic hero with the headline at 87% down, a
  * full-viewport band of the nine stages, the four layers as 4:5 portrait
- * cards, the dark security band and the close. The reference's statement
+ * cards, the four segments on a dark band, the four boxes and the close. The reference's statement
  * block, carousel, gallery, interstitial, stat rows and vision block were
  * removed (Sep 2026) at the founder's instruction.
  *
@@ -57,6 +57,36 @@ const PILLARS = [
     body: 'A vetted list of DMCs and suppliers across 130+ countries, searched from the CRM and ready to quote. On every tier, including free.',
     layer: 'Horizon',
     href: '/horizon',
+  },
+];
+
+/** Who it is for: four segments, in the reference's alternating rows — the
+    snippet on one side, the name, one line and a link on the other. The
+    snippet is the part of the product that segment lives in. */
+const SEGMENTS = [
+  {
+    name: 'Travel agencies',
+    line: 'Multi-agent teams on one shared CRM and one brand. Every agent, every trip, one stage engine.',
+    href: '/customers/travel-agencies',
+    screen: 'team',
+  },
+  {
+    name: 'Advisors',
+    line: 'Look like a full agency without the overhead — branded proposals, magic links, a real CRM.',
+    href: '/customers/independent-advisors',
+    screen: 'proposal',
+  },
+  {
+    name: 'DMCs',
+    line: 'Reply the way you already do, and get discovered by agencies as the network grows.',
+    href: '/customers/dmcs',
+    screen: 'quote',
+  },
+  {
+    name: 'Tour operators',
+    line: 'Quote from your own rates, and keep your full quoted rate on every booking.',
+    href: '/customers/tour-operators',
+    screen: 'vault',
   },
 ];
 
@@ -187,6 +217,25 @@ const PILLARS = [
             ))
           }
         </div>
+      </div>
+    </section>
+
+    <section class="lg-segs" data-chrome="dark" id="customers">
+      <div class="wrap">
+        {
+          SEGMENTS.map((g, i) => (
+            <div class:list={['lg-seg', { flip: i % 2 === 1 }]}>
+              <div class="lg-seg-shot">
+                <Mockup screen={g.screen} />
+              </div>
+              <div class="lg-seg-copy">
+                <h2>{g.name}</h2>
+                <p>{g.line}</p>
+                <a class="lg-seg-btn" href={g.href}>Learn more</a>
+              </div>
+            </div>
+          ))
+        }
       </div>
     </section>
 
