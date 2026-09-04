@@ -12,7 +12,7 @@
  * removed (Sep 2026) at the founder's instruction.
  *
  * Content comes from the content modules, as everywhere else on this site —
- * PRODUCTS, MOVES and SECURITY — so
+ * PRODUCTS and MOVES — so
  * the page stays thin and cannot drift from /product, /autopilot or
  * /security.
  *
@@ -24,22 +24,39 @@
  */
 import Base from '../layouts/Base.astro';
 import { PRODUCTS, MOVES } from '../lib/content/products';
-import { SECURITY } from '../lib/content/pricing';
 import Mockup from '../components/Mockup.astro';
 
 // The screen each layer shows — the part of the interface that layer is.
 const CARD_SCREEN: Record<string, string> = { portal: 'crm', autopilot: 'pipeline', intelligence: 'atlas', horizon: 'horizon' };
 import '../styles/legora-home.css';
 
-/** The four practices are real and in place today; the fifth card states
-    what is NOT held. Do not turn that one into a seal. */
-const CERTS = [
-  ...SECURITY.practices.map((p) => ({ ...p, status: 'IN\nPLACE', pending: false })),
+/** The four boxes on the dark band: one per layer, named by what it does
+    rather than by its product name — the product names are the list above.
+    The layer each one is stands in the badge slot as a link. */
+const PILLARS = [
   {
-    title: 'SOC 2 & GDPR',
-    body: 'Not formally certified, not yet. Both are targeted post-pilot, once real usage volume justifies the audit. The practices above are already how the platform is built, ahead of the paperwork.',
-    status: 'TARGETED\nPOST-PILOT',
-    pending: true,
+    title: 'Workflow',
+    body: 'CRM, magic links, the public inquiry form and the proposal generator. One thread per trip, free on every tier, for both sides of the market.',
+    layer: 'Portal',
+    href: '/portal',
+  },
+  {
+    title: 'Automation',
+    body: 'Nine stages, Inquiry through Post-Trip, run on their own. The points where a person takes over are designed in, not left over.',
+    layer: 'Autopilot',
+    href: '/autopilot',
+  },
+  {
+    title: 'Intelligence',
+    body: 'Atlas answers from your own Vault — your contracts, your rates, your history. Trained on your account’s data and nobody else’s.',
+    layer: 'Intelligence',
+    href: '/intelligence',
+  },
+  {
+    title: 'Network',
+    body: 'A vetted list of DMCs and suppliers across 130+ countries, searched from the CRM and ready to quote. On every tier, including free.',
+    layer: 'Horizon',
+    href: '/horizon',
   },
 ];
 
@@ -184,20 +201,13 @@ const CERTS = [
         </p>
         <div class="lg-certs">
           {
-            CERTS.map((c) => (
+            PILLARS.map((c) => (
               <div class="lg-cert">
                 <b>{c.title}</b>
                 <p>{c.body}</p>
-                <div class:list={['lg-seal', { 'lg-pending': c.pending }]}>
-                  <i>
-                    {c.status.split('\n').map((line, i) => (
-                      <Fragment>
-                        {i > 0 && <br />}
-                        {line}
-                      </Fragment>
-                    ))}
-                  </i>
-                </div>
+                <a class="lg-layer" href={c.href}>
+                  <span aria-hidden="true">&#8627;</span> <span>{c.layer}</span>
+                </a>
               </div>
             ))
           }
