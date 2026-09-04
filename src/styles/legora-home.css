@@ -97,16 +97,6 @@
 .lg-hero-sub{margin-top:26px;display:flex;gap:20px;align-items:center;justify-content:center;flex-wrap:wrap}
 .lg-hero-sub span{font-size:16px;color:rgba(255,255,255,.9)}
 
-/* ---------------- centred statement ---------------- */
-/* Asymmetric on purpose, matching the reference: a long drop from the hero
-   (312px at 1440) and then only 60px to the grey band, so the statement
-   reads as the band's title rather than as its own centred section.
-   Symmetric padding here is what made it look generic. */
-.lg-stmt{padding-top:clamp(132px,21.7vw,312px);padding-bottom:clamp(40px,4.2vw,60px);
-  text-align:center}
-.lg-stmt h2{text-wrap:balance}
-.lg-stmt p{margin-top:30px;color:var(--muted);font-size:15px;line-height:1.4}
-
 /* ---------------- grey band of stage pills ---------------- */
 /* The reference builds on full-viewport blocks: its grey band is exactly
    100vh, same as the hero. Ours was 715px and content-height. */
