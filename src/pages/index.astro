@@ -23,10 +23,7 @@
  * status instead of certification seals — SOC 2 and GDPR are targeted
  * post-pilot, not held. Do not turn that last one into a seal.
  */
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import Carousel from '../components/legora/Carousel.astro';
-import { destArt } from '../lib/landmark/generator';
 import { PRODUCTS, MOVES } from '../lib/content/products';
 import { HOME_FAQ, SECURITY } from '../lib/content/pricing';
 import Mockup from '../components/Mockup.astro';
@@ -34,30 +31,6 @@ import Mockup from '../components/Mockup.astro';
 // The screen each product card shows — the part of the interface that layer is.
 const CARD_SCREEN: Record<string, string> = { portal: 'crm', autopilot: 'pipeline', intelligence: 'atlas', horizon: 'horizon' };
 import '../styles/legora-home.css';
-
-/** Twelve chosen to spread the archetypes -- no two share a builder, so the
-    gallery shows what the generator actually does rather than twelve
-    variations of a cityscape. */
-const PICKS = [
-  'Japan', 'Peru', 'Kenya', 'Iceland', 'Jordan', 'Vietnam',
-  'Namibia', 'Portugal', 'Nepal', 'Brazil', 'Oman', 'Bolivia',
-];
-const all = await getCollection('destinations');
-const byName = new Map(all.map((d) => [d.data.title, d.data]));
-const places = PICKS.map((name) => {
-  const d = byName.get(name);
-  if (!d) throw new Error(`legora preview: no destination entry for ${name}`);
-  return { name, region: d.region };
-});
-
-const SEGMENTS = [
-  { name: 'Travel agencies', kind: 'Reseller', body: 'Multi-agent teams on one shared CRM and one brand — every agent, every trip, one stage engine.' },
-  { name: 'Travel agents', kind: 'Reseller', body: 'Run your whole book of clients from a single thread, without a second system to keep in sync.' },
-  { name: 'Independent advisors', kind: 'Reseller', body: 'Look like a full agency without the overhead — branded proposals, magic links, a real CRM.' },
-  { name: 'Creators', kind: 'Reseller', body: 'Turn an audience into bookings: a public inquiry form, and a pipeline that handles the rest.' },
-  { name: 'DMCs', kind: 'Supplier', body: 'Reply the way you already do, and get discovered by agencies as the network grows.' },
-  { name: 'Tour operators', kind: 'Supplier', body: 'Build and quote packages from your own rates, and keep your full quoted rate on every booking.' },
-];
 
 /** The four practices are real and in place today; the fifth card states
     what is NOT held. Do not turn that one into a seal. */
@@ -69,13 +42,6 @@ const CERTS = [
     status: 'TARGETED\nPOST-PILOT',
     pending: true,
   },
-];
-
-const STATS = [
-  ['130+', 'Countries with vetted DMCs and suppliers on Horizon.'],
-  ['9', 'Stages from Inquiry to Completed, all on one thread.'],
-  ['€0', 'To start on Showcase. Free forever for suppliers; free up to 20 trips a month for resellers.'],
-  ['10%', 'Horizon’s fee. The supplier always receives their full quoted rate.'],
 ];
 
 ---
@@ -189,72 +155,6 @@ const STATS = [
             </article>
           ))
         }
-      </div>
-    </section>
-
-    <section class="lg-car" id="customers">
-      <div class="wrap lg-car-head">
-        <h2>Every side.<br />Every trip.</h2>
-        <p>
-          Resellers source suppliers and run the full ladder. Suppliers are the ones being sourced,
-          and stay free on Showcase.
-        </p>
-      </div>
-      <Carousel items={SEGMENTS} active={2} uid="seg" />
-    </section>
-
-    <section class="lg-gal" id="destinations">
-      <div class="wrap lg-gal-head">
-        <h2>Every destination,<br />drawn rather than stocked.</h2>
-        <p>
-          Destination artwork is generated, not stock — one scene per country, built from that
-          country’s own landmark and seeded so the palette never repeats.
-        </p>
-      </div>
-      <div class="wrap lg-gal-grid">
-        {
-          places.map((p, i) => (
-            <a class="lg-gal-i" href={`/destinations/${p.name.toLowerCase().replace(/\s+/g, '-')}`}>
-              <Fragment set:html={destArt(p.name, `g${i}`, 'light')} />
-              <span class="lg-gal-n">{p.name}</span>
-              <span class="lg-gal-r">{p.region}</span>
-            </a>
-          ))
-        }
-      </div>
-    </section>
-
-    <section class="lg-inter" data-chrome="dark">
-      <img src="/hero.jpg" alt="" />
-      <div class="lg-inter-in">
-        <p class="eyebrow">Horizon</p>
-        <h2>A vetted list of DMCs and suppliers, ready to quote.</h2>
-      </div>
-    </section>
-
-    <section class="lg-sec wrap">
-      <div class="lg-statwrap">
-        <div class="lg-statprose">
-          <p>
-            Every trip involves the same coordination work, repeated by hand, agency by agency —
-            chasing DMCs over email, relaying messages between travellers and drivers, rebuilding
-            the same itinerary for the fifth time.
-          </p>
-          <p>
-            Hyperporter puts that work on one thread, and leaves a person exactly where judgment is
-            actually needed.
-          </p>
-        </div>
-        <div class="lg-stats">
-          {
-            STATS.map(([n, label]) => (
-              <div class="lg-strow">
-                <b>{n}</b>
-                <p>{label}</p>
-              </div>
-            ))
-          }
-        </div>
       </div>
     </section>
 
