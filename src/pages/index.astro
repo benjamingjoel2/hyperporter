@@ -97,7 +97,8 @@ const SEGMENTS = [
   description="Travel operations infrastructure — one connected system for agencies, DMCs and tour operators."
   currentNav="home"
 >
-  <main>
+  {/* Base.astro supplies <main>; this is a plain wrapper. */}
+  <div class="lg-home">
     <section class="lg-hero" data-chrome="dark">
       <img
         class="lg-hero-img"
@@ -199,7 +200,7 @@ const SEGMENTS = [
                   <div>
                     <span class="lg-avail">{p.availability}</span>
                     <p>{p.summary}</p>
-                    <a class="lg-read" href={`/${p.slug}`}>
+                    <a class="lg-read" href={`/${p.slug}`} aria-label={`Learn more about ${p.name}`}>
                       <span aria-hidden="true">&#8627;</span> <span>Learn more</span>
                     </a>
                   </div>
@@ -231,7 +232,7 @@ const SEGMENTS = [
               <div class="lg-seg-copy">
                 <h2>{g.name}</h2>
                 <p>{g.line}</p>
-                <a class="lg-seg-btn" href={g.href}>Learn more</a>
+                <a class="lg-seg-btn" href={g.href} aria-label={`Learn more about ${g.name}`}>Learn more</a>
               </div>
             </div>
           ))
@@ -241,13 +242,8 @@ const SEGMENTS = [
 
     <section class="lg-sec-dark" data-chrome="dark">
       <div class="wrap">
-        <h2>Built to the standard your contracts and rates actually deserve.</h2>
-        <a class="lg-read" href="/security"><span aria-hidden="true">&#8627;</span> <span>Read more</span></a>
-        <p class="lg-fine">
-          Encryption in transit and at rest. Zero standing access. Account isolation. No training on
-          your data.<br />SOC&nbsp;2 and GDPR-formal compliance are targeted post-pilot — not held
-          today, and we won’t imply otherwise.
-        </p>
+        <h2>One system, four layers.</h2>
+        <a class="lg-read" href="/product"><span aria-hidden="true">&#8627;</span> <span>See the product</span></a>
         <div class="lg-certs">
           {
             PILLARS.map((c) => (
@@ -261,6 +257,12 @@ const SEGMENTS = [
             ))
           }
         </div>
+        <p class="lg-fine">
+          Encryption in transit and at rest. Zero standing access. Account isolation. No training on
+          your data.<br />SOC&nbsp;2 and GDPR-formal compliance are targeted post-pilot — not held
+          today, and we won’t imply otherwise.
+          <a href="/security">Security &rarr;</a>
+        </p>
       </div>
     </section>
 
@@ -268,7 +270,7 @@ const SEGMENTS = [
       <h2>Run your next trip on<br />infrastructure, not inboxes.</h2>
       <a class="btn btn-lg" href="/signup">Get started free <i aria-hidden="true">&rarr;</i></a>
     </section>
-  </main>
+  </div>
 
 </Base>
 

@@ -939,8 +939,21 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
   .fgrid{grid-template-columns:1fr}
   .fcell{padding:28px 0!important;border-right:0!important}
 }
+/* The three-track bar gives the nav and the actions equal columns, and six
+   links need more than half of anything under ~1340px, where they ran
+   under the wordmark. Below that the outer tracks size to their content
+   and the mark centres in what is left; below 1150 the word goes and the
+   glyph alone stands in, until the burger takes over at 860. */
+@media (max-width:1340px){
+  .bar{grid-template-columns:auto minmax(0,1fr) auto}
+}
+@media (max-width:1150px){
+  .mark .word{display:none}
+  .links a{padding:8px 9px}
+}
 @media (max-width:860px){
   .links,.bar .cta-nav,.bar-acts .login,.sys{display:none}
+  .mark .word{display:inline}
   .burger{display:block}
   /* Two columns, not three: the centred wordmark has nothing to balance
      against once the nav and the actions are gone, and a 390px bar has no
