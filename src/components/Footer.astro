@@ -1,103 +1,65 @@
 ---
 /**
- * Footer, restructured onto the Harvey AI reference layout:
+ * Footer, on the reference's format: a dark ground, the mark top-left with
+ * the copyright under it at the bottom, and the link columns filling the
+ * right. No CTA band, no oversized wordmark, no separate bottom bar —
+ * Legal is a column like the others.
  *
- *   1. a CTA band  — headline left, one button right
- *   2. a rule
- *   3. the mark and contact details on the left, link columns on the right
- *   4. copyright and legal links along the bottom
- *
- * Structure follows the reference; typography stays on Hyperporter's own
- * system (Space Grotesk display, IBM Plex Mono column labels) rather than
- * importing the reference's serif.
- *
- * Two things from the old footer are deliberately gone:
- *  - the circular social icon buttons, replaced by a text "Follow" column
- *    as in the reference. The hrefs are still the placeholder "#" they
- *    always were — real profile URLs are still needed.
- *  - the inert FAQ <button>. No FAQ page exists; a dead control in a
- *    rebuilt footer is worse than an honest omission.
+ * Contact is a mailto, not a route: there is no contact page, and sending
+ * "Contact" to the sign-up form was a lie.
  */
 const YEAR = new Date().getFullYear();
 ---
 
-<footer>
-  <div class="wrap">
-    <div class="f-cta">
-      <h2>Start running trips on autopilot.</h2>
-      <a class="f-pill" href="/signup">Sign up</a>
-    </div>
-
-    <div class="f-hr"></div>
-
-    <div class="f-main">
-      <div class="f-brand">
-        <a class="f-mark" href="/" aria-label="Hyperporter — home">
-          <svg viewBox="0 0 100 100" aria-hidden="true"
-            ><circle class="ring" cx="50" cy="50" r="44"></circle><rect x="32.5" y="26" width="7.5" height="47"
-            ></rect><rect x="60" y="26" width="7.5" height="47"></rect><rect
-              x="32.5"
-              y="46.5"
-              width="35"
-              height="7.5"></rect></svg
-          >
-        </a>
-        <div class="f-con">
-          <div>Intelak Hub, Offices 4, One Central<br />Dubai World Trade Center, Dubai, UAE</div>
-          <div><a href="mailto:hello@hyperporter.com">hello@hyperporter.com</a></div>
-        </div>
+<footer data-chrome="dark">
+  <div class="wrap f-main">
+    <div class="f-brand">
+      <a class="f-mark" href="/" aria-label="Hyperporter — home">
+        <svg viewBox="0 0 100 100" aria-hidden="true"
+          ><circle class="ring" cx="50" cy="50" r="44"></circle><rect x="32.5" y="26" width="7.5" height="47"
+          ></rect><rect x="60" y="26" width="7.5" height="47"></rect><rect
+            x="32.5"
+            y="46.5"
+            width="35"
+            height="7.5"></rect></svg
+        >
+      </a>
+      <div class="f-con">
+        <div>Intelak Hub, Offices 4, One Central<br />Dubai World Trade Centre, Dubai, UAE</div>
+        <div><a href="mailto:hello@hyperporter.com">hello@hyperporter.com</a></div>
       </div>
-
-      <nav class="f-cols" aria-label="Footer">
-        <div class="f-col">
-          <h4>Product</h4>
-          <a href="/product">Overview</a>
-          <a href="/os">OS</a>
-          <a href="/autopilot">Autopilot</a>
-          <a href="/intelligence">Intelligence</a>
-          <a href="/horizon">Horizon</a>
-        </div>
-        <div class="f-col">
-          <h4>Solutions</h4>
-          <a href="/solutions">All features</a>
-          <a href="/customers/agent-os">Agent OS</a>
-          <a href="/customers/supplier-os">Supplier OS</a>
-          <a href="/pricing">Pricing</a>
-        </div>
-        <div class="f-col">
-          <h4>Company</h4>
-          <a href="/about">About</a>
-          <a href="/blog">Resources</a>
-          <a href="/destinations">Destinations</a>
-          <a href="/security">Security</a>
-          <a href="/signup">Contact</a>
-        </div>
-        <div class="f-col">
-          <h4>Legal</h4>
-          <a href="/privacy">Privacy Policy</a>
-          <a href="/terms">Terms of Service</a>
-        </div>
-      </nav>
+      <p class="f-copy">Copyright &copy; {YEAR} Hyperporter.<br />All rights reserved.</p>
     </div>
 
-    <div class="f-logotype">
-      <svg viewBox="0 0 1100 164" role="img" aria-label="Hyperporter">
-        <text
-          x="0"
-          y="126"
-          textLength="1100"
-          lengthAdjust="spacingAndGlyphs"
-          font-family="'Hyperlocal ROM','Inter',system-ui,sans-serif"
-          font-size="128"
-          font-weight="400">HYPERPORTER</text>
-      </svg>
-    </div>
-
-    <div class="f-bottom">
-      <span class="f-copy">Copyright &copy; {YEAR} Hyperporter. All rights reserved.</span>
-      <a href="/terms">Terms &amp; Conditions</a>
-      <a href="/privacy">Privacy Policy</a>
-    </div>
+    <nav class="f-cols" aria-label="Footer">
+      <div class="f-col">
+        <h4>Product</h4>
+        <a href="/product">Overview</a>
+        <a href="/portal">Portal</a>
+        <a href="/autopilot">Autopilot</a>
+        <a href="/intelligence">Intelligence</a>
+        <a href="/horizon">Horizon</a>
+      </div>
+      <div class="f-col">
+        <h4>Solutions</h4>
+        <a href="/solutions">All features</a>
+        <a href="/customers/agent-portal">Agent Portal</a>
+        <a href="/customers/supplier-portal">Supplier Portal</a>
+        <a href="/pricing">Pricing</a>
+      </div>
+      <div class="f-col">
+        <h4>Company</h4>
+        <a href="/about">About</a>
+        <a href="/blog">Resources</a>
+        <a href="/destinations">Destinations</a>
+        <a href="/security">Security</a>
+        <a href="mailto:hello@hyperporter.com">Contact</a>
+      </div>
+      <div class="f-col">
+        <h4>Legal</h4>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+      </div>
+    </nav>
   </div>
-
 </footer>

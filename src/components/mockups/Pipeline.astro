@@ -1,0 +1,27 @@
+---
+/** Autopilot — the nine stages of one trip, ticked off as they happen. */
+import { STAGES } from '../../lib/stages';
+const CURRENT = 4;
+---
+<div class="mk-back rows">
+  <b>Nairobi — 9 nights</b>
+  <div class="row"><span>Brief confirmed</span><span>Mon</span></div>
+  <div class="row"><span>Itinerary v2 live</span><span>Tue</span></div>
+  <div class="row"><span>3 quotes requested</span><span>Tue</span></div>
+  <div class="row"><span>Rift Valley · €4,180</span><span>Wed</span></div>
+  <div class="row"><span>Re-verifying availability</span><span>now</span></div>
+</div>
+<div class="mk-panel right">
+  <div class="mk-head"><b>Autopilot</b><small>{CURRENT - 1} of {STAGES.length} done</small></div>
+  {STAGES.map((s, i) => {
+    const n = i + 1;
+    const human = s.cls !== 'Automatic';
+    return (
+      <div class:list={['mk-row', { done: n < CURRENT, dimmed: n > CURRENT + 3 }]}>
+        <span class:list={['mk-chk', { now: n === CURRENT, wait: n > CURRENT, amb: human && n < CURRENT }]}></span>
+        <div><b>{s.name}</b>{n === CURRENT && <small>Re-verifying with the supplier</small>}</div>
+        {human ? <span class="mk-tag amb">Needs a person</span> : <span class="mk-fine">Automatic</span>}
+      </div>
+    );
+  })}
+</div>

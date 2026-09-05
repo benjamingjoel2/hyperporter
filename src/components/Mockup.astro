@@ -1,0 +1,48 @@
+---
+/**
+ * A snippet of Hyperporter's interface, composed as a product shot.
+ *
+ * The reference anchors its sections with one piece of its product at a
+ * time — a review panel, a chat, a list — floating on a ground, large enough
+ * to read. We have no screenshots yet, so this draws the pieces: see
+ * styles/mockup.css for the composition and components/mockups/ for the
+ * snippets themselves, one per placement on the site.
+ *
+ * The agency, the suppliers, the trips and the prices are invented. There is
+ * no caption saying so — the founder asked for none — so keep them plausible
+ * and keep them consistent with the copy around them.
+ * The frame is `role="img"` with the snippet's description as its label; the
+ * interface inside is hidden from assistive tech, because reading a fake
+ * table aloud helps nobody.
+ *
+ * An unknown screen name throws rather than rendering an empty frame.
+ */
+import '../styles/mockup.css';
+import { SCREENS, SCREEN_ALT, SCREEN_META } from './mockups/index';
+
+interface Props {
+  screen: string;
+  /** 4:5 portrait for the homepage cards; the default is 4:3. */
+  tall?: boolean;
+  class?: string;
+}
+
+const { screen, tall = false, class: klass = '' } = Astro.props;
+const Screen = SCREENS[screen];
+if (!Screen) {
+  throw new Error(`Mockup: no screen named "${screen}". Add one to components/mockups/index.ts.`);
+}
+const meta = SCREEN_META[screen];
+---
+
+<div class:list={['mockup', klass]}>
+  <div class:list={['mk', { tall }]} data-ground={meta.ground} role="img" aria-label={SCREEN_ALT[screen]}>
+    <div class="mk-stage" aria-hidden="true">
+      <Screen />
+    </div>
+    <span class="mk-app" aria-hidden="true">
+      <svg viewBox="0 0 100 100"><circle class="ring" cx="50" cy="50" r="44" /><rect x="32.5" y="26" width="7.5" height="47" /><rect x="60" y="26" width="7.5" height="47" /><rect x="32.5" y="46.5" width="35" height="7.5" /></svg>
+      {meta.app}
+    </span>
+  </div>
+</div>

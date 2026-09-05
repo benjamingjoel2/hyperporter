@@ -1,0 +1,15 @@
+---
+/** Security — who did what, and what is automatic versus a person. */
+const L = [
+  ['09:31', 'Magic link opened', 'Priya Nair · proposal v3', 'Traveller'],
+  ['08:52', 'Payment marked received', 'Kyoto · €6,470 · Lena Ortiz', 'Human'],
+  ['08:40', 'Sign-in by magic link', 'Daniel Achebe · Lisbon, PT', 'Agent'],
+  ['Yesterday', 'Vault upload', 'Indexed to this account only', 'Owner'],
+];
+---
+<div class="mk-panel wide">
+  <div class="mk-head"><b>Access &amp; audit</b><small>SOC 2 · GDPR — targeted post-pilot</small></div>
+  {L.map(([t, e, d, by]) => (
+    <div class="mk-row"><span class="mk-fine mk-mono" style="min-width:5em">{t}</span><div><b>{e}</b><small>{d}</small></div><span class:list={['mk-tag', { grey: by !== 'Human', amb: by === 'Human' }]}>{by}</span></div>
+  ))}
+</div>

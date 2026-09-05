@@ -1,6 +1,6 @@
 ---
 /**
- * Autopilot — the automation layer, not the platform. OS is the platform.
+ * Autopilot — the automation layer, not the platform. Portal is the platform.
  *
  * The nine-stage engine lives here now; it used to have its own /how page.
  * The before/after figures are pilot TARGETS, and the note saying so is not
@@ -10,8 +10,14 @@
 import Base from '../layouts/Base.astro';
 import ProductPage from '../components/ProductPage.astro';
 import { byProduct, AUTOPILOT_TARGETS } from '../lib/content/products';
+import { STAGES } from '../lib/stages';
 
 const product = byProduct('autopilot');
+
+// The sample thread opens at stage 3 (Quotation): 1-2 done, 3 current, the
+// rest ahead. Driven off STAGES so the card cannot drift from the nine stages
+// listed below it on this same page.
+const CURRENT_STAGE = 3;
 ---
 
 <Base
@@ -19,7 +25,126 @@ const product = byProduct('autopilot');
   description="Full nine-stage automation, from Inquiry through Post-Trip, with human escalation points built in by design."
   currentNav="product"
 >
-  <ProductPage product={product}>
+  <ProductPage product={product} photoHero>
+    {/* The photograph the hero and the nine-stage band both sit on. */}
+    <img slot="hero-bg" class="p-photo-bg" src="/hero.jpg" alt="" />
+
+    {/* Beside the headline rather than below it: the card is the hero's
+        illustration, not a section of its own. */}
+    <Fragment slot="hero-aside">
+      <div class="thread">
+        <div class="th"><span>Thread <b>KE-2291</b></span><span>Nairobi · 9 nights</span></div>
+        {/* Tab pattern: each chip switches the card to that stage. All
+            nine panels are rendered server-side and toggled with `hidden`,
+            so with JS off the card still shows stage 3 rather than going
+            blank. */}
+        <div class="chips" role="tablist" aria-label="Pipeline stage">
+          {
+            STAGES.map((s, i) => (
+              <button
+                type="button"
+                role="tab"
+                id={`stage-tab-${i}`}
+                aria-controls={`stage-panel-${i}`}
+                aria-selected={i + 1 === CURRENT_STAGE ? 'true' : 'false'}
+                tabindex={i + 1 === CURRENT_STAGE ? 0 : -1}
+                class:list={['chip', { done: i + 1 < CURRENT_STAGE, now: i + 1 === CURRENT_STAGE }]}
+              >
+                {s.name}
+              </button>
+            ))
+          }
+        </div>
+
+        {
+          STAGES.map((s, i) => (
+            <div
+              class="tpanel"
+              id={`stage-panel-${i}`}
+              role="tabpanel"
+              aria-labelledby={`stage-tab-${i}`}
+              data-auto-needs={s.cls === 'Automatic' ? 'nothing' : 'a person'}
+              data-manual-needs="all of it"
+              hidden={i + 1 !== CURRENT_STAGE}
+            >
+              {/* Autopilot on. Amber marks human-touchpoint states only. */}
+              <div class="v v-auto">
+                <div class:list={['line', { amb: s.cls !== 'Automatic' }]}>
+                  <i />
+                  <span>{s.note}</span>
+                </div>
+                <div class="line">
+                  <i />
+                  <span>{s.one}</span>
+                </div>
+              </div>
+              {/* Autopilot off -- the same step done by hand, so every
+                  line is a human-touchpoint state and reads amber. */}
+              <div class="v v-manual">
+                <div class="line amb">
+                  <i />
+                  <span>{s.manual}</span>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+
+        <div class="ft">
+          <button class="toggle" id="ap-toggle" type="button" aria-pressed="true">
+            <span /> Autopilot
+          </button>
+          <span id="ap-needs">Needs you &middot; nothing</span>
+        </div>
+      </div>
+    </Fragment>
+
+    {/* The nine stages, moved here from the homepage — this is the page they
+        belong to. Dark glass on a photograph rather than a panel on the page
+        ground, matching the nav dropdown: the stage list is chrome over the
+        product, not a section of prose.
+
+        The outer element is the scroll track; `.ap-band-stick` is what stays
+        put while the stages advance. */}
+    <section slot="after-hero" class="ap-band" id="stages">
+      <div class="ap-band-stick">
+        <div class="wrap">
+          <div class="ap-glass">
+            <div class="ap-band-lead">
+              <p class="eyebrow">Autopilot · nine stages</p>
+              <p class="dek">
+                Inquiry through Post-Trip. The escalation points where a person takes over are
+                designed in, not gaps left over.
+              </p>
+            </div>
+            <div class="ap-pills">
+              {
+                STAGES.map((s, i) => (
+                  <button class="ap-pill" type="button" aria-expanded="false" aria-controls={`s${i}`}>
+                    <em>{s.n}</em> {s.name} <i aria-hidden="true">+</i>
+                  </button>
+                ))
+              }
+            </div>
+            {/* The bodies sit in their own column rather than under their pill.
+                The stage list is a fixed nine items tall, so a body opening
+                beside it changes nothing about the panel's height — inline,
+                every stage shifted the eight below it. */}
+            <div class="ap-detail">
+              {
+                STAGES.map((s, i) => (
+                  <p class="ap-pill-body" id={`s${i}`} hidden>
+                    {s.one}
+                    {s.cls === 'Human touchpoint' && <span class="ap-tag">Human touchpoint</span>}
+                  </p>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div slot="after-features" class="sec-tight wrap">
       <div class="mission rv">
         Automation that still knows when to stop is the whole point — not less human involvement,
@@ -43,8 +168,8 @@ const product = byProduct('autopilot');
               AUTOPILOT_TARGETS.map((t) => (
                 <tr>
                   <td>{t.metric}</td>
-                  <td class="pm-cell">{t.before}</td>
-                  <td class="pm-cell pm-yes">{t.after}</td>
+                  <td class="pm-cell" data-col="Before Autopilot">{t.before}</td>
+                  <td class="pm-cell pm-yes" data-col="After Autopilot">{t.after}</td>
                 </tr>
               ))
             }
@@ -67,3 +192,171 @@ const product = byProduct('autopilot');
     </div>
   </ProductPage>
 </Base>
+
+<script>
+  /**
+   * Hero thread card: the chips act as tabs over the nine stage panels.
+   * Chips to the left of the selected one read as "done", so the card still
+   * behaves as a progress display rather than a plain switcher.
+   */
+  const tablist = document.querySelector<HTMLElement>('.thread .chips[role="tablist"]');
+
+  if (tablist) {
+    const tabs = Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+
+    const select = (index: number, focus = true): void => {
+      tabs.forEach((tab, i) => {
+        const on = i === index;
+        tab.setAttribute('aria-selected', String(on));
+        tab.tabIndex = on ? 0 : -1;
+        tab.classList.toggle('now', on);
+        tab.classList.toggle('done', i < index);
+        const panel = document.getElementById(tab.getAttribute('aria-controls') ?? '');
+        if (panel) panel.hidden = !on;
+      });
+      if (focus) tabs[index].focus();
+      syncNeeds();
+    };
+
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => select(i, false)));
+
+    /* The Autopilot switch is real: off swaps every panel to the by-hand
+       version of that stage and rewrites the "needs you" state. */
+    const thread = document.querySelector<HTMLElement>('.thread');
+    const toggle = document.querySelector<HTMLButtonElement>('#ap-toggle');
+    const needs = document.querySelector<HTMLElement>('#ap-needs');
+
+    const syncNeeds = (): void => {
+      const panel = document.querySelector<HTMLElement>('.tpanel:not([hidden])');
+      if (!panel || !needs) return;
+      const on = toggle?.getAttribute('aria-pressed') !== 'false';
+      const value = on ? panel.dataset.autoNeeds : panel.dataset.manualNeeds;
+      needs.textContent = `Needs you \u00b7 ${value ?? 'nothing'}`;
+    };
+
+    toggle?.addEventListener('click', () => {
+      const on = toggle.getAttribute('aria-pressed') !== 'false';
+      toggle.setAttribute('aria-pressed', String(!on));
+      thread?.classList.toggle('manual', on);
+      syncNeeds();
+    });
+
+    tablist.addEventListener('keydown', (event: KeyboardEvent) => {
+      const current = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+      let next: number;
+      switch (event.key) {
+        case 'ArrowRight': next = (current + 1) % tabs.length; break;
+        case 'ArrowLeft':  next = (current - 1 + tabs.length) % tabs.length; break;
+        case 'Home':       next = 0; break;
+        case 'End':        next = tabs.length - 1; break;
+        default: return;
+      }
+      event.preventDefault();
+      select(next);
+    });
+  }
+</script>
+
+<script>
+  /* Clicking a pill opens it. While the band is pinned the next scroll takes
+     the sequence back over — that is deliberate: the pointer wins for as long
+     as the reader is not scrolling. */
+  document.querySelectorAll<HTMLButtonElement>('.ap-pill').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+      if (!panel) return;
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      panel.hidden = open;
+      const icon = btn.querySelector('i');
+      if (icon) icon.textContent = open ? '+' : '\u2212';
+      /* Unpinned, the detail sits below all nine pills — tapping an early
+         stage would otherwise write its text off the bottom of the screen. */
+      if (!open && !document.querySelector('.ap-band')?.classList.contains('ap-pinned')) {
+        panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    });
+  });
+
+  /**
+   * The nine stages advance with the scroll while the band is pinned: the
+   * section holds still and each stage opens in turn, as on the reference.
+   *
+   * Gated on the same conditions as the CSS that does the pinning — a media
+   * query, so the two cannot disagree. Under prefers-reduced-motion, or on a
+   * screen too short or narrow to pin without trapping the reader, the band
+   * stays an ordinary section and the pills work as a plain accordion.
+   *
+   * Clicking a pill still works while pinned; the next scroll simply takes
+   * the sequence back over.
+   */
+  const band = document.querySelector<HTMLElement>('.ap-band');
+  const stick = document.querySelector<HTMLElement>('.ap-band-stick');
+  const canPin = window.matchMedia(
+    '(prefers-reduced-motion: no-preference) and (min-width: 861px) and (min-height: 640px)'
+  );
+
+  if (band && stick) {
+    const pills = Array.from(band.querySelectorAll<HTMLButtonElement>('.ap-pill'));
+    let pinning = false;
+    let queued = false;
+    let shown = -1;
+
+    const show = (i: number): void => {
+      if (i === shown) return;
+      shown = i;
+      pills.forEach((btn, n) => {
+        const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+        const on = n === i;
+        btn.setAttribute('aria-expanded', String(on));
+        if (panel) panel.hidden = !on;
+        const icon = btn.querySelector('i');
+        if (icon) icon.textContent = on ? '\u2212' : '+';
+      });
+    };
+
+    const step = (): void => {
+      queued = false;
+      if (!pinning) return;
+      const track = band.getBoundingClientRect();
+      const chrome = stick.getBoundingClientRect().top;
+      const span = band.offsetHeight - stick.offsetHeight;
+      if (span <= 0) return;
+      const progress = Math.min(Math.max((chrome - track.top) / span, 0), 1);
+      show(Math.min(Math.floor(progress * pills.length), pills.length - 1));
+    };
+
+    const setMode = (): void => {
+      pinning = canPin.matches;
+      band.classList.toggle('ap-pinned', pinning);
+      if (pinning) {
+        shown = -1;
+        step();
+      } else {
+        /* Hand the pills back to the click handler, all closed. */
+        shown = -1;
+        pills.forEach((btn) => {
+          const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+          btn.setAttribute('aria-expanded', 'false');
+          if (panel) panel.hidden = true;
+          const icon = btn.querySelector('i');
+          if (icon) icon.textContent = '+';
+        });
+      }
+    };
+
+    setMode();
+    canPin.addEventListener('change', setMode);
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!queued) {
+          queued = true;
+          requestAnimationFrame(step);
+        }
+      },
+      { passive: true }
+    );
+    window.addEventListener('resize', setMode);
+  }
+</script>

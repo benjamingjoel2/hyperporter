@@ -5,60 +5,65 @@
  * same "captured in the UI only" notice as the prototype's cap() helper.
  */
 import Base from '../layouts/Base.astro';
+import Mockup from '../components/Mockup.astro';
 ---
 
 <Base
   title="Sign up"
   description="Sign up and we'll walk through your actual inquiry-to-booking flow — what Autopilot would have done with it, and where Horizon fills the gaps."
 >
-  <div class="sec wrap">
-    <p class="eyebrow rv">Sign up</p>
-    <h1 class="rv">See it running<br />on a real trip.</h1>
-    <p class="lede rv">
-      Sign up and we'll walk through your actual inquiry-to-booking flow — what Autopilot would have done with it,
-      and where Horizon fills the gaps.
-    </p>
-    <div class="sgrid rv" style="margin-top:44px">
-      <div class="panel">
-        <div class="field"><label for="f-name">Name</label><input id="f-name" type="text" placeholder="Your name" /></div>
-        <div class="field">
-          <label for="f-agency">Agency name</label><input id="f-agency" type="text" placeholder="Agency" />
+  <div class="sec wrap page-hero">
+    <div class="page-hero-copy">
+
+      <p class="eyebrow rv">Sign up</p>
+      <h1 class="rv">See it running<br />on a real trip.</h1>
+      <p class="lede rv">
+        Sign up and we'll walk through your actual inquiry-to-booking flow — what Autopilot would have done with it,
+        and where Horizon fills the gaps.
+      </p>
+      <div class="sgrid rv" style="margin-top:44px">
+        <div class="panel">
+          <div class="field"><label for="f-name">Name</label><input id="f-name" type="text" placeholder="Your name" /></div>
+          <div class="field">
+            <label for="f-agency">Agency name</label><input id="f-agency" type="text" placeholder="Agency" />
+          </div>
+          <div class="field">
+            <label for="f-email">Email</label><input id="f-email" type="email" placeholder="you@agency.com" />
+          </div>
+          <div class="field">
+            <label for="f-vol">Bookings per month</label>
+            <select id="f-vol">
+              <option>Under 20</option>
+              <option>20–50</option>
+              <option>50–150</option>
+              <option>150+</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-int">Interested in</label>
+            <select id="f-int">
+              <option>Autopilot — the software</option>
+              <option>Horizon — the network</option>
+              <option>Autopilot + Horizon</option>
+            </select>
+          </div>
+          <button class="btn" style="width:100%" data-capture-input="f-email" data-capture-target="m-signup" type="button"
+            >Create account</button
+          >
+          <p class="note">No credit card, no commitment.</p>
+          <div class="msg" id="m-signup"></div>
         </div>
-        <div class="field">
-          <label for="f-email">Email</label><input id="f-email" type="email" placeholder="you@agency.com" />
+        <div class="panel">
+          <p class="eyebrow">What happens next</p>
+          <ol class="nlist">
+            <li>We walk through a real inquiry from your inbox.</li>
+            <li>You see the draft itinerary and quote it produces.</li>
+            <li>You see exactly where a human stays in the loop.</li>
+          </ol>
         </div>
-        <div class="field">
-          <label for="f-vol">Bookings per month</label>
-          <select id="f-vol">
-            <option>Under 20</option>
-            <option>20–50</option>
-            <option>50–150</option>
-            <option>150+</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="f-int">Interested in</label>
-          <select id="f-int">
-            <option>Autopilot — the software</option>
-            <option>Horizon — the network</option>
-            <option>Autopilot + Horizon</option>
-          </select>
-        </div>
-        <button class="btn" style="width:100%" data-capture-input="f-email" data-capture-target="m-signup" type="button"
-          >Create account</button
-        >
-        <p class="note">No credit card, no commitment.</p>
-        <div class="msg" id="m-signup"></div>
-      </div>
-      <div class="panel">
-        <p class="eyebrow">What happens next</p>
-        <ol class="nlist">
-          <li>We walk through a real inquiry from your inbox.</li>
-          <li>You see the draft itinerary and quote it produces.</li>
-          <li>You see exactly where a human stays in the loop.</li>
-        </ol>
       </div>
     </div>
+    <Mockup screen="login" />
   </div>
 </Base>
 

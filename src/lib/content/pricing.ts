@@ -64,7 +64,7 @@ export const LADDERS: Ladder[] = [
           'Full Horizon network access',
         ],
         cta: 'Get started',
-        href: '/signup',
+        href: 'https://portal.hyperporter.com',
       },
       {
         name: 'Autopilot',
@@ -77,7 +77,7 @@ export const LADDERS: Ladder[] = [
           'Remove “Powered by Hyperporter”',
         ],
         cta: 'Get started',
-        href: '/signup',
+        href: 'https://portal.hyperporter.com',
       },
       {
         name: 'Intelligence',
@@ -90,7 +90,7 @@ export const LADDERS: Ladder[] = [
           'Custom domain, included',
         ],
         cta: 'Talk to us',
-        href: '/signup',
+        href: 'https://portal.hyperporter.com',
       },
     ],
     columns: ['Showcase', 'Autopilot', 'Intelligence'],
@@ -122,7 +122,7 @@ export const LADDERS: Ladder[] = [
       {
         group: 'Communication',
         rows: [
-          { feature: 'Inquire directly inside OS', cells: [YES, YES, YES] },
+          { feature: 'Inquire directly inside Portal', cells: [YES, YES, YES] },
           { feature: 'Email integration', cells: [NO, YES, YES] },
           { feature: 'WhatsApp integration', cells: [NO, 'Add-on', 'Add-on'] },
           { feature: 'WhatsApp Support Orchestrator', cells: [NO, 'Add-on', 'Add-on'] },
@@ -164,7 +164,7 @@ export const LADDERS: Ladder[] = [
         note: 'Forever, no upgrade pressure',
         features: ['CRM access and quoting', 'Listed on Horizon, at no cost', 'Itinerary / proposal generator'],
         cta: 'Get started',
-        href: '/signup',
+        href: 'https://portal.hyperporter.com',
       },
       {
         name: 'Intelligence',
@@ -173,7 +173,7 @@ export const LADDERS: Ladder[] = [
         note: 'Tailored to your operation',
         features: ['Everything in Showcase', 'Atlas — the internal brain', 'WhatsApp & email integration'],
         cta: 'Talk to us',
-        href: '/signup',
+        href: 'https://portal.hyperporter.com',
       },
     ],
     columns: ['Showcase', 'Intelligence'],
@@ -202,7 +202,7 @@ export const LADDERS: Ladder[] = [
       {
         group: 'Communication',
         rows: [
-          { feature: 'Inquire directly inside OS', cells: [YES, YES] },
+          { feature: 'Inquire directly inside Portal', cells: [YES, YES] },
           { feature: 'WhatsApp & email integration', cells: [NO, YES] },
         ],
       },
@@ -231,13 +231,13 @@ export const byLadder = (side: Side): Ladder => {
 export const SECURITY = {
   eyebrow: 'Always on. Always secure.',
   title: 'Your data is in safe hands.',
-  lede: "From encryption to access control, Hyperporter is built to the standard travel businesses' contracts, rates, and traveler data actually deserve.",
+  lede: "From encryption to access control, Hyperporter is built to the standard travel businesses' contracts, rates, and traveller data actually deserve.",
   practicesEyebrow: 'Built on strong foundations',
   practicesTitle: 'The practices, in place from day one.',
   practices: [
     {
       title: 'Encryption everywhere',
-      body: 'TLS in transit, AES-256 at rest — contracts, rates, and traveler data protected the same way, on every tier.',
+      body: 'TLS in transit, AES-256 at rest — contracts, rates, and traveller data protected the same way, on every tier.',
     },
     {
       title: 'Zero standing access',

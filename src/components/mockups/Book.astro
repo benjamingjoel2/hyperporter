@@ -1,0 +1,15 @@
+---
+/** Travel agents — one person's book of clients. */
+const C: [string, string, string, boolean][] = [
+  ['Ortiz family', '3 trips · Nairobi, March', 'Quotation', false],
+  ['Priya Nair', '2 trips · Marrakesh, February', 'Booking', true],
+  ['Whitfields', '1 trip · Hanoi, May', 'Ready', false],
+  ['Brandt', '4 trips · Kyoto, now', 'Traveling', true],
+];
+---
+<div class="mk-panel">
+  <div class="mk-head"><b>My book</b><small>41 clients · 6 trips open</small></div>
+  {C.map(([n, m, st, amb]) => (
+    <div class="mk-row"><span class="mk-av ghost">{n.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}</span><div><b>{n}</b><small>{m}</small></div><span class:list={['mk-tag', { amb }]}>{st}</span></div>
+  ))}
+</div>

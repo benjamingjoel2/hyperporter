@@ -9,6 +9,7 @@
  */
 import Base from '../layouts/Base.astro';
 import ProductPage from '../components/ProductPage.astro';
+import Mockup from '../components/Mockup.astro';
 import { byProduct, HORIZON_SUPPLIER_TYPES } from '../lib/content/products';
 import WorldMap from '../components/WorldMap.astro';
 
@@ -21,6 +22,9 @@ const product = byProduct('horizon');
   currentNav="product"
 >
   <ProductPage product={product}>
+    <Fragment slot="hero-aside">
+      <Mockup screen="horizon" />
+    </Fragment>
     <section slot="after-hero" class="mapband">
       <div class="wrap">
         <p class="eyebrow rv" style="color:rgba(255,255,255,.66)">Where the network reaches</p>
@@ -40,7 +44,7 @@ const product = byProduct('horizon');
         <h2 class="rv">10%, locked. The supplier always gets their full quoted rate.</h2>
         <p class="lede rv">
           A markup on top of the quoted rate, absorbed by the agency or passed through to the
-          traveler. Being listed costs a supplier nothing — Horizon is the agency's tool for finding
+          traveller. Being listed costs a supplier nothing — Horizon is the agency's tool for finding
           them, not a product the supplier logs into.
         </p>
       </div>

@@ -11,36 +11,64 @@ import type { Product } from '../lib/content/products';
 
 interface Props {
   product: Product;
+  /** Open on a photograph, homepage-style; the page passes the image in `hero-bg`. */
+  photoHero?: boolean;
 }
 
 const { product } = Astro.props;
 const { eyebrow, title, lede, features, featuresTitle, cases, casesTitle, next } = product;
+
+// A page can put something beside its hero — Autopilot puts the sample
+// thread there. Without it the hero stays a single column, so the other
+// three product pages are unaffected.
+const hasAside = Astro.slots.has('hero-aside');
+const { photoHero = false } = Astro.props;
 ---
 
-<div class="sec wrap">
-  <p class="eyebrow rv">{eyebrow}</p>
-  <h1 class="rv">{title}</h1>
-  <p class="lede rv">{lede}</p>
-</div>
-
-<slot name="after-hero" />
-
-<div class="sec-tight wrap">
-  {featuresTitle && <h2 class="rv">{featuresTitle}</h2>}
-  <div class="flist rv">
-    {
-      features.map((f) => (
-        <div class="fitem">
-          <div class="fn">{f.n}</div>
-          <div>
-            <b>{f.name}</b>
-            <p>{f.body}</p>
-          </div>
+{/* `photoHero` puts the hero and whatever follows it in `after-hero` on one
+    photograph, the way the homepage opens — the page supplies the image in
+    `hero-bg`. Without it this wrapper is an unstyled div. */}
+<div class:list={['p-top', { 'p-top-photo': photoHero }]} data-chrome={photoHero ? 'dark' : undefined}>
+  {photoHero && <slot name="hero-bg" />}
+  <div class="sec wrap">
+    <div class:list={['p-hero', { 'p-hero-split': hasAside }]}>
+      <div>
+        <p class="eyebrow rv">{eyebrow}</p>
+        <h1 class="rv">{title}</h1>
+        <p class="lede rv" style="margin-bottom:0">{lede}</p>
+      </div>
+      {hasAside && (
+        <div class="p-hero-aside rv">
+          <slot name="hero-aside" />
         </div>
-      ))
-    }
+      )}
+    </div>
   </div>
+
+  <slot name="after-hero" />
 </div>
+
+{
+  /* A product whose page shows its own list some other way passes none —
+     /autopilot draws the nine stages off STAGES, and this list repeated
+     five of them a screen further down. */
+  features.length > 0 && (
+    <div class="sec-tight wrap">
+      {featuresTitle && <h2 class="rv">{featuresTitle}</h2>}
+      <div class="flist rv">
+        {features.map((f) => (
+          <div class="fitem">
+            <div class="fn">{f.n}</div>
+            <div>
+              <b>{f.name}</b>
+              <p>{f.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 <slot name="after-features" />
 

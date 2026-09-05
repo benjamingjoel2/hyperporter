@@ -56,45 +56,22 @@ const stream = row + row;
                 </svg>
               </a>
 
-              <div class="mega" hidden>
-                <div class="mega-rail" role="tablist" aria-label={`${n.label} sections`}>
-                  {n.tabs.map((t, i) => (
-                    <button
-                      type="button"
-                      role="tab"
-                      class:list={['mega-tab', { on: i === 0 }]}
-                      data-tab={t.id}
-                      aria-selected={i === 0 ? 'true' : 'false'}
-                      tabindex={i === 0 ? 0 : -1}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
-                </div>
-
-                <div class="mega-views">
-                  {n.tabs.map((t, i) => (
-                    <div class="mega-view" data-view={t.id} hidden={i !== 0}>
-                      <p class="mega-head">{t.heading}</p>
-                      <div class="mega-list">
-                        {t.rows.map((r, j) => (
-                          <a class="mega-row" href={r.href}>
-                            <span class="mega-n">{String(j + 1).padStart(2, '0')}</span>
-                            <span class="mega-txt">
-                              <b>{r.label}</b>
-                              <em>{r.desc}</em>
-                            </span>
-                            <span class="mega-go">&rarr;</span>
-                          </a>
-                        ))}
-                      </div>
-                      <a class="mega-foot" href={t.footHref}>
-                        <span>{t.footLabel}</span>
-                        <em>{t.footCta} &rarr;</em>
+              {/* One column per tab group, plain links only — the reference's
+                  panel carries no descriptions, numbers or icons. The tabs in
+                  the data become column headings, so the same content that
+                  drove the old rail drives the columns without a second
+                  structure to keep in sync. */}
+              <div class="mega" hidden style={`--mega-cols:${n.tabs.length}`}>
+                {n.tabs.map((t) => (
+                  <div class="mega-col">
+                    <p class="mega-head">{t.label}</p>
+                    {t.rows.map((r) => (
+                      <a class="mega-row" href={r.href}>
+                        {r.label}
                       </a>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ))}
               </div>
             </div>
           ) : (
@@ -119,29 +96,60 @@ const stream = row + row;
       <span class="word">Hyperporter</span>
     </a>
     <div class="bar-acts">
-      <a class="login" href="/signup">Log in</a>
-      <a class="cta-nav" href="/signup">Get started free <i aria-hidden="true">&rarr;</i></a>
-      <button class="burger" aria-label="Menu" id="burger"><span></span><span></span><span></span></button>
+      <a class="login" href="https://portal.hyperporter.com/login">Log in</a>
+      <a class="cta-nav" href="https://portal.hyperporter.com">Get started free <i aria-hidden="true">&rarr;</i></a>
+      <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="drawer" id="burger"><span></span><span></span><span></span></button>
     </div>
   </div>
   <div class="rail" aria-hidden="true">
     <div class="tag">Live activity</div>
     <div class="stream" set:html={stream} />
   </div>
-  <div class="drawer" id="drawer">
-    {
-      DRAWER.map((g) => (
-        <>
-          {g.heading && <p class="drawer-h">{g.heading}</p>}
-          {g.links.map((n) => (
-            <a href={n.href}>{n.label}</a>
-          ))}
-        </>
-      ))
-    }
-    <a href="/signup">Get started free &rarr;</a>
-  </div>
 </header>
+
+{/* Outside the header on purpose: `header.top` carries a backdrop-filter,
+    and that makes it the containing block for `position:fixed` descendants —
+    inside it, this sheet was clipped to the header's own height and the page
+    underneath kept receiving the taps. */}
+{/* Mobile menu. Top-level items only, each expanding to its own group —
+      the old drawer flattened every link in the site into one unbroken list
+      of twenty-odd rows with no way to tell a product from a solution. */}
+  <div class="drawer" id="drawer">
+    <nav class="drawer-in" aria-label="Menu">
+      {
+        NAV.map((n) =>
+          n.tabs ? (
+            <div class="dsec">
+              <button class="drow dtog" type="button" aria-expanded="false" aria-controls={`d-${n.id}`}>
+                <span>{n.label}</span>
+                <svg viewBox="0 0 12 8" aria-hidden="true">
+                  <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+                </svg>
+              </button>
+              <div class="dsub" id={`d-${n.id}`} hidden>
+                {n.tabs.map((t) => (
+                  <>
+                    <p class="dsub-h">{t.label}</p>
+                    {t.rows.map((r) => (
+                      <a href={r.href}>{r.label}</a>
+                    ))}
+                  </>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <a class="drow" href={n.href}>
+              <span>{n.label}</span>
+            </a>
+          )
+        )
+      }
+      <div class="drawer-foot">
+        <a class="drawer-login" href="https://portal.hyperporter.com/login">Log in</a>
+        <a class="btn drawer-cta" href="https://portal.hyperporter.com">Get started free <i aria-hidden="true">&rarr;</i></a>
+      </div>
+    </nav>
+  </div>
 
 <script>
   /**
@@ -154,45 +162,50 @@ const stream = row + row;
    * wordmark lands directly on top of it.
    */
   const bar = document.querySelector<HTMLElement>('header.top');
-  const heroTitle = document.querySelector<HTMLElement>('.lg-hero h1');
 
-  /**
-   * Publish the chrome's height so a full-viewport hero can subtract it.
-   * This header is sticky, which means it is still in flow: a hero set to
-   * 100svh therefore starts *below* it and runs exactly that far past the
-   * fold, taking the sub-line and the CTA with it. The reference's bar is
-   * fixed, so its hero starts at zero and this does not arise.
-   *
-   * Measured rather than hard-coded because the bar and the dispatch rail
-   * change height across breakpoints.
-   */
   if (bar) {
+    /**
+     * Publish the chrome's height so a full-viewport hero can subtract it.
+     * This header is sticky, which means it is still in flow: a hero set to
+     * 100svh therefore starts *below* it and runs exactly that far past the
+     * fold, taking the sub-line and the CTA with it. Measured rather than
+     * hard-coded because the bar and the rail change height across
+     * breakpoints.
+     */
     const publishHeight = (): void =>
       document.documentElement.style.setProperty('--chrome-h', `${bar.offsetHeight}px`);
-    publishHeight();
-    window.addEventListener('resize', publishHeight);
-  }
 
-  if (bar && heroTitle) {
+    /**
+     * The bar is transparent on every page, so its text has to survive
+     * whatever scrolls under it. Sections that are genuinely dark carry
+     * `data-chrome="dark"` — the hero, the photo interstitial, the security
+     * band, the world map — and while any of them is behind the bar it
+     * switches to light text over a scrim.
+     *
+     * Read against the bar's own box rather than the viewport top: the rail
+     * sits at the bottom of the chrome, and a section that has only reached
+     * the bar's midpoint is already behind that rail.
+     */
+    const darks = Array.from(document.querySelectorAll<HTMLElement>('[data-chrome="dark"]'));
     let ticking = false;
-    let trigger = 0;
-
-    const measure = (): void => {
-      const was = bar.classList.contains('over');
-      bar.classList.add('over');
-      trigger = Math.max(
-        heroTitle.getBoundingClientRect().top + window.scrollY - bar.offsetHeight - 16,
-        0
-      );
-      bar.classList.toggle('over', was || window.scrollY <= trigger);
-    };
 
     const apply = (): void => {
       ticking = false;
-      bar.classList.toggle('over', window.scrollY <= trigger);
+      const h = bar.offsetHeight;
+      /* The open drawer is a dark panel hanging off the bar, so the bar has to
+         go dark with it — otherwise the burger's white cross sits on the white
+         bar of every page that isn't the homepage, and vanishes. */
+      bar.classList.toggle(
+        'over',
+        document.body.classList.contains('drawer-open') ||
+          darks.some((el) => {
+            const r = el.getBoundingClientRect();
+            return r.top < h && r.bottom > 0;
+          })
+      );
     };
 
-    measure();
+    publishHeight();
     apply();
     window.addEventListener(
       'scroll',
@@ -205,7 +218,7 @@ const stream = row + row;
       { passive: true }
     );
     window.addEventListener('resize', () => {
-      measure();
+      publishHeight();
       apply();
     });
   }
@@ -264,36 +277,6 @@ const stream = row + row;
       setOpen(wrap, open);
     });
 
-    // Tabs inside the panel.
-    const tabs = Array.from(wrap.querySelectorAll<HTMLButtonElement>('.mega-tab'));
-    const views = Array.from(wrap.querySelectorAll<HTMLElement>('.mega-view'));
-
-    const select = (id: string) => {
-      tabs.forEach((t) => {
-        const on = t.dataset.tab === id;
-        t.classList.toggle('on', on);
-        t.setAttribute('aria-selected', on ? 'true' : 'false');
-        t.tabIndex = on ? 0 : -1;
-      });
-      views.forEach((v) => {
-        v.hidden = v.dataset.view !== id;
-      });
-    };
-
-    tabs.forEach((tab, i) => {
-      // pointerenter, not click: the reference switches on hover, and a
-      // click would feel like a dead button to anyone using a mouse
-      tab.addEventListener('pointerenter', () => tab.dataset.tab && select(tab.dataset.tab));
-      tab.addEventListener('click', () => tab.dataset.tab && select(tab.dataset.tab));
-      tab.addEventListener('keydown', (e) => {
-        const k = e.key;
-        if (k !== 'ArrowDown' && k !== 'ArrowUp') return;
-        e.preventDefault();
-        const next = tabs[(i + (k === 'ArrowDown' ? 1 : tabs.length - 1)) % tabs.length];
-        if (next.dataset.tab) select(next.dataset.tab);
-        next.focus();
-      });
-    });
   });
 
   document.addEventListener('keydown', (e) => {
@@ -316,6 +299,41 @@ const stream = row + row;
 
   const burger = document.getElementById('burger');
   const drawer = document.getElementById('drawer');
-  burger?.addEventListener('click', () => drawer?.classList.toggle('open'));
+
+  if (burger && drawer) {
+    /* The drawer covers the page, so the page behind it must stop scrolling —
+       otherwise a flick on the overlay scrolls the article underneath and the
+       menu appears to jump. */
+    const setDrawer = (open: boolean): void => {
+      drawer.classList.toggle('open', open);
+      burger.classList.toggle('on', open);
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Menu');
+      document.body.classList.toggle('drawer-open', open);
+      /* Hand back to the chrome observer above, which owns the bar's dark
+         state — on close it recomputes from what is actually behind the bar
+         rather than guessing. */
+      window.dispatchEvent(new Event('scroll'));
+    };
+
+    burger.addEventListener('click', () => setDrawer(!drawer.classList.contains('open')));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer.classList.contains('open')) {
+        setDrawer(false);
+        burger.focus();
+      }
+    });
+
+    /* Each top-level item opens its own group. */
+    drawer.querySelectorAll<HTMLButtonElement>('.dtog').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const panel = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+        if (!panel) return;
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+        panel.hidden = open;
+      });
+    });
+  }
 
 </script>

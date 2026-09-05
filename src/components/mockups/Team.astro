@@ -1,0 +1,11 @@
+---
+/** Travel agencies — four agents, one CRM, one brand. */
+const T = [['Lena Ortiz', 'Owner · 6 open trips', 'LO'], ['Daniel Achebe', 'Agent · 4 open trips', 'DA'], ['Mira Sato', 'Agent · 5 open trips', 'MS']];
+---
+<div class="mk-panel">
+  <div class="mk-head"><b>Team</b><small>One CRM · one brand</small></div>
+  {T.map(([n, m, ini]) => (
+    <div class="mk-row"><span class="mk-av">{ini}</span><div><b>{n}</b><small>{m}</small></div><span class="mk-tog"></span></div>
+  ))}
+  <div class="mk-foot"><span class="mk-fine">Any agent can pick up any thread.</span><span class="mk-btn o">Invite agent</span></div>
+</div>
