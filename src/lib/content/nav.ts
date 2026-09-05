@@ -51,7 +51,7 @@ export const NAV: NavItem[] = [
         heading: 'The four capabilities',
         rows: [
           { label: 'Overview', desc: 'All four products, one connected system', href: '/product' },
-          { label: 'OS', desc: 'The foundation everyone gets, free forever', href: '/os' },
+          { label: 'Portal', desc: 'The foundation everyone gets, free forever', href: '/portal' },
           { label: 'Autopilot', desc: 'Automation that still knows when to stop', href: '/autopilot' },
           { label: 'Intelligence', desc: 'An AI layer trained on your own data', href: '/intelligence' },
           { label: 'Horizon', desc: 'A vetted list of DMCs and suppliers', href: '/horizon' },
@@ -69,7 +69,7 @@ export const NAV: NavItem[] = [
           { label: 'Inquiry', desc: 'How a new lead enters the CRM', href: '/solutions/inquiry' },
           { label: 'Operations', desc: 'CRM and stage automation', href: '/solutions/operations' },
           { label: 'Branding', desc: 'Your identity on everything customers see', href: '/solutions/branding' },
-          { label: 'Communication', desc: 'Talking to travelers and partners, everywhere', href: '/solutions/communication' },
+          { label: 'Communication', desc: 'Talking to travellers and partners, everywhere', href: '/solutions/communication' },
           { label: 'Payments', desc: 'Money in, money out, fully automated', href: '/solutions/payments' },
           { label: 'Marketing', desc: 'Outbound reach beyond a single trip', href: '/solutions/marketing' },
         ],
@@ -90,7 +90,7 @@ export const NAV: NavItem[] = [
         label: 'Resellers',
         heading: 'For Resellers',
         rows: [
-          { label: 'Agent OS', desc: 'The full walkthrough, for agencies', href: '/customers/agent-os' },
+          { label: 'Agent Portal', desc: 'The full walkthrough, for agencies', href: '/customers/agent-portal' },
           { label: 'Travel agencies', desc: 'Multi-agent teams, one shared CRM and brand', href: '/customers/travel-agencies' },
           { label: 'Travel agents', desc: 'Run your book of clients from one thread', href: '/customers/travel-agents' },
           { label: 'Independent advisors', desc: 'Look like a full agency, without the overhead', href: '/customers/independent-advisors' },
@@ -105,7 +105,7 @@ export const NAV: NavItem[] = [
         label: 'Suppliers',
         heading: 'For Suppliers',
         rows: [
-          { label: 'Supplier OS', desc: 'The full walkthrough, for suppliers', href: '/customers/supplier-os' },
+          { label: 'Supplier Portal', desc: 'The full walkthrough, for suppliers', href: '/customers/supplier-portal' },
           { label: 'DMCs', desc: 'Reply your way, get discovered as the network grows', href: '/customers/dmcs' },
           { label: 'Tour operators', desc: 'Build and quote packages from your own rates', href: '/customers/tour-operators' },
         ],

@@ -2,7 +2,7 @@
  * The four product layers, from the founder's content file.
  *
  * This supersedes the two-product model the site carried before. The
- * platform is now **OS** — not Autopilot. Autopilot is only the automation
+ * platform is now **Portal** — not Autopilot. Autopilot is only the automation
  * layer that sits on top of it, Intelligence is the AI layer above that, and
  * Horizon is still the supplier network, never software.
  *
@@ -50,10 +50,10 @@ export interface Product {
 
 export const PRODUCTS: Product[] = [
   {
-    slug: 'os',
+    slug: 'portal',
     n: '01',
-    name: 'OS',
-    eyebrow: 'Product — OS',
+    name: 'Portal',
+    eyebrow: 'Product — Portal',
     availability: 'Always included',
     summary:
       'The modern operating system and toolkit — CRM, quote builder, itinerary tool, a clean interface replacing spreadsheets and email threads. Every tier starts here.',
@@ -86,7 +86,7 @@ export const PRODUCTS: Product[] = [
       {
         kind: 'Case — Travel agency',
         title: 'Coordinating a trip without a shared inbox.',
-        body: "An agent runs everything through the CRM — inquiry in, magic link out to both the traveler and the DMC, proposal generated straight from the same data. No spreadsheet, no copy-pasting between three apps. Once volume picks up, the manual back-and-forth is the bottleneck — that's what Autopilot automates. And if the agency doesn't have a supplier list yet, Horizon gives them one, free, on Showcase.",
+        body: "An agent runs everything through the CRM — inquiry in, magic link out to both the traveller and the DMC, proposal generated straight from the same data. No spreadsheet, no copy-pasting between three apps. Once volume picks up, the manual back-and-forth is the bottleneck — that's what Autopilot automates. And if the agency doesn't have a supplier list yet, Horizon gives them one, free, on Showcase.",
       },
       {
         kind: 'Case — Supplier / DMC',
@@ -97,7 +97,7 @@ export const PRODUCTS: Product[] = [
     next: {
       eyebrow: 'Up next',
       title: 'Ready to automate the back-and-forth?',
-      desc: 'Autopilot layers stage-based automation on top of everything OS already does — same CRM, same magic links, less manual chasing.',
+      desc: 'Autopilot layers stage-based automation on top of everything Portal already does — same CRM, same magic links, less manual chasing.',
       cta: 'See Autopilot',
       href: '/autopilot',
     },
@@ -113,40 +113,16 @@ export const PRODUCTS: Product[] = [
       "Communication automation — inquiry through booking, automated based on what's actually being said. Two-sided workflows only, with human escalation built in.",
     title: 'Automation that still knows when to stop.',
     lede: 'Full nine-stage automation, from Inquiry through Post-Trip — with human escalation points built in by design, not bolted on.',
-    featuresTitle: 'Nine stages, one thread.',
-    features: [
-      {
-        n: '01',
-        name: 'Inquiry',
-        body: 'A lead arrives — public form, email, or WhatsApp — and lands directly in the CRM.',
-      },
-      {
-        n: '02',
-        name: 'Planning',
-        body: 'Autopilot drafts the itinerary shape from your own past trips and available suppliers.',
-      },
-      {
-        n: '03',
-        name: 'Quotation',
-        body: 'Requests go out to sourced DMCs automatically; replies get parsed back into the thread.',
-      },
-      {
-        n: '04',
-        name: 'Confirmation',
-        body: 'Repricing and date changes loop automatically, capped before they need a human call.',
-      },
-      {
-        n: '05',
-        name: 'Booking → Support',
-        body: 'Payment instructions, live coordination, and post-trip wrap-up, still one connected thread.',
-      },
-    ],
+    /* No feature list: /autopilot renders all nine stages off STAGES in the
+       band below its hero. This was a five-item retelling of the same
+       thing, a screen further down the same page. */
+    features: [],
     casesTitle: 'Same agency, three weeks later.',
     cases: [
       {
         kind: 'Case — Travel agency',
         title: 'Same agency, three weeks later.',
-        body: "An agency running 20 trips a month on OS alone hits a ceiling — every reprice, every confirmation chase, every status update is a human doing it manually. Autopilot doesn't change what they offer travelers, it changes how much of it one person can run at once.",
+        body: "An agency running 20 trips a month on Portal alone hits a ceiling — every reprice, every confirmation chase, every status update is a human doing it manually. Autopilot doesn't change what they offer travellers, it changes how much of it one person can run at once.",
       },
     ],
     next: {
@@ -177,7 +153,7 @@ export const PRODUCTS: Product[] = [
       {
         n: '02',
         name: 'Memory',
-        body: "Carries forward your quoting style, preferred suppliers, and traveler preferences — so Atlas isn't re-taught from scratch on every trip.",
+        body: "Carries forward your quoting style, preferred suppliers, and traveller preferences — so Atlas isn't re-taught from scratch on every trip.",
       },
       {
         n: '03',
@@ -252,7 +228,7 @@ export const PRODUCTS: Product[] = [
     cases: [],
     next: {
       eyebrow: 'Up next',
-      title: 'All of this, directly inside OS — even on Showcase.',
+      title: 'All of this, directly inside Portal — even on Showcase.',
       desc: 'No separate app, no upgrade required to search the network. See what each tier actually costs.',
       cta: 'See pricing',
       href: '/pricing',
@@ -285,4 +261,17 @@ export const AUTOPILOT_TARGETS: { metric: string; before: string; after: string 
   { metric: 'Inquiry-to-booking conversion', before: 'Baseline', after: '+15–20%' },
   { metric: 'Manual errors, reprice & confirmation', before: 'Human-paced', after: '<5%' },
   { metric: 'Headcount for same volume', before: 'Baseline', after: '–30%' },
+];
+
+/**
+ * The homepage's system overview — the whole thing in four moves, above the
+ * nine stages rather than instead of them. Horizon supplies operators; it is
+ * not software and nobody logs into it, so the move is what the agency gets
+ * from it, not a product they open.
+ */
+export const MOVES: { name: string; body: string }[] = [
+  { name: 'Inquiry received', body: 'Any channel — form, email or WhatsApp — arrives as one structured brief.' },
+  { name: 'Autopilot runs it', body: 'Planning, quoting, booking and live support, with escalation points built in.' },
+  { name: 'Horizon fills gaps', body: 'A vetted operator wherever the trip is going, on any tier including free.' },
+  { name: 'Trip goes live', body: 'Relay handled end to end; only the exceptions reach a person.' },
 ];

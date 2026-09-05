@@ -59,7 +59,7 @@ const coveredCount = countries.filter((c) => c.covered).length + dots.length;
     )
   }
 
-  <div class="wm-frame">
+  <div class="wm-frame" data-chrome="dark">
     <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} role="img" aria-label={`Hyperporter operates in ${coveredCount} countries`}>
       <g class="wm-base">
         {countries.filter((c) => !c.covered).map((c) => <path d={c.d} data-label={c.name} />)}

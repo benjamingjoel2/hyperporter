@@ -1,0 +1,164 @@
+/* ---- software snippets ---------------------------------------------------
+   Renderings of one piece of Hyperporter's interface at a time — a trip
+   record, the stage list, an Atlas answer, a quote — drawn in markup rather
+   than captured as images, and composed the way the reference composes its
+   product shots: a coloured or photographic ground, one frosted panel
+   floating on it at legible size, sometimes a faded sheet behind for depth,
+   and a small app chip in the corner saying which layer this is.
+
+   A whole application shrunk into a tile reads as a diagram. One panel at
+   the size a person would actually see it reads as software. Everything
+   inside a panel is measured in em off a font-size that is a fraction of the
+   frame width, so a snippet scales like a photograph of itself. */
+
+.mk{position:relative;container-type:inline-size;aspect-ratio:4/3;
+  border-radius:6px;overflow:hidden;isolation:isolate;background:var(--steel);color:var(--paper)}
+.mk.tall{aspect-ratio:4/5;border-radius:0}
+
+/* Grounds. Four flat tones from the site's own palette plus the photograph.
+   Amber is not among them — it is a state, not a colour. */
+.mk[data-ground="warm"]{background:var(--steel)}
+.mk[data-ground="slate"]{background:#A7B4B6}
+.mk[data-ground="sand"]{background:#CDBFAA}
+.mk[data-ground="teal"]{background:var(--signal)}
+.mk[data-ground="photo"]{background:#6B7377}
+.mk[data-ground="photo"]::before{content:"";position:absolute;inset:-4%;
+  background:var(--photo) center/cover;filter:blur(3px) saturate(.8);opacity:.9}
+.mk[data-ground="photo"]::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.18)}
+
+.mk-stage{position:absolute;inset:0;font-size:clamp(10px,2.6cqw,14px);line-height:1.35;z-index:1}
+.mk.tall .mk-stage{font-size:clamp(10px,3.3cqw,14px)}
+
+/* The panel: frosted, lifted, one idea. */
+.mk-panel{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);
+  width:min(80%,30em);padding:1.1em 1.2em;border-radius:1.1em;
+  background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(20px) saturate(1.4);backdrop-filter:blur(20px) saturate(1.4);
+  box-shadow:0 0 0 1px rgba(255,255,255,.6) inset,0 1.4em 3.2em rgba(12,22,34,.18),0 .2em .5em rgba(12,22,34,.06);
+  display:flex;flex-direction:column;gap:.75em;color:var(--paper)}
+.mk-panel.right{left:auto;right:7%;top:9%;transform:none;width:min(62%,26em)}
+.mk-panel.low{top:auto;bottom:-6%;transform:translateX(-50%)}
+.mk-panel.wide{width:min(86%,34em)}
+.mk[data-ground="teal"] .mk-panel{background:rgba(255,255,255,.92)}
+
+/* The sheet behind: a document or a list, faded, for depth. */
+.mk-back{position:absolute;left:-6%;top:12%;width:64%;bottom:-8%;padding:2em 2em 2em 2.4em;
+  background:rgba(255,255,255,.55);border-radius:.6em;color:var(--paper);
+  -webkit-mask-image:linear-gradient(180deg,#000 45%,transparent 95%);mask-image:linear-gradient(180deg,#000 45%,transparent 95%)}
+.mk-back b{display:block;font-weight:400;font-size:1.5em;letter-spacing:-.02em;margin-bottom:.9em}
+.mk-back i{display:block;height:.45em;border-radius:.3em;background:rgba(13,16,22,.14);margin:.65em 0}
+.mk-back i.s{width:55%}.mk-back i.m{width:78%}.mk-back i.l{width:92%}
+.mk-back p{margin:0 0 .8em;font-size:1em;color:rgba(13,16,22,.7);line-height:1.5}
+.mk-back.rows{padding:1.6em 1.8em}
+.mk-back .row{display:flex;justify-content:space-between;gap:1em;padding:.7em 0;border-bottom:1px solid rgba(13,16,22,.08);color:rgba(13,16,22,.65)}
+.mk[data-ground="teal"] .mk-back{background:rgba(255,255,255,.28)}
+
+/* App chip, bottom-left: which layer this is. */
+.mk-app{position:absolute;left:5%;bottom:6%;z-index:2;display:inline-flex;align-items:center;gap:.5em;
+  padding:.4em .7em .4em .45em;border-radius:.6em;background:rgba(255,255,255,.85);color:var(--paper);
+  font-size:clamp(10px,2.4cqw,12.5px);letter-spacing:.01em;box-shadow:0 .3em 1em rgba(12,22,34,.12)}
+.mk-app svg{width:1.6em;height:1.6em;flex:none}
+.mk-app svg .ring{fill:none;stroke:var(--paper);stroke-width:6}
+.mk-app svg rect{fill:var(--paper)}
+/* Narrow frames — the homepage cards — give a right-anchored panel more room. */
+@container (max-width:420px){
+  .mk-panel.right{width:72%;right:5%}
+  .mk-foot .mk-fine{display:none}
+  /* A phone-width frame has no room beside the panel for the chip. */
+  .mk-app{display:none}
+}
+
+/* Panel anatomy. */
+.mk-head{display:flex;align-items:center;justify-content:space-between;gap:.8em;padding-bottom:.7em;border-bottom:1px solid var(--line)}
+.mk-head b{font-weight:400;font-size:1.05em;letter-spacing:-.01em;display:flex;align-items:center;gap:.5em}
+.mk-head small{color:var(--dim);font-size:.82em}
+.mk-chev{width:.55em;height:.55em;border-right:1.5px solid var(--dim);border-bottom:1.5px solid var(--dim);transform:rotate(45deg);margin:0 .3em .2em 0;flex:none}
+.mk-lbl{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.mk-title{font-weight:400;font-size:1.45em;letter-spacing:-.02em;line-height:1.15;margin:0}
+.mk .mk-stage p{margin:0;font-size:1em;line-height:1.45;color:var(--paper)}
+.mk .mk-stage p.mk-p{color:var(--muted)}
+.mk .mk-stage .mk-fine{font-size:.8em;color:var(--dim);line-height:1.4}
+.mk-foot{display:flex;justify-content:space-between;align-items:center;gap:.8em;padding-top:.6em}
+
+/* Rows. */
+.mk-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:.7em;align-items:center;padding:.65em 0;border-bottom:1px solid var(--line);font-size:.95em}
+.mk-row:last-of-type{border-bottom:0}
+.mk-row.plain{grid-template-columns:minmax(0,1fr) auto}
+.mk-row b{font-weight:400;display:block;color:var(--paper)}
+.mk-row small{display:block;color:var(--dim);font-size:.82em;margin-top:.1em}
+.mk-row.done b{color:var(--dim);text-decoration:line-through;text-decoration-color:rgba(13,16,22,.35)}
+.mk-row.dimmed{opacity:.45}
+.mk-row .r{text-align:right;font-variant-numeric:tabular-nums;color:var(--paper)}
+.mk-sum{display:flex;justify-content:space-between;align-items:baseline;padding-top:.7em;border-top:1px solid var(--line-2);font-variant-numeric:tabular-nums}
+.mk-sum b{font-weight:400;font-size:1.25em}
+
+/* Marks. */
+.mk-dot{width:.9em;height:.9em;border-radius:50%;background:var(--signal);flex:none;box-shadow:0 0 0 .3em var(--signal-dim)}
+.mk-dot.amb{background:var(--amber);box-shadow:0 0 0 .3em rgba(154,95,11,.14)}
+.mk-dot.grey{background:var(--line-2);box-shadow:none}
+.mk-chk{display:inline-grid;place-items:center;width:1.2em;height:1.2em;border-radius:50%;background:var(--signal);flex:none}
+.mk-chk::after{content:"";width:.5em;height:.28em;border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;transform:translateY(-.1em) rotate(-45deg)}
+.mk-chk.amb{background:var(--amber)}
+.mk-chk.wait{background:none;box-shadow:inset 0 0 0 1.5px var(--line-2)}
+.mk-chk.wait::after{display:none}
+.mk-chk.now{background:var(--raise);box-shadow:inset 0 0 0 1.5px var(--signal)}
+.mk-chk.now::after{border-color:var(--signal);width:.3em;height:.3em;border:0;border-radius:50%;background:var(--signal);transform:none}
+.mk-av{width:2em;height:2em;border-radius:50%;background:var(--signal);color:#fff;display:grid;place-items:center;font-size:.72em;flex:none}
+.mk-av.ghost{background:var(--ink);color:var(--muted)}
+.mk-av.amb{background:var(--amber)}
+.mk-ico{width:1.9em;height:1.9em;border-radius:.4em;background:var(--ink);display:grid;place-items:center;color:var(--muted);font-size:.7em;flex:none}
+.mk-ico.pdf{color:#B4332C}
+.mk-tag{display:inline-block;padding:.25em .65em;border-radius:1em;font-size:.78em;white-space:nowrap;background:var(--signal-dim);color:var(--signal)}
+.mk-tag.amb{background:rgba(154,95,11,.12);color:var(--amber)}
+.mk-tag.grey{background:var(--ink);color:var(--muted)}
+.mk-tag.red{background:rgba(180,51,44,.1);color:#B4332C}
+
+/* Controls. */
+.mk-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;padding:.6em 1.1em;border-radius:2em;font-size:.92em;white-space:nowrap;background:var(--paper);color:#fff}
+.mk-btn.sig{background:var(--signal)}
+.mk-btn.amb{background:var(--amber)}
+.mk-btn.o{background:none;color:var(--paper);box-shadow:inset 0 0 0 1px var(--line-2)}
+.mk-btn.block{width:100%;padding:.8em}
+.mk-tog{display:inline-block;width:2.5em;height:1.4em;border-radius:1em;background:var(--signal);position:relative;flex:none}
+.mk-tog::after{content:"";position:absolute;top:.15em;right:.15em;width:1.1em;height:1.1em;border-radius:50%;background:#fff}
+.mk-tog.off{background:var(--line-2)}
+.mk-tog.off::after{right:auto;left:.15em}
+.mk-field{display:flex;flex-direction:column;gap:.3em}
+.mk-field label{font-size:.8em;color:var(--muted)}
+.mk-field div{padding:.6em .8em;border-radius:.5em;background:rgba(255,255,255,.7);box-shadow:inset 0 0 0 1px var(--line-2);min-height:2.4em;display:flex;align-items:center;justify-content:space-between;gap:.6em}
+.mk-field div.ph{color:var(--dim)}
+.mk-field div.focus{box-shadow:inset 0 0 0 1.5px var(--signal)}
+.mk-row2{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
+.mk-search{display:flex;align-items:center;gap:.6em;padding:.65em .9em;border-radius:.6em;background:rgba(13,16,22,.05);color:var(--paper)}
+.mk-search i{width:.9em;height:.9em;border-radius:50%;border:1.5px solid var(--dim);flex:none;position:relative}
+.mk-search i::after{content:"";position:absolute;width:.45em;height:1.5px;background:var(--dim);right:-.4em;bottom:-.1em;transform:rotate(45deg)}
+.mk-search span{color:var(--dim);margin-left:auto;font-size:.82em}
+
+/* Messages. */
+.mk-msg{display:flex;flex-direction:column;gap:.3em;align-items:flex-start;max-width:92%}
+.mk-msg.me{align-self:flex-end;align-items:flex-end}
+.mk .mk-stage .mk-msg p{padding:.7em .95em;border-radius:1em;background:rgba(13,16,22,.06);line-height:1.4}
+.mk .mk-stage .mk-msg.me p{background:var(--signal);color:#fff;border-bottom-right-radius:.3em}
+.mk .mk-stage .mk-msg.sys p{background:none;box-shadow:inset 0 0 0 1px var(--line);color:var(--muted)}
+.mk-via{display:inline-block;font-size:.74em;color:var(--dim);padding:.1em .55em;border-radius:1em;background:rgba(13,16,22,.05)}
+.mk-cite{display:inline-flex;align-items:center;gap:.45em;padding:.35em .7em;border-radius:.5em;background:rgba(255,255,255,.7);box-shadow:inset 0 0 0 1px var(--line);color:var(--muted);font-size:.82em}
+.mk-cite i{width:.7em;height:.9em;border-radius:.15em;background:#B4332C;flex:none}
+.mk-spark{width:1.3em;height:1.3em;flex:none;color:var(--paper)}
+
+/* Stats and bars. */
+.mk-kpis{display:grid;grid-template-columns:1fr 1fr;gap:.6em}
+.mk-kpi{padding:.7em .8em;border-radius:.6em;background:rgba(13,16,22,.045)}
+.mk-kpi span{display:block;font-size:.78em;color:var(--dim)}
+.mk-kpi b{display:block;font-weight:400;font-size:1.5em;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:.1em}
+.mk-kpi b em{font-style:normal;font-size:.55em;color:var(--signal);margin-left:.3em}
+.mk-kpi b em.amb{color:var(--amber)}
+.mk-meter{height:.5em;border-radius:1em;background:rgba(13,16,22,.07);overflow:hidden}
+.mk-meter i{display:block;height:100%;background:var(--signal);border-radius:1em}
+.mk-bars{display:flex;align-items:flex-end;gap:.35em;height:4.5em;border-bottom:1px solid var(--line)}
+.mk-bars i{flex:1;background:var(--line-2);border-radius:.15em .15em 0 0}
+.mk-bars i.hi{background:var(--signal)}
+.mk-rail{display:flex;gap:.3em}
+.mk-rail i{flex:1;height:.4em;border-radius:1em;background:rgba(13,16,22,.1)}
+.mk-rail i.done{background:var(--signal)}
+.mk-rail i.now{background:var(--signal);box-shadow:0 0 0 .2em var(--signal-dim)}
+.mk-rail i.amb.done,.mk-rail i.amb.now{background:var(--amber)}
+.mk-mono{font-variant-numeric:tabular-nums}

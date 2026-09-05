@@ -6,10 +6,10 @@ Context for any Claude Code session working in this repo. Read this first.
 
 Travel-tech company. **Four product layers**, and they are not interchangeable:
 
-- **OS** — the *platform*. CRM, magic links, public inquiry form, proposal generator.
+- **Portal** — the *platform*. CRM, magic links, public inquiry form, proposal generator.
   Free on every tier, for both sides. This is the software; when you mean "the platform",
-  the word is **OS**, not Autopilot.
-- **Autopilot** — the *automation layer* on top of OS. The nine-stage engine, Inquiry
+  the word is **Portal**, not Autopilot.
+- **Autopilot** — the *automation layer* on top of Portal. The nine-stage engine, Inquiry
   through Post-Trip, with human escalation points by design.
 - **Intelligence** — the *AI layer* on top of Autopilot. Atlas is the assistant, Vault is
   where an account's own contracts and rates live. Trained on the account's own data only.
@@ -29,7 +29,7 @@ tier names collide with two of the product-layer names; that is the founder's na
 ### Terminology rules — do not break these
 
 - Never describe Horizon as software, and never as something a supplier logs into.
-- Never call Autopilot the platform. OS is the platform; Autopilot is automation on top.
+- Never call Autopilot the platform. Portal is the platform; Autopilot is automation on top.
 - Intelligence trains on the account's own Vault only — never on anyone else's data.
   This claim appears on /intelligence and /security and must stay identical on both.
 - Do not overstate automation. Escalation to a human is a designed feature, not a gap.
@@ -140,8 +140,29 @@ wanted back.
   **fails** if any destination has no geometry, so the map can never
   under-report. It lives on `/destinations` and keeps its own dark ground;
   hover green is deliberately not `--signal`.
-- Removed with the revert: `AppShot.astro` (the Autopilot interface drawn in
-  markup) and `lib/counts.ts`. Both are recoverable from `d05cc73`.
+- **Software mock-ups, not illustrations** (Sep 2026, founder's instruction).
+  Every page hero and the four homepage product cards show a screen of
+  Hyperporter's own interface — Portal, Autopilot, Atlas and Vault, and the
+  supplier's side of a Horizon request — drawn in markup and composed the way
+  the reference composes its product shots: one frosted panel with a single
+  idea in it, floating at legible size on a coloured or photographic ground,
+  sometimes a faded sheet behind it for depth, and a small chip in the corner
+  naming the layer. Never a whole application shrunk into a tile — that reads
+  as a diagram. The frame is
+  `components/Mockup.astro`; the screens are `components/mockups/*.astro`,
+  named in `mockups/index.ts`; the primitives are `styles/mockup.css`. All
+  measurements inside a screen are in em off a font-size that is a fraction
+  of the frame width, so a screen scales like a photograph of itself.
+  Everything in them is invented, and the caption under each says so. The
+  rules that hold inside a screen are the site's: amber only on human /
+  manual states, suppliers never shown inside Horizon, Atlas answering from
+  the account's own Vault, the supplier receiving their full quoted rate,
+  SOC 2 / GDPR shown as targeted. The line-drawn `pageArt.ts` and
+  `legoraArt.ts` families they replaced are at `1848a30`.
+- An Apple / Liquid Glass restyle was tried and rejected (`039fad9`,
+  reverted at `1848a30`). Do not bring it back.
+- Removed with the earlier revert: `AppShot.astro` and `lib/counts.ts`, both
+  recoverable from `d05cc73`.
 
 ### Font licence — outstanding
 Hyperlocal ROM was supplied under a **desktop** licence, whose terms forbid
@@ -170,3 +191,31 @@ Port the design system and the landmark SVG generator across as-is. They work.
 - Make targeted edits. Do not rebuild or "improve" things that weren't asked about.
 - Push back on overstatement, wordiness, and visual clutter.
 - Short punchy lines for positioning copy. Cleanly structured prose for spec documents.
+
+### Always preview before merging
+
+**Any visual change gets a preview link before the PR is merged, not after.**
+Build the site, inline the page into a single self-contained file, and publish
+it as an artifact so it can be opened in a browser without cloning, installing
+or running anything locally.
+
+This is not optional politeness — it is how the review actually works here.
+Screenshots taken by the agent are a poor substitute: several faults in this
+site's history were invisible in a screenshot and obvious the moment a person
+clicked something. A dropdown that renders under the ticker, a hero whose CTA
+falls below the fold on a shorter screen, an entire missing `<script>` block —
+all shipped past agent-side checks, all would have been caught in ten seconds
+of clicking.
+
+So: preview link first, merge second, deploy third. Never reverse that order,
+and never ask for a merge without a link to look at.
+
+    npm run build && python3 scripts/build-preview.py preview-site.html
+
+That bundles all 181 routes into one self-contained file — every route
+browsable through its real links, at phone, tablet or full width. Publish it
+as an artifact. Preview the whole site, not the one page you changed: several
+of the faults in this site's history were on a page nobody thought to look at.
+The generator drops `/how` (a redirect stub) and `/preview/*` (design studies),
+and leaves `/photos/*` unresolved because that photography is still
+unlicensed — those tiles are blank in the preview exactly as they are live.

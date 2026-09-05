@@ -1,0 +1,15 @@
+---
+/** Customers — both sides of the market in one list. */
+const R = [
+  ['Priya Nair', 'Traveller · Marrakesh, Booking', 'PN', false],
+  ['Rift Valley Ground Services', 'DMC · Kenya · 11 trips together', 'RV', true],
+  ['The Halvorsen family', 'Traveller · Cusco, Planning', 'H', false],
+  ['Andes Trail Operators', 'Tour operator · Peru · 4 trips', 'AT', true],
+];
+---
+<div class="mk-panel wide">
+  <div class="mk-head"><b>People</b><small>168 travellers · 44 suppliers</small></div>
+  {R.map(([n, m, ini, sup]) => (
+    <div class="mk-row"><span class:list={['mk-av', { ghost: sup }]}>{ini}</span><div><b>{n}</b><small>{m}</small></div><span class:list={['mk-tag', { grey: sup }]}>{sup ? 'Supplier' : 'Traveller'}</span></div>
+  ))}
+</div>

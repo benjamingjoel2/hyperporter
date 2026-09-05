@@ -2,6 +2,7 @@
 /** Solutions index — six categories, ordered as a trip actually runs. */
 import Base from '../../layouts/Base.astro';
 import { CATEGORIES } from '../../lib/content/solutions';
+import Mockup from '../../components/Mockup.astro';
 ---
 
 <Base
@@ -9,13 +10,17 @@ import { CATEGORIES } from '../../lib/content/solutions';
   description="Every feature grouped by what it actually does — six categories, from the first inquiry through getting paid, each showing which tier it's on."
   currentNav="solutions"
 >
-  <div class="sec wrap">
-    <p class="eyebrow rv">Solutions</p>
-    <h1 class="rv">Every feature, by what it actually does.</h1>
-    <p class="lede rv">
-      Six categories, from the first inquiry through getting paid. Each one lists exactly what's
-      included and which tier it's on.
-    </p>
+  <div class="sec wrap page-hero">
+    <div class="page-hero-copy">
+
+      <p class="eyebrow rv">Solutions</p>
+      <h1 class="rv">Every feature, by what it actually does.</h1>
+      <p class="lede rv">
+        Six categories, from the first inquiry through getting paid. Each one lists exactly what's
+        included and which tier it's on.
+      </p>
+    </div>
+    <Mockup screen="settings" />
   </div>
 
   <div class="sec-tight wrap">

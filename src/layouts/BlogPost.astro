@@ -7,22 +7,29 @@
  */
 import { render, type CollectionEntry } from 'astro:content';
 import Base from './Base.astro';
+import EmailCapture from '../components/EmailCapture.astro';
 import { readingTime } from '../lib/readingTime';
+import { blogCover } from '../lib/blogArt';
 
 interface Props {
   entry: CollectionEntry<'blog'>;
   next: CollectionEntry<'blog'>;
+  /** Everything else, newest first — the "more stories" rail takes two. */
+  others?: CollectionEntry<'blog'>[];
 }
 
-const { entry, next } = Astro.props;
+const { entry, next, others = [] } = Astro.props;
 const { title, dek, cat, date, author } = entry.data;
 const { Content } = await render(entry);
 
 const displayDate = date.toLocaleDateString('en-GB', {
-  day: '2-digit',
+  day: 'numeric',
   month: 'short',
   year: 'numeric',
 });
+const shortDate = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+const more = others.filter((o) => o.id !== entry.id).slice(0, 2);
 const read = readingTime(entry.body ?? '');
 
 const canonical = new URL(`/blog/${entry.id}/`, Astro.site).toString();
@@ -44,23 +51,71 @@ const blogPostingJsonLd = {
     <script is:inline type="application/ld+json" set:html={JSON.stringify(blogPostingJsonLd)} />
   </Fragment>
 
-  <div class="sec wrap">
-    <div class="art-top">
-      <a class="back" href="/blog">&larr; All posts</a>
-      <div class="b-meta">
-        <em>{cat}</em><span>{displayDate}</span><span>{read}</span>
+  {/* The reference's structure: everything hangs off a left rail of small
+      labels, with the article itself in an offset column. The rail is what
+      makes a post read as a document rather than a page. */}
+  <article class="post">
+    <div class="wrap post-head">
+      <a class="post-back" href="/blog">&larr; All posts</a>
+      <p class="bx-label">{cat}</p>
+      <h1>{title}</h1>
+    </div>
+
+    <div class="wrap">
+      <div class="post-cover" set:html={blogCover(entry.id, cat)} />
+    </div>
+
+    <div class="wrap post-rail">
+      <dl class="post-meta">
+        <dt>Category</dt><dd>{cat}</dd>
+        <dt>Published</dt><dd><time datetime={date.toISOString()}>{displayDate}</time></dd>
+        <dt>Author</dt><dd>{author}</dd>
+        <dt>Read</dt><dd>{read}</dd>
+      </dl>
+      <p class="post-lede">{dek}</p>
+    </div>
+
+    <div class="wrap post-rail">
+      <div></div>
+      <div class="post-body">
+        <Content />
       </div>
-      <h1 class="art-title">{title}</h1>
-      <p class="art-dek">{dek}</p>
     </div>
-    <div class="art-body">
-      <Content />
+
+    <div class="wrap post-rail post-sub">
+      <span class="bx-label">Stay in the loop</span>
+      <div>
+        <p class="post-sub-line">
+          The next piece, when it lands. No more than one email a month.
+        </p>
+        <EmailCapture uid="post-sub" marginTop="16px" />
+      </div>
     </div>
-    <div class="art-end">
-      <a class="art-next" href={`/blog/${next.id}`}>
-        <span>Next</span><b>{next.data.title}</b>
+
+    {
+      more.length > 0 && (
+        <div class="wrap post-rail post-more">
+          <span class="bx-label">More stories</span>
+          <div class="post-more-grid">
+            {more.map((p) => (
+              <a class="post-more-card" href={`/blog/${p.id}`}>
+                <div class="bx-cover" set:html={blogCover(p.id, p.data.cat)} />
+                <time datetime={p.data.date.toISOString()}>{shortDate(p.data.date)}</time>
+                <h3>{p.data.title}</h3>
+                <p>{p.data.dek}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    <div class="wrap post-rail post-next">
+      <span class="bx-label">Up next</span>
+      <a class="post-next-link" href={`/blog/${next.id}`}>
+        <b>{next.data.title}</b>
+        <span>{next.data.dek}</span>
       </a>
-      <a class="btn" href="/signup">Sign up &rarr;</a>
     </div>
-  </div>
+  </article>
 </Base>

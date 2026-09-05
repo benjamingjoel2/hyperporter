@@ -1,0 +1,15 @@
+---
+/** Horizon — the vetted list, searched by destination. */
+const S = [
+  ['Rift Valley Ground Services', 'Nairobi · DMC · replies in 40 min', 'RV'],
+  ['Acacia Safari Logistics', 'Nairobi · DMC · replies in 2 h', 'AS'],
+  ['Lamu Dhow Collective', 'Lamu · tour operator · coast', 'LD'],
+];
+---
+<div class="mk-panel wide">
+  <div class="mk-search"><i></i>Kenya<span>12 vetted suppliers</span></div>
+  {S.map(([n, m, ini], i) => (
+    <div class="mk-row"><span class="mk-av ghost">{ini}</span><div><b>{n}</b><small>{m}</small></div>{i === 0 ? <span class="mk-tag">Quote requested</span> : <span class="mk-btn o">Request quote</span>}</div>
+  ))}
+  <span class="mk-fine">Horizon adds 10% on the quote. The supplier receives their full quoted rate.</span>
+</div>

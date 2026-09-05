@@ -2,26 +2,31 @@
 /**
  * Product overview — the four layers and how they stack.
  *
- * OS is the platform everyone gets; Autopilot and Intelligence layer on top
+ * Portal is the platform everyone gets; Autopilot and Intelligence layer on top
  * as an account grows; Horizon runs underneath for agencies, on every tier
  * including free.
  */
 import Base from '../layouts/Base.astro';
 import { PRODUCTS } from '../lib/content/products';
+import Mockup from '../components/Mockup.astro';
 ---
 
 <Base
   title="Product"
-  description="OS is the foundation everyone gets. Autopilot and Intelligence layer on top as you grow. Horizon runs underneath, on every tier."
+  description="Portal is the foundation everyone gets. Autopilot and Intelligence layer on top as you grow. Horizon runs underneath, on every tier."
   currentNav="product"
 >
-  <div class="sec wrap">
-    <p class="eyebrow rv">Product</p>
-    <h1 class="rv">Every capability, in one connected system.</h1>
-    <p class="lede rv">
-      OS is the foundation everyone gets. Autopilot and Intelligence layer on top as you grow.
-      Horizon runs underneath both, always on.
-    </p>
+  <div class="sec wrap page-hero">
+    <div class="page-hero-copy">
+
+      <p class="eyebrow rv">Product</p>
+      <h1 class="rv">Every capability, in one connected system.</h1>
+      <p class="lede rv">
+        Portal is the foundation everyone gets. Autopilot and Intelligence layer on top as you grow.
+        Horizon runs underneath both, always on.
+      </p>
+    </div>
+    <Mockup screen="dashboard" />
   </div>
 
   <div class="sec-tight wrap">

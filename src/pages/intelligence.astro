@@ -7,6 +7,7 @@
  */
 import Base from '../layouts/Base.astro';
 import ProductPage from '../components/ProductPage.astro';
+import Mockup from '../components/Mockup.astro';
 import { byProduct } from '../lib/content/products';
 
 const product = byProduct('intelligence');
@@ -18,9 +19,12 @@ const product = byProduct('intelligence');
   currentNav="product"
 >
   <ProductPage product={product}>
+    <Fragment slot="hero-aside">
+      <Mockup screen="atlas" />
+    </Fragment>
     <div slot="after-features" class="sec-tight wrap">
       <p class="eyebrow rv">How it processes your documents</p>
-      <h2 class="rv">Every contract, every rate sheet — organized and queryable in minutes, not weeks.</h2>
+      <h2 class="rv">Every contract, every rate sheet — organised and queryable in minutes, not weeks.</h2>
       <p class="lede rv">
         Drop in years of contracts, rate sheets, and past itineraries. Atlas reads, structures, and
         indexes all of it into Vault — ready to query the same day, not after a manual data-entry

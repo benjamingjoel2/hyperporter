@@ -8,6 +8,7 @@
  */
 import Base from '../layouts/Base.astro';
 import { LADDERS } from '../lib/content/pricing';
+import Mockup from '../components/Mockup.astro';
 ---
 
 <Base
@@ -15,22 +16,26 @@ import { LADDERS } from '../lib/content/pricing';
   description="Same three tiers. Resellers run the full ladder; Suppliers skip straight from Showcase to Intelligence. Every tier is strictly additive."
   currentNav="pricing"
 >
-  <div class="sec wrap">
-    <p class="eyebrow rv">Pricing</p>
-    <h1 class="rv">Plans &amp; Pricing</h1>
-    <p class="lede rv">
-      Same three tiers — which ones apply depends on who you are. Every tier is strictly additive.
-      Resellers run the full ladder; Suppliers skip straight to Intelligence.
-    </p>
-    <div class="switch rv" id="p-switch">
-      {
-        LADDERS.map((l, i) => (
-          <button type="button" data-side={l.side} class={i === 0 ? 'on' : ''}>
-            {l.label}
-          </button>
-        ))
-      }
+  <div class="sec wrap page-hero">
+    <div class="page-hero-copy">
+
+      <p class="eyebrow rv">Pricing</p>
+      <h1 class="rv">Plans &amp; Pricing</h1>
+      <p class="lede rv">
+        Same three tiers — which ones apply depends on who you are. Every tier is strictly additive.
+        Resellers run the full ladder; Suppliers skip straight to Intelligence.
+      </p>
+      <div class="switch rv" id="p-switch">
+        {
+          LADDERS.map((l, i) => (
+            <button type="button" data-side={l.side} class={i === 0 ? 'on' : ''}>
+              {l.label}
+            </button>
+          ))
+        }
+      </div>
     </div>
+    <Mockup screen="plan" />
   </div>
 
   {
@@ -77,8 +82,9 @@ import { LADDERS } from '../lib/content/pricing';
                     {g.rows.map((r) => (
                       <tr>
                         <td>{r.feature}</td>
-                        {r.cells.map((cell) => (
+                        {r.cells.map((cell, i) => (
                           <td
+                            data-col={l.columns[i]}
                             class:list={[
                               'pm-cell',
                               { 'pm-yes': cell === '✓', 'pm-no': cell === '—' },

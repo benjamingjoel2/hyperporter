@@ -2,11 +2,12 @@
 /** Customers index — the two sides of a booking, then the segments inside each. */
 import Base from '../../layouts/Base.astro';
 import { OVERVIEWS, SEGMENTS, SIDE_LABEL, SIDE_SUB } from '../../lib/content/customers';
+import Mockup from '../../components/Mockup.astro';
 
 const SIDES = [
   {
     side: 'reseller' as const,
-    body: 'Runs the full ladder — OS, Autopilot, Intelligence — and sources suppliers through the Horizon list.',
+    body: 'Runs the full ladder — Portal, Autopilot, Intelligence — and sources suppliers through the Horizon list.',
   },
   {
     side: 'supplier' as const,
@@ -20,13 +21,17 @@ const SIDES = [
   description="Same product underneath. Different starting point, depending on whether you're sourcing suppliers or being sourced."
   currentNav="customers"
 >
-  <div class="sec wrap">
-    <p class="eyebrow rv">Customers</p>
-    <h1 class="rv">Whichever side of the booking you're on.</h1>
-    <p class="lede rv">
-      Same product underneath. Different starting point, depending on whether you're sourcing
-      suppliers or being sourced.
-    </p>
+  <div class="sec wrap page-hero">
+    <div class="page-hero-copy">
+
+      <p class="eyebrow rv">Customers</p>
+      <h1 class="rv">Whichever side of the booking you're on.</h1>
+      <p class="lede rv">
+        Same product underneath. Different starting point, depending on whether you're sourcing
+        suppliers or being sourced.
+      </p>
+    </div>
+    <Mockup screen="contacts" />
   </div>
 
   <div class="sec-tight wrap">

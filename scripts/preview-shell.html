@@ -1,0 +1,244 @@
+<title>Hyperporter Site Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* Deliberately single-theme. This is a cockpit around the site, and the site
+     is a fixed light design — a shell that flipped with the viewer's OS would
+     put two different grounds either side of the same hairline. Every colour
+     is painted explicitly so it holds on either host ground. */
+  :root{
+    --ground:#0D1016;      /* the site's own --paper, used here as the ground */
+    --bar:#141922;
+    --rule:#242A36;
+    --rule-hi:#333B49;
+    --ink:#E9E8E5;
+    --dim:#868C97;
+    --signal:#3D9AA6;      /* --signal lifted; #0E4B52 is unreadable on #0D1016 */
+    --amber:#C98A2E;
+    --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font);
+    height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+
+  .cockpit{flex:0 0 auto;display:flex;align-items:center;gap:14px;
+    padding:0 14px;height:46px;background:var(--bar);
+    border-bottom:1px solid var(--rule)}
+
+  .brand{display:flex;align-items:baseline;gap:8px;flex:0 0 auto}
+  .brand b{font-size:12.5px;font-weight:600;letter-spacing:.01em}
+  .brand span{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+
+  .grp{display:flex;align-items:center;gap:1px;flex:0 0 auto}
+  button,select{font-family:inherit;color:var(--ink);background:transparent;
+    border:1px solid var(--rule-hi);border-radius:5px;cursor:pointer}
+  button{width:28px;height:28px;font-size:14px;line-height:1;padding:0;
+    display:flex;align-items:center;justify-content:center}
+  .grp button:first-child{border-radius:5px 0 0 5px}
+  .grp button:last-child{border-radius:0 5px 5px 0}
+  .grp button+button{border-left:0}
+  button:hover:not(:disabled){background:var(--rule);border-color:var(--dim)}
+  button:disabled{opacity:.34;cursor:default}
+  button[aria-pressed="true"]{background:var(--signal);border-color:var(--signal);color:#06181B}
+  :focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+
+  .seg button{width:auto;padding:0 11px;font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;height:28px}
+
+  .pick{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:9px}
+  select{flex:1 1 auto;min-width:0;height:28px;padding:0 9px;font-size:12.5px;
+    background:var(--ground)}
+  optgroup{background:var(--ground);color:var(--dim);font-style:normal}
+  option{background:var(--ground);color:var(--ink)}
+
+  .meta{flex:0 0 auto;display:flex;align-items:center;gap:10px;font-size:11px;
+    color:var(--dim);font-variant-numeric:tabular-nums}
+  .meta code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
+    color:var(--signal)}
+
+  .stage{flex:1 1 auto;min-height:0;display:flex;justify-content:center;
+    background:var(--ground);padding:0}
+  .stage.framed{padding:14px}
+  iframe{border:0;width:100%;height:100%;background:#FAFAF9;display:block}
+  .stage.framed iframe{border:1px solid var(--rule-hi);border-radius:3px}
+
+  /* The missing-route note. Only ever fires on a link the build did not emit,
+     which is itself worth seeing in a review. */
+  .warn{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+    background:var(--bar);border:1px solid var(--amber);color:var(--ink);
+    border-radius:6px;padding:9px 14px;font-size:12.5px;z-index:9;
+    box-shadow:0 8px 28px rgba(0,0,0,.5)}
+  .warn code{color:var(--amber)}
+
+  @media (max-width:880px){
+    .brand,.meta{display:none}
+    .cockpit{gap:9px;padding:0 9px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="cockpit">
+  <div class="brand"><b>Hyperporter</b><span>Preview</span></div>
+
+  <div class="grp">
+    <button id="back" title="Back  [" aria-label="Back">&#8249;</button>
+    <button id="fwd" title="Forward  ]" aria-label="Forward">&#8250;</button>
+  </div>
+
+  <div class="pick">
+    <select id="route" aria-label="Route"></select>
+  </div>
+
+  <div class="grp seg" id="seg" role="group" aria-label="Viewport width">
+    <button data-w="390">Phone</button>
+    <button data-w="834">Tablet</button>
+    <button data-w="0" aria-pressed="true">Full</button>
+  </div>
+
+  <div class="meta"><span id="count"></span><code id="path"></code></div>
+</div>
+
+<div class="stage" id="stage"><iframe id="frame" title="Site preview"></iframe></div>
+
+<script type="application/json" id="payload">/*__PAYLOAD__*/</script>
+<script>
+(function () {
+  var D = JSON.parse(document.getElementById('payload').textContent);
+  var R = D.routes;
+  var byPath = {};
+  R.forEach(function (r, i) { byPath[r.u] = i; });
+
+  var frame = document.getElementById('frame');
+  var stage = document.getElementById('stage');
+  var sel = document.getElementById('route');
+  var pathEl = document.getElementById('path');
+  var countEl = document.getElementById('count');
+  var backBtn = document.getElementById('back');
+  var fwdBtn = document.getElementById('fwd');
+
+  /* Group the picker by the section a route belongs to, so 181 entries stay
+     navigable. The order matches the site's own information architecture
+     rather than the alphabet. */
+  var GROUPS = [
+    ['Home', function (u) { return u === '/'; }],
+    ['Product', function (u) { return /^\/(product|os|autopilot|intelligence|horizon)$/.test(u); }],
+    ['Solutions', function (u) { return u.indexOf('/solutions') === 0; }],
+    ['Customers', function (u) { return u.indexOf('/customers') === 0; }],
+    ['Pricing & security', function (u) { return /^\/(pricing|security)$/.test(u); }],
+    ['Resources', function (u) { return u.indexOf('/blog') === 0; }],
+    ['Regions', function (u) { return u.indexOf('/regions') === 0; }],
+    ['Destinations', function (u) { return u.indexOf('/destinations') === 0; }],
+    ['Company & legal', function () { return true; }]
+  ];
+  var buckets = GROUPS.map(function () { return []; });
+  R.forEach(function (r, i) {
+    for (var g = 0; g < GROUPS.length; g++) {
+      if (GROUPS[g][1](r.u)) { buckets[g].push(i); return; }
+    }
+  });
+  buckets.forEach(function (ids, g) {
+    if (!ids.length) return;
+    var og = document.createElement('optgroup');
+    og.label = GROUPS[g][0] + '  (' + ids.length + ')';
+    ids.forEach(function (i) {
+      var o = document.createElement('option');
+      o.value = String(i);
+      o.textContent = R[i].u === '/' ? '/  —  home' : R[i].u;
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+  countEl.textContent = R.length + ' routes';
+
+  /* Link interception. Injected into the frame rather than bound from out
+     here, because a click has to be caught before the iframe navigates
+     itself — at which point the whole preview would be gone. */
+  var HOOK = '<script>document.addEventListener("click",function(e){' +
+    'var a=e.target.closest&&e.target.closest("a[href]");if(!a)return;' +
+    'var h=a.getAttribute("href");if(!h)return;' +
+    'if(h.charAt(0)==="#")return;' +
+    'if(/^https?:/i.test(h)){a.target="_blank";a.rel="noopener";return;}' +
+    'if(h.charAt(0)==="/"){e.preventDefault();parent.postMessage({go:h},"*");}' +
+    '});<\/' + 'script>';
+
+  function build(i) {
+    var r = R[i];
+    var css = r.x.map(function (c) { return '<style>' + D.css[c] + '</style>'; }).join('');
+    var js = r.s.map(function (s) {
+      return '<script type="module">' + D.scripts[s] + '<\/' + 'script>';
+    }).join('');
+    return '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
+      '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+      '<title>' + r.t + '</title>' + css + '</head><body>' +
+      D.chromes[r.c] + r.m + D.foot + js + HOOK + '</body></html>';
+  }
+
+  var hist = [], at = -1, current = -1;
+
+  function show(i, push) {
+    if (i == null || i < 0 || i >= R.length || i === current) return;
+    current = i;
+    frame.srcdoc = build(i);
+    sel.value = String(i);
+    pathEl.textContent = R[i].u;
+    if (push !== false) {
+      hist = hist.slice(0, at + 1);
+      hist.push(i);
+      at = hist.length - 1;
+    }
+    backBtn.disabled = at <= 0;
+    fwdBtn.disabled = at >= hist.length - 1;
+    try { history.replaceState(null, '', '#' + R[i].u); } catch (e) { /* file:// */ }
+  }
+
+  function go(path) {
+    var p = path.split('#')[0].split('?')[0].replace(/\/+$/, '') || '/';
+    if (p in byPath) { show(byPath[p], true); return; }
+    warn(path);
+  }
+
+  var warnEl = null, warnT = 0;
+  function warn(path) {
+    if (warnEl) warnEl.remove();
+    warnEl = document.createElement('div');
+    warnEl.className = 'warn';
+    warnEl.innerHTML = 'Not in this build: <code></code>';
+    warnEl.querySelector('code').textContent = path;
+    document.body.appendChild(warnEl);
+    clearTimeout(warnT);
+    warnT = setTimeout(function () { if (warnEl) { warnEl.remove(); warnEl = null; } }, 3200);
+  }
+
+  sel.addEventListener('change', function () { show(+sel.value, true); });
+  backBtn.addEventListener('click', function () { if (at > 0) { at--; show(hist[at], false); } });
+  fwdBtn.addEventListener('click', function () {
+    if (at < hist.length - 1) { at++; show(hist[at], false); }
+  });
+  window.addEventListener('message', function (e) {
+    if (e.data && e.data.go) go(e.data.go);
+  });
+
+  document.getElementById('seg').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    [].forEach.call(this.querySelectorAll('button'), function (x) {
+      x.setAttribute('aria-pressed', String(x === b));
+    });
+    var w = +b.dataset.w;
+    stage.classList.toggle('framed', w > 0);
+    frame.style.width = w ? w + 'px' : '100%';
+    frame.style.maxWidth = '100%';
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) return;
+    if (e.key === '[') backBtn.click();
+    else if (e.key === ']') fwdBtn.click();
+    else if (e.key === '/') { e.preventDefault(); sel.focus(); }
+  });
+
+  var start = decodeURIComponent(location.hash.slice(1));
+  show(start && byPath[start] != null ? byPath[start] : 0, true);
+})();
+</script>

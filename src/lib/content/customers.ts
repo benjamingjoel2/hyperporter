@@ -56,7 +56,7 @@ export interface Overview {
   lede: string;
   sectionEyebrow: string;
   sectionTitle: string;
-  /** Only Supplier OS carries this — the honest "why now" framing. */
+  /** Only Supplier Portal carries this — the honest "why now" framing. */
   note?: string;
   features: SegmentFeature[];
   pricingHref: string;
@@ -65,12 +65,12 @@ export interface Overview {
 
 export const OVERVIEWS: Overview[] = [
   {
-    slug: 'agent-os',
+    slug: 'agent-portal',
     side: 'reseller',
-    name: 'Agent OS',
+    name: 'Agent Portal',
     eyebrow: 'Solutions — For Resellers',
     title: 'Built for the agency stuck between two inboxes.',
-    lede: 'Travel agencies, independent advisors, content creators — coordinate your traveler and your supplier in one thread, not three apps.',
+    lede: 'Travel agencies, independent advisors, content creators — coordinate your traveller and your supplier in one thread, not three apps.',
     sectionEyebrow: 'What changes',
     sectionTitle: 'Everything you already do, minus the manual chasing.',
     features: [
@@ -100,12 +100,12 @@ export const OVERVIEWS: Overview[] = [
   },
 
   {
-    slug: 'supplier-os',
+    slug: 'supplier-portal',
     side: 'supplier',
-    name: 'Supplier OS',
+    name: 'Supplier Portal',
     eyebrow: 'Solutions — For Suppliers',
     title: 'A free workflow tool, built for how DMCs already reply.',
-    lede: 'Organize inbound requests and quote from one place — Showcase is free, useful on day one, not contingent on network size. Intelligence is there when you want AI-assisted quoting from your own rates.',
+    lede: 'Organise inbound requests and quote from one place — Showcase is free, useful on day one, not contingent on network size. Intelligence is there when you want AI-assisted quoting from your own rates.',
     sectionEyebrow: 'Why Showcase, why now',
     sectionTitle: 'Useful today, not just once the network is bigger.',
     note: 'The value isn’t “get discovered” — that takes volume we don’t have yet. It’s a free CRM for the requests you’re already getting, and a real upgrade path to Intelligence when you want AI-assisted quoting from your own rates.',
@@ -113,7 +113,7 @@ export const OVERVIEWS: Overview[] = [
       {
         n: '01',
         name: 'Free CRM & quoting, on Showcase',
-        body: 'Organize inbound requests and quote directly through your own workflow — no cost, ever.',
+        body: 'Organise inbound requests and quote directly through your own workflow — no cost, ever.',
       },
       {
         n: '02',
@@ -207,7 +207,7 @@ export const SEGMENTS: Segment[] = [
     ],
     features: [
       { n: '01', name: 'CRM access', body: 'Your whole client book, one stage engine.' },
-      { n: '02', name: 'Magic link creation', body: 'Proposal and itinerary links, sent to travelers or suppliers.' },
+      { n: '02', name: 'Magic link creation', body: 'Proposal and itinerary links, sent to travellers or suppliers.' },
       { n: '03', name: 'Payment instructions', body: 'Structured payment info on every link, all tiers.' },
       {
         n: '04',
@@ -319,7 +319,7 @@ export const SEGMENTS: Segment[] = [
     reasons: [
       {
         title: 'Free CRM, no cost ever',
-        body: 'Organize inbound requests and quote directly through your own workflow.',
+        body: 'Organise inbound requests and quote directly through your own workflow.',
       },
       {
         title: 'Listed on Horizon',
@@ -331,7 +331,7 @@ export const SEGMENTS: Segment[] = [
       },
     ],
     features: [
-      { n: '01', name: 'CRM access', body: 'Organize every inbound request in one place, free.' },
+      { n: '01', name: 'CRM access', body: 'Organise every inbound request in one place, free.' },
       { n: '02', name: 'Listed on Horizon', body: 'Discoverable by every agency searching the network.' },
       {
         n: '03',
@@ -361,7 +361,7 @@ export const SEGMENTS: Segment[] = [
     reasons: [
       {
         title: 'Free CRM, no cost ever',
-        body: 'Organize inbound requests and quote directly through your own workflow.',
+        body: 'Organise inbound requests and quote directly through your own workflow.',
       },
       {
         title: 'Built for packaged trips',

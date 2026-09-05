@@ -1,0 +1,12 @@
+---
+/** Solutions — features by category, each with the tier it comes with. */
+import { CATEGORIES } from '../../lib/content/solutions';
+const ops = CATEGORIES.find((c) => c.slug === 'operations')!;
+const on = (t: string) => t === 'Showcase' || t.startsWith('Autopilot');
+---
+<div class="mk-panel wide">
+  <div class="mk-head"><b>Operations</b><small>{ops.features.length} features</small></div>
+  {ops.features.map((f) => (
+    <div class="mk-row"><span class:list={['mk-tog', { off: !on(f.tier) }]}></span><div><b>{f.name}</b></div><span class:list={['mk-tag', { grey: !on(f.tier) }]}>{f.tier}</span></div>
+  ))}
+</div>

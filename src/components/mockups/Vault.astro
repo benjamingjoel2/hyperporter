@@ -1,0 +1,15 @@
+---
+/** Tour operators — their own contracts and rates, indexed for Atlas. */
+const D = [
+  ['Rift Valley GS — rates 2026.pdf', 'Kenya · 48 rates · valid to Oct 2026', 'Indexed'],
+  ['Atlas Maroc 2026.pdf', 'Morocco · 112 rates · valid to Dec 2026', 'Indexed'],
+  ['Andes Trail — Sacred Valley tariff.xlsx', 'Peru · 36 rates · valid to Dec 2026', 'Indexing'],
+];
+---
+<div class="mk-panel wide">
+  <div class="mk-head"><b>Vault</b><small>61 documents · 1,204 rates</small></div>
+  {D.map(([d, m, st]) => (
+    <div class="mk-row"><span class:list={['mk-ico', { pdf: d.endsWith('.pdf') }]}>{d.endsWith('.pdf') ? 'PDF' : 'XLS'}</span><div><b>{d}</b><small>{m}</small></div><span class:list={['mk-tag', { amb: st === 'Indexing' }]}>{st}</span></div>
+  ))}
+  <span class="mk-fine">Atlas answers from these and nothing else. Nothing here is shared with any other account.</span>
+</div>

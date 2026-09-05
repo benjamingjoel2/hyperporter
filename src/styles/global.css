@@ -67,8 +67,16 @@
   --photo:url("/hero.jpg");
 }
 *{box-sizing:border-box}
+
 html{scroll-behavior:smooth;background:var(--void)}
-body{margin:0;background:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{margin:0;background:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
+  /* `clip`, not `hidden`. This was `overflow-x:hidden` — a safety net against
+     sideways scroll that also made body a scroll container, which silently
+     broke `position:sticky` for every descendant and capped programmatic
+     scrolling at scrollY 1018 on a 14110px page. `clip` guards the same axis
+     without establishing a scroll container. It must not go on `html`: there
+     it stops the page scrolling altogether. */
+  overflow-x:clip}
 /* Underlines off at the root. They were being switched off one selector at
    a time, which meant every link added since — the product ladder, the
    mega-menu rows, the tier cards — arrived with the browser default
@@ -81,9 +89,9 @@ a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer}
 
 /* Links in prose keep their underline, offset so it clears the descenders. */
-.art-body p a,
-.art-body li a,
-.art-dek a{
+.post-body p a,
+.post-body li a,
+.post-lede a{
   text-decoration:underline;
   text-decoration-thickness:1px;
   text-underline-offset:3px;
@@ -107,44 +115,71 @@ body::after{
    backdrop-filter may not apply at all, it shows through completely
    unblurred. The bar's job is to stay legible over anything, so it is
    opaque and the question does not arise. */
-header.top{position:sticky;top:0;z-index:70;background:var(--raise);border-bottom:1px solid var(--line);
-  transition:background .28s ease,border-color .28s ease}
+/* Translucent, not opaque: content passes under it and stays faintly
+   visible, which is what makes the bar read as glass rather than as a
+   painted strip. saturate() before blur keeps colour underneath from going
+   muddy. */
+/* Fully transparent on every page, as on the reference: the page scrolls
+   under the bar with nothing behind it, no glass and no rule.
+   
+   That only works while what passes underneath stays light. This site has
+   genuinely dark regions — the homepage hero and its photo interstitial, the
+   dark security band, the world map on /destinations — and dark nav text over
+   any of them is invisible. So the bar watches for them and flips to light
+   with a scrim behind it; see Header.astro, which adds `.over` when a region
+   marked `data-chrome="dark"` is under the bar. */
+/* Solid by default. Transparent everywhere was wrong: page content —
+   card artwork, the pipeline dots, the destination tiles — scrolled straight
+   through the bar and collided with the nav and the ticker. The bar only goes
+   transparent over the dark photographic regions, where there is a scrim
+   behind it and nothing to read through. */
+header.top{position:sticky;top:0;z-index:70;
+  background:var(--raise);border-bottom:1px solid var(--line);
+  transition:background .28s ease,border-color .28s ease,color .28s ease}
 
-/* Transparent over a full-bleed hero, solid once past it. Only engages on a
-   page that actually has one — `.over` is added by the header's own script
-   when it finds a `.lg-hero`, so the other 184 pages keep the opaque bar and
-   nothing has to opt out.
-
-   The scrim is not decoration: white nav over the homepage hero's pale sky
+/* The scrim is not decoration. White nav over the homepage hero's pale sky
    measured 2.7:1, under the 4.5:1 minimum, and 12.6:1 with it. It rides with
-   the bar rather than the hero, so legibility survives a change of
-   photograph. Positive z-index on the children rather than a negative one on
-   the scrim — a negative-z child escapes to behind the parent entirely. */
-header.top.over{background:transparent;border-bottom-color:transparent}
-header.top.over::before{content:"";position:absolute;inset:0 0 -34px;z-index:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(6,10,13,.72) 0%,rgba(6,10,13,.66) 76%,rgba(6,10,13,0) 100%);
-  transition:opacity .28s ease}
-header.top.over .bar,header.top.over .rail{position:relative;z-index:1}
-header.top.over .links a,header.top.over .mark,header.top.over .bar-acts .login{color:#fff;opacity:.94}
+   the bar rather than with any one section, so it holds over every dark
+   region and survives a change of photograph. Positive z-index on the
+   children rather than a negative one on the scrim — a negative-z child
+   escapes to behind the parent entirely. */
+header.top::before{content:"";position:absolute;inset:0 0 -34px;z-index:0;pointer-events:none;
+  opacity:0;transition:opacity .28s ease;
+  background:linear-gradient(180deg,rgba(6,10,13,.34) 0%,rgba(6,10,13,.26) 76%,rgba(6,10,13,0) 100%)}
+/* Translucent over the dark regions rather than fully transparent: the
+   photograph reads through the bar as glass, which is the effect asked for,
+   and it holds white text without needing the heavier gradient. */
+header.top.over{background:rgba(10,14,18,.42);
+  -webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);
+  border-bottom-color:rgba(255,255,255,.14)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  header.top.over{background:rgba(10,14,18,.72)}
+}
+header.top.over::before{opacity:1}
+
+header.top.over .links > a,header.top.over .mega-trigger,header.top.over .mark,header.top.over .bar-acts .login{color:#fff;opacity:.94}
 header.top.over .links a:hover,header.top.over .mark:hover .glyph{opacity:1}
 header.top.over .mark .glyph{color:#fff}
-header.top.over .rail{background:transparent;border-color:rgba(255,255,255,.22)}
-/* The tag carries its own opaque ground so the marquee scrolls behind it
-   rather than under the text; over the hero that reads as a white block, so
-   it goes transparent and keeps only its divider. */
+header.top.over .rail{border-color:rgba(255,255,255,.22)}
 /* The tag needs a ground of its own or the marquee scrolls visibly behind
-   the label and the two sets of letters interleave. Transparent was wrong;
-   it takes a darker tint of the header scrim instead, so it reads as a chip
-   rather than a white block. */
-header.top.over .rail .tag{color:#fff;background:rgba(6,10,13,.86);
+   the label and the two sets of letters interleave. */
+header.top.over .rail .tag{color:#fff;background:rgba(6,10,13,.96);
   border-right-color:rgba(255,255,255,.22)}
 header.top.over .rail .ent{color:rgba(255,255,255,.82)}
 header.top.over .rail .ent b{color:#fff}
+/* Over light content the tag still needs its own ground, for the same
+   reason — but tinted to the page, not to a scrim. */
+header.top:not(.over) .rail .tag{background:var(--raise)}
 /* Nav left, wordmark centred, actions right — the reference's arrangement.
    Three grid columns rather than flex, so the wordmark is centred on the
    viewport and not merely "after the nav": with flex it drifts whenever the
    nav or the actions change width. */
+/* The bar sits above the rail so the dropdown, which is anchored inside it,
+   paints over the ticker rather than under it. Safe now that the panel is
+   anchored to its trigger — it was not when the panel was full-bleed, since
+   a positioned .bar became its containing block and boxed it in. */
 .bar{max-width:var(--max);margin:0 auto;padding:0 var(--pad);height:76px;
+  position:relative;z-index:2;
   display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px}
 .mark{display:flex;align-items:center;gap:11px;text-decoration:none;justify-self:center;white-space:nowrap}
 .mark .glyph{width:24px;height:24px;display:block;color:var(--paper);transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
@@ -170,14 +205,62 @@ header.top.over .rail .ent b{color:#fff}
   display:grid;place-items:center;font-style:normal;font-size:11px;line-height:1}
 .burger{display:none;background:none;border:1px solid var(--line-2);border-radius:6px;padding:10px}
 .burger span{display:block;width:18px;height:1.5px;background:var(--paper);margin:4px 0}
-.drawer{display:none;background:var(--ink);border-top:1px solid var(--line)}
+/* Mobile menu: a full-height sheet below the chrome, on the same dark glass
+   as the desktop dropdown, so the two read as one component at two sizes. */
+.drawer{display:none;position:fixed;left:0;right:0;top:var(--chrome-h,111px);bottom:0;z-index:65;
+  background:rgba(13,16,22,.86);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .drawer{background:rgba(13,16,22,.97)}
+}
 .drawer.open{display:block}
-.drawer a{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);color:var(--muted);padding:17px var(--pad);font-size:15px}
-.drawer a:last-child{color:var(--paper);font-weight:400;border-bottom:0}
+/* With the drawer open the bar is the top edge of the same dark sheet, not
+   glass over a photograph: the hero scrim leaves it a washed grey that reads
+   as a seam against the panel below. Take the drawer's own ground instead. */
+body.drawer-open header.top{background:rgba(13,16,22,.86);border-bottom-color:rgba(255,255,255,.10)}
+body.drawer-open header.top::before{opacity:0}
+body.drawer-open header.top .rail{border-top-color:rgba(255,255,255,.10)}
+body.drawer-open header.top .rail .tag{border-right-color:rgba(255,255,255,.14)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  body.drawer-open header.top{background:rgba(13,16,22,.97)}
+}
+/* The page behind must not scroll while the sheet covers it, or a flick on
+   the overlay moves the article underneath and the menu appears to jump. */
+body.drawer-open{overflow:hidden}
+
+.drawer-in{padding:8px 0 40px}
+.drow{display:flex;align-items:center;justify-content:space-between;gap:16px;
+  width:100%;background:none;border:0;border-bottom:1px solid rgba(255,255,255,.10);
+  color:rgba(255,255,255,.94);font-family:inherit;font-size:19px;letter-spacing:-.015em;
+  padding:18px var(--pad);text-align:left;cursor:pointer}
+.drow svg{width:12px;height:8px;flex:none;opacity:.6;transition:transform .22s ease}
+.dtog[aria-expanded="true"] svg{transform:rotate(180deg)}
+.dtog[aria-expanded="true"]{color:#fff}
+
+.dsub{padding:2px 0 14px;background:rgba(0,0,0,.16);border-bottom:1px solid rgba(255,255,255,.10)}
+.dsub[hidden]{display:none}
+.dsub-h{margin:14px 0 4px;padding:0 var(--pad);
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.46)}
+.dsub a{display:block;padding:11px var(--pad);font-size:16px;color:rgba(255,255,255,.82)}
+.dsub a:active{color:#fff}
+
+.drawer-foot{display:flex;flex-direction:column;gap:14px;padding:26px var(--pad) 0}
+.drawer-login{color:rgba(255,255,255,.82);font-size:16px}
+.drawer-cta{justify-content:center;padding:15px 18px;font-size:16px}
+
+/* Burger turns into a close cross while the sheet is open. */
+.burger span{transition:transform .22s ease,opacity .18s ease,background .22s ease}
+.burger.on{border-color:rgba(255,255,255,.34)}
+.burger.on span{background:#fff}
+.burger.on span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.burger.on span:nth-child(2){opacity:0}
+.burger.on span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
 
 /* ---- dispatch rail (signature) ---- */
-.rail{height:34px;display:flex;align-items:center;overflow:hidden;border-top:1px solid var(--line);background:var(--raise)}
-.rail .tag{flex-shrink:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);padding:0 18px;height:100%;display:flex;align-items:center;border-right:1px solid var(--line);background:var(--void);position:relative;z-index:1}
+.rail{height:34px;position:relative;z-index:1;display:flex;align-items:center;overflow:hidden;border-top:1px solid var(--line);background:transparent}
+.rail .tag{flex-shrink:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);padding:0 18px;height:100%;display:flex;align-items:center;border-right:1px solid var(--line);background:var(--raise);position:relative;z-index:1}
 /* 2900s, not 58s: the strip now carries 600 entries instead of 12, and
    the duration has to scale with it or the text would blur past. */
 .rail .stream{display:flex;white-space:nowrap;animation:march 2900s linear infinite}
@@ -250,6 +333,28 @@ p{margin:0 0 16px}
 .routes .arc-lit{fill:none;stroke:var(--signal);stroke-width:1.6;stroke-linecap:round;stroke-dasharray:0 1200;animation:fly 9s ease-in-out infinite}
 .routes .wp{fill:var(--signal)}
 .routes .wp-ring{fill:none;stroke:rgba(27,116,126,.45);stroke-width:1}
+
+/* Product hero. One column by default; two when the page passes something
+   for `hero-aside`, which is how the sample thread sits beside Autopilot's
+   headline instead of stranded underneath it. The copy column is capped so
+   the lede keeps a readable measure rather than stretching to meet the card. */
+.p-hero{display:grid;gap:clamp(28px,4vw,64px)}
+.p-hero-split{grid-template-columns:minmax(0,1fr) minmax(0,600px);align-items:center}
+.p-hero-split .lede{max-width:46ch}
+.p-hero-aside{min-width:0}
+@media (max-width:980px){
+  .p-hero-split{grid-template-columns:1fr}
+  .p-hero-split .lede{max-width:62ch}
+}
+
+/* The arcs were drawn for a light ground. Over the hero photograph the
+   original teal-on-white values sit at roughly 1.2:1 and vanish, so on that
+   one dark surface they invert to light strokes. Geometry is untouched. */
+.lg-hero .routes .grat{stroke:rgba(255,255,255,.14)}
+.lg-hero .routes .arc{stroke:rgba(255,255,255,.34)}
+.lg-hero .routes .arc-lit{stroke:rgba(255,255,255,.92)}
+.lg-hero .routes .wp{fill:#fff}
+.lg-hero .routes .wp-ring{stroke:rgba(255,255,255,.5)}
 @keyframes fly{0%{stroke-dasharray:0 60 0 1140;opacity:0}12%{opacity:1}55%{stroke-dasharray:0 900 62 300;opacity:1}75%{opacity:0}100%{stroke-dasharray:0 900 62 300;opacity:0}}
 .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:200px;background:linear-gradient(180deg,transparent,var(--void));pointer-events:none}
 .hero .wrap{position:relative;z-index:3}
@@ -294,7 +399,6 @@ p{margin:0 0 16px}
 .toggle{display:flex;align-items:center;gap:8px;color:var(--signal)}
 .toggle span{width:26px;height:14px;border-radius:99px;background:var(--signal-dim);border:1px solid var(--signal);position:relative}
 .toggle span::after{content:"";position:absolute;right:2px;top:1.5px;width:9px;height:9px;border-radius:50%;background:var(--signal)}
-.sample-tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);text-align:right;margin-top:12px}
 
 /* ============ STATEMENT ============ */
 /* OH's labelled strip -- a row of small cells sitting directly beneath the
@@ -372,6 +476,10 @@ p{margin:0 0 16px}
 .callout{margin-top:36px;border:1px dashed var(--line-2);border-radius:14px;padding:28px;background:rgba(27,116,126,.05);display:flex;gap:18px;align-items:flex-start}
 .callout .lock{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);flex-shrink:0;padding-top:3px}
 .callout p{margin:0;color:var(--muted);font-size:15px}
+/* The label does not shrink, so side-by-side it strands the paragraph in a
+   sliver on a phone. Stack them. */
+@media (max-width:700px){.callout{flex-direction:column;gap:12px;padding:22px}
+  .callout .lock{padding-top:0}}
 
 /* ============ DIAGRAM 3: RADIAL ============ */
 .radial{position:relative;height:460px;margin:24px auto 0;max-width:660px}
@@ -448,102 +556,208 @@ p{margin:0 0 16px}
 .fcta .iform{margin:0 auto;justify-content:center}
 .fcta .msg{text-align:center}
 
-/* ============ BLOG ============ */
-.b-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;padding-bottom:34px;border-bottom:1px solid var(--line)}
-.b-count{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
-.feat{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,4vw,64px);align-items:center;padding:clamp(34px,4.6vw,64px) 0;border-bottom:1px solid var(--line);cursor:pointer}
-.feat:hover .feat-t{color:var(--signal)}
-.feat-t{font-family:var(--display);font-weight:400;letter-spacing:-.022em;line-height:1.05;font-size:clamp(28px,3.9vw,50px);margin:16px 0 18px;transition:color .3s}
-.feat p{color:var(--muted);font-size:17px;max-width:52ch}
-.feat-art{position:relative;aspect-ratio:4/3;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:linear-gradient(150deg,#EDF3F5,#E1E8ED)}
-.feat-art svg{position:absolute;inset:0;width:100%;height:100%}
-.b-meta{display:flex;gap:16px;align-items:center;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
-.b-meta em{font-style:normal;color:var(--signal)}
-.plist{border-bottom:1px solid var(--line)}
-.prow{display:grid;grid-template-columns:52px 108px 1fr 1.05fr;gap:clamp(18px,3vw,48px);align-items:start;padding:clamp(26px,3.2vw,40px) 0;border-top:1px solid var(--line);cursor:pointer;transition:padding-left .35s cubic-bezier(.2,.8,.2,1),background .3s}
-.prow:first-child{border-top:0}
-.prow-art{display:block;aspect-ratio:4/3;overflow:hidden;border-radius:3px;border:1px solid var(--line);background:var(--steel);margin-top:4px}
-.prow-art svg{width:100%;height:100%;display:block}
-.prow:hover{padding-left:14px;background:rgba(12,22,34,.022)}
-.prow .pn{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);padding-top:6px}
-.prow h3{font-size:clamp(19px,1.9vw,25px);letter-spacing:-.015em;line-height:1.3;margin:12px 0 0;transition:color .3s}
-.prow:hover h3{color:var(--signal)}
-.prow p{color:var(--dim);font-size:14.5px;margin:0;max-width:46ch}
-.prow .arrow{color:var(--dim);transition:color .3s,transform .3s}
-.prow:hover .arrow{color:var(--signal);transform:translateX(5px)}
+/* ============ BLOG ============
+   Index and article both hang off a rail of small caps labels with the
+   content in an offset column, which is what makes a post read as a
+   document rather than a page. Covers are generated (lib/blogArt.ts) —
+   there is no licensed photography yet. */
+
+.bx-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);margin:0}
+.bx-title{font-size:clamp(38px,5vw,66px);letter-spacing:-.035em;line-height:1.02;
+  margin:14px 0 0;max-width:16ch}
+/* The title band sets its own bottom edge — .sec's padding plus the
+   featured block's margin left a screen of nothing between them. */
+.bx-head{padding-bottom:0}
+
+/* The cover frame. `slice` on the SVG, so a cover fills whatever aspect the
+   slot asks for rather than letterboxing inside it. */
+.bx-cover{position:relative;overflow:hidden;background:var(--ink);
+  border:1px solid var(--line);border-radius:3px}
+.bx-cover svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* ---- featured ---- */
+.bx-feat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);
+  gap:clamp(14px,1.2vw,20px);align-items:stretch;
+  padding:0 0 clamp(34px,4vw,60px);margin-top:clamp(30px,4vw,54px)}
+/* The rules bracket the side column and stop at the cover, as on the
+   reference — no full-width rule across the top of the image. */
+.bx-feat-side{display:flex;flex-direction:column;justify-content:space-between;
+  gap:40px;padding:28px 0 26px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.bx-feat-meta{display:flex;flex-direction:column;gap:7px}
+.bx-feat-meta time{font-size:13px;color:var(--dim);font-variant-numeric:tabular-nums}
+.bx-kicker{display:block;font-size:14px;color:var(--muted);margin-bottom:10px}
+.bx-feat h2{font-size:clamp(24px,2.5vw,34px);letter-spacing:-.025em;line-height:1.14;
+  margin:0 0 14px;transition:color .25s}
+.bx-feat:hover h2{color:var(--signal)}
+.bx-feat p{font-size:14.5px;line-height:1.6;color:var(--muted);margin:0 0 14px}
+.bx-read{font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim)}
+/* A height rather than a ratio: at this column width 16/10 made the cover
+   nearly 600px tall and pushed the filters and the grid off the page. */
+.bx-feat .bx-cover{aspect-ratio:16/9}
+
+/* ---- filters ---- */
+.bx-filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center;
+  padding:0 0 clamp(26px,3vw,40px);border-top:1px solid var(--line);padding-top:22px}
+.bx-chip{background:none;border:0;border-radius:3px;padding:7px 13px;
+  font-size:13.5px;color:var(--muted);transition:background .2s,color .2s}
+.bx-chip:hover{color:var(--paper)}
+.bx-chip.on{background:var(--paper);color:var(--raise)}
+
+/* ---- three-up grid ---- */
+/* Square and nearly touching: the reference's grid is 458px squares with a
+   9px gutter, and the images are what carry the page. */
+.bx-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:36px clamp(9px,.8vw,12px)}
+.bx-card .bx-cover{aspect-ratio:1/1;margin-bottom:16px}
+.bx-card time{display:block;font-size:12.5px;color:var(--dim);margin-bottom:9px;
+  font-variant-numeric:tabular-nums}
+.bx-card h3{font-size:19px;letter-spacing:-.018em;line-height:1.26;margin:0 0 10px;
+  transition:color .25s}
+.bx-card:hover h3{color:var(--signal)}
+.bx-card p{font-size:14px;line-height:1.55;color:var(--muted);margin:0;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+
+/* ---- more stories ---- */
+.bx-more{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);
+  gap:clamp(24px,4vw,70px);margin-top:clamp(48px,6vw,90px)}
+.bx-more-label{padding-top:26px}
+.bx-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(16px,1.4vw,24px);align-items:end;
+  border-top:1px solid var(--line);padding:24px 0}
+.bx-row time{grid-column:1;font-size:12.5px;color:var(--dim);
+  font-variant-numeric:tabular-nums;align-self:start}
+.bx-row-copy{grid-column:1}
+.bx-row h3{font-size:clamp(19px,1.9vw,23px);letter-spacing:-.018em;line-height:1.26;
+  margin:14px 0 9px;transition:color .25s}
+.bx-row:hover h3{color:var(--signal)}
+.bx-row p{font-size:14px;line-height:1.55;color:var(--muted);margin:0;max-width:56ch}
+.bx-row .bx-cover{grid-column:2;grid-row:1 / span 2;aspect-ratio:16/9;align-self:center}
+.bx-empty{color:var(--dim);font-size:15px;padding:40px 0}
 
 /* ---- article ---- */
-.art-top{border-bottom:1px solid var(--line);padding-bottom:clamp(30px,4vw,48px)}
-.back{background:none;border:0;color:var(--dim);font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;padding:0;margin-bottom:30px;transition:color .25s}
-.back:hover{color:var(--signal)}
-.art-title{font-family:var(--display);font-weight:400;letter-spacing:-.022em;line-height:1.03;font-size:clamp(32px,5.2vw,64px);margin:18px 0 22px;max-width:20ch}
-.art-dek{font-size:clamp(17px,1.7vw,21px);color:var(--muted);max-width:58ch;line-height:1.5;margin:0}
-.art-body{max-width:68ch;padding-top:clamp(34px,4.4vw,58px);font-size:17.5px;line-height:1.78;color:var(--muted)}
-.art-body p{margin:0 0 26px}
-.art-body h2{font-size:clamp(23px,2.5vw,30px);color:var(--paper);text-transform:none;font-weight:400;margin:52px 0 18px;letter-spacing:-.02em;line-height:1.3}
-.art-body h3{font-size:19px;color:var(--paper);margin:38px 0 12px}
-.art-body strong{color:var(--paper);font-weight:400}
-.art-body ul{margin:0 0 26px;padding-left:0;list-style:none}
-.art-body li{position:relative;padding-left:26px;margin-bottom:13px}
-.art-body li::before{content:"";position:absolute;left:0;top:11px;width:8px;height:1px;background:var(--signal)}
-.art-body .pull{border-left:2px solid var(--signal);padding:8px 0 8px 26px;margin:40px 0;font-family:var(--display);font-size:clamp(20px,2.2vw,26px);line-height:1.35;letter-spacing:-.022em;color:var(--paper);max-width:32ch}
-.art-body .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);margin:0 0 8px}
-.art-end{max-width:68ch;margin-top:20px;padding-top:34px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:24px;align-items:center;flex-wrap:wrap}
-.art-next{background:none;border:0;padding:0;text-align:left;cursor:pointer}
-.art-next span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
-.art-next b{font-family:var(--display);font-size:19px;font-weight:400;transition:color .25s}
-.art-next:hover b{color:var(--signal)}
+.post{padding-top:clamp(26px,3vw,42px);padding-bottom:clamp(60px,7vw,110px)}
+.post-back{font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);display:inline-block;margin-bottom:26px}
+.post-back:hover{color:var(--signal)}
+.post-head h1{font-size:clamp(32px,4.4vw,56px);letter-spacing:-.032em;line-height:1.05;
+  margin:12px 0 clamp(28px,3.4vw,44px);max-width:20ch}
+.post-cover{position:relative;overflow:hidden;aspect-ratio:16/7;
+  border:1px solid var(--line);border-radius:3px;background:var(--ink)}
+.post-cover svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* The rail. Every band of the article uses it, so the label column stays on
+   one axis from the meta at the top to "Up next" at the bottom. */
+.post-rail{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);
+  gap:clamp(24px,4vw,70px);padding-top:clamp(30px,4vw,52px)}
+.post-meta{display:grid;grid-template-columns:auto 1fr;gap:8px 20px;margin:0;
+  align-content:start}
+.post-meta dt{font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim)}
+.post-meta dd{margin:0;font-size:13.5px;color:var(--muted)}
+.post-lede{font-size:clamp(19px,2vw,25px);line-height:1.4;letter-spacing:-.02em;
+  color:var(--paper);margin:0;max-width:34ch}
+/* Article prose. Quieter than the old article page: the reference sets its
+   body around 15px with subheads barely larger than the text, which is what
+   makes a post read as a document. Ours sits a little above that, because
+   this typeface runs smaller than theirs at the same size. */
+.post-body{max-width:64ch;font-size:16.5px;line-height:1.72;color:var(--muted)}
+.post-body > *:first-child{margin-top:0}
+.post-body p{margin:0 0 22px}
+.post-body h2{font-size:clamp(20px,2vw,24px);color:var(--paper);font-weight:400;
+  text-transform:none;letter-spacing:-.018em;line-height:1.28;margin:44px 0 14px}
+.post-body h3{font-size:17.5px;color:var(--paper);font-weight:400;margin:32px 0 10px;
+  letter-spacing:-.012em}
+.post-body strong{color:var(--paper);font-weight:400}
+.post-body em{font-style:italic}
+.post-body ul,.post-body ol{margin:0 0 22px;padding-left:0;list-style:none}
+.post-body li{position:relative;padding-left:24px;margin-bottom:11px}
+/* A rule, not a disc — the site has no other round bullet in it. */
+.post-body ul li::before{content:"";position:absolute;left:0;top:.72em;
+  width:9px;height:1px;background:var(--signal)}
+.post-body ol{counter-reset:s}
+.post-body ol li{counter-increment:s}
+.post-body ol li::before{content:counter(s);position:absolute;left:0;top:0;
+  font-family:var(--mono);font-size:11px;color:var(--signal);
+  font-variant-numeric:tabular-nums}
+.post-body blockquote{margin:34px 0;padding:2px 0 2px 22px;
+  border-left:2px solid var(--signal);color:var(--paper);
+  font-size:clamp(18px,1.8vw,21px);line-height:1.4;letter-spacing:-.018em;max-width:34ch}
+.post-body blockquote p:last-child{margin-bottom:0}
+.post-body code{font-family:var(--mono);font-size:.88em;background:var(--ink);
+  padding:2px 5px;border-radius:3px;color:var(--paper)}
+.post-body pre{background:var(--ink);border:1px solid var(--line);border-radius:4px;
+  padding:18px;overflow-x:auto;margin:0 0 22px}
+.post-body pre code{background:none;padding:0}
+.post-body hr{border:0;border-top:1px solid var(--line);margin:38px 0}
+.post-body img{width:100%;height:auto;border-radius:3px;margin:30px 0}
+.post-body p a,.post-body li a,.post-lede a{text-decoration:underline;
+  text-decoration-thickness:1px;text-underline-offset:3px;color:var(--signal)}
+.post-body p a:hover,.post-body li a:hover{color:var(--signal-hi)}
+
+.post-sub{margin-top:clamp(46px,5.5vw,80px);border-top:1px solid var(--line)}
+.post-sub-line{font-size:15px;color:var(--muted);margin:0;max-width:44ch}
+.post-more{margin-top:clamp(46px,5.5vw,80px);border-top:1px solid var(--line)}
+.post-more-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(20px,2.6vw,36px)}
+.post-more-card .bx-cover{aspect-ratio:16/9;margin-bottom:14px}
+.post-more-card time{display:block;font-size:12.5px;color:var(--dim);margin-bottom:8px;
+  font-variant-numeric:tabular-nums}
+.post-more-card h3{font-size:18px;letter-spacing:-.018em;line-height:1.26;margin:0 0 9px;
+  transition:color .25s}
+.post-more-card:hover h3{color:var(--signal)}
+.post-more-card p{font-size:13.5px;line-height:1.55;color:var(--muted);margin:0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.post-next{margin-top:clamp(40px,5vw,70px);border-top:1px solid var(--line)}
+.post-next-link b{display:block;font-size:clamp(21px,2.3vw,28px);font-weight:400;
+  letter-spacing:-.022em;line-height:1.2;max-width:22ch;transition:color .25s}
+.post-next-link:hover b{color:var(--signal)}
+.post-next-link span{display:block;margin-top:10px;font-size:14.5px;color:var(--muted);
+  max-width:52ch}
+
 @media (max-width:900px){
-  .feat{grid-template-columns:1fr}
-  .feat-art{order:-1}
-  .prow{grid-template-columns:38px 1fr}
-  .prow p{grid-column:2}
-  .prow .pn{padding-top:2px}
+  .bx-feat{grid-template-columns:1fr;gap:22px}
+  .bx-feat-side{border-right:0;padding-right:0;order:2;gap:18px;
+    flex-direction:column-reverse;justify-content:flex-start}
+  .bx-feat-meta{flex-direction:row;gap:14px;align-items:baseline}
+  .bx-grid{grid-template-columns:1fr;gap:34px}
+  .bx-more,.post-rail{grid-template-columns:1fr;gap:16px}
+  .bx-more-label{padding-top:0}
+  .bx-row{grid-template-columns:1fr;gap:14px}
+  .bx-row .bx-cover{grid-column:1;grid-row:auto;order:-1}
+  .post-more-grid{grid-template-columns:1fr;gap:30px}
+  /* The rail's empty spacer column collapses to a zero-height row rather
+     than a gap the width of the page. */
+  .post-rail > div:empty{display:none}
 }
 
 /* ============ FOOTER ============ */
-footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56px,6vw,88px) 0 0;overflow:hidden}
-.f-cta{display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
-/* Sentence case, not the uppercase the global h2 carries -- this is a
-   closing line, not a section heading. */
-.f-cta h2{font-size:clamp(26px,2.6vw,40px);text-transform:none;line-height:1.15;margin:0;max-width:32ch}
-.f-hr{height:1px;background:var(--line);margin:clamp(30px,4vw,52px) 0 clamp(40px,5vw,68px)}
-.f-main{display:grid;grid-template-columns:1fr 2.2fr;gap:clamp(30px,5vw,80px);align-items:start}
-.f-brand{display:flex;flex-direction:column;align-items:flex-start}
-.f-mark{width:56px;height:56px;display:block;color:var(--paper);transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
+/* ---- footer ------------------------------------------------------------
+   The reference's format: dark ground, the mark top-left and the copyright
+   pinned to the bottom of that same column, link columns across the right
+   with grey labels and white links. Nothing above it and nothing below. */
+footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp(40px,5vw,72px);border-top:1px solid #1E242B}
+.f-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(30px,5vw,80px);align-items:stretch}
+.f-brand{display:flex;flex-direction:column;align-items:flex-start;min-height:100%}
+.f-mark{width:44px;height:44px;display:block;color:#fff;transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
 .f-mark svg{width:100%;height:100%;display:block}
 .f-mark svg rect{fill:currentColor}
 .f-mark svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6;stroke-linecap:butt}
-.f-mark:hover{color:var(--signal);transform:rotate(90deg)}
-.f-con{font-size:16px;line-height:1.6;color:var(--muted);margin-top:36px;max-width:34ch}
-.f-con div{margin-bottom:22px}
-.f-con a{text-decoration:none;border-bottom:1px solid transparent}
-.f-con a:hover{border-bottom-color:var(--line-2)}
+.f-mark:hover{color:#4FB3BD;transform:rotate(90deg)}
+.f-con{font-size:14px;line-height:1.6;color:#9AA1AA;margin-top:32px;max-width:34ch}
+.f-con div{margin-bottom:14px}
+.f-con a{color:#EDEFF2;text-decoration:none;border-bottom:1px solid transparent}
+.f-con a:hover{border-bottom-color:#4A525C}
+.f-copy{margin:auto 0 0;padding-top:48px;font-size:14px;line-height:1.5;color:#7D848E}
 .f-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,2.4vw,36px)}
-.f-col h4{display:block;font-family:var(--display);font-size:14px;font-weight:400;letter-spacing:-.01em;text-transform:none;color:var(--paper);margin:0 0 16px}
-.f-col a{display:block;color:var(--signal);font-family:var(--body);font-weight:400;font-size:14px;letter-spacing:-.01em;line-height:1.4;padding:4px 0;transition:color .2s}
-.f-col a:hover{color:var(--paper)}
-.f-pill{background:var(--paper);color:var(--void);border:0;border-radius:var(--radius);padding:15px 32px;font-size:15px;font-weight:400;white-space:nowrap;transition:transform .2s,box-shadow .2s}
-.f-pill:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(12,22,34,.20)}
-/* Sentence-case sans, matching the reference -- not the mono capitals the
-   OH footer used along the bottom. */
-/* The oversized wordmark that closes the reference's footer. Drawn as SVG
-   with textLength rather than a vw font-size: "HYPERPORTER" is 11 characters
-   where the reference's mark is 6, so a 15vw value overflows the page at
-   every width — and would break again whenever the webfont falls back to a
-   wider face. textLength fits the container exactly, always.
-
-   The reference sets its mark in a serif; ours stays in the site face. PT
-   Serif was dropped in Aug 2026 at the founder's instruction, and bringing a
-   serif back for one lockup is a design-system decision, not a styling one. */
-.f-logotype{padding-block:clamp(46px,7vw,104px) clamp(30px,4vw,60px)}
-.f-logotype svg{display:block;width:100%;height:auto;fill:var(--signal);overflow:visible}
-
-.f-bottom{display:flex;align-items:center;gap:14px 44px;flex-wrap:wrap;margin-top:clamp(34px,4.5vw,64px);padding-top:clamp(20px,2.6vw,30px);border-top:1px solid var(--line);padding-bottom:clamp(20px,4vw,44px);font-size:15px;color:var(--dim)}
-.f-bottom a{color:var(--dim);transition:color .2s}
-.f-bottom a:hover{color:var(--paper)}
-.f-copy{margin-right:auto}
-@media (max-width:900px){.f-main{grid-template-columns:1fr;gap:44px}.f-cols{grid-template-columns:1fr 1fr;gap:34px 30px}}
+.f-col h4{display:block;font-family:var(--display);font-size:14px;font-weight:400;letter-spacing:-.01em;text-transform:none;color:#7D848E;margin:0 0 18px}
+.f-col a{display:block;color:#EDEFF2;font-family:var(--body);font-weight:400;font-size:14px;letter-spacing:-.01em;line-height:1.4;padding:6px 0;transition:color .2s}
+.f-col a:hover{color:#4FB3BD}
+/* Stacked, the copyright belongs at the bottom, not between the address and
+   the links — so the brand column dissolves into the flex column and its
+   pieces are ordered directly. */
+@media (max-width:900px){.f-main{display:flex;flex-direction:column;gap:40px}.f-brand{display:contents}.f-con{margin-top:0}.f-cols{grid-template-columns:1fr 1fr;gap:34px 30px}.f-copy{order:9;margin:0;padding-top:8px}}
 @media (max-width:520px){.f-cols{grid-template-columns:1fr}}
 
 /* ============ DESTINATIONS ============ */
@@ -634,7 +848,7 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
 .dp-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(var(--scrim),.30),rgba(var(--scrim),.68))}
 .dp-tile .tw,.dp-tile .tn{position:relative;z-index:2}
 .dp-tile .tw{font-family:var(--display);font-weight:400;font-size:11px;letter-spacing:.04em;color:rgba(12,22,34,.62);margin-bottom:12px}
-.dp-tile .tn{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.2vw,56px);letter-spacing:-.022em;line-height:.98}
+.dp-tile .tn{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.2vw,56px);letter-spacing:-.022em;line-height:.98;margin:0}
 .dp-badges{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:24px}
 .dp-badge{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);border:1px solid var(--line-2);border-radius:99px;padding:8px 15px;background:rgba(255,255,255,.70);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .dp-h{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.5vw,44px);letter-spacing:-.022em;line-height:1.08;margin:0 0 16px}
@@ -708,9 +922,29 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
   .fgrid{grid-template-columns:1fr}
   .fcell{padding:28px 0!important;border-right:0!important}
 }
+/* The three-track bar gives the nav and the actions equal columns, and six
+   links need more than half of anything under ~1340px, where they ran
+   under the wordmark. Below that the outer tracks size to their content
+   and the mark centres in what is left; below 1150 the word goes and the
+   glyph alone stands in, until the burger takes over at 860. */
+@media (max-width:1340px){
+  .bar{grid-template-columns:auto minmax(0,1fr) auto}
+}
+@media (max-width:1150px){
+  .mark .word{display:none}
+  .links a{padding:8px 9px}
+}
 @media (max-width:860px){
-  .links,.bar .cta-nav,.sys{display:none}
+  .links,.bar .cta-nav,.bar-acts .login,.sys{display:none}
+  .mark .word{display:inline}
   .burger{display:block}
+  /* Two columns, not three: the centred wordmark has nothing to balance
+     against once the nav and the actions are gone, and a 390px bar has no
+     room for a third track. */
+  .bar{grid-template-columns:auto 1fr;height:64px}
+  .mark{justify-self:start}
+  .mark .word{font-size:16px;letter-spacing:.12em}
+  .bar-acts{justify-self:end}
 }
 @media (max-width:680px){
   .radial{display:none}
@@ -742,9 +976,9 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
    all, so those are widened to cover both tags rather than duplicated. */
 
 /* 1. Underlines. */
-.links a,.drawer a,.f-col a,.cta-nav,.dp-back,.f-pill,.gua-cta,
+.links a,.drawer a,.f-col a,.cta-nav,.dp-back,.gua-cta,
 .dreg,.visit,.r-back,.feat,.prow,.back,.art-next,.btn,.d-cols a,
-.plink,.rnode,.f-bottom a,.rlist a,.btn-o{text-decoration:none}
+.plink,.rnode,.rlist a,.btn-o{text-decoration:none}
 .rlist a{color:inherit}
 
 /* 2. Elements whose own rules set width or vertical margin, which an inline
@@ -882,7 +1116,10 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
 .reasons>div{border-top:2px solid var(--signal);padding-top:18px}
 .reasons b{display:block;font-size:17px;font-weight:400;margin-bottom:8px}
 .reasons p{margin:0;color:var(--muted);font-size:14.5px}
-@media (max-width:820px){.reasons{grid-template-columns:1fr}}
+.reasons-2{grid-template-columns:repeat(2,1fr)}
+/* Was an inline style on /security, which outranked the stack rule below
+   and left two 167px columns on a phone. */
+@media (max-width:820px){.reasons,.reasons-2{grid-template-columns:1fr}}
 
 /* Two-sided chooser — Reseller / Supplier. */
 .sides{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.4vw,30px);margin-top:clamp(26px,3.4vw,42px)}
@@ -909,6 +1146,144 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
 .tier ul{margin:0 0 24px;padding:0;list-style:none;flex:1}
 .tier li{font-size:14px;color:var(--muted);padding:8px 0;border-top:1px solid var(--line)}
 
+/* ---- page illustrations ------------------------------------------------
+   Every hero is the same three elements — eyebrow, h1, lede — sometimes with
+   a control or a link after them. Rather than restructure twenty templates,
+   `.page-hero` turns the hero into two columns and drops the drawing into the
+   second, whatever else the first happens to hold. */
+.page-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);
+  gap:clamp(30px,4.5vw,80px);align-items:center}
+/* Two children, not four. Left as separate grid items the eyebrow, headline
+   and lede each got a row, the rows shared the drawing's height, and the
+   three of them ended up spread half a screen apart. */
+.page-hero-copy{min-width:0}
+.mockup{min-width:0}
+@media (max-width:900px){
+  /* Below this the drawing is competing with the headline for the fold, and
+     the headline wins. */
+  .page-hero{grid-template-columns:1fr;gap:clamp(26px,4vw,42px)}
+  .page-hero > .mockup{grid-column:1;grid-row:auto;max-width:440px}
+}
+
+/* ---- photo hero for product pages -------------------------------------
+   The hero and the band under it sit on one photograph, as the homepage
+   opens. The image is sticky rather than absolute: absolute over a section
+   this tall would stretch a landscape photo to a few thousand pixels, and
+   fixed attachment does not work on iOS. Sticky at the top with its own
+   height pulled back out of the flow, it holds still while the hero and the
+   pinned stage panel scroll over it, and leaves with the section. */
+.p-top-photo{position:relative;background:#1A1D21;color:#fff;
+  margin-top:calc(-1 * var(--chrome-h,111px));padding-top:var(--chrome-h,111px)}
+.p-photo-bg{position:sticky;top:0;z-index:0;display:block;width:100%;
+  height:100vh;height:100svh;object-fit:cover;
+  filter:grayscale(.4) brightness(.5);margin-bottom:-100vh;margin-bottom:-100svh}
+.p-top-photo > :not(.p-photo-bg){position:relative;z-index:1}
+.p-top-photo .eyebrow{color:rgba(255,255,255,.62)}
+.p-top-photo h1{color:#fff}
+.p-top-photo .lede{color:rgba(255,255,255,.82)}
+
+/* The thread card on the photograph: the nav dropdown's glass, not a white
+   card — a white card on a dark photograph is a dialog box. */
+.p-top-photo .thread{background:rgba(13,16,22,.66);border-color:rgba(255,255,255,.12);
+  -webkit-backdrop-filter:saturate(1.3) blur(20px);backdrop-filter:saturate(1.3) blur(20px);
+  box-shadow:none;color:#fff}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .p-top-photo .thread{background:rgba(13,16,22,.9)}
+}
+.p-top-photo .thread .th{color:rgba(255,255,255,.6);border-bottom-color:rgba(255,255,255,.12)}
+.p-top-photo .thread .th b{color:#fff}
+.p-top-photo .chip{border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.62)}
+.p-top-photo .chip:hover{color:#fff;border-color:rgba(255,255,255,.4)}
+.p-top-photo .chip.done{color:rgba(255,255,255,.78);border-color:rgba(255,255,255,.3)}
+.p-top-photo .chip.now{color:#fff;background:var(--signal-hi);border-color:var(--signal-hi)}
+.p-top-photo .thread .line{color:rgba(255,255,255,.84);border-top-color:rgba(255,255,255,.12)}
+.p-top-photo .thread .line i{background:#4FB3BD}
+.p-top-photo .thread .line.amb i{background:#E2A94E}
+.p-top-photo .thread .ft{color:rgba(255,255,255,.6);border-top-color:rgba(255,255,255,.12)}
+.p-top-photo .toggle{color:#4FB3BD}
+.p-top-photo .toggle span{background:rgba(79,179,189,.18);border-color:#4FB3BD}
+.p-top-photo .toggle span::after{background:#4FB3BD}
+.p-top-photo .toggle[aria-pressed="false"]{color:rgba(255,255,255,.55)}
+.p-top-photo .toggle[aria-pressed="false"] span{background:none;border-color:rgba(255,255,255,.3)}
+
+/* ---- /autopilot: the nine stages -------------------------------------
+   Moved off the homepage. Dark glass on a photograph rather than a panel on
+   the page ground — the same material as the nav dropdown, because the stage
+   list is chrome over the product rather than a passage of prose.
+
+   The outer element is the scroll track and `.ap-band-stick` is what holds
+   still while the stages advance. Both the pinning and the script that drives
+   it are gated on the same media query, so the two cannot disagree: on a
+   short or narrow screen, or under reduced motion, the band is an ordinary
+   section and the pills are a plain accordion. */
+/* No `overflow:hidden` here, however much it looks like it wants one: it
+   makes this element the sticky child's scrollport, and the panel below
+   silently stops sticking. The photograph is inset:0 inside the sticky
+   element, so there is nothing to clip anyway. */
+.ap-band{position:relative}
+/* The photograph lives inside the element that gets pinned, so it holds still
+   with the panel. It cannot be a sibling pulled up with a negative margin:
+   percentage margins resolve against the container's *width*, so -100% there
+   is about 1300px, not one viewport. */
+.ap-band-stick{position:relative;width:100%;display:flex;align-items:center;
+  padding:clamp(54px,6vw,84px) 0}
+.ap-band-stick > .wrap{position:relative;z-index:1;width:100%}
+
+@media (prefers-reduced-motion:no-preference) and (min-width:861px) and (min-height:640px){
+  .ap-band{--ap-stage-step:40vh;
+    height:calc(100svh - var(--chrome-h,111px) + 9 * var(--ap-stage-step))}
+  .ap-band-stick{position:sticky;top:var(--chrome-h,111px);padding:0;
+    height:calc(100svh - var(--chrome-h,111px));overflow:hidden}
+}
+
+/* Two columns: the lead holds the left, the stages take the rest. In one
+   column the pills are a thin strip down the side of a mostly empty panel. */
+.ap-glass{display:grid;grid-template-columns:minmax(0,280px) auto minmax(0,1fr);
+  gap:clamp(26px,3.4vw,56px);align-items:start;
+  border-radius:18px;padding:clamp(26px,3.2vw,44px);
+  background:rgba(13,16,22,.66);border:1px solid rgba(255,255,255,.12);
+  -webkit-backdrop-filter:saturate(1.3) blur(20px);backdrop-filter:saturate(1.3) blur(20px)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .ap-glass{background:rgba(13,16,22,.9)}
+}
+.ap-band-lead .eyebrow{color:rgba(255,255,255,.62);margin:0 0 14px}
+.ap-band-lead .dek{color:rgba(255,255,255,.82);margin:0;font-size:15.5px;line-height:1.6}
+@media (max-width:1100px){
+  /* Three columns need about 1100px. Below that the detail goes under the
+     stages, where it still reads in order. */
+  .ap-glass{grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:28px}
+  .ap-detail{grid-column:1 / -1;border-left:0;border-top:1px solid rgba(255,255,255,.14);
+    padding:18px 0 0}
+}
+@media (max-width:860px){
+  .ap-glass{grid-template-columns:1fr;gap:24px}
+  .ap-band-lead{padding-bottom:22px;border-bottom:1px solid rgba(255,255,255,.12)}
+}
+
+.ap-pills{display:flex;flex-direction:column;align-items:flex-start;gap:9px}
+.ap-pill{border:1px solid rgba(255,255,255,.16);font-family:inherit;text-align:left;cursor:pointer;
+  background:rgba(255,255,255,.07);color:#fff;border-radius:999px;
+  padding:10px 15px 10px 19px;display:flex;align-items:center;gap:13px;
+  font-size:15px;letter-spacing:-.01em;
+  transition:background .18s ease,border-color .18s ease,opacity .28s ease}
+.ap-pill:hover{background:rgba(255,255,255,.13)}
+/* Stages behind the current one stay legible but recede, so the column reads
+   as a position in a sequence rather than nine equal buttons. */
+.ap-pinned .ap-pill{opacity:.5}
+.ap-pill[aria-expanded="true"],.ap-pill:hover,.ap-pill:focus-visible{opacity:1}
+.ap-pill[aria-expanded="true"]{background:var(--signal-hi);border-color:transparent}
+.ap-pill em{font-style:normal;font-variant-numeric:tabular-nums;opacity:.65;font-size:13px}
+.ap-pill i{font-style:normal;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.18);
+  display:grid;place-items:center;font-size:13px;line-height:1;flex:none}
+.ap-detail{border-left:1px solid rgba(255,255,255,.14);padding-left:clamp(24px,3vw,44px);
+  align-self:stretch}
+.ap-pill-body{max-width:34ch;color:#fff;font-size:clamp(17px,1.5vw,21px);line-height:1.5;
+  letter-spacing:-.012em;margin:0;padding-top:4px}
+.ap-pill-body[hidden]{display:none}
+/* Amber marks the human touchpoints and nothing else, here as everywhere. */
+.ap-pill-body .ap-tag{display:block;margin-top:9px;font-size:12px;letter-spacing:.08em;
+  text-transform:uppercase;color:#E2A94E}
+
 /* Feature comparison matrix. Scrolls on its own so the page never does. */
 .pm-scroll{overflow-x:auto;margin-top:clamp(28px,3.4vw,44px);border-top:1px solid var(--line-2)}
 .pm{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
@@ -921,6 +1296,28 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
 .pm td.pm-yes{color:var(--signal)}
 .pm td.pm-no{color:var(--line-2)}
 .pm tbody tr:last-child td{border-bottom:0}
+
+/* Below 700px the matrix stops being a table. Three tier columns will not fit
+   on a phone, and horizontally scrolling it is worse than useless: the header
+   row scrolls away with the page, so the ticks lose the only thing that says
+   which tier they belong to. Each feature becomes its own block instead, with
+   the tier read off data-col. */
+@media (max-width:700px){
+  .pm-scroll{overflow-x:visible;border-top:0}
+  .pm{min-width:0;width:100%;display:block}
+  .pm thead{display:none}
+  .pm tbody,.pm tr,.pm td{display:block;width:auto}
+  .pm tbody tr{border-bottom:1px solid var(--line);padding:14px 0}
+  .pm tbody tr:last-child{border-bottom:0}
+  .pm td{border-bottom:0;padding:0}
+  .pm tbody tr:not(.pm-group) > td:first-child{font-size:15px;color:var(--paper);margin-bottom:9px}
+  .pm td.pm-cell{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+    width:auto;text-align:right;padding:5px 0;border-top:1px solid var(--line)}
+  .pm td.pm-cell::before{content:attr(data-col);font-family:var(--mono);font-size:9.5px;
+    letter-spacing:.15em;text-transform:uppercase;color:var(--dim);text-align:left}
+  .pm tr.pm-group{border-bottom:0;padding:0}
+  .pm .pm-group td{padding:26px 0 2px}
+}
 
 /* "Up next" — the link forward at the foot of a product or category page. */
 .nextup{border-top:1px solid var(--line-2);margin-top:clamp(40px,5vw,72px);padding-top:clamp(26px,3vw,40px);
@@ -959,76 +1356,59 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
    `header.top` is already `position:sticky`, which is a positioned value
    and therefore the containing block — adding `position:relative` here
    would silently un-stick the header. */
-.mega-wrap{position:static;display:inline-flex}
-.mega-trigger{display:inline-flex;align-items:center;gap:6px}
+/* Dropdown panel, on the reference's arrangement rather than the full-bleed
+   band this replaced. Measured off it at 1440px: 280px wide, rgba(0,0,0,.4),
+   15px radius, blur(20px), no border and no shadow — the blur alone
+   separates it from the page, which is why adding a shadow makes it look
+   like a different component.
+
+   `position:relative` on the wrapper so the panel anchors under its own
+   trigger; the old panel was full-bleed and anchored to the bar. */
+.mega-wrap{position:relative;display:inline-flex}
+.mega-trigger{display:inline-flex;align-items:center;gap:6px;border-radius:999px}
 .mega-trigger .chev{width:9px;height:6px;opacity:.45;transition:transform .25s,opacity .25s}
 .mega-wrap.open .chev{transform:rotate(180deg);opacity:.9}
-.mega-wrap.open>.mega-trigger{color:var(--paper);background:rgba(12,22,34,.05)}
+/* The trigger takes a pill while its panel is open, as on the reference. */
+.mega-wrap.open>.mega-trigger{background:rgba(255,255,255,.16);opacity:1}
+header.top:not(.over) .mega-wrap.open>.mega-trigger{background:rgba(13,16,22,.07)}
 
 .mega{
-  /* 72px is the bar height. Hanging the panel off the bar rather than
-     the whole header puts it over the dispatch rail instead of below it,
-     so the bar and the panel read as one surface. */
-  position:absolute;top:72px;left:50%;transform:translateX(-50%);
-  z-index:60;display:grid;grid-template-columns:170px minmax(0,1fr);
-  min-width:660px;max-width:min(94vw,820px);
-  background:var(--raise);
-  border:1px solid var(--line);
-  border-top:0;
-  box-shadow:0 30px 70px -20px rgba(12,22,34,.22);
+  position:absolute;top:calc(100% + 10px);left:0;z-index:80;
+  min-width:280px;padding:14px;border-radius:15px;
+  /* The reference uses .4 black. Over a light page that composites to a mid
+     grey and puts its white links at 2.75:1 — under the 4.5 minimum, on
+     their site as much as ours. .66 is the least that clears it: measured
+     5.9:1 here, and it still reads as the same smoked-glass panel. */
+  background:rgba(13,16,22,.66);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  display:grid;grid-template-columns:repeat(var(--mega-cols,2),minmax(120px,max-content));
+  gap:4px 26px;
+}
+/* No backdrop-filter: the panel would be 40% black over live text and
+   unreadable, so it goes near-solid instead. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .mega{background:rgba(13,16,22,.94)}
 }
 .mega[hidden]{display:none}
-
-/* Left rail: mono labels, a rule marking the live one. No filled pill. */
-.mega-rail{display:flex;flex-direction:column;padding:26px 0;border-right:1px solid var(--line)}
-.mega-tab{
-  background:none;border:0;border-left:2px solid transparent;
-  padding:11px 22px;text-align:left;cursor:pointer;
-  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--dim);transition:color .2s,border-color .2s;
+.mega-col{display:flex;flex-direction:column;min-width:0}
+.mega .mega-head{
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;font-weight:400;
+  color:rgba(255,255,255,.66);margin:6px 0 6px 10px;white-space:nowrap;
 }
-.mega-tab:hover{color:var(--muted)}
-.mega-tab.on{color:var(--signal);border-left-color:var(--signal)}
-.mega-tab:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
-
-.mega-views{padding:26px 30px 0}
-.mega-view[hidden]{display:none}
-.mega-head{
-  margin:0 0 4px;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--dim);
+/* The first heading in each column sits flush; later ones get air above so
+   a second group reads as separate rather than as a run-on list. */
+.mega-col .mega-head + a{margin-top:0}
+/* Scoped under .mega so these beat `.links a`, which is (0,1,1) and would
+   otherwise hand the panel the bar's dark ink — invisible on dark glass.
+   That was the bug: the panel links were rendering at 3:1, not the 6.3:1 I
+   had measured, because I measured the background and assumed the text. */
+.mega .mega-row{
+  display:block;padding:7px 10px;border-radius:8px;white-space:nowrap;
+  font-size:14px;letter-spacing:-.01em;color:rgba(255,255,255,.92);opacity:1;
+  transition:background .16s ease,color .16s ease;
 }
-
-/* Rows: number, name, description, separated by hairlines. */
-.mega-list{border-top:1px solid var(--line);margin-top:14px}
-.mega-row{
-  display:grid;grid-template-columns:34px minmax(0,1fr) 16px;align-items:baseline;gap:0 14px;
-  padding:13px 0;border-bottom:1px solid var(--line);
-  transition:background .18s;
-}
-.mega-row:last-child{border-bottom:0}
-.mega-n{
-  font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--dim);
-  font-variant-numeric:tabular-nums;transition:color .18s;
-}
-.mega-txt b{display:block;font-weight:400;font-size:16px;color:var(--paper);letter-spacing:-.012em;transition:color .18s}
-.mega-txt em{display:block;margin-top:3px;font-style:normal;font-size:13.5px;color:var(--dim);line-height:1.45}
-.mega-go{font-size:14px;color:transparent;transition:color .18s,transform .18s;transform:translateX(-4px)}
-.mega-row:hover{background:linear-gradient(90deg,rgba(27,116,126,.05),transparent 70%)}
-.mega-row:hover .mega-n,.mega-row:hover .mega-txt b,.mega-row:hover .mega-go{color:var(--signal)}
-.mega-row:hover .mega-go{transform:none}
-.mega-row:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
-
-/* One real next step, never filler. */
-.mega-foot{
-  display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;
-  margin:0 -30px;padding:15px 30px;border-top:1px solid var(--line);background:var(--ink);
-}
-.mega-foot span{font-size:13.5px;color:var(--muted)}
-.mega-foot em{
-  font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--signal);
-}
-.mega-foot:hover em{text-decoration:underline;text-underline-offset:3px}
+.mega .mega-row:hover{background:rgba(255,255,255,.12);color:#fff}
+.mega .mega-row:focus-visible{outline:2px solid rgba(255,255,255,.6);outline-offset:-2px}
 
 /* Panels are pointer affordances; below this width the drawer lists
    everything inside them instead. */
@@ -1044,11 +1424,15 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
 
 /* Scrim behind an open mega panel. Slight — enough to push the page back
    and let the panel sit forward, not enough to read as a modal. */
+/* Kept, but much lighter than it was. It was tuned for a full-bleed band
+   that covered the width of the page; dimming the whole viewport by a third
+   behind a 280px dropdown reads as heavy-handed, and the reference has no
+   scrim at all — its panel's own blur does the separating. */
 .mega-scrim{
   position:fixed;inset:0;z-index:-1;
-  background:rgba(12,18,24,.34);
-  -webkit-backdrop-filter:blur(4px);
-  backdrop-filter:blur(4px);
+  background:rgba(12,18,24,.14);
+  -webkit-backdrop-filter:blur(2px);
+  backdrop-filter:blur(2px);
   opacity:0;pointer-events:none;
   transition:opacity .22s ease;
 }
