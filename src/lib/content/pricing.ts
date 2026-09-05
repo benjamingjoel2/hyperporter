@@ -231,13 +231,13 @@ export const byLadder = (side: Side): Ladder => {
 export const SECURITY = {
   eyebrow: 'Always on. Always secure.',
   title: 'Your data is in safe hands.',
-  lede: "From encryption to access control, Hyperporter is built to the standard travel businesses' contracts, rates, and traveler data actually deserve.",
+  lede: "From encryption to access control, Hyperporter is built to the standard travel businesses' contracts, rates, and traveller data actually deserve.",
   practicesEyebrow: 'Built on strong foundations',
   practicesTitle: 'The practices, in place from day one.',
   practices: [
     {
       title: 'Encryption everywhere',
-      body: 'TLS in transit, AES-256 at rest — contracts, rates, and traveler data protected the same way, on every tier.',
+      body: 'TLS in transit, AES-256 at rest — contracts, rates, and traveller data protected the same way, on every tier.',
     },
     {
       title: 'Zero standing access',

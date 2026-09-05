@@ -232,7 +232,7 @@ A.stupa=(r,C)=>{                                     /* Myanmar / Sri Lanka */
   o+=R(x-170,b-40,340,40,C.mid);
   o+=D(`M${x-120} ${b-40} q0 -180 120 -230 q120 50 120 230 Z`,C.near);
   o+=D(`M${x-30} ${b-238} q30 -60 60 0 Z`,C.near)+L(`M${x} ${b-286} v-40`,C.near,5)+C_(x,b-332,9,C.acc,.9);
-  [[x-210,.7],[x+210,.7]].forEach(([sx,s])=>{o+=D(`M${sx-40*s} ${b} q0 -120*s ${40*s} -150*s q${40*s} ${30*s} ${40*s} ${150*s} Z`.replace('-120*s',String(-120*s)),C.mid)+L(`M${sx} ${b-150*s} v${-26*s}`,C.mid,3);});
+  [[x-210,.7],[x+210,.7]].forEach(([sx,s])=>{o+=D(`M${sx-40*s} ${b} q0 ${-120*s} ${40*s} ${-150*s} q${40*s} ${30*s} ${40*s} ${150*s} Z`,C.mid)+L(`M${sx} ${b-150*s} v${-26*s}`,C.mid,3);});
   return o;};
 A.eiffel=(r,C)=>{                                    /* France */
   let o='';for(let i=0;i<14;i++)o+=R(i*92,G-40-((i*61)%54),80,94,C.far);

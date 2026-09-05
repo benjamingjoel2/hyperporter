@@ -61,7 +61,7 @@ export const CATEGORIES: Category[] = [
       },
       {
         name: 'Magic link creation',
-        body: 'Proposal / itinerary link, sent to travelers or partners.',
+        body: 'Proposal / itinerary link, sent to travellers or partners.',
         tier: 'Showcase',
       },
       {
@@ -122,7 +122,7 @@ export const CATEGORIES: Category[] = [
       },
     ],
     next: {
-      title: 'Talk to travelers and partners, wherever they already are.',
+      title: 'Talk to travellers and partners, wherever they already are.',
       desc: 'Communication covers in-platform inquiries, email, and WhatsApp.',
       cta: 'See Communication',
       href: '/solutions/communication',
@@ -132,8 +132,8 @@ export const CATEGORIES: Category[] = [
   {
     slug: 'communication',
     name: 'Communication',
-    desc: 'Talking to travelers and partners, inside and outside the platform.',
-    title: 'Talking to travelers and partners, inside and outside the platform.',
+    desc: 'Talking to travellers and partners, inside and outside the platform.',
+    title: 'Talking to travellers and partners, inside and outside the platform.',
     lede: 'Four features, from in-platform messaging through a full WhatsApp relay.',
     features: [
       {
@@ -153,7 +153,7 @@ export const CATEGORIES: Category[] = [
       },
       {
         name: 'WhatsApp Support Orchestrator',
-        body: 'Masked three-way relay — agency / supplier / traveler, live during Traveling. Metered per active trip.',
+        body: 'Masked three-way relay — agency / supplier / traveller, live during Traveling. Metered per active trip.',
         tier: 'Add-on',
       },
     ],
@@ -190,7 +190,7 @@ export const CATEGORIES: Category[] = [
     ],
     next: {
       title: 'Reach beyond a single trip thread.',
-      desc: 'Marketing covers outbound campaigns to your own traveler and client list.',
+      desc: 'Marketing covers outbound campaigns to your own traveller and client list.',
       cta: 'See Marketing',
       href: '/solutions/marketing',
     },
@@ -205,7 +205,7 @@ export const CATEGORIES: Category[] = [
     features: [
       {
         name: 'Email marketing',
-        body: 'Campaign sends to your own traveler/client list — separate from the transactional email integration in Communication.',
+        body: 'Campaign sends to your own traveller/client list — separate from the transactional email integration in Communication.',
         tier: 'Intelligence',
       },
     ],
