@@ -733,48 +733,31 @@ p{margin:0 0 16px}
 }
 
 /* ============ FOOTER ============ */
-footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56px,6vw,88px) 0 0;overflow:hidden}
-.f-cta{display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap}
-/* Sentence case, not the uppercase the global h2 carries -- this is a
-   closing line, not a section heading. */
-.f-cta h2{font-size:clamp(26px,2.6vw,40px);text-transform:none;line-height:1.15;margin:0;max-width:32ch}
-.f-hr{height:1px;background:var(--line);margin:clamp(30px,4vw,52px) 0 clamp(40px,5vw,68px)}
-.f-main{display:grid;grid-template-columns:1fr 2.2fr;gap:clamp(30px,5vw,80px);align-items:start}
-.f-brand{display:flex;flex-direction:column;align-items:flex-start}
-.f-mark{width:56px;height:56px;display:block;color:var(--paper);transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
+/* ---- footer ------------------------------------------------------------
+   The reference's format: dark ground, the mark top-left and the copyright
+   pinned to the bottom of that same column, link columns across the right
+   with grey labels and white links. Nothing above it and nothing below. */
+footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp(40px,5vw,72px);border-top:1px solid #1E242B}
+.f-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(30px,5vw,80px);align-items:stretch}
+.f-brand{display:flex;flex-direction:column;align-items:flex-start;min-height:100%}
+.f-mark{width:44px;height:44px;display:block;color:#fff;transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
 .f-mark svg{width:100%;height:100%;display:block}
 .f-mark svg rect{fill:currentColor}
 .f-mark svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6;stroke-linecap:butt}
-.f-mark:hover{color:var(--signal);transform:rotate(90deg)}
-.f-con{font-size:16px;line-height:1.6;color:var(--muted);margin-top:36px;max-width:34ch}
-.f-con div{margin-bottom:22px}
-.f-con a{text-decoration:none;border-bottom:1px solid transparent}
-.f-con a:hover{border-bottom-color:var(--line-2)}
+.f-mark:hover{color:#4FB3BD;transform:rotate(90deg)}
+.f-con{font-size:14px;line-height:1.6;color:#9AA1AA;margin-top:32px;max-width:34ch}
+.f-con div{margin-bottom:14px}
+.f-con a{color:#EDEFF2;text-decoration:none;border-bottom:1px solid transparent}
+.f-con a:hover{border-bottom-color:#4A525C}
+.f-copy{margin:auto 0 0;padding-top:48px;font-size:14px;line-height:1.5;color:#7D848E}
 .f-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,2.4vw,36px)}
-.f-col h4{display:block;font-family:var(--display);font-size:14px;font-weight:400;letter-spacing:-.01em;text-transform:none;color:var(--paper);margin:0 0 16px}
-.f-col a{display:block;color:var(--signal);font-family:var(--body);font-weight:400;font-size:14px;letter-spacing:-.01em;line-height:1.4;padding:4px 0;transition:color .2s}
-.f-col a:hover{color:var(--paper)}
-.f-pill{background:var(--paper);color:var(--void);border:0;border-radius:var(--radius);padding:15px 32px;font-size:15px;font-weight:400;white-space:nowrap;transition:transform .2s,box-shadow .2s}
-.f-pill:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(12,22,34,.20)}
-/* Sentence-case sans, matching the reference -- not the mono capitals the
-   OH footer used along the bottom. */
-/* The oversized wordmark that closes the reference's footer. Drawn as SVG
-   with textLength rather than a vw font-size: "HYPERPORTER" is 11 characters
-   where the reference's mark is 6, so a 15vw value overflows the page at
-   every width — and would break again whenever the webfont falls back to a
-   wider face. textLength fits the container exactly, always.
-
-   The reference sets its mark in a serif; ours stays in the site face. PT
-   Serif was dropped in Aug 2026 at the founder's instruction, and bringing a
-   serif back for one lockup is a design-system decision, not a styling one. */
-.f-logotype{padding-block:clamp(46px,7vw,104px) clamp(30px,4vw,60px)}
-.f-logotype svg{display:block;width:100%;height:auto;fill:var(--signal);overflow:visible}
-
-.f-bottom{display:flex;align-items:center;gap:14px 44px;flex-wrap:wrap;margin-top:clamp(34px,4.5vw,64px);padding-top:clamp(20px,2.6vw,30px);border-top:1px solid var(--line);padding-bottom:clamp(20px,4vw,44px);font-size:15px;color:var(--dim)}
-.f-bottom a{color:var(--dim);transition:color .2s}
-.f-bottom a:hover{color:var(--paper)}
-.f-copy{margin-right:auto}
-@media (max-width:900px){.f-main{grid-template-columns:1fr;gap:44px}.f-cols{grid-template-columns:1fr 1fr;gap:34px 30px}}
+.f-col h4{display:block;font-family:var(--display);font-size:14px;font-weight:400;letter-spacing:-.01em;text-transform:none;color:#7D848E;margin:0 0 18px}
+.f-col a{display:block;color:#EDEFF2;font-family:var(--body);font-weight:400;font-size:14px;letter-spacing:-.01em;line-height:1.4;padding:6px 0;transition:color .2s}
+.f-col a:hover{color:#4FB3BD}
+/* Stacked, the copyright belongs at the bottom, not between the address and
+   the links — so the brand column dissolves into the flex column and its
+   pieces are ordered directly. */
+@media (max-width:900px){.f-main{display:flex;flex-direction:column;gap:40px}.f-brand{display:contents}.f-con{margin-top:0}.f-cols{grid-template-columns:1fr 1fr;gap:34px 30px}.f-copy{order:9;margin:0;padding-top:8px}}
 @media (max-width:520px){.f-cols{grid-template-columns:1fr}}
 
 /* ============ DESTINATIONS ============ */
@@ -993,9 +976,9 @@ footer{border-top:1px solid var(--line);background:var(--void);padding:clamp(56p
    all, so those are widened to cover both tags rather than duplicated. */
 
 /* 1. Underlines. */
-.links a,.drawer a,.f-col a,.cta-nav,.dp-back,.f-pill,.gua-cta,
+.links a,.drawer a,.f-col a,.cta-nav,.dp-back,.gua-cta,
 .dreg,.visit,.r-back,.feat,.prow,.back,.art-next,.btn,.d-cols a,
-.plink,.rnode,.f-bottom a,.rlist a,.btn-o{text-decoration:none}
+.plink,.rnode,.rlist a,.btn-o{text-decoration:none}
 .rlist a{color:inherit}
 
 /* 2. Elements whose own rules set width or vertical margin, which an inline

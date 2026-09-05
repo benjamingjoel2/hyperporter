@@ -69,7 +69,7 @@ export const NAV: NavItem[] = [
           { label: 'Inquiry', desc: 'How a new lead enters the CRM', href: '/solutions/inquiry' },
           { label: 'Operations', desc: 'CRM and stage automation', href: '/solutions/operations' },
           { label: 'Branding', desc: 'Your identity on everything customers see', href: '/solutions/branding' },
-          { label: 'Communication', desc: 'Talking to travelers and partners, everywhere', href: '/solutions/communication' },
+          { label: 'Communication', desc: 'Talking to travellers and partners, everywhere', href: '/solutions/communication' },
           { label: 'Payments', desc: 'Money in, money out, fully automated', href: '/solutions/payments' },
           { label: 'Marketing', desc: 'Outbound reach beyond a single trip', href: '/solutions/marketing' },
         ],

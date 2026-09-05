@@ -86,7 +86,7 @@ export const PRODUCTS: Product[] = [
       {
         kind: 'Case — Travel agency',
         title: 'Coordinating a trip without a shared inbox.',
-        body: "An agent runs everything through the CRM — inquiry in, magic link out to both the traveler and the DMC, proposal generated straight from the same data. No spreadsheet, no copy-pasting between three apps. Once volume picks up, the manual back-and-forth is the bottleneck — that's what Autopilot automates. And if the agency doesn't have a supplier list yet, Horizon gives them one, free, on Showcase.",
+        body: "An agent runs everything through the CRM — inquiry in, magic link out to both the traveller and the DMC, proposal generated straight from the same data. No spreadsheet, no copy-pasting between three apps. Once volume picks up, the manual back-and-forth is the bottleneck — that's what Autopilot automates. And if the agency doesn't have a supplier list yet, Horizon gives them one, free, on Showcase.",
       },
       {
         kind: 'Case — Supplier / DMC',
@@ -122,7 +122,7 @@ export const PRODUCTS: Product[] = [
       {
         kind: 'Case — Travel agency',
         title: 'Same agency, three weeks later.',
-        body: "An agency running 20 trips a month on Portal alone hits a ceiling — every reprice, every confirmation chase, every status update is a human doing it manually. Autopilot doesn't change what they offer travelers, it changes how much of it one person can run at once.",
+        body: "An agency running 20 trips a month on Portal alone hits a ceiling — every reprice, every confirmation chase, every status update is a human doing it manually. Autopilot doesn't change what they offer travellers, it changes how much of it one person can run at once.",
       },
     ],
     next: {
@@ -153,7 +153,7 @@ export const PRODUCTS: Product[] = [
       {
         n: '02',
         name: 'Memory',
-        body: "Carries forward your quoting style, preferred suppliers, and traveler preferences — so Atlas isn't re-taught from scratch on every trip.",
+        body: "Carries forward your quoting style, preferred suppliers, and traveller preferences — so Atlas isn't re-taught from scratch on every trip.",
       },
       {
         n: '03',
