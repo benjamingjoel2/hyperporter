@@ -1367,8 +1367,9 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .mega-in{max-width:var(--max);margin:0 auto;padding:44px var(--pad) 52px;
   display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:clamp(40px,6vw,120px);align-items:start}
 .mega-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px clamp(40px,6vw,120px);max-width:880px}
-/* Three groups: the first spans both rows, the other two stack beside it. */
-.mega-groups.three .mega-group:first-child{grid-row:span 2}
+/* Three groups take three columns, one each, so a long panel reads across
+   rather than down. */
+.mega-groups.three{grid-template-columns:repeat(3,minmax(0,1fr));gap:36px clamp(28px,3.5vw,64px);max-width:none}
 .mega-group{display:flex;flex-direction:column;min-width:0}
 .mega .mega-head{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 6px;white-space:nowrap}
 /* Scoped under .mega so these beat `.links a`. */
@@ -1401,7 +1402,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .mega-new{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:#DDF3E4;color:#146B4A}
 .mega-feat-d{margin:0 2px;font-size:13.5px;line-height:1.45;color:var(--muted)}
 .mega .mega-feat:hover .mega-feat-t,.dsub .mega-feat:hover .mega-feat-t{color:var(--signal)}
-@media (max-width:1180px){.mega-in{grid-template-columns:minmax(0,1fr) 260px;gap:40px}}
+@media (max-width:1180px){.mega-in{grid-template-columns:minmax(0,1fr) 260px;gap:40px}.mega-groups.three{gap:36px 28px}}
 
 /* Panels are pointer affordances; below this width the drawer lists
    everything inside them instead. */
