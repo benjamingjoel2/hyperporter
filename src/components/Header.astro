@@ -12,6 +12,7 @@
 import { FEED } from '../lib/feed';
 import { NAV, DRAWER } from '../lib/content/nav';
 import type { NavItem } from '../lib/content/nav';
+import NavFeature from './NavFeature.astro';
 
 interface Props {
   current?:
@@ -46,12 +47,6 @@ const row = FEED.map(
 ).join('');
 const stream = row + row;
 
-/* The dots on the Horizon card: a spread that reads as a map without being
-   one. Percent positions inside the card. */
-const DOTS = [
-  [22, 40], [30, 30], [38, 55], [47, 22], [52, 46], [58, 70], [64, 38], [70, 60],
-  [76, 28], [82, 48], [88, 36], [35, 72], [56, 84], [45, 66],
-];
 ---
 
 <header class="top">
@@ -109,43 +104,7 @@ const DOTS = [
                       </div>
                     ))}
                   </div>
-                  {n.feature && (
-                    <a class="mega-feat" href={n.feature.href}>
-                      <div class:list={['mega-card', `mega-card-${n.feature.card}`]} aria-hidden="true">
-                        {n.feature.card === 'whatsapp' && (
-                          <>
-                            <span class="mc-kicker">WhatsApp integration</span>
-                            <span class="mc-bub">Hi! Any update on our Peru dates?</span>
-                            <span class="mc-bub me">Confirmed — Nov 12, 8 days. Sending the itinerary now.</span>
-                            <span class="mc-bub">Perfect, thank you!</span>
-                          </>
-                        )}
-                        {n.feature.card === 'escalation' && (
-                          <>
-                            <span class="mc-row"><i></i>J. Mendes asked about private guide access<em>Reply</em></span>
-                            <span class="mc-row"><i></i>Andes Roots requested a date change<em>Review</em></span>
-                            <span class="mc-row ok"><i></i>Kenya deposit confirmed by supplier<em>Approve</em></span>
-                          </>
-                        )}
-                        {n.feature.card === 'horizon' &&
-                          DOTS.map(([x, y]) => <i class="mc-dot" style={`left:${x}%;top:${y}%`}></i>)}
-                        {n.feature.card === 'reading' && (
-                          <>
-                            <span class="mc-kicker">From the blog</span>
-                            <span class="mc-title">Nine stages: building a shared vocabulary for trip operations</span>
-                            <span class="mc-line" style="width:88%"></span>
-                            <span class="mc-line" style="width:72%"></span>
-                            <span class="mc-line" style="width:80%"></span>
-                          </>
-                        )}
-                      </div>
-                      <p class="mega-feat-t">
-                        {n.feature.title}
-                        {n.feature.badge && <span class="mega-new">{n.feature.badge}</span>}
-                      </p>
-                      <p class="mega-feat-d">{n.feature.desc}</p>
-                    </a>
-                  )}
+                  {n.feature && <NavFeature feature={n.feature} />}
                 </div>
               </div>
             </div>
@@ -193,10 +152,14 @@ const DOTS = [
                   <>
                     {g.heading && <p class="dsub-h">{g.heading}</p>}
                     {g.items.map((r) => (
-                      <a href={r.href}>{r.label}</a>
+                      <a class="ditem" href={r.href}>
+                        <b>{r.label}</b>
+                        <span>{r.desc}</span>
+                      </a>
                     ))}
                   </>
                 ))}
+                {n.feature && <NavFeature feature={n.feature} />}
               </div>
             </div>
           ) : (
@@ -206,11 +169,11 @@ const DOTS = [
           )
         )
       }
-      <div class="drawer-foot">
-        <a class="drawer-login" href="https://portal.hyperporter.com/login">Log in</a>
-        <a class="btn drawer-cta" href="https://portal.hyperporter.com">Get started</a>
-      </div>
     </nav>
+    <div class="drawer-foot">
+      <a class="drawer-cta" href="https://portal.hyperporter.com">Get started</a>
+      <a class="drawer-login" href="https://portal.hyperporter.com/login">Log in</a>
+    </div>
   </div>
 
 <script>
@@ -254,12 +217,11 @@ const DOTS = [
     const apply = (): void => {
       ticking = false;
       const h = bar.offsetHeight;
-      /* The open drawer is a dark panel hanging off the bar, so the bar has to
-         go dark with it — otherwise the burger's white cross sits on the white
-         bar of every page that isn't the homepage, and vanishes. */
+      /* The open drawer is a light sheet hanging off the bar, so the bar
+         stays light with it whatever is behind. */
       bar.classList.toggle(
         'over',
-        document.body.classList.contains('drawer-open') ||
+        !document.body.classList.contains('drawer-open') &&
           darks.some((el) => {
             const r = el.getBoundingClientRect();
             return r.top < h && r.bottom > 0;

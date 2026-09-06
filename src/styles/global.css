@@ -162,6 +162,8 @@ header.top.over .bar-acts .login{border-color:rgba(255,255,255,.4)}
 header.top.over .cta-nav{background:#fff;color:var(--paper);border-color:#fff}
 header.top.over .links a:hover,header.top.over .mark:hover .glyph{opacity:1}
 header.top.over .mark .glyph{color:#fff}
+header.top.over .burger span{background:#fff}
+body.drawer-open header.top .burger span{background:var(--paper)}
 header.top.over .rail{border-color:rgba(255,255,255,.22)}
 /* The tag needs a ground of its own or the marquee scrolls visibly behind
    the label and the two sets of letters interleave. */
@@ -204,60 +206,52 @@ header.top:not(.over) .rail .tag{background:var(--raise)}
 .cta-nav{display:inline-flex;align-items:center;background:var(--paper);color:#fff;border:1px solid var(--paper);
   padding:9px 16px;border-radius:var(--radius);font-size:14px;white-space:nowrap;transition:background .2s,color .2s}
 .cta-nav:hover{background:#000}
-.burger{display:none;background:none;border:1px solid var(--line-2);border-radius:6px;padding:10px}
-.burger span{display:block;width:18px;height:1.5px;background:var(--paper);margin:4px 0}
-/* Mobile menu: a full-height sheet below the chrome, on the same dark glass
-   as the desktop dropdown, so the two read as one component at two sizes. */
+.burger{display:none;background:none;border:0;padding:10px;margin-right:-10px}
+.burger span{display:block;width:20px;height:1.5px;background:var(--paper);margin:5px 0}
+/* Mobile menu, in the reference's format: a light sheet below the chrome,
+   the top-level items in display type with a chevron, the open one listing
+   its items with their line and ending on the feature card, and the two
+   actions pinned to the bottom with the list fading under them. */
 .drawer{display:none;position:fixed;left:0;right:0;top:var(--chrome-h,111px);bottom:0;z-index:65;
-  background:rgba(13,16,22,.86);
-  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
-  overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .drawer{background:rgba(13,16,22,.97)}
-}
+  background:var(--void);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .drawer.open{display:block}
-/* With the drawer open the bar is the top edge of the same dark sheet, not
-   glass over a photograph: the hero scrim leaves it a washed grey that reads
-   as a seam against the panel below. Take the drawer's own ground instead. */
-body.drawer-open header.top{background:rgba(13,16,22,.86);border-bottom-color:rgba(255,255,255,.10)}
+/* The bar becomes the top edge of the same light sheet. */
+body.drawer-open header.top{background:var(--void);border-bottom-color:transparent}
 body.drawer-open header.top::before{opacity:0}
-body.drawer-open header.top .rail{border-top-color:rgba(255,255,255,.10)}
-body.drawer-open header.top .rail .tag{border-right-color:rgba(255,255,255,.14)}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  body.drawer-open header.top{background:rgba(13,16,22,.97)}
-}
 /* The page behind must not scroll while the sheet covers it, or a flick on
    the overlay moves the article underneath and the menu appears to jump. */
 body.drawer-open{overflow:hidden}
 
-.drawer-in{padding:8px 0 40px}
+.drawer-in{padding:28px 0 140px}
 .drow{display:flex;align-items:center;justify-content:space-between;gap:16px;
-  width:100%;background:none;border:0;border-bottom:1px solid rgba(255,255,255,.10);
-  color:rgba(255,255,255,.94);font-family:inherit;font-size:19px;letter-spacing:-.015em;
-  padding:18px var(--pad);text-align:left;cursor:pointer}
-.drow svg{width:12px;height:8px;flex:none;opacity:.6;transition:transform .22s ease}
+  width:100%;background:none;border:0;color:var(--paper);font-family:var(--display);
+  font-size:clamp(30px,8.5vw,38px);letter-spacing:-.03em;line-height:1.1;
+  padding:12px var(--pad);text-align:left;cursor:pointer}
+.drow svg{width:14px;height:9px;flex:none;opacity:.75;transition:transform .22s ease}
 .dtog[aria-expanded="true"] svg{transform:rotate(180deg)}
-.dtog[aria-expanded="true"]{color:#fff}
 
-.dsub{padding:2px 0 14px;background:rgba(0,0,0,.16);border-bottom:1px solid rgba(255,255,255,.10)}
+.dsub{padding:10px 0 34px}
 .dsub[hidden]{display:none}
-.dsub-h{margin:14px 0 4px;padding:0 var(--pad);
-  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-  color:rgba(255,255,255,.46)}
-.dsub a{display:block;padding:11px var(--pad);font-size:16px;color:rgba(255,255,255,.82)}
-.dsub a:active{color:#fff}
+.dsub-h{margin:14px 0 2px;padding:0 var(--pad);
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.ditem{display:block;padding:12px var(--pad);color:var(--paper)}
+.ditem b{display:block;font-weight:600;font-size:16px;letter-spacing:-.01em;margin-bottom:4px}
+.ditem span{display:block;font-size:15px;line-height:1.45;color:var(--muted);max-width:40ch}
+.dsub .mega-feat{display:block;margin:18px var(--pad) 0}
 
-.drawer-foot{display:flex;flex-direction:column;gap:14px;padding:26px var(--pad) 0}
-.drawer-login{color:rgba(255,255,255,.82);font-size:16px}
-.drawer-cta{justify-content:center;padding:15px 18px;font-size:16px}
+.drawer-foot{position:fixed;left:0;right:0;bottom:0;z-index:66;display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  padding:18px var(--pad) calc(18px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,var(--void) 72%,rgba(250,250,249,0))}
+.drawer:not(.open) .drawer-foot{display:none}
+.drawer-cta,.drawer-login{display:block;text-align:center;padding:16px 12px;border-radius:var(--radius);font-size:16px;letter-spacing:-.01em}
+.drawer-cta{background:var(--paper);color:#fff;border:1px solid var(--paper)}
+.drawer-login{color:var(--paper);border:1px solid var(--paper)}
 
 /* Burger turns into a close cross while the sheet is open. */
-.burger span{transition:transform .22s ease,opacity .18s ease,background .22s ease}
-.burger.on{border-color:rgba(255,255,255,.34)}
-.burger.on span{background:#fff}
-.burger.on span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.burger span{transition:transform .22s ease,opacity .18s ease}
+.burger.on span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
 .burger.on span:nth-child(2){opacity:0}
-.burger.on span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+.burger.on span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 
 /* ---- dispatch rail (signature) ---- */
 .rail{height:34px;position:relative;z-index:1;display:flex;align-items:center;overflow:hidden;border-top:1px solid var(--line);background:transparent}
@@ -1378,15 +1372,19 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .mega-group{display:flex;flex-direction:column;min-width:0}
 .mega .mega-head{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 6px;white-space:nowrap}
 /* Scoped under .mega so these beat `.links a`. */
-.mega .mega-row{display:block;padding:11px 0;color:var(--paper);opacity:1;text-decoration:none;max-width:34ch;border-radius:0;transition:none;background:none}
+.mega .mega-row{display:block;padding:11px 12px;margin:0 -12px;color:var(--paper);opacity:1;text-decoration:none;max-width:calc(34ch + 24px);border-radius:10px;background:none;transition:background .15s ease}
 .mega .mega-row b{display:block;font-weight:600;font-size:15px;letter-spacing:-.01em;line-height:1.3;margin-bottom:4px}
 .mega .mega-row span{display:block;font-size:13.5px;line-height:1.45;color:var(--muted)}
-.mega .mega-row:hover{background:none}
+.mega .mega-row:hover{background:var(--ink)}
 .mega .mega-row:hover b{color:var(--signal)}
 .mega .mega-row:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 /* Feature card. */
-.mega .mega-feat{display:block;color:var(--paper);text-decoration:none;opacity:1;padding:0;background:none}
-.mega-card{position:relative;height:170px;border-radius:12px;background:#0B0E12;color:#EDEFF2;padding:18px 20px;overflow:hidden;
+/* The feature sits in a tinted card of its own, image and caption together,
+   so it reads as one object beside the columns. */
+.mega .mega-feat,.dsub .mega-feat{display:block;color:var(--paper);text-decoration:none;opacity:1;padding:14px 14px 20px;
+  background:var(--ink);border:1px solid var(--line);border-radius:16px;transition:background .2s,border-color .2s}
+.mega .mega-feat:hover,.dsub .mega-feat:hover{background:var(--steel);border-color:var(--line-2)}
+.mega-card{position:relative;min-height:170px;border-radius:12px;background:#0B0E12;color:#EDEFF2;padding:18px 20px;overflow:hidden;
   display:flex;flex-direction:column;gap:8px;font-size:12px;line-height:1.35}
 .mc-kicker{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#7FD1C7;margin-bottom:2px}
 .mc-bub{align-self:flex-start;max-width:78%;padding:7px 10px;border-radius:9px;background:#1A2028;color:#EDEFF2}
@@ -1399,10 +1397,10 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .mc-dot{position:absolute;width:5px;height:5px;border-radius:50%;background:#7FD1C7;box-shadow:0 0 0 3px rgba(127,209,199,.12)}
 .mc-title{font-size:13.5px;line-height:1.35;color:#fff;margin:2px 0 6px}
 .mc-line{height:6px;border-radius:3px;background:#222932}
-.mega-feat-t{margin:16px 0 8px;font-size:15px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mega-feat-t{margin:16px 2px 8px;font-size:15px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .mega-new{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:#DDF3E4;color:#146B4A}
-.mega-feat-d{margin:0;font-size:13.5px;line-height:1.45;color:var(--muted)}
-.mega .mega-feat:hover .mega-feat-t{color:var(--signal)}
+.mega-feat-d{margin:0 2px;font-size:13.5px;line-height:1.45;color:var(--muted)}
+.mega .mega-feat:hover .mega-feat-t,.dsub .mega-feat:hover .mega-feat-t{color:var(--signal)}
 @media (max-width:1180px){.mega-in{grid-template-columns:minmax(0,1fr) 260px;gap:40px}}
 
 /* Panels are pointer affordances; below this width the drawer lists
