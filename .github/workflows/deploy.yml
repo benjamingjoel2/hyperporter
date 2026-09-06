@@ -13,6 +13,12 @@
 # The branch is force-pushed as a single fresh commit each time, so it holds
 # the current build and nothing else — otherwise the repository would grow by
 # a full copy of the site on every deploy.
+#
+# Once the deploy branch is published, the last two steps SSH to the server,
+# pull that branch, and confirm the live site serves this exact commit. They
+# run only when the DEPLOY_SSH_KEY secret exists, so the workflow still
+# builds and publishes on a fork or before the key is set up. See DEPLOY.md
+# for the one-time setup.
 name: Deploy
 
 on:
@@ -29,9 +35,17 @@ concurrency:
   group: deploy
   cancel-in-progress: true
 
+env:
+  # Empty until the secret is set; the deploy steps key off it.
+  DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+  DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+  DEPLOY_HOST: ${{ vars.DEPLOY_HOST || 'hyperporter.com' }}
+  DEPLOY_USER: ${{ vars.DEPLOY_USER || 'root' }}
+  DEPLOY_PATH: ${{ vars.DEPLOY_PATH || '/opt/hyperporter/site' }}
+
 jobs:
   build-and-publish:
-    name: Build and publish to the deploy branch
+    name: Build, publish, deploy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,6 +76,11 @@ jobs:
           echo "$count HTML pages built"
           [ "$count" -ge 150 ] || { echo "only $count pages — expected 150+"; exit 1; }
 
+      - name: Stamp the build
+        # The live check below reads this back over HTTPS, so a deploy only
+        # passes when the server is serving this commit and not the last one.
+        run: echo "$GITHUB_SHA" > dist/build.txt
+
       - name: Publish to the deploy branch
         run: |
           cd dist
@@ -73,3 +92,26 @@ jobs:
           git push -f \
             "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
             HEAD:deploy
+
+      - name: Pull the deploy branch on the server
+        if: env.DEPLOY_KEY != ''
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts && chmod 644 ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key \
+              -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o BatchMode=yes -o ConnectTimeout=20 \
+              "$DEPLOY_USER@$DEPLOY_HOST" \
+              "cd '$DEPLOY_PATH' && git fetch --depth 1 origin deploy && git reset --hard origin/deploy"
+          rm -f ~/.ssh/deploy_key
+
+      - name: Confirm the live site serves this build
+        if: env.DEPLOY_KEY != ''
+        run: |
+          for i in 1 2 3 4 5 6; do
+            live=$(curl -fsS --max-time 15 "https://$DEPLOY_HOST/build.txt" || true)
+            if [ "$live" = "$GITHUB_SHA" ]; then echo "live site serves $live"; exit 0; fi
+            sleep 5
+          done
+          echo "live site serves '$live', expected $GITHUB_SHA"
+          exit 1
