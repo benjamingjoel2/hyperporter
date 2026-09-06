@@ -1,14 +1,17 @@
 ---
 /**
- * Ported from hyperporter-3.html's <header class="top">. The nav items
- * were `<button onclick="go(id)">` driving the old client-side router;
- * they're real `<a href>` links now, and `current` picks the active one
- * server-side instead of `go()` toggling a `.act` class at runtime.
- * The dispatch-rail marquee is unchanged (same FEED data, doubled for the
- * CSS `march` loop). The UTC clock that used to sit in the bar is gone.
+ * The site's chrome: wordmark left, five items, actions right, and the
+ * three panels — Tools, Automations, Solutions, and Resources open one —
+ * in the reference's format: described items in labelled columns and a
+ * feature card on the right. The dispatch-rail marquee sits under the bar.
+ *
+ * `current` is the page's own idea of where it lives (product, customers,
+ * blog…) and is folded onto the five items here, so a page does not have
+ * to know how the bar is arranged.
  */
 import { FEED } from '../lib/feed';
 import { NAV, DRAWER } from '../lib/content/nav';
+import type { NavItem } from '../lib/content/nav';
 
 interface Props {
   current?:
@@ -25,12 +28,30 @@ interface Props {
 
 const { current } = Astro.props;
 
+const ACTIVE: Record<string, NavItem['id']> = {
+  product: 'tools',
+  solutions: 'tools',
+  customers: 'solutions',
+  pricing: 'pricing',
+  security: 'resources',
+  destinations: 'resources',
+  blog: 'resources',
+  about: 'resources',
+};
+const active = current ? ACTIVE[current] : undefined;
 
 const row = FEED.map(
   ([city, from, to, human]) =>
     `<span class="ent${human ? ' h' : ''}"><b>${city}</b>${from} <u>&rarr;</u> ${to}</span>`
 ).join('');
 const stream = row + row;
+
+/* The dots on the Horizon card: a spread that reads as a map without being
+   one. Percent positions inside the card. */
+const DOTS = [
+  [22, 40], [30, 30], [38, 55], [47, 22], [52, 46], [58, 70], [64, 38], [70, 60],
+  [76, 28], [82, 48], [88, 36], [35, 72], [56, 84], [45, 66],
+];
 ---
 
 <header class="top">
@@ -39,49 +60,6 @@ const stream = row + row;
       header's own opaque background — the bar and the panel stay crisp. */}
   <div class="mega-scrim" aria-hidden="true"></div>
   <div class="bar">
-    <nav class="links" id="links">
-      {
-        NAV.map((n) =>
-          n.tabs ? (
-            <div class="mega-wrap" data-mega={n.id}>
-              <a
-                class:list={['mega-trigger', { act: current === n.id }]}
-                href={n.href}
-                aria-expanded="false"
-                aria-haspopup="true"
-              >
-                {n.label}
-                <svg class="chev" viewBox="0 0 12 8" aria-hidden="true">
-                  <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.5" />
-                </svg>
-              </a>
-
-              {/* One column per tab group, plain links only — the reference's
-                  panel carries no descriptions, numbers or icons. The tabs in
-                  the data become column headings, so the same content that
-                  drove the old rail drives the columns without a second
-                  structure to keep in sync. */}
-              <div class="mega" hidden style={`--mega-cols:${n.tabs.length}`}>
-                {n.tabs.map((t) => (
-                  <div class="mega-col">
-                    <p class="mega-head">{t.label}</p>
-                    {t.rows.map((r) => (
-                      <a class="mega-row" href={r.href}>
-                        {r.label}
-                      </a>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <a data-nav={n.id} class:list={{ act: current === n.id }} href={n.href}>
-              {n.label}
-            </a>
-          )
-        )
-      }
-    </nav>
     <a class="mark" href="/">
       <span class="glyph"
         ><svg viewBox="0 0 100 100" aria-hidden="true"
@@ -95,9 +73,93 @@ const stream = row + row;
       >
       <span class="word">Hyperporter</span>
     </a>
+    <nav class="links" id="links">
+      {
+        NAV.map((n) =>
+          n.groups ? (
+            <div class="mega-wrap" data-mega={n.id}>
+              <a
+                class:list={['mega-trigger', { act: active === n.id }]}
+                href={n.href}
+                aria-expanded="false"
+                aria-haspopup="true"
+              >
+                {n.label}
+                <svg class="chev" viewBox="0 0 12 8" aria-hidden="true">
+                  <path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.5" />
+                </svg>
+              </a>
+
+              {/* The panel: a full-width band under the bar. Groups on the
+                  left — the first spans both rows when there are three, so a
+                  long first group and two short ones share the height — and
+                  the feature card on the right. */}
+              <div class="mega" hidden>
+                <div class="mega-in">
+                  <div class:list={['mega-groups', { three: n.groups.length === 3 }]}>
+                    {n.groups.map((g) => (
+                      <div class="mega-group">
+                        <p class="mega-head">{g.heading || '\u00a0'}</p>
+                        {g.items.map((r) => (
+                          <a class="mega-row" href={r.href}>
+                            <b>{r.label}</b>
+                            <span>{r.desc}</span>
+                          </a>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                  {n.feature && (
+                    <a class="mega-feat" href={n.feature.href}>
+                      <div class:list={['mega-card', `mega-card-${n.feature.card}`]} aria-hidden="true">
+                        {n.feature.card === 'whatsapp' && (
+                          <>
+                            <span class="mc-kicker">WhatsApp integration</span>
+                            <span class="mc-bub">Hi! Any update on our Peru dates?</span>
+                            <span class="mc-bub me">Confirmed — Nov 12, 8 days. Sending the itinerary now.</span>
+                            <span class="mc-bub">Perfect, thank you!</span>
+                          </>
+                        )}
+                        {n.feature.card === 'escalation' && (
+                          <>
+                            <span class="mc-row"><i></i>J. Mendes asked about private guide access<em>Reply</em></span>
+                            <span class="mc-row"><i></i>Andes Roots requested a date change<em>Review</em></span>
+                            <span class="mc-row ok"><i></i>Kenya deposit confirmed by supplier<em>Approve</em></span>
+                          </>
+                        )}
+                        {n.feature.card === 'horizon' &&
+                          DOTS.map(([x, y]) => <i class="mc-dot" style={`left:${x}%;top:${y}%`}></i>)}
+                        {n.feature.card === 'reading' && (
+                          <>
+                            <span class="mc-kicker">From the blog</span>
+                            <span class="mc-title">Nine stages: building a shared vocabulary for trip operations</span>
+                            <span class="mc-line" style="width:88%"></span>
+                            <span class="mc-line" style="width:72%"></span>
+                            <span class="mc-line" style="width:80%"></span>
+                          </>
+                        )}
+                      </div>
+                      <p class="mega-feat-t">
+                        {n.feature.title}
+                        {n.feature.badge && <span class="mega-new">{n.feature.badge}</span>}
+                      </p>
+                      <p class="mega-feat-d">{n.feature.desc}</p>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <a data-nav={n.id} class:list={{ act: active === n.id }} href={n.href}>
+              {n.label}
+            </a>
+          )
+        )
+      }
+    </nav>
     <div class="bar-acts">
       <a class="login" href="https://portal.hyperporter.com/login">Log in</a>
-      <a class="cta-nav" href="https://portal.hyperporter.com">Get started free <i aria-hidden="true">&rarr;</i></a>
+      <a class="cta-nav" href="https://portal.hyperporter.com">Get started</a>
       <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="drawer" id="burger"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -118,7 +180,7 @@ const stream = row + row;
     <nav class="drawer-in" aria-label="Menu">
       {
         NAV.map((n) =>
-          n.tabs ? (
+          n.groups ? (
             <div class="dsec">
               <button class="drow dtog" type="button" aria-expanded="false" aria-controls={`d-${n.id}`}>
                 <span>{n.label}</span>
@@ -127,10 +189,10 @@ const stream = row + row;
                 </svg>
               </button>
               <div class="dsub" id={`d-${n.id}`} hidden>
-                {n.tabs.map((t) => (
+                {n.groups.map((g) => (
                   <>
-                    <p class="dsub-h">{t.label}</p>
-                    {t.rows.map((r) => (
+                    {g.heading && <p class="dsub-h">{g.heading}</p>}
+                    {g.items.map((r) => (
                       <a href={r.href}>{r.label}</a>
                     ))}
                   </>
@@ -146,7 +208,7 @@ const stream = row + row;
       }
       <div class="drawer-foot">
         <a class="drawer-login" href="https://portal.hyperporter.com/login">Log in</a>
-        <a class="btn drawer-cta" href="https://portal.hyperporter.com">Get started free <i aria-hidden="true">&rarr;</i></a>
+        <a class="btn drawer-cta" href="https://portal.hyperporter.com">Get started</a>
       </div>
     </nav>
   </div>
