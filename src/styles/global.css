@@ -235,7 +235,7 @@ body.drawer-open{overflow:hidden}
 .dsub-h{margin:14px 0 2px;padding:0 var(--pad);
   font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
 .ditem{display:block;padding:12px var(--pad);color:var(--paper)}
-.ditem b{display:block;font-weight:600;font-size:16px;letter-spacing:-.01em;margin-bottom:4px}
+.ditem b{display:block;font-weight:400;font-size:16px;letter-spacing:-.01em;margin-bottom:4px}
 .ditem span{display:block;font-size:15px;line-height:1.45;color:var(--muted);max-width:40ch}
 .dsub .mega-feat{display:block;margin:18px var(--pad) 0}
 
@@ -1373,7 +1373,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .mega .mega-head{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 6px;white-space:nowrap}
 /* Scoped under .mega so these beat `.links a`. */
 .mega .mega-row{display:block;padding:11px 12px;margin:0 -12px;color:var(--paper);opacity:1;text-decoration:none;max-width:calc(34ch + 24px);border-radius:10px;background:none;transition:background .15s ease}
-.mega .mega-row b{display:block;font-weight:600;font-size:15px;letter-spacing:-.01em;line-height:1.3;margin-bottom:4px}
+.mega .mega-row b{display:block;font-weight:400;font-size:15px;letter-spacing:-.01em;line-height:1.3;margin-bottom:4px}
 .mega .mega-row span{display:block;font-size:13.5px;line-height:1.45;color:var(--muted)}
 .mega .mega-row:hover{background:var(--ink)}
 .mega .mega-row:hover b{color:var(--signal)}
@@ -1397,7 +1397,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .mc-dot{position:absolute;width:5px;height:5px;border-radius:50%;background:#7FD1C7;box-shadow:0 0 0 3px rgba(127,209,199,.12)}
 .mc-title{font-size:13.5px;line-height:1.35;color:#fff;margin:2px 0 6px}
 .mc-line{height:6px;border-radius:3px;background:#222932}
-.mega-feat-t{margin:16px 2px 8px;font-size:15px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mega-feat-t{margin:16px 2px 8px;font-size:15px;font-weight:400;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .mega-new{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:#DDF3E4;color:#146B4A}
 .mega-feat-d{margin:0 2px;font-size:13.5px;line-height:1.45;color:var(--muted)}
 .mega .mega-feat:hover .mega-feat-t,.dsub .mega-feat:hover .mega-feat-t{color:var(--signal)}
