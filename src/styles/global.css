@@ -158,6 +158,8 @@ header.top.over{background:rgba(10,14,18,.42);
 header.top.over::before{opacity:1}
 
 header.top.over .links > a,header.top.over .mega-trigger,header.top.over .mark,header.top.over .bar-acts .login{color:#fff;opacity:.94}
+header.top.over .bar-acts .login{border-color:rgba(255,255,255,.4)}
+header.top.over .cta-nav{background:#fff;color:var(--paper);border-color:#fff}
 header.top.over .links a:hover,header.top.over .mark:hover .glyph{opacity:1}
 header.top.over .mark .glyph{color:#fff}
 header.top.over .rail{border-color:rgba(255,255,255,.22)}
@@ -178,31 +180,30 @@ header.top:not(.over) .rail .tag{background:var(--raise)}
    paints over the ticker rather than under it. Safe now that the panel is
    anchored to its trigger — it was not when the panel was full-bleed, since
    a positioned .bar became its containing block and boxed it in. */
-.bar{max-width:var(--max);margin:0 auto;padding:0 var(--pad);height:76px;
+.bar{max-width:var(--max);margin:0 auto;padding:0 var(--pad);height:72px;
   position:relative;z-index:2;
-  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px}
-.mark{display:flex;align-items:center;gap:11px;text-decoration:none;justify-self:center;white-space:nowrap}
+  display:flex;align-items:center;gap:clamp(20px,3vw,44px)}
+.mark{display:flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap;flex:none}
 .mark .glyph{width:24px;height:24px;display:block;color:var(--paper);transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
 .mark .glyph svg{width:100%;height:100%;display:block}
 .mark .glyph svg rect{fill:currentColor}
 .mark .glyph svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6;stroke-linecap:butt}
 .mark:hover .glyph{color:var(--signal);transform:rotate(90deg)}
-.mark .word{font-family:var(--display);font-weight:400;font-size:19px;letter-spacing:.14em;text-transform:uppercase}
-.links{display:flex;gap:2px;align-items:center;min-width:0}
+.mark .word{font-family:var(--display);font-weight:400;font-size:21px;letter-spacing:-.025em}
+.links{display:flex;gap:4px;align-items:center;min-width:0;flex:1 1 auto}
 .links a{background:none;border:0;color:var(--paper);opacity:.85;padding:8px 11px;font-size:14px;letter-spacing:-.01em;border-radius:6px;position:relative;transition:opacity .2s,background .2s}
-.links a:hover{opacity:1;background:rgba(13,16,22,.05)}
+.links a:hover{opacity:1}
 .links a.act{opacity:1}
-.links a.act::after{content:"";position:absolute;left:14px;right:14px;bottom:2px;height:1px;background:var(--signal)}
+/* The current item and an open panel's trigger both carry the reference's
+   underline: a 2px rule sitting on the bar's bottom edge. */
+.links a.act::after,.mega-wrap.open>.mega-trigger::after{content:"";position:absolute;left:11px;right:11px;bottom:-19px;height:2px;background:currentColor}
 @keyframes blip{0%,100%{opacity:1}50%{opacity:.25}}
-.bar-acts{display:flex;gap:18px;align-items:center;justify-content:flex-end;justify-self:end}
-.bar-acts .login{font-size:14px;color:var(--paper);opacity:.85}
-.bar-acts .login:hover{opacity:1}
-.cta-nav{display:inline-flex;align-items:center;gap:9px;background:var(--signal);color:#fff;border:0;
-  padding:10px 16px;border-radius:var(--radius);font-weight:400;font-size:14px;letter-spacing:-.01em;
-  transition:background .18s ease}
-.cta-nav:hover{background:var(--signal-hi)}
-.cta-nav i{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.16);
-  display:grid;place-items:center;font-style:normal;font-size:11px;line-height:1}
+.bar-acts{display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-left:auto;flex:none}
+.bar-acts .login{font-size:14px;color:var(--paper);padding:9px 16px;border:1px solid var(--line-2);border-radius:var(--radius);transition:border-color .2s,background .2s}
+.bar-acts .login:hover{border-color:var(--paper)}
+.cta-nav{display:inline-flex;align-items:center;background:var(--paper);color:#fff;border:1px solid var(--paper);
+  padding:9px 16px;border-radius:var(--radius);font-size:14px;white-space:nowrap;transition:background .2s,color .2s}
+.cta-nav:hover{background:#000}
 .burger{display:none;background:none;border:1px solid var(--line-2);border-radius:6px;padding:10px}
 .burger span{display:block;width:18px;height:1.5px;background:var(--paper);margin:4px 0}
 /* Mobile menu: a full-height sheet below the chrome, on the same dark glass
@@ -922,19 +923,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
   .fgrid{grid-template-columns:1fr}
   .fcell{padding:28px 0!important;border-right:0!important}
 }
-/* The three-track bar gives the nav and the actions equal columns, and six
-   links need more than half of anything under ~1340px, where they ran
-   under the wordmark. Below that the outer tracks size to their content
-   and the mark centres in what is left; below 1150 the word goes and the
-   glyph alone stands in, until the burger takes over at 860. */
-@media (max-width:1340px){
-  .bar{grid-template-columns:auto minmax(0,1fr) auto}
-}
-@media (max-width:1150px){
-  .mark .word{display:none}
-  .links a{padding:8px 9px}
-}
-@media (max-width:860px){
+@media (max-width:920px){
   .links,.bar .cta-nav,.bar-acts .login,.sys{display:none}
   .mark .word{display:inline}
   .burger{display:block}
@@ -1364,51 +1353,57 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 
    `position:relative` on the wrapper so the panel anchors under its own
    trigger; the old panel was full-bleed and anchored to the bar. */
-.mega-wrap{position:relative;display:inline-flex}
-.mega-trigger{display:inline-flex;align-items:center;gap:6px;border-radius:999px}
+.mega-wrap{display:inline-flex}
+.mega-trigger{display:inline-flex;align-items:center;gap:6px;position:relative}
 .mega-trigger .chev{width:9px;height:6px;opacity:.45;transition:transform .25s,opacity .25s}
 .mega-wrap.open .chev{transform:rotate(180deg);opacity:.9}
-/* The trigger takes a pill while its panel is open, as on the reference. */
-.mega-wrap.open>.mega-trigger{background:rgba(255,255,255,.16);opacity:1}
-header.top:not(.over) .mega-wrap.open>.mega-trigger{background:rgba(13,16,22,.07)}
+.mega-wrap.open>.mega-trigger{opacity:1}
 
+/* The panel: a full-width light band hung from the bar, in the reference's
+   format. Positioned against `.bar` (the nearest positioned ancestor) and
+   pulled out to the viewport edges. Always light, whatever the bar is doing
+   over a photograph — its text is the page's ink. */
 .mega{
-  position:absolute;top:calc(100% + 10px);left:0;z-index:80;
-  min-width:280px;padding:14px;border-radius:15px;
-  /* The reference uses .4 black. Over a light page that composites to a mid
-     grey and puts its white links at 2.75:1 — under the 4.5 minimum, on
-     their site as much as ours. .66 is the least that clears it: measured
-     5.9:1 here, and it still reads as the same smoked-glass panel. */
-  background:rgba(13,16,22,.66);
-  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
-  display:grid;grid-template-columns:repeat(var(--mega-cols,2),minmax(120px,max-content));
-  gap:4px 26px;
-}
-/* No backdrop-filter: the panel would be 40% black over live text and
-   unreadable, so it goes near-solid instead. */
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .mega{background:rgba(13,16,22,.94)}
+  position:absolute;top:100%;left:calc(50% - 50vw);width:100vw;z-index:80;
+  background:var(--raise);color:var(--paper);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  box-shadow:0 30px 60px -30px rgba(12,22,34,.25);
 }
 .mega[hidden]{display:none}
-.mega-col{display:flex;flex-direction:column;min-width:0}
-.mega .mega-head{
-  font-family:var(--mono);font-size:11px;letter-spacing:.04em;font-weight:400;
-  color:rgba(255,255,255,.66);margin:6px 0 6px 10px;white-space:nowrap;
-}
-/* The first heading in each column sits flush; later ones get air above so
-   a second group reads as separate rather than as a run-on list. */
-.mega-col .mega-head + a{margin-top:0}
-/* Scoped under .mega so these beat `.links a`, which is (0,1,1) and would
-   otherwise hand the panel the bar's dark ink — invisible on dark glass.
-   That was the bug: the panel links were rendering at 3:1, not the 6.3:1 I
-   had measured, because I measured the background and assumed the text. */
-.mega .mega-row{
-  display:block;padding:7px 10px;border-radius:8px;white-space:nowrap;
-  font-size:14px;letter-spacing:-.01em;color:rgba(255,255,255,.92);opacity:1;
-  transition:background .16s ease,color .16s ease;
-}
-.mega .mega-row:hover{background:rgba(255,255,255,.12);color:#fff}
-.mega .mega-row:focus-visible{outline:2px solid rgba(255,255,255,.6);outline-offset:-2px}
+.mega-in{max-width:var(--max);margin:0 auto;padding:44px var(--pad) 52px;
+  display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:clamp(40px,6vw,120px);align-items:start}
+.mega-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px clamp(40px,6vw,120px);max-width:880px}
+/* Three groups: the first spans both rows, the other two stack beside it. */
+.mega-groups.three .mega-group:first-child{grid-row:span 2}
+.mega-group{display:flex;flex-direction:column;min-width:0}
+.mega .mega-head{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 6px;white-space:nowrap}
+/* Scoped under .mega so these beat `.links a`. */
+.mega .mega-row{display:block;padding:11px 0;color:var(--paper);opacity:1;text-decoration:none;max-width:34ch;border-radius:0;transition:none;background:none}
+.mega .mega-row b{display:block;font-weight:600;font-size:15px;letter-spacing:-.01em;line-height:1.3;margin-bottom:4px}
+.mega .mega-row span{display:block;font-size:13.5px;line-height:1.45;color:var(--muted)}
+.mega .mega-row:hover{background:none}
+.mega .mega-row:hover b{color:var(--signal)}
+.mega .mega-row:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+/* Feature card. */
+.mega .mega-feat{display:block;color:var(--paper);text-decoration:none;opacity:1;padding:0;background:none}
+.mega-card{position:relative;height:170px;border-radius:12px;background:#0B0E12;color:#EDEFF2;padding:18px 20px;overflow:hidden;
+  display:flex;flex-direction:column;gap:8px;font-size:12px;line-height:1.35}
+.mc-kicker{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#7FD1C7;margin-bottom:2px}
+.mc-bub{align-self:flex-start;max-width:78%;padding:7px 10px;border-radius:9px;background:#1A2028;color:#EDEFF2}
+.mc-bub.me{align-self:flex-end;background:#124A47;border:1px solid #1E6B65}
+.mc-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #1A2028;color:#D6DBE1}
+.mc-row:last-child{border-bottom:0}
+.mc-row i{width:6px;height:6px;border-radius:50%;background:var(--amber);flex:none}
+.mc-row.ok i{background:#4FB3BD}
+.mc-row em{font-style:normal;margin-left:auto;font-size:9.5px;font-weight:600;padding:3px 8px;border-radius:999px;background:#153F3C;color:#9FE2D8}
+.mc-dot{position:absolute;width:5px;height:5px;border-radius:50%;background:#7FD1C7;box-shadow:0 0 0 3px rgba(127,209,199,.12)}
+.mc-title{font-size:13.5px;line-height:1.35;color:#fff;margin:2px 0 6px}
+.mc-line{height:6px;border-radius:3px;background:#222932}
+.mega-feat-t{margin:16px 0 8px;font-size:15px;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mega-new{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:#DDF3E4;color:#146B4A}
+.mega-feat-d{margin:0;font-size:13.5px;line-height:1.45;color:var(--muted)}
+.mega .mega-feat:hover .mega-feat-t{color:var(--signal)}
+@media (max-width:1180px){.mega-in{grid-template-columns:minmax(0,1fr) 260px;gap:40px}}
 
 /* Panels are pointer affordances; below this width the drawer lists
    everything inside them instead. */

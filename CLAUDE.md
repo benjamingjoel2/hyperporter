@@ -97,6 +97,15 @@ Built from the founder's content file — 26 views, ~4,900 words.
 Content lives in `src/lib/content/{products,solutions,customers,pricing}.ts`, not in
 the page files. Pages are thin; edit the content modules.
 
+The bar (Sep 2026, founder's grouping) is Tools · Automations · Solutions ·
+Pricing · Resources, with the wordmark on the left and Log in / Get started
+on the right, both pointing at portal.hyperporter.com. Tools, Automations,
+Solutions and Resources open a full-width panel in the harvey.ai format:
+described items in labelled columns and a feature card on the right. It is
+all data in `src/lib/content/nav.ts`; every item links to a real place —
+product features carry ids from their names (`/portal#crm`), and the nine
+stages carry `stage-N` hashes that `/autopilot` opens on arrival.
+
 ## Known gaps — these need doing
 
 1. **No URLs.** All 137 destinations, 7 regions, and 7 blog posts are unindexable. This is why

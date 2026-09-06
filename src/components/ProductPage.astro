@@ -23,6 +23,9 @@ const { eyebrow, title, lede, features, featuresTitle, cases, casesTitle, next }
 // three product pages are unaffected.
 const hasAside = Astro.slots.has('hero-aside');
 const { photoHero = false } = Astro.props;
+
+// An id per feature, from its name, so the nav can link straight to one.
+const anchor = (name: string): string => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 ---
 
 {/* `photoHero` puts the hero and whatever follows it in `after-hero` on one
@@ -57,7 +60,7 @@ const { photoHero = false } = Astro.props;
       {featuresTitle && <h2 class="rv">{featuresTitle}</h2>}
       <div class="flist rv">
         {features.map((f) => (
-          <div class="fitem">
+          <div class="fitem" id={anchor(f.name)}>
             <div class="fn">{f.n}</div>
             <div>
               <b>{f.name}</b>
