@@ -76,28 +76,71 @@ with a temporary self-signed cert, then replaces it with the real one.
 ## Deploying a change
 
 **The server does not build the site.** GitHub Actions builds it on every push
-to `main` and publishes the finished files to the `deploy` branch. The server
-holds a checkout of that branch at `/opt/hyperporter/site`, bind-mounted into
-nginx.
+to `main`, publishes the finished files to the `deploy` branch, then SSHes to
+the server and pulls that branch. The server holds a checkout of it at
+`/opt/hyperporter/site`, bind-mounted into nginx, so there is nothing to
+restart and no downtime.
 
-So deploying is a pull, not a build:
+So deploying is: merge to `main`. The workflow's last step fetches
+`https://hyperporter.com/build.txt` and fails unless it contains the commit
+just built, so a green run means the live site is serving that commit.
+
+The pull needs an SSH key the workflow can use. Until the secrets below exist
+the workflow still builds and publishes but skips the pull, and you deploy by
+hand:
 
 ```sh
 ssh root@hyperporter.com 'cd /opt/hyperporter/site && git fetch --depth 1 origin deploy && git reset --hard origin/deploy'
 ```
 
-That takes a few seconds. nginx serves the files straight off the bind mount,
-so there is nothing to restart and no downtime.
-
 `reset --hard` rather than `pull` because CI force-pushes a single fresh commit
 each time — otherwise the repository would grow by a whole copy of the site on
 every deploy, and a fast-forward would fail.
 
-Check it landed:
+### One-time setup for the automatic pull
+
+1. On your own machine, make a key that exists only for this:
+
+   ```sh
+   ssh-keygen -t ed25519 -N '' -C 'hyperporter deploy' -f ~/.ssh/hyperporter-deploy
+   ```
+
+2. On the server, allow that key to do one thing and nothing else. Append to
+   `/root/.ssh/authorized_keys` (one line):
+
+   ```
+   command="cd /opt/hyperporter/site && git fetch --depth 1 origin deploy && git reset --hard origin/deploy",no-port-forwarding,no-agent-forwarding,no-X11-forwarding,no-pty ssh-ed25519 AAAA...  hyperporter deploy
+   ```
+
+   The `command=` prefix means the key can run the pull and cannot open a
+   shell, whatever the client asks for.
+
+3. In the repository, Settings → Secrets and variables → Actions, add two
+   secrets:
+
+   - `DEPLOY_SSH_KEY` — the contents of `~/.ssh/hyperporter-deploy` (the
+     private key, the file without `.pub`).
+   - `DEPLOY_KNOWN_HOSTS` — the output of
+     `ssh-keyscan -t ed25519 hyperporter.com`. This pins the server's host
+     key; the workflow refuses to connect to anything else.
+
+   Host, user and path default to `hyperporter.com`, `root` and
+   `/opt/hyperporter/site`. Override with repository *variables*
+   `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PATH` if they ever change.
+
+4. Re-run the Deploy workflow from the Actions tab. The last two steps now
+   run, and the run is green only when the live site serves the new build.
+
+While you are in `sshd_config`: set `PasswordAuthentication no` and
+`PermitRootLogin prohibit-password`, then `systemctl reload sshd`. The root
+password has been shared in chat and shell history during this project and
+should be rotated regardless.
+
+Check by hand any time:
 
 ```sh
 curl -sI https://hyperporter.com | head -1          # HTTP/2 200
-curl -s https://hyperporter.com | grep -o '<title>[^<]*'
+curl -s https://hyperporter.com/build.txt          # the commit on main
 ```
 
 ### One-time switch to this setup
@@ -130,9 +173,10 @@ that build is the one that ships.
 ### If a deploy goes wrong
 
 The `deploy` branch holds only the current build, so there is no previous
-commit to roll back to on that branch. To roll back, re-run the Deploy
-workflow from the last good commit on `main` (Actions tab, "Run workflow"),
-then pull again on the server.
+commit to roll back to on that branch. To roll back, revert the bad commit on
+`main`, or re-run the Deploy workflow from the last good commit (Actions tab,
+"Run workflow", pick the commit). Either way the workflow rebuilds, republishes
+and pulls.
 
 ---
 
