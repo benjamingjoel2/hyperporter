@@ -1,8 +1,8 @@
 /**
  * One line icon per nav item, keyed by the item's label. 24-unit grid, a
  * single 1.5 stroke, round caps and joins, no fills — the same construction
- * kit as the site's chevrons and marks, so they read as one family. Not yet
- * wired into the panels (Sep 2026): drawn for the founder's review first.
+ * kit as the site's chevrons and marks, so they read as one family. Rendered
+ * beside every item in the panels and the phone drawer.
  */
 const P = (d: string): string => `<path d="${d}"/>`;
 const C = (cx: number, cy: number, r: number): string => `<circle cx="${cx}" cy="${cy}" r="${r}"/>`;
@@ -41,7 +41,7 @@ export const NAV_ICONS: Record<string, string> = {
   'Auto-Collect': AUTO(P('M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z') + P('M12 10v6') + P('M9.5 13.5 12 16l2.5-2.5')),
   'Auto-Pay': AUTO(C(12, 12, 9) + P('M12 7v5l3 2')),
   // Solutions
-  'Travel agencies': R(4, 3, 16, 18) + P('M9 8h2') + P('M13 8h2') + P('M9 12h2') + P('M13 12h2') + P('M10 21v-4h4v4'),
+  'Travel agencies': P('M3 21h18') + P('M6 21V4a1 1 0 011-1h10a1 1 0 011 1v17') + P('M9.5 7h1.5') + P('M13 7h1.5') + P('M9.5 11h1.5') + P('M13 11h1.5') + P('M9.5 15h1.5') + P('M13 15h1.5') + P('M10.5 21v-3h3v3'),
   'Advisors & Agents': C(12, 8, 4) + P('M4 21a8 8 0 0116 0'),
   'Creators': P('M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z'),
   'DMCs': P('M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11z') + C(12, 10, 2.5),

@@ -236,9 +236,9 @@ body.drawer-open{overflow:hidden}
 .dsub[hidden]{display:none}
 .dsub-h{margin:14px 0 2px;padding:0 var(--pad);
   font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
-.ditem{display:block;padding:12px var(--pad);color:var(--paper)}
-.ditem b{display:block;font-weight:400;font-size:16px;letter-spacing:-.01em;margin-bottom:4px}
-.ditem span{display:block;font-size:15px;line-height:1.45;color:var(--muted);max-width:40ch}
+.ditem{display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;align-items:start;padding:10px var(--pad);color:var(--paper)}
+.ditem b{display:block;font-weight:400;font-size:16px;letter-spacing:-.01em;margin:3px 0 4px}
+.ditem .mega-row-t > span{display:block;font-size:15px;line-height:1.45;color:var(--muted);max-width:40ch}
 .dsub .mega-feat{display:block;margin:18px var(--pad) 0}
 
 .drawer-foot{position:fixed;left:0;right:0;bottom:0;z-index:66;display:grid;grid-template-columns:1fr 1fr;gap:12px;
@@ -1387,9 +1387,17 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .mega-group{display:flex;flex-direction:column;min-width:0}
 .mega .mega-head{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 6px;white-space:nowrap}
 /* Scoped under .mega so these beat `.links a`. */
-.mega .mega-row{display:block;padding:11px 12px;margin:0 -12px;color:var(--paper);opacity:1;text-decoration:none;max-width:calc(34ch + 24px);border-radius:10px;background:none;transition:background .15s ease}
-.mega .mega-row b{display:block;font-weight:400;font-size:15px;letter-spacing:-.01em;line-height:1.3;margin-bottom:4px}
-.mega .mega-row span{display:block;font-size:13.5px;line-height:1.45;color:var(--muted)}
+.mega .mega-row{display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;align-items:start;padding:10px 12px;margin:0 -12px;color:var(--paper);opacity:1;text-decoration:none;max-width:calc(34ch + 74px);border-radius:10px;background:none;transition:background .15s ease}
+/* The icon in its tinted square. A shade lighter on the hover card so it
+   still separates from the ground. */
+.mega-ico-box{width:36px;height:36px;border-radius:9px;background:var(--ink);display:grid;place-items:center;color:var(--paper);flex:none;transition:background .15s ease}
+.mega-ico{width:22px;height:22px;display:block}
+.mega .mega-row:hover .mega-ico-box{background:var(--raise)}
+/* The automation icons carry the A⁺ mark, which wants a size up to read. */
+.mega-wrap[data-mega="automations"] .mega-ico,.dsub .mega-ico{width:24px;height:24px}
+.mega-row-t{min-width:0}
+.mega .mega-row b{display:block;font-weight:400;font-size:15px;letter-spacing:-.01em;line-height:1.3;margin:2px 0 4px}
+.mega .mega-row-t > span{display:block;font-size:13.5px;line-height:1.45;color:var(--muted)}
 .mega .mega-row:hover{background:var(--ink)}
 .mega .mega-row:hover b{color:var(--signal)}
 .mega .mega-row:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
