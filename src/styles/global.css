@@ -1392,6 +1392,10 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 /* No feature card: the groups take the whole band. */
 .mega-in.no-feat{grid-template-columns:minmax(0,1fr)}
 .mega-group{display:flex;flex-direction:column;min-width:0}
+/* A group spanning two columns: its rows run down the first column, then
+   the second, under one heading. --rows is set in the markup. */
+.mega-group.wide{grid-column:span 2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto repeat(var(--rows,4),auto);grid-auto-flow:column;column-gap:clamp(28px,3vw,48px);align-content:start}
+.mega-group.wide .mega-head{grid-column:1/-1;grid-row:1}
 .mega .mega-head{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 6px;white-space:nowrap}
 /* Scoped under .mega so these beat `.links a`. */
 .mega .mega-row{display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;align-items:start;padding:14px 12px;margin:0 -12px;color:var(--paper);opacity:1;text-decoration:none;max-width:calc(34ch + 74px);border-radius:10px;background:none;transition:background .15s ease}
@@ -1400,6 +1404,11 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .mega-ico-box{width:36px;height:36px;border-radius:9px;background:var(--ink);display:grid;place-items:center;color:var(--paper);flex:none;transition:background .15s ease}
 .mega-ico{width:22px;height:22px;display:block}
 .mega .mega-row:hover .mega-ico-box{background:var(--raise)}
+/* Each panel's icons wear their own box, so a glance tells the three
+   apart: Tools in the tinted square, Automations in a dark square with
+   the icon in white, Solutions in a circle drawn as an outline. */
+.mega-ico-box.ico-automations,.mega .mega-row:hover .mega-ico-box.ico-automations{background:var(--paper);color:#fff}
+.mega-ico-box.ico-solutions,.mega .mega-row:hover .mega-ico-box.ico-solutions{background:transparent;border:1.5px solid var(--paper);border-radius:50%}
 /* The automation icons carry the A⁺ mark, which wants a size up to read. */
 .mega-wrap[data-mega="automations"] .mega-ico,.dsub .mega-ico{width:24px;height:24px}
 .mega-row-t{min-width:0}
