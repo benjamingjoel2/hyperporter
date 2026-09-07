@@ -38,12 +38,12 @@ export const NAV_ICONS: Record<string, string> = {
   // The A⁺ mark on its own, full size.
   'Overview': P('M4 19.5l6.5-15 6.5 15') + P('M6.6 13.5h7.8') + P('M20 3v5') + P('M17.5 5.5h5'),
   // A letter lifted out of its envelope.
-  'Auto-Inquire': AUTO(R(6, 2.5, 12, 11, 1) + P('M9 6.5h6') + P('M9 9.5h4') + P('M3 13l9 5 9-5v6a2 2 0 01-2 2H5a2 2 0 01-2-2z')),
-  'Auto-Quote': AUTO(P('M3 12l7-7h8v8l-7 7z') + C(15, 8, 1)),
-  'Auto-Follow-up': AUTO(P('M6 16V11a6 6 0 0112 0v5l2 2H4z') + P('M10 21h4')),
-  'Auto-Confirm': AUTO(C(12, 12, 9) + P('M8 12l3 3 5-6')),
-  'Auto-Collect': AUTO(P('M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z') + P('M12 10v6') + P('M9.5 13.5 12 16l2.5-2.5')),
-  'Auto-Pay': AUTO(R(3, 6, 18, 12) + P('M3 10h18') + P('M7 14.5h4')),
+  'Automated Inquiry': AUTO(R(6, 2.5, 12, 11, 1) + P('M9 6.5h6') + P('M9 9.5h4') + P('M3 13l9 5 9-5v6a2 2 0 01-2 2H5a2 2 0 01-2-2z')),
+  'Automated Quotation': AUTO(P('M3 12l7-7h8v8l-7 7z') + C(15, 8, 1)),
+  'Automated Follow-up': AUTO(P('M6 16V11a6 6 0 0112 0v5l2 2H4z') + P('M10 21h4')),
+  'Automated Confirmation': AUTO(C(12, 12, 9) + P('M8 12l3 3 5-6')),
+  'Automated Collection': AUTO(P('M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z') + P('M12 10v6') + P('M9.5 13.5 12 16l2.5-2.5')),
+  'Automated Payment': AUTO(R(3, 6, 18, 12) + P('M3 10h18') + P('M7 14.5h4')),
   // Solutions
   'Travel agencies': P('M3 21h18') + P('M6 21V4a1 1 0 011-1h10a1 1 0 011 1v17') + P('M9.5 7h1.5') + P('M13 7h1.5') + P('M9.5 11h1.5') + P('M13 11h1.5') + P('M9.5 15h1.5') + P('M13 15h1.5') + P('M10.5 21v-3h3v3'),
   'Advisors & Agents': C(12, 8, 4) + P('M4 21a8 8 0 0116 0'),
