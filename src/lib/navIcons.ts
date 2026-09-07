@@ -19,13 +19,15 @@ export const NAV_ICONS: Record<string, string> = {
   // Tools — Core
   'Portal': R(3, 4, 18, 16) + P('M3 9h18') + P('M7 6.5h.01'),
   'Atlas AI': P('M12 3c.6 5 4 8.4 9 9-5 .6-8.4 4-9 9-.6-5-4-8.4-9-9 5-.6 8.4-4 9-9z'),
-  'CRM workflow': R(3, 5, 18, 14) + C(8.5, 10.5, 2) + P('M6 16c.5-1.5 1.5-2 2.5-2s2 .5 2.5 2') + P('M14 9h4') + P('M14 13h4'),
+  // A kanban board: three columns, each as tall as its stack of cards.
+  'CRM workflow': R(3, 3, 5, 12, 1.5) + R(9.5, 3, 5, 18, 1.5) + R(16, 3, 5, 8, 1.5),
   'Inquiry form': R(5, 3, 14, 18) + P('M9 8h6') + P('M9 12h6') + P('M9 16h3'),
   'Quotation tool': P('M5 20V11') + P('M12 20V5') + P('M19 20v-8') + P('M3 20h18'),
   'Proposal tool': P('M21 3 10 14') + P('M21 3 14 21l-4-7-7-4z'),
   // Tools — Collaboration
   'Client + Supplier Dashboard': R(3, 4, 8, 16) + R(13, 4, 8, 16) + P('M6 8h2') + P('M16 8h2'),
-  '3-way inbox': P('M3 13l2.5-8h13L21 13v6H3z') + P('M3 13h5l1.5 2h5L16 13h5'),
+  // Three speech bubbles: two parties above, the third answering below.
+  '3-way inbox': P('M5 3h4a2 2 0 012 2v2a2 2 0 01-2 2H6l-3 2V5a2 2 0 012-2z') + P('M15 3h4a2 2 0 012 2v6l-3-2h-1a2 2 0 01-2-2V5a2 2 0 012-2z') + P('M9 12.5h6a2 2 0 012 2v3a2 2 0 01-2 2h-5l-3 2v-7a2 2 0 012-2z'),
   // Tools — More tools
   'Document vault': R(4, 10, 16, 11) + P('M8 10V7a4 4 0 018 0v3') + P('M12 15v2'),
   'Itinerary generator': C(5, 6, 2) + C(19, 18, 2) + P('M7 6h6a4 4 0 010 8h-4a4 4 0 000 8h8') ,
@@ -33,13 +35,15 @@ export const NAV_ICONS: Record<string, string> = {
   'Support relay': P('M4 14v-2a8 8 0 0116 0v2') + R(3, 13, 4, 6, 1) + R(17, 13, 4, 6, 1) + P('M19 19a3 3 0 01-3 2h-3'),
   'WhatsApp integration': P('M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3z') + P('M9 10h6') + P('M9 13.5h4'),
   // Automations
-  'Overview': AUTO(R(3, 3, 8, 8) + R(13, 3, 8, 8) + R(3, 13, 8, 8) + R(13, 13, 8, 8)),
-  'Auto-Inquire': AUTO(R(3, 6, 18, 12) + P('M3 7l9 6 9-6')),
+  // The A⁺ mark on its own, full size.
+  'Overview': P('M4 19.5l6.5-15 6.5 15') + P('M6.6 13.5h7.8') + P('M20 3v5') + P('M17.5 5.5h5'),
+  // A letter lifted out of its envelope.
+  'Auto-Inquire': AUTO(R(6, 2.5, 12, 11, 1) + P('M9 6.5h6') + P('M9 9.5h4') + P('M3 13l9 5 9-5v6a2 2 0 01-2 2H5a2 2 0 01-2-2z')),
   'Auto-Quote': AUTO(P('M3 12l7-7h8v8l-7 7z') + C(15, 8, 1)),
   'Auto-Follow-up': AUTO(P('M6 16V11a6 6 0 0112 0v5l2 2H4z') + P('M10 21h4')),
   'Auto-Confirm': AUTO(C(12, 12, 9) + P('M8 12l3 3 5-6')),
   'Auto-Collect': AUTO(P('M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z') + P('M12 10v6') + P('M9.5 13.5 12 16l2.5-2.5')),
-  'Auto-Pay': AUTO(C(12, 12, 9) + P('M12 7v5l3 2')),
+  'Auto-Pay': AUTO(R(3, 6, 18, 12) + P('M3 10h18') + P('M7 14.5h4')),
   // Solutions
   'Travel agencies': P('M3 21h18') + P('M6 21V4a1 1 0 011-1h10a1 1 0 011 1v17') + P('M9.5 7h1.5') + P('M13 7h1.5') + P('M9.5 11h1.5') + P('M13 11h1.5') + P('M9.5 15h1.5') + P('M13 15h1.5') + P('M10.5 21v-3h3v3'),
   'Advisors & Agents': C(12, 8, 4) + P('M4 21a8 8 0 0116 0'),
