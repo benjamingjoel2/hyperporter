@@ -48,7 +48,7 @@ const cta =
   <div class="demo-band">
     <div class="demo-glass rv">
       <div class="demo-lead">
-        <p class="eyebrow">{page.name} · overview</p>
+        <p class="eyebrow">{page.layer} · {page.name}</p>
         <p class="dek">{page.overview}</p>
         <p class="demo-tier">Available on <b>{page.tier}</b> · {page.tierNote}</p>
       </div>
@@ -57,7 +57,7 @@ const cta =
   </div>
 </PhotoHero>
 
-<Points title={page.whatTitle} points={page.what} />
+<Points title={`${page.name} overview`} points={page.what} />
 
 {/* How it works: the reference's accordion — the steps on hairlines,
     the open one with its body, the screen beside. */}

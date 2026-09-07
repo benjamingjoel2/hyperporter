@@ -1593,5 +1593,16 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
   opacity:0;pointer-events:none;
   transition:opacity .22s ease;
 }
+/* While a panel is open the bar is dark whatever is behind it, as on the
+   reference: the panel hangs off a dark bar even over a light page. The
+   text rules are the `.over` set; the ground is opaque rather than glass. */
+header.top.mega-open .links > a,header.top.mega-open .mega-trigger,header.top.mega-open .mark,header.top.mega-open .bar-acts .login{color:#fff;opacity:.94}
+header.top.mega-open .bar-acts .login{border-color:rgba(255,255,255,.4)}
+header.top.mega-open .cta-nav{background:#fff;color:var(--paper);border-color:#fff}
+header.top.mega-open .links a:hover,header.top.mega-open .mark:hover .glyph{opacity:1}
+header.top.mega-open .mark .glyph{color:#fff}
+header.top.mega-open .burger span{background:#fff}
+header.top.mega-open{background:var(--paper);border-bottom-color:rgba(255,255,255,.12)}
+header.top.mega-open::before{opacity:0}
 header.top.mega-open .mega-scrim{opacity:1}
 @media (max-width:1080px){.mega-scrim{display:none}}
