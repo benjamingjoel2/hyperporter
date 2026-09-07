@@ -92,13 +92,13 @@ const stream = row + row;
                   the feature card on the right. */}
               <div class="mega" hidden>
                 <div class:list={['mega-in', { 'no-feat': !n.feature }]}>
-                  <div class:list={['mega-groups', { three: n.groups.length === 3 }]}>
+                  <div class:list={['mega-groups', { three: n.groups.reduce((c, g) => c + (g.span ?? 1), 0) === 3 }]}>
                     {n.groups.map((g) => (
-                      <div class="mega-group">
+                      <div class:list={['mega-group', { wide: g.span === 2 }]} style={g.span === 2 ? `--rows:${Math.ceil(g.items.length / 2)}` : undefined}>
                         <p class="mega-head">{g.heading || '\u00a0'}</p>
                         {g.items.map((r) => (
                           <a class="mega-row" href={r.href}>
-                            <span class="mega-ico-box" set:html={navIcon(r.label)} />
+                            <span class={`mega-ico-box ico-${n.id}`} set:html={navIcon(r.label)} />
                             <span class="mega-row-t">
                               <b>{r.label}</b>
                               <span>{r.desc}</span>
@@ -157,7 +157,7 @@ const stream = row + row;
                     {g.heading && <p class="dsub-h">{g.heading}</p>}
                     {g.items.map((r) => (
                       <a class="ditem" href={r.href}>
-                        <span class="mega-ico-box" set:html={navIcon(r.label)} />
+                        <span class={`mega-ico-box ico-${n.id}`} set:html={navIcon(r.label)} />
                         <span class="mega-row-t">
                           <b>{r.label}</b>
                           <span>{r.desc}</span>

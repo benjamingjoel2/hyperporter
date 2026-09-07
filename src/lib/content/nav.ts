@@ -27,6 +27,8 @@ export interface MegaGroup {
       previous one into a second column, as the pipeline does. */
   heading: string;
   items: MegaItem[];
+  /** Lay the group's rows across two of the panel's columns. */
+  span?: 2;
 }
 
 export type FeatureCard = 'whatsapp' | 'escalation' | 'horizon' | 'reading';
@@ -54,17 +56,13 @@ export const NAV: NavItem[] = [
     href: '/product',
     groups: [
       {
-        heading: 'Core',
+        heading: '',
+        span: 2,
         items: [
           { label: 'Portal', desc: 'The platform underneath everything — team, trips, and contacts.', href: '/portal' },
           { label: 'Atlas AI', desc: 'Builds trips, looks up trip details, answers questions on request.', href: '/intelligence' },
           { label: 'CRM workflow', desc: 'The client and supplier database, connected to trip staging.', href: '/portal#crm' },
           { label: 'Inquiry form', desc: 'Your public lead-capture link — every submission lands in the CRM.', href: '/solutions/inquiry' },
-        ],
-      },
-      {
-        heading: 'Collaboration',
-        items: [
           { label: 'Quotation Board', desc: 'Organises supplier quotes side by side, and adds your margin.', href: '/autopilot#stage-2' },
           { label: 'Proposal Share', desc: 'Share itineraries and quotes as a link, a PDF, or a text message.', href: '/portal#proposal-generator' },
           { label: 'Client + Supplier Dashboard', desc: 'Each side gets their own view to manage the trip.', href: '/customers' },
