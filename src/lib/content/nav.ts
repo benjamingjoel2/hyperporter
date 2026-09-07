@@ -90,18 +90,18 @@ export const NAV: NavItem[] = [
       {
         heading: 'Pipeline',
         items: [
-          { label: 'Overview', desc: 'The full overview of Autopilot, end to end.', href: '/autopilot' },
-          { label: 'Auto-Inquire', desc: 'Parses an incoming message into a structured lead automatically.', href: '/autopilot#stage-0' },
-          { label: 'Auto-Quote', desc: 'Sends the inquiry to your supplier list, manages every reply.', href: '/autopilot#stage-2' },
-          { label: 'Auto-Follow-up', desc: 'Reminds clients, sends nudges, wins back leads gone quiet.', href: '/autopilot#stage-7' },
+          { label: 'Overview', desc: 'The full scope of Automation, end to end.', href: '/autopilot' },
+          { label: 'Automated Inquiry', desc: 'Parses an incoming message into a structured lead automatically.', href: '/autopilot#stage-0' },
+          { label: 'Automated Quotation', desc: 'Sends the inquiry to your supplier list, manages every reply.', href: '/autopilot#stage-2' },
+          { label: 'Automated Follow-up', desc: 'Reminds clients, sends nudges, wins back leads gone quiet.', href: '/autopilot#stage-7' },
         ],
       },
       {
         heading: '',
         items: [
-          { label: 'Auto-Confirm', desc: 'Confirms dates, intent, and availability with both sides.', href: '/autopilot#stage-3' },
-          { label: 'Auto-Collect', desc: 'Gathers traveller documents and supplier booking confirmations.', href: '/autopilot#stage-5' },
-          { label: 'Auto-Pay', desc: 'Sends deposit and balance requests on schedule — marking money received stays yours.', href: '/autopilot#stage-4' },
+          { label: 'Automated Confirmation', desc: 'Confirms dates, intent, and availability with both sides.', href: '/autopilot#stage-3' },
+          { label: 'Automated Collection', desc: 'Gathers traveller documents and supplier booking confirmations.', href: '/autopilot#stage-5' },
+          { label: 'Automated Payment', desc: 'Sends deposit and balance requests on schedule — marking money received stays yours.', href: '/autopilot#stage-4' },
         ],
       },
     ],

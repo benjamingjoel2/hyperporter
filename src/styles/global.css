@@ -1414,7 +1414,9 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .mega-wrap[data-mega="automations"] .mega-ico,.dsub .mega-ico{width:24px;height:24px}
 .mega-row-t{min-width:0}
 .mega .mega-row b{display:block;font-weight:400;font-size:15px;letter-spacing:-.01em;line-height:1.3;margin:2px 0 4px}
-.mega .mega-row-t > span{display:block;font-size:13.5px;line-height:1.5;color:var(--muted)}
+/* A short measure, so the line breaks early and each row reads as a
+   name over two or three brief lines rather than one long one. */
+.mega .mega-row-t > span{display:block;font-size:13.5px;line-height:1.5;color:var(--muted);max-width:27ch}
 .mega .mega-row:hover{background:var(--ink)}
 .mega .mega-row:hover b{color:var(--signal)}
 .mega .mega-row:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
