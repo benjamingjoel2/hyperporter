@@ -14,6 +14,7 @@ import Base from '../../layouts/Base.astro';
 import { OVERVIEWS, SEGMENTS } from '../../lib/content/customers';
 import type { Overview, Segment } from '../../lib/content/customers';
 import Mockup from '../../components/Mockup.astro';
+import PhotoHero from '../../components/PhotoHero.astro';
 
 // The screen each segment opens on: the part of the product that segment
 // actually lives in. Suppliers see their own side — requests and quotes —
@@ -50,21 +51,23 @@ const features = page.features;
   description={page.lede}
   currentNav="customers"
 >
-  <div class="sec wrap page-hero">
-    <div class="page-hero-copy">
+  <PhotoHero>
+    <div class="sec wrap page-hero">
+      <div class="page-hero-copy">
 
-      <p class="eyebrow rv">{page.eyebrow}</p>
-      <h1 class="rv">{page.title}</h1>
-      <p class="lede rv">{page.lede}</p>
-      <div class="rv" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
-        <a class="btn" href="https://portal.hyperporter.com">Get started free</a>
-        <a class="btn-o" href={overview ? overview.pricingHref : '/pricing'}>
-          {overview ? overview.pricingLabel : 'See pricing'}
-        </a>
+        <p class="eyebrow rv">{page.eyebrow}</p>
+        <h1 class="rv">{page.title}</h1>
+        <p class="lede rv">{page.lede}</p>
+        <div class="rv" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
+          <a class="btn" href="https://portal.hyperporter.com">Get started free</a>
+          <a class="btn-o" href={overview ? overview.pricingHref : '/pricing'}>
+            {overview ? overview.pricingLabel : 'See pricing'}
+          </a>
+        </div>
       </div>
+      <Mockup screen={SCREEN[page.slug]} />
     </div>
-    <Mockup screen={SCREEN[page.slug]} />
-  </div>
+  </PhotoHero>
 
   {
     segment && (

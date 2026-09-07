@@ -9,6 +9,7 @@
 import Base from '../layouts/Base.astro';
 import { PRODUCTS } from '../lib/content/products';
 import Mockup from '../components/Mockup.astro';
+import PhotoHero from '../components/PhotoHero.astro';
 ---
 
 <Base
@@ -16,18 +17,20 @@ import Mockup from '../components/Mockup.astro';
   description="Portal is the foundation everyone gets. Autopilot and Intelligence layer on top as you grow. Horizon runs underneath, on every tier."
   currentNav="product"
 >
-  <div class="sec wrap page-hero">
-    <div class="page-hero-copy">
+  <PhotoHero>
+    <div class="sec wrap page-hero">
+      <div class="page-hero-copy">
 
-      <p class="eyebrow rv">Product</p>
-      <h1 class="rv">Every capability, in one connected system.</h1>
-      <p class="lede rv">
-        Portal is the foundation everyone gets. Autopilot and Intelligence layer on top as you grow.
-        Horizon runs underneath both, always on.
-      </p>
+        <p class="eyebrow rv">Product</p>
+        <h1 class="rv">Every capability, in one connected system.</h1>
+        <p class="lede rv">
+          Portal is the foundation everyone gets. Autopilot and Intelligence layer on top as you grow.
+          Horizon runs underneath both, always on.
+        </p>
+      </div>
+      <Mockup screen="dashboard" />
     </div>
-    <Mockup screen="dashboard" />
-  </div>
+  </PhotoHero>
 
   <div class="sec-tight wrap">
     <div class="ladder rv">

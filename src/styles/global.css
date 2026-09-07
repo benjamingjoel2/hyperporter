@@ -1164,6 +1164,11 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .p-top-photo .eyebrow{color:rgba(255,255,255,.62)}
 .p-top-photo h1{color:#fff}
 .p-top-photo .lede{color:rgba(255,255,255,.82)}
+.p-top-photo .btn-o{color:#fff;border-color:rgba(255,255,255,.42)}
+.p-top-photo .btn-o:hover{border-color:#fff}
+/* The hero and whatever follows sit on one image; the light section after
+   it needs its own top padding back, since `.sec + .sec-tight` removes it. */
+.p-top-photo + .sec-tight{padding-top:clamp(34px,3.8vw,58px)}
 
 /* The thread card on the photograph: the nav dropdown's glass, not a white
    card — a white card on a dark photograph is a dialog box. */
