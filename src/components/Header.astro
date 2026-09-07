@@ -3,7 +3,8 @@
  * The site's chrome: wordmark left, five items, actions right, and the
  * three panels — Tools, Automations, Solutions, and Resources open one —
  * in the reference's format: described items in labelled columns and a
- * feature card on the right. The dispatch-rail marquee sits under the bar.
+ * feature card on the right. The dispatch-rail marquee sits under the bar
+ * on the homepage and /autopilot only, and scrolls away with the page.
  *
  * `current` is the page's own idea of where it lives (product, customers,
  * blog…) and is folded onto the five items here, so a page does not have
@@ -29,6 +30,12 @@ interface Props {
 }
 
 const { current } = Astro.props;
+
+/** The live-activity rail rides the two pages that open on Autopilot's
+    story — the homepage and the Autopilot overview — and nowhere else. It
+    scrolls away with the page; only the bar sticks. */
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const showRail = path === '/' || path === '/autopilot';
 
 const ACTIVE: Record<string, NavItem['id']> = {
   product: 'tools',
@@ -126,11 +133,15 @@ const stream = row + row;
       <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="drawer" id="burger"><span></span><span></span><span></span></button>
     </div>
   </div>
-  <div class="rail" aria-hidden="true">
-    <div class="tag">Live activity</div>
-    <div class="stream" set:html={stream} />
-  </div>
 </header>
+{
+  showRail && (
+    <div class="rail" id="rail" aria-hidden="true">
+      <div class="tag">Live activity</div>
+      <div class="stream" set:html={stream} />
+    </div>
+  )
+}
 
 {/* Outside the header on purpose: `header.top` carries a backdrop-filter,
     and that makes it the containing block for `position:fixed` descendants —
@@ -204,8 +215,11 @@ const stream = row + row;
      * hard-coded because the bar and the rail change height across
      * breakpoints.
      */
-    const publishHeight = (): void =>
+    const rail = document.getElementById('rail');
+    const publishHeight = (): void => {
       document.documentElement.style.setProperty('--chrome-h', `${bar.offsetHeight}px`);
+      document.documentElement.style.setProperty('--rail-h', `${rail ? rail.offsetHeight : 0}px`);
+    };
 
     /**
      * The bar is transparent on every page, so its text has to survive
