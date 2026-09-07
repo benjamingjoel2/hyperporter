@@ -1377,17 +1377,24 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 }
 .mega[hidden]{display:none}
 .mega-in{max-width:var(--max);margin:0 auto;padding:44px var(--pad) 52px;
-  display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:clamp(40px,6vw,120px);align-items:start}
-.mega-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px clamp(40px,6vw,120px);max-width:880px}
+  display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:clamp(28px,3vw,48px);align-items:start}
+/* The feature column stands off the groups behind a full-height hairline,
+   the same rule that separates the groups from each other. */
+.mega-side{align-self:stretch;border-left:1px solid var(--line);padding-left:clamp(28px,3vw,48px)}
+.mega-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 0;max-width:880px}
+/* Columns share the band equally, a hairline between them, each padded off
+   its rule so the rows never touch it. */
+.mega-group + .mega-group{border-left:1px solid var(--line);padding-left:clamp(28px,3vw,48px)}
+.mega-group:not(:last-child){padding-right:clamp(28px,3vw,48px)}
 /* Three groups take three columns, one each, so a long panel reads across
    rather than down. */
-.mega-groups.three{grid-template-columns:repeat(3,minmax(0,1fr));gap:36px clamp(28px,3.5vw,64px);max-width:1180px}
+.mega-groups.three{grid-template-columns:repeat(3,minmax(0,1fr));max-width:none}
 /* No feature card: the groups take the whole band. */
 .mega-in.no-feat{grid-template-columns:minmax(0,1fr)}
 .mega-group{display:flex;flex-direction:column;min-width:0}
 .mega .mega-head{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 6px;white-space:nowrap}
 /* Scoped under .mega so these beat `.links a`. */
-.mega .mega-row{display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;align-items:start;padding:10px 12px;margin:0 -12px;color:var(--paper);opacity:1;text-decoration:none;max-width:calc(34ch + 74px);border-radius:10px;background:none;transition:background .15s ease}
+.mega .mega-row{display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;align-items:start;padding:14px 12px;margin:0 -12px;color:var(--paper);opacity:1;text-decoration:none;max-width:calc(34ch + 74px);border-radius:10px;background:none;transition:background .15s ease}
 /* The icon in its tinted square. A shade lighter on the hover card so it
    still separates from the ground. */
 .mega-ico-box{width:36px;height:36px;border-radius:9px;background:var(--ink);display:grid;place-items:center;color:var(--paper);flex:none;transition:background .15s ease}
@@ -1397,7 +1404,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .mega-wrap[data-mega="automations"] .mega-ico,.dsub .mega-ico{width:24px;height:24px}
 .mega-row-t{min-width:0}
 .mega .mega-row b{display:block;font-weight:400;font-size:15px;letter-spacing:-.01em;line-height:1.3;margin:2px 0 4px}
-.mega .mega-row-t > span{display:block;font-size:13.5px;line-height:1.45;color:var(--muted)}
+.mega .mega-row-t > span{display:block;font-size:13.5px;line-height:1.5;color:var(--muted)}
 .mega .mega-row:hover{background:var(--ink)}
 .mega .mega-row:hover b{color:var(--signal)}
 .mega .mega-row:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
@@ -1424,7 +1431,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .mega-new{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:#DDF3E4;color:#146B4A}
 .mega-feat-d{margin:0 2px;font-size:13.5px;line-height:1.45;color:var(--muted)}
 .mega .mega-feat:hover .mega-feat-t,.dsub .mega-feat:hover .mega-feat-t{color:var(--signal)}
-@media (max-width:1180px){.mega-in{grid-template-columns:minmax(0,1fr) 260px;gap:40px}.mega-groups.three{gap:36px 28px}}
+@media (max-width:1180px){.mega-in{grid-template-columns:minmax(0,1fr) 260px;gap:28px}.mega-side{padding-left:28px}}
 
 /* Panels are pointer affordances; below this width the drawer lists
    everything inside them instead. */
