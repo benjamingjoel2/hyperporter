@@ -62,8 +62,13 @@
   /* Buttons, inputs and segmented controls. Not pills — a small, even
      corner, as on the reference. Label chips keep their own pill radius. */
   --radius:6px;
-  --pad:clamp(20px,3.2vw,48px);
-  --max:1680px;
+  /* Content runs no wider than the reference's — about 1,300px with a
+     tenth of the viewport either side — after the founder found the
+     1,680px measure hard to read (Sep 2026). The bar keeps the wider
+     measure so the wordmark and the actions stay near the edges. */
+  --pad:clamp(20px,8vw,120px);
+  --max:1320px;
+  --bar-max:1680px;
   --photo:url("/hero.jpg");
 }
 *{box-sizing:border-box}
@@ -172,7 +177,7 @@ body.drawer-open header.top .burger span{background:var(--paper)}
    paints over the ticker rather than under it. Safe now that the panel is
    anchored to its trigger — it was not when the panel was full-bleed, since
    a positioned .bar became its containing block and boxed it in. */
-.bar{max-width:var(--max);margin:0 auto;padding:0 var(--pad);height:72px;
+.bar{max-width:var(--bar-max);margin:0 auto;padding:0 clamp(20px,3.2vw,48px);height:72px;
   position:relative;z-index:2;
   /* Equal outer tracks, so the items sit on the page's centre whatever the
      wordmark and the buttons weigh. */
