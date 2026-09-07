@@ -150,7 +150,7 @@
   background:#0B0E12;border:1px solid var(--lg-lit);
   margin:-5.5px 0 28px;position:relative;z-index:2}
 .lg-pnode h3{font-size:19px;letter-spacing:-.018em;color:#fff;margin:0 0 9px}
-.lg-pnode p{font-size:14.5px;line-height:1.6;color:#9AA1AA;margin:0;max-width:32ch}
+.lg-pnode p{font-size:14.5px;line-height:1.6;color:#9AA1AA;margin:0;max-width:36ch}
 
 .lg-pipe-sec > .wrap > .lg-read{margin-top:clamp(40px,4.6vw,68px);color:#9AA1AA}
 .lg-pipe-sec > .wrap > .lg-read:hover{color:#fff}
