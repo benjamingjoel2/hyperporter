@@ -65,6 +65,32 @@ routes = []
 foot = None
 
 SCRIPT_RE = re.compile(r'<script type="module">(.*?)</script>', re.S)
+# Astro writes a page script that imports a shared module out to a file
+# under /_astro/ instead of inlining it — the accordion, since it moved to
+# lib/accordion.ts. Those are read back and inlined, chunk imports resolved,
+# so the preview runs what the site runs.
+EXT_SCRIPT_RE = re.compile(r'<script type="module" src="([^"]+)"></script>')
+IMPORT_RE = re.compile(r'^\s*import\s*"(\./[^"]+)";?', re.M)
+
+def read_module(rel, seen):
+    p = os.path.join(DIST, rel.lstrip('/'))
+    if rel in seen or not os.path.isfile(p):
+        return ''
+    seen.add(rel)
+    with open(p, encoding='utf-8') as fh:
+        code = fh.read()
+    base = os.path.dirname(rel)
+    def sub(m):
+        return read_module(os.path.normpath(os.path.join(base, m.group(1))).replace(os.sep, '/'), seen)
+    return IMPORT_RE.sub(sub, code)
+
+def externals(fragment):
+    out = []
+    for src_path in EXT_SCRIPT_RE.findall(fragment):
+        code = read_module(src_path, set())
+        if code:
+            out.append(code)
+    return out
 
 for path in sorted(glob.glob(os.path.join(DIST, '**', 'index.html'), recursive=True)):
     rel = os.path.relpath(path, DIST).replace(os.sep, '/')
@@ -80,9 +106,11 @@ for path in sorted(glob.glob(os.path.join(DIST, '**', 'index.html'), recursive=T
         continue
 
     pre, main, tail = body[:i], body[i:j], body[j:]
-    src = SCRIPT_RE.findall(tail) + SCRIPT_RE.findall(pre) + SCRIPT_RE.findall(main)
+    src = (SCRIPT_RE.findall(tail) + SCRIPT_RE.findall(pre) + SCRIPT_RE.findall(main)
+           + externals(tail) + externals(pre) + externals(main))
     tail = SCRIPT_RE.sub('', tail).replace('</body>', '').replace('</html>', '')
     pre, main = SCRIPT_RE.sub('', pre), SCRIPT_RE.sub('', main)
+    tail, pre, main = (EXT_SCRIPT_RE.sub('', x) for x in (tail, pre, main))
 
     if foot is None:
         foot = inline_assets(tail)
