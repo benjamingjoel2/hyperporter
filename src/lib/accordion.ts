@@ -5,29 +5,38 @@
  * snippets are `inert`, so they are out of the tab order and the
  * accessibility tree.
  *
- * Wires every `.lg-acc` on the page, each scoped to its own items and
- * shots. Imported by the pages that carry one.
+ * One delegated listener on the document rather than one per button: it
+ * does not care when the markup arrived, wires every `.lg-acc` on the page,
+ * and cannot be attached twice. Imported by the pages that carry one.
  */
-export const wireAccordions = (): void => {
-  document.querySelectorAll<HTMLElement>('.lg-acc').forEach((acc) => {
-    const items = Array.from(acc.querySelectorAll<HTMLElement>('.lg-acc-item'));
-    const shots = Array.from(acc.querySelectorAll<HTMLElement>('.lg-acc-shot > div'));
-    items.forEach((item, i) => {
-      item.querySelector<HTMLButtonElement>('.lg-acc-btn')?.addEventListener('click', () => {
-        items.forEach((it, j) => {
-          const on = j === i;
-          it.classList.toggle('on', on);
-          it.querySelector('.lg-acc-btn')?.setAttribute('aria-expanded', on ? 'true' : 'false');
-          const body = it.querySelector<HTMLElement>('.lg-acc-body');
-          if (body) body.inert = !on;
-          if (shots[j]) {
-            shots[j].classList.toggle('on', on);
-            shots[j].inert = !on;
-          }
-        });
-      });
-    });
+const openItem = (acc: HTMLElement, index: number): void => {
+  const items = Array.from(acc.querySelectorAll<HTMLElement>('.lg-acc-item'));
+  const shots = Array.from(acc.querySelectorAll<HTMLElement>('.lg-acc-shot > div'));
+  items.forEach((it, j) => {
+    const on = j === index;
+    it.classList.toggle('on', on);
+    it.querySelector('.lg-acc-btn')?.setAttribute('aria-expanded', on ? 'true' : 'false');
+    const body = it.querySelector<HTMLElement>('.lg-acc-body');
+    if (body) body.inert = !on;
+    if (shots[j]) {
+      shots[j].classList.toggle('on', on);
+      shots[j].inert = !on;
+    }
   });
 };
 
-wireAccordions();
+const root = document.documentElement as HTMLElement & { __acc?: boolean };
+if (!root.__acc) {
+  root.__acc = true;
+  document.addEventListener('click', (event) => {
+    const btn = (event.target as Element | null)?.closest?.('.lg-acc-btn');
+    if (!btn) return;
+    const acc = btn.closest<HTMLElement>('.lg-acc');
+    const item = btn.closest<HTMLElement>('.lg-acc-item');
+    if (!acc || !item) return;
+    const index = Array.from(acc.querySelectorAll('.lg-acc-item')).indexOf(item);
+    if (index >= 0) openItem(acc, index);
+  });
+}
+
+export {};
