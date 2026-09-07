@@ -1098,6 +1098,20 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 @media (max-width:560px){.fitem{grid-template-columns:1fr;gap:6px}}
 
 /* ---------- tool and automation pages (components/DetailPage.astro) ---------- */
+/* The hero's right column holds the clickable card, which wants the width
+   /autopilot's thread card has rather than the 460px a screen gets. */
+.page-hero.demo-hero{grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:clamp(40px,7vw,120px);align-items:center}
+/* More air than the /autopilot card: this one is read step by step. */
+.thread.demo{padding:28px}
+.thread.demo .th{padding-bottom:20px}
+.thread.demo .chips{gap:8px;margin:24px 0}
+.thread.demo .chip{white-space:normal;text-align:left;line-height:1.3;padding:8px 11px}
+.thread.demo .line{padding:16px 0;gap:13px;line-height:1.5}
+.thread.demo .tpanel{min-height:124px}
+.thread.demo .ft{margin-top:22px;padding-top:20px}
+.thread.demo .demo-k{display:flex;align-items:center;gap:8px;color:var(--signal)}
+.thread.demo .demo-k i{width:7px;height:7px;border-radius:50%;background:var(--signal)}
+@media (max-width:900px){.page-hero.demo-hero{grid-template-columns:1fr}}
 /* The step a person always takes. Amber: the site's mark for a human or
    manual state, and this is the one place on an automation page it belongs. */
 .human-note{border-left:2px solid var(--amber);padding:6px 0 6px 28px;max-width:64ch}
