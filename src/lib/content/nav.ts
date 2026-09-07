@@ -78,6 +78,7 @@ export const NAV: NavItem[] = [
           { label: 'Itinerary generator', desc: 'Builds itineraries automatically from what is in the vault.', href: '/intelligence#ai-itinerary-suggestions' },
           { label: 'Payments & Invoicing', desc: 'Collect deposits and balances, and generate invoices tied to the booking.', href: '/solutions/payments' },
           { label: 'Support relay', desc: 'Multiple ground-team contacts, live support on the ground.', href: '/solutions/communication' },
+          { label: 'WhatsApp integration', desc: 'Real WhatsApp Business API, connected straight into your relay.', href: '/solutions/communication' },
         ],
       },
     ],
