@@ -70,7 +70,7 @@ export const NAV: NavItem[] = [
         ],
       },
       {
-        heading: 'More tools',
+        heading: 'Add-on tools',
         items: [
           { label: 'Document vault', desc: 'Stores every contract and rate sheet, and makes them queryable.', href: '/intelligence#vault' },
           { label: 'Itinerary generator', desc: 'Builds itineraries automatically from what is in the vault.', href: '/intelligence#ai-itinerary-suggestions' },
