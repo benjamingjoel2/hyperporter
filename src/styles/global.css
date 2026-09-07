@@ -377,7 +377,14 @@ p{margin:0 0 16px}
 .tpanel[hidden]{display:none}
 /* Both variants are rendered; the toggle picks one. min-height keeps the
    card from jumping when the manual view has one line instead of two. */
+/* A panel arriving eases in — a short rise and fade — rather than
+   snapping; `hidden` coming off restarts the animation. Chips carry their
+   own colour transitions. */
 .tpanel{min-height:118px}
+@media (prefers-reduced-motion:no-preference){
+  .tpanel{animation:panel-in .5s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes panel-in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+}
 .v-manual{display:none}
 .thread.manual .v-auto{display:none}
 .thread.manual .v-manual{display:block}
@@ -1116,7 +1123,8 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
    behind the height so the text arrives into space that already exists. */
 .lg-acc-body{display:grid;grid-template-rows:0fr;opacity:0;max-width:44ch;
   transition:grid-template-rows .65s var(--acc-ease),opacity .45s var(--acc-ease)}
-.lg-acc-body > div{min-height:0;overflow:hidden}
+.lg-acc-body > div{min-height:0;overflow:hidden;transform:translateY(8px);transition:transform .6s var(--acc-ease)}
+.lg-acc-item.on .lg-acc-body > div{transform:none;transition:transform .7s var(--acc-ease) .1s}
 .lg-acc-item.on .lg-acc-body{grid-template-rows:1fr;opacity:1;transition:grid-template-rows .65s var(--acc-ease),opacity .6s var(--acc-ease) .15s}
 .lg-acc-item.on .lg-acc-body > div{padding-bottom:30px}
 .lg-acc-body p{margin:8px 0 0;color:var(--muted);font-size:16px;line-height:1.5}
