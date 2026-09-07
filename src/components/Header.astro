@@ -90,7 +90,7 @@ const stream = row + row;
                   long first group and two short ones share the height — and
                   the feature card on the right. */}
               <div class="mega" hidden>
-                <div class="mega-in">
+                <div class:list={['mega-in', { 'no-feat': !n.feature }]}>
                   <div class:list={['mega-groups', { three: n.groups.length === 3 }]}>
                     {n.groups.map((g) => (
                       <div class="mega-group">
