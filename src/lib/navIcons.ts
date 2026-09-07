@@ -22,8 +22,8 @@ export const NAV_ICONS: Record<string, string> = {
   // A kanban board: three columns, each as tall as its stack of cards.
   'CRM workflow': R(3, 3, 5, 12, 1.5) + R(9.5, 3, 5, 18, 1.5) + R(16, 3, 5, 8, 1.5),
   'Inquiry form': R(5, 3, 14, 18) + P('M9 8h6') + P('M9 12h6') + P('M9 16h3'),
-  'Quotation tool': P('M5 20V11') + P('M12 20V5') + P('M19 20v-8') + P('M3 20h18'),
-  'Proposal tool': P('M21 3 10 14') + P('M21 3 14 21l-4-7-7-4z'),
+  'Quotation Board': P('M5 20V11') + P('M12 20V5') + P('M19 20v-8') + P('M3 20h18'),
+  'Proposal Share': P('M21 3 10 14') + P('M21 3 14 21l-4-7-7-4z'),
   // Tools — Collaboration
   'Client + Supplier Dashboard': R(3, 4, 8, 16) + R(13, 4, 8, 16) + P('M6 8h2') + P('M16 8h2'),
   // Three speech bubbles: two parties above, the third answering below.
