@@ -1,0 +1,22 @@
+---
+/**
+ * The closing band: a dark ground, one statement in two tones — the claim
+ * in white, the continuation in grey — and the one button. The reference
+ * ends its product and solutions pages this way.
+ */
+interface Props {
+  lead: string;
+  rest: string;
+  cta?: string;
+  href?: string;
+}
+
+const { lead, rest, cta = 'Get started free', href = 'https://portal.hyperporter.com' } = Astro.props;
+---
+
+<section class="cta-band" data-chrome="dark">
+  <div class="wrap">
+    <p class="cta-band-t rv"><b>{lead}</b> {rest}</p>
+    <a class="btn btn-lg rv" href={href}>{cta} <i aria-hidden="true">&rarr;</i></a>
+  </div>
+</section>

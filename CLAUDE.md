@@ -106,10 +106,21 @@ all data in `src/lib/content/nav.ts`. Every Tools item has a page of its
 own at `/tools/[slug]` and every Automation at `/automations/[slug]` (Sep
 2026, founder's ask — the anchors on the layer pages read as "the same page
 again" from the menu). Both collections are `src/lib/content/detail.ts`,
-rendered through `components/DetailPage.astro`: hero with a screen, what it
-does, how it works, the step a person always takes (automations), where it
-is available, related pages, next step. `/tools` and `/automations` are the
-indexes. The layer pages `/portal`, `/autopilot`, `/intelligence`,
+rendered through `components/DetailPage.astro` in the founder's sequence
+(after harvey.ai): hero, text only, on the photograph; the overview band
+under it on the same photograph, with the page's steps as a clickable
+card (`DemoCard.astro`); three points with icons (`Points.astro`,
+icons guessed from the point's title in `lib/pointIcons.ts`); "How it
+works" as the list-and-snippet accordion (`lib/accordion.ts`, CSS in
+global.css, shared with the homepage); the step a person always takes
+(automations, amber); the closing statement band (`CtaBand.astro`).
+`/tools` and `/automations` are the indexes.
+
+The solutions pages (`/customers/[slug]`) follow the reference's solutions
+sequence: a light hero with the headline left, the lede and button right
+and one wide photograph under both; three points with icons; "How X use
+Hyperporter" as the accordion on a dark ground with the screen beside;
+the closing band. The pricing ladder they used to end on is /pricing. The layer pages `/portal`, `/autopilot`, `/intelligence`,
 `/horizon` stay as they were; Overview in the Automations menu is
 `/autopilot`.
 

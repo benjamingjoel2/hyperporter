@@ -40,6 +40,8 @@ export interface DetailPage {
   tierNote: string;
   title: string;
   lede: string;
+  /** Two or three sentences for the overview band under the hero. */
+  overview: string;
   /** Screen from components/mockups/index.ts. */
   screen: string;
   whatTitle: string;
@@ -62,6 +64,7 @@ export const TOOLS: DetailPage[] = [
     tierNote: 'Included on every tier, for resellers and suppliers alike. Free, forever.',
     title: 'The platform underneath everything.',
     lede: 'Portal is where your team, your trips and your contacts live: one CRM, one thread per trip, one link that faces the traveller on one side and the supplier on the other. Everything else Hyperporter does is built on it.',
+    overview: 'Portal is the platform every account starts on and never leaves: the CRM, the magic links, the inquiry form and the proposal generator. Autopilot, Intelligence and Horizon all sit on top of it. It is free on every tier, for both sides of the market.',
     screen: 'dashboard',
     whatTitle: 'What Portal gives you on day one',
     what: [
@@ -87,6 +90,7 @@ export const TOOLS: DetailPage[] = [
     tierNote: 'Part of the Intelligence tier, priced per business. Atlas is trained on your account’s own Vault and nobody else’s data.',
     title: 'An assistant that answers from your own contracts.',
     lede: 'Atlas builds trips, looks up rates and dates, and answers questions on request. It reads from your Vault — your contracts, your rate sheets, your past trips — and cites the page it took the answer from.',
+    overview: 'Atlas is the assistant in the Intelligence tier. It reads your Vault, answers with a citation, and drafts from your own past trips. It never sees another account’s data, and never sends anything on your behalf.',
     screen: 'atlas',
     whatTitle: 'What Atlas does',
     what: [
@@ -112,6 +116,7 @@ export const TOOLS: DetailPage[] = [
     tierNote: 'Included on every tier. Manual on Showcase; the stage engine runs on its own from Autopilot up.',
     title: 'Every trip on a board, every stage in view.',
     lede: 'The client and supplier database, connected to trip staging. Each trip moves through nine stages from Inquiry to Completed, and the board shows where every one of them is right now.',
+    overview: 'The CRM is a board of trips, each at one of nine stages, with the travellers and suppliers on it as contacts with a history. On Showcase you move the stages by hand. From Autopilot up, the engine moves them for you.',
     screen: 'crm',
     whatTitle: 'What the CRM workflow does',
     what: [
@@ -137,6 +142,7 @@ export const TOOLS: DetailPage[] = [
     tierNote: 'Included on every tier. Your public link is live the day you sign up.',
     title: 'A public link that fills your CRM for you.',
     lede: 'Your own lead-capture form, on a link you can put anywhere — a LinkedIn profile, an email signature, an Instagram bio, a community group. Every submission lands in the CRM as a contact and a trip inquiry.',
+    overview: 'One public link, branded to you, that turns a visitor into a structured trip inquiry in your CRM. It is live the day you sign up and works from any page you already have.',
     screen: 'inquiry',
     whatTitle: 'What the inquiry form does',
     what: [
@@ -162,6 +168,7 @@ export const TOOLS: DetailPage[] = [
     tierNote: 'Included on every tier. Quotes are requested by hand on Showcase and in parallel, automatically, from Autopilot up.',
     title: 'Every supplier quote, side by side.',
     lede: 'The Quotation Board lays out each supplier’s price for each part of the trip, applies your margin, and shows what the traveller will see — before they see it.',
+    overview: 'The board is where a trip’s parts meet the suppliers’ prices: one row per part, one column per supplier, your margin on top. On Autopilot the requests go out and the replies come back to it on their own.',
     screen: 'sourcing',
     whatTitle: 'What the board does',
     what: [
@@ -187,6 +194,7 @@ export const TOOLS: DetailPage[] = [
     tierNote: 'Included on every tier. Your own domain on the link is part of Intelligence, or a €19/mo add-on below it.',
     title: 'One proposal, shared as a link, a PDF or a message.',
     lede: 'A branded itinerary and quote, built from what is already on the trip record, and shared the way the traveller prefers: a link that stays current, a PDF for their inbox, or a text message with the link in it.',
+    overview: 'A proposal is built from the trip record and shared as a link that stays current, a PDF, or a text message. Your brand is on it; the traveller accepts on their side of the link.',
     screen: 'brand',
     whatTitle: 'What Proposal Share does',
     what: [
@@ -212,6 +220,7 @@ export const TOOLS: DetailPage[] = [
     tierNote: 'Included on every tier. Neither side needs an account; each opens their own side of the magic link.',
     title: 'Each side gets their own view of the trip.',
     lede: 'The traveller sees the itinerary, the price and where to pay. The supplier sees the request, their quote and the confirmation. Both are views of the same trip record, and neither sees the other’s side.',
+    overview: 'Every trip has a traveller’s side and a supplier’s side, each a view of the same record through its own magic link. Neither side needs an account, and neither sees the other’s.',
     screen: 'contacts',
     whatTitle: 'What each side sees',
     what: [
@@ -237,6 +246,7 @@ export const TOOLS: DetailPage[] = [
     tierNote: 'In-platform messaging on every tier. Email threads join it from Autopilot up; WhatsApp is an add-on.',
     title: 'Traveller, supplier and you, on one thread.',
     lede: 'A trip has two conversations — with the person travelling and with the people delivering it. The 3-way inbox keeps both on the trip record, in order, so nothing said to one side is lost when you speak to the other.',
+    overview: 'One thread per trip carries both conversations — with the traveller and with the supplier — in order, whichever channel each came through. You reply in place and it goes back the way it came.',
     screen: 'inbox',
     whatTitle: 'What the inbox does',
     what: [
@@ -262,6 +272,7 @@ export const TOOLS: DetailPage[] = [
     tierNote: 'Part of the Intelligence tier. Each account’s Vault is indexed to that account only.',
     title: 'Every contract and rate sheet, made queryable.',
     lede: 'The Vault is where your account’s own documents live: supplier contracts, rate sheets, terms. Each is read on upload, its rates and validity extracted, and from then on it can be asked a question.',
+    overview: 'The Vault is where your contracts and rate sheets live once they are uploaded: read, their rates and validity extracted, indexed to your account only. It is what Atlas and the Itinerary generator answer from.',
     screen: 'vault',
     whatTitle: 'What the Vault does',
     what: [
@@ -287,6 +298,7 @@ export const TOOLS: DetailPage[] = [
     tierNote: 'Part of the Intelligence tier. Drafts from your Vault and your past trips; Portal’s proposal generator is on every tier.',
     title: 'A first draft of the trip, from what you already know.',
     lede: 'Give it the brief and the Itinerary generator drafts the days — the places, the pacing, the suppliers you already use there and the rates you have on file — as a starting point you edit, not a page you fill.',
+    overview: 'Give it the brief and it drafts the days from the suppliers and rates in your Vault, shaped like your past trips. The draft lands on the trip at Planning for you to edit, then becomes the proposal.',
     screen: 'proposal',
     whatTitle: 'What the generator does',
     what: [
@@ -312,6 +324,7 @@ export const TOOLS: DetailPage[] = [
     tierNote: 'Payment instructions on every tier. Gateway processing and two-sided payment automation are part of Intelligence.',
     title: 'Deposits, balances and invoices, tied to the booking.',
     lede: 'Every trip carries its own payment schedule. Instructions appear on the traveller’s link, invoices are generated from the trip record, and what has been received is always marked by a person.',
+    overview: 'Each trip carries a payment schedule shown on the traveller’s link, and invoices generated from the accepted proposal. Requests go out on schedule from Autopilot; marking money received is always a person’s action.',
     screen: 'payments',
     whatTitle: 'What it does',
     what: [
@@ -337,6 +350,7 @@ export const TOOLS: DetailPage[] = [
     tierNote: 'Metered per active trip, on top of any tier. Live during the Traveling stage.',
     title: 'Live support that runs itself, until it shouldn’t.',
     lede: 'While the traveller is on the ground, the relay connects them to the driver, the guide and the camp without anyone sharing a number. Routine questions are handled on the thread. A real problem reaches you at once.',
+    overview: 'During the trip, the relay connects the traveller to the ground team through one number each, keeps every message on the thread, and escalates anything that is not routine to you at once.',
     screen: 'relay',
     whatTitle: 'What the relay does',
     what: [
@@ -362,6 +376,7 @@ export const TOOLS: DetailPage[] = [
     tierNote: 'The real WhatsApp Business API, set up per account. Token cost scales with use, on top of any tier.',
     title: 'Real WhatsApp, straight into the thread.',
     lede: 'Not a screenshot of a chat pasted into a note. The WhatsApp Business API connected to your account, so a traveller’s message arrives on the trip thread and your reply goes back to their phone.',
+    overview: 'The real WhatsApp Business API connected to your account: a traveller’s message lands on the trip thread, your reply goes back to their phone, and a new request becomes an inquiry.',
     screen: 'relay',
     whatTitle: 'What the integration does',
     what: [
@@ -390,6 +405,7 @@ export const AUTOMATIONS: DetailPage[] = [
     tierNote: 'Part of Autopilot at €49 a month, and of Intelligence. Stage 01 of the nine.',
     title: 'From the first message to a confirmed brief, untouched.',
     lede: 'A form, an email or a WhatsApp arrives. Automated Inquiry reads it, asks the traveller the questions it cannot answer, and confirms the brief with them before the trip moves to Planning.',
+    overview: 'Stage one of the nine. A message arrives on any channel, is parsed into a brief, the gaps are asked about, and the traveller confirms it before the trip moves to Planning.',
     screen: 'inquiry',
     whatTitle: 'What it automates',
     what: [
@@ -416,6 +432,7 @@ export const AUTOMATIONS: DetailPage[] = [
     tierNote: 'Part of Autopilot at €49 a month, and of Intelligence. Stage 03 of the nine.',
     title: 'Every supplier asked at once, every reply managed.',
     lede: 'Each part of the trip — hotels, transport, activities — goes to the suppliers qualified for it, in parallel. Replies come back onto the Quotation Board, your margin is applied, and the traveller never sees a number before you do.',
+    overview: 'Stage three. Each part of the trip goes to every qualified supplier at once, replies come back to the Quotation Board with your margin applied, and you choose which to accept.',
     screen: 'sourcing',
     whatTitle: 'What it automates',
     what: [
@@ -442,6 +459,7 @@ export const AUTOMATIONS: DetailPage[] = [
     tierNote: 'Part of Autopilot at €49 a month, and of Intelligence. Runs across Planning, Ready and Post-Trip.',
     title: 'Reminders sent, nudges timed, quiet leads won back.',
     lede: 'A proposal opened twice and not answered. A voucher still missing five days out. A traveller home for a week with no feedback asked for. Automated Follow-up sends the message you would have sent, at the moment you would have sent it.',
+    overview: 'Across the stages. Proposal nudges, pre-departure reminders and post-trip feedback requests go out at the moment you would have sent them, and every reply comes back to the thread.',
     screen: 'inbox',
     whatTitle: 'What it automates',
     what: [
@@ -468,6 +486,7 @@ export const AUTOMATIONS: DetailPage[] = [
     tierNote: 'Part of Autopilot at €49 a month, and of Intelligence. Stage 04 of the nine.',
     title: 'Nothing is booked until it is checked again.',
     lede: 'The moment a proposal is accepted, every supplier on it is asked to re-confirm dates, availability and price. A small change is resolved with the traveller directly. A real problem finds a backup. A person steps in only if neither works.',
+    overview: 'Stage four. When a proposal is accepted, every supplier on it re-confirms dates and price. Small changes go to the traveller, a real problem finds a backup, and only the rest reaches you.',
     screen: 'pipeline',
     whatTitle: 'What it automates',
     what: [
@@ -494,6 +513,7 @@ export const AUTOMATIONS: DetailPage[] = [
     tierNote: 'Part of Autopilot at €49 a month, and of Intelligence. Stage 06 of the nine.',
     title: 'The last mile chased down before it is a problem.',
     lede: 'Passport details from the traveller. Vouchers, pickup times and a driver’s number from each supplier. Automated Collection asks for each, tracks what has come in, and reminds whoever is late — so that on departure day nothing is missing.',
+    overview: 'Stage six. Traveller documents and supplier vouchers are requested, tracked and chased before departure, so nothing is missing on the day.',
     screen: 'crm',
     whatTitle: 'What it automates',
     what: [
@@ -520,6 +540,7 @@ export const AUTOMATIONS: DetailPage[] = [
     tierNote: 'Requests are automated on Autopilot. Gateway processing and two-sided payment automation are part of Intelligence.',
     title: 'Requests sent on schedule. Money marked by a person.',
     lede: 'The deposit request goes out when the trip is confirmed. The balance request goes out when it falls due. Reminders follow. What never happens on its own is marking money received — that stays a deliberate action, every time.',
+    overview: 'Stage five. Deposit and balance requests go out on schedule with reminders. Marking money received stays a person’s action; on Intelligence, gateway processing pays the supplier in full automatically.',
     screen: 'payments',
     whatTitle: 'What it automates',
     what: [

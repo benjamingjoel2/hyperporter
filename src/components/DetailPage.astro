@@ -1,14 +1,19 @@
 ---
 /**
- * One tool or one automation, on a page of its own: the hero with its steps
- * as a clickable card, what it does, how it works, the step a person always takes (on
- * the automations), where it is available, three related pages and the
- * next step. Both collections render through this so they read as one
- * family; the copy is each page's own, in lib/content/detail.ts.
+ * One tool or one automation, on a page of its own, in the founder's
+ * sequence (Sep 2026): the hero, text only, on the photograph; under it,
+ * on the same photograph, the overview band with the clickable step card;
+ * three points with icons; "How it works" as the reference's list-and-
+ * snippet accordion; the step a person always takes (automations); and
+ * the closing statement band. Both collections render through this so
+ * they read as one family; the copy is each page's own, in
+ * lib/content/detail.ts.
  */
 import DemoCard from './DemoCard.astro';
 import PhotoHero from './PhotoHero.astro';
-import { resolveRelated } from '../lib/content/detail';
+import Points from './Points.astro';
+import CtaBand from './CtaBand.astro';
+import Mockup from './Mockup.astro';
 import type { DetailPage } from '../lib/content/detail';
 
 interface Props {
@@ -18,11 +23,15 @@ interface Props {
 
 const { page, kind } = Astro.props;
 const eyebrow = `${kind === 'tool' ? 'Tools' : 'Automations'} — ${page.layer}`;
-const related = page.related.map(resolveRelated);
+const id = `${kind}-${page.slug}`;
+const cta =
+  kind === 'tool'
+    ? { lead: `${page.name} is part of ${page.layer}.`, rest: 'Start free on Showcase, and switch on what you need as the trips come in.' }
+    : { lead: 'Autopilot runs the stages. You take the decisions.', rest: 'Start free on Showcase, and switch it on when you are ready.' };
 ---
 
 <PhotoHero>
-  <div class="sec wrap page-hero demo-hero">
+  <div class="sec wrap page-hero hero-solo">
     <div class="page-hero-copy">
       <p class="eyebrow rv">{eyebrow}</p>
       <h1 class="rv">{page.title}</h1>
@@ -32,42 +41,58 @@ const related = page.related.map(resolveRelated);
         <a class="btn-o" href="/pricing">See pricing</a>
       </div>
     </div>
-    {/* Not a picture: the page's own steps, clickable, in the thread card
-        /autopilot opens with. */}
-    <DemoCard page={page} kind={kind} />
+  </div>
+
+  {/* The overview, under the hero on the same photograph: a lead beside the
+      page's own steps, clickable. */}
+  <div class="demo-band">
+    <div class="demo-glass rv">
+      <div class="demo-lead">
+        <p class="eyebrow">{page.name} · overview</p>
+        <p class="dek">{page.overview}</p>
+        <p class="demo-tier">Available on <b>{page.tier}</b> · {page.tierNote}</p>
+      </div>
+      <DemoCard page={page} kind={kind} />
+    </div>
   </div>
 </PhotoHero>
 
-<div class="sec-tight wrap">
-  <h2 class="rv">{page.whatTitle}</h2>
-  <div class="reasons rv">
-    {
-      page.what.map((r) => (
-        <div>
-          <b>{r.title}</b>
-          <p>{r.body}</p>
-        </div>
-      ))
-    }
-  </div>
-</div>
+<Points title={page.whatTitle} points={page.what} />
 
-<div class="sec-tight wrap">
-  <h2 class="rv">{page.howTitle}</h2>
-  <div class="flist rv">
-    {
-      page.how.map((s) => (
-        <div class="fitem">
-          <div class="fn">{s.n}</div>
-          <div>
-            <b>{s.name}</b>
-            <p>{s.body}</p>
+{/* How it works: the reference's accordion — the steps on hairlines,
+    the open one with its body, the screen beside. */}
+<section class="sec wrap">
+  <h2 class="rv" style="margin-bottom:clamp(30px,3.6vw,52px)">{page.howTitle}</h2>
+  <div class="lg-acc">
+    <div class="lg-acc-list">
+      {
+        page.how.map((s, i) => (
+          <div class:list={['lg-acc-item', { on: i === 0 }]}>
+            <button
+              type="button"
+              class="lg-acc-btn"
+              id={`${id}-how-tab-${i}`}
+              aria-expanded={i === 0 ? 'true' : 'false'}
+              aria-controls={`${id}-how-body-${i}`}
+            >
+              {s.name}
+            </button>
+            <div class="lg-acc-body" id={`${id}-how-body-${i}`} inert={i !== 0}>
+              <div>
+                <p>{s.body}</p>
+              </div>
+            </div>
           </div>
-        </div>
-      ))
-    }
+        ))
+      }
+    </div>
+    <div class="lg-acc-shot">
+      <div class="on">
+        <Mockup screen={page.screen} />
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
 {
   /* Amber is the site's mark for a human / manual state, and this is the
@@ -82,40 +107,8 @@ const related = page.related.map(resolveRelated);
   )
 }
 
-<div class="sec-tight wrap">
-  <div class="avail rv">
-    <div>
-      <p class="eyebrow">Available on</p>
-      <div class="avail-tier">{page.tier}</div>
-      <p>{page.tierNote}</p>
-    </div>
-    <a class="plink" href="/pricing">Compare tiers &rarr;</a>
-  </div>
-</div>
+<CtaBand lead={cta.lead} rest={cta.rest} />
 
-<div class="sec-tight wrap">
-  <p class="eyebrow rv">Related</p>
-  <div class="rel-grid rv">
-    {
-      related.map((r) => (
-        <a class="rel" href={r.href}>
-          <span class="rel-k">{r.page.layer}</span>
-          <b>{r.page.name}</b>
-          <p>{r.page.title}</p>
-          <span class="plink">Open &rarr;</span>
-        </a>
-      ))
-    }
-  </div>
-</div>
-
-<div class="sec-tight wrap">
-  <div class="nextup rv">
-    <div>
-      <p class="eyebrow" style="margin-bottom:0">{page.next.eyebrow}</p>
-      <h3>{page.next.title}</h3>
-      <p>{page.next.desc}</p>
-    </div>
-    <a class="plink" href={page.next.href}>{page.next.cta} &rarr;</a>
-  </div>
-</div>
+<script>
+  import '../lib/accordion';
+</script>
