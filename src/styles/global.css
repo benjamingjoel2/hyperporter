@@ -1161,6 +1161,11 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
   height:100vh;height:100svh;object-fit:cover;
   filter:grayscale(.4) brightness(.5);margin-bottom:-100vh;margin-bottom:-100svh}
 .p-top-photo > :not(.p-photo-bg){position:relative;z-index:1}
+/* The hero's own size: the photograph fills the section and stops with it.
+   Only /autopilot keeps the sticky full-viewport image, for the band that
+   scrolls over it. */
+.p-top-fit{overflow:hidden}
+.p-top-fit .p-photo-bg{position:absolute;inset:0;height:100%;margin:0}
 .p-top-photo .eyebrow{color:rgba(255,255,255,.62)}
 .p-top-photo h1{color:#fff}
 .p-top-photo .lede{color:rgba(255,255,255,.82)}
