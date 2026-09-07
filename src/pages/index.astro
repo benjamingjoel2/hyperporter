@@ -12,7 +12,7 @@
  * removed (Sep 2026) at the founder's instruction.
  *
  * Content comes from the content modules, as everywhere else on this site —
- * PRODUCTS and MOVES — so
+ * PRODUCTS and WHY — so
  * the page stays thin and cannot drift from /product, /autopilot or
  * /security.
  *
@@ -23,7 +23,7 @@
  * post-pilot, not held. Do not turn that last one into a seal.
  */
 import Base from '../layouts/Base.astro';
-import { PRODUCTS, MOVES } from '../lib/content/products';
+import { PRODUCTS, WHY } from '../lib/content/products';
 import Mockup from '../components/Mockup.astro';
 
 // The screen each layer shows — the part of the interface that layer is.
@@ -140,14 +140,14 @@ const SIDES = [
     <section class="lg-pipe-sec" id="stages" data-chrome="dark">
       <div class="wrap">
         <div class="lg-pipe-lead">
-          <p class="eyebrow rv">System overview</p>
-          <h2 class="rv">Four moves, start to finish.</h2>
+          <p class="eyebrow rv">System overview — Why Hyperporter</p>
+          <h2 class="rv">Build a modern travel business.</h2>
         </div>
         <div class="lg-pipe rv">
           <div class="lg-pipe-rail"><span aria-hidden="true"></span></div>
           <ol class="lg-pipe-row">
             {
-              MOVES.map((m, i) => (
+              WHY.map((m, i) => (
                 <li class="lg-pnode">
                   <span class="lg-pnum" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                   <span class="lg-pdot" aria-hidden="true" />
@@ -158,8 +158,8 @@ const SIDES = [
             }
           </ol>
         </div>
-        <a class="lg-read rv" href="/autopilot">
-          <span aria-hidden="true">&#8627;</span> <span>All nine stages, on Autopilot</span>
+        <a class="lg-read rv" href="/product">
+          <span aria-hidden="true">&#8627;</span> <span>See the whole system</span>
         </a>
       </div>
     </section>
