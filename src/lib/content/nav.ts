@@ -6,10 +6,9 @@
  * the founder's own grouping (Sep 2026): Tools, Automations, Solutions,
  * Pricing, Resources.
  *
- * Every item links to a real place. Tools that are features of a product
- * page link to that feature's anchor (ProductPage gives each numbered
- * feature an id from its name); automations link to their stage on
- * /autopilot, whose pills carry `stage-N` ids and open on arrival.
+ * Every item links to a page of its own: the tools at /tools/[slug] and
+ * the automations at /automations/[slug], both off lib/content/detail.ts.
+ * Overview is the /autopilot layer page.
  *
  * Terminology holds inside the menu as everywhere: Portal is the platform,
  * Horizon is a list and not software, payment marking is a human step even
@@ -59,24 +58,24 @@ export const NAV: NavItem[] = [
         heading: '',
         span: 2,
         items: [
-          { label: 'Portal', desc: 'The platform underneath everything — team, trips, and contacts.', href: '/portal' },
-          { label: 'Atlas AI', desc: 'Builds trips, looks up trip details, answers questions on request.', href: '/intelligence' },
-          { label: 'CRM workflow', desc: 'The client and supplier database, connected to trip staging.', href: '/portal#crm' },
-          { label: 'Inquiry form', desc: 'Your public lead-capture link — every submission lands in the CRM.', href: '/solutions/inquiry' },
-          { label: 'Quotation Board', desc: 'Organises supplier quotes side by side, and adds your margin.', href: '/autopilot#stage-2' },
-          { label: 'Proposal Share', desc: 'Share itineraries and quotes as a link, a PDF, or a text message.', href: '/portal#proposal-generator' },
-          { label: 'Client + Supplier Dashboard', desc: 'Each side gets their own view to manage the trip.', href: '/customers' },
-          { label: '3-way inbox', desc: 'Client-side and supplier-side conversation, managed in one place.', href: '/solutions/communication' },
+          { label: 'Portal', desc: 'The platform underneath everything — team, trips, and contacts.', href: '/tools/portal' },
+          { label: 'Atlas AI', desc: 'Builds trips, looks up trip details, answers questions on request.', href: '/tools/atlas-ai' },
+          { label: 'CRM workflow', desc: 'The client and supplier database, connected to trip staging.', href: '/tools/crm-workflow' },
+          { label: 'Inquiry form', desc: 'Your public lead-capture link — every submission lands in the CRM.', href: '/tools/inquiry-form' },
+          { label: 'Quotation Board', desc: 'Organises supplier quotes side by side, and adds your margin.', href: '/tools/quotation-board' },
+          { label: 'Proposal Share', desc: 'Share itineraries and quotes as a link, a PDF, or a text message.', href: '/tools/proposal-share' },
+          { label: 'Client + Supplier Dashboard', desc: 'Each side gets their own view to manage the trip.', href: '/tools/client-supplier-dashboard' },
+          { label: '3-way inbox', desc: 'Client-side and supplier-side conversation, managed in one place.', href: '/tools/three-way-inbox' },
         ],
       },
       {
         heading: 'Add-on tools',
         items: [
-          { label: 'Document vault', desc: 'Stores every contract and rate sheet, and makes them queryable.', href: '/intelligence#vault' },
-          { label: 'Itinerary generator', desc: 'Builds itineraries automatically from what is in the vault.', href: '/intelligence#ai-itinerary-suggestions' },
-          { label: 'Payments & Invoicing', desc: 'Collect deposits and balances, and generate invoices tied to the booking.', href: '/solutions/payments' },
-          { label: 'Support relay', desc: 'Multiple ground-team contacts, live support on the ground.', href: '/solutions/communication' },
-          { label: 'WhatsApp integration', desc: 'Real WhatsApp Business API, connected straight into your relay.', href: '/solutions/communication' },
+          { label: 'Document vault', desc: 'Stores every contract and rate sheet, and makes them queryable.', href: '/tools/document-vault' },
+          { label: 'Itinerary generator', desc: 'Builds itineraries automatically from what is in the vault.', href: '/tools/itinerary-generator' },
+          { label: 'Payments & Invoicing', desc: 'Collect deposits and balances, and generate invoices tied to the booking.', href: '/tools/payments-invoicing' },
+          { label: 'Support relay', desc: 'Multiple ground-team contacts, live support on the ground.', href: '/tools/support-relay' },
+          { label: 'WhatsApp integration', desc: 'Real WhatsApp Business API, connected straight into your relay.', href: '/tools/whatsapp-integration' },
         ],
       },
     ],
@@ -91,17 +90,17 @@ export const NAV: NavItem[] = [
         heading: 'Pipeline',
         items: [
           { label: 'Overview', desc: 'The full scope of Automation, end to end.', href: '/autopilot' },
-          { label: 'Automated Inquiry', desc: 'Parses an incoming message into a structured lead automatically.', href: '/autopilot#stage-0' },
-          { label: 'Automated Quotation', desc: 'Sends the inquiry to your supplier list, manages every reply.', href: '/autopilot#stage-2' },
-          { label: 'Automated Follow-up', desc: 'Reminds clients, sends nudges, wins back leads gone quiet.', href: '/autopilot#stage-7' },
+          { label: 'Automated Inquiry', desc: 'Parses an incoming message into a structured lead automatically.', href: '/automations/inquiry' },
+          { label: 'Automated Quotation', desc: 'Sends the inquiry to your supplier list, manages every reply.', href: '/automations/quotation' },
+          { label: 'Automated Follow-up', desc: 'Reminds clients, sends nudges, wins back leads gone quiet.', href: '/automations/follow-up' },
         ],
       },
       {
         heading: '',
         items: [
-          { label: 'Automated Confirmation', desc: 'Confirms dates, intent, and availability with both sides.', href: '/autopilot#stage-3' },
-          { label: 'Automated Collection', desc: 'Gathers traveller documents and supplier booking confirmations.', href: '/autopilot#stage-5' },
-          { label: 'Automated Payment', desc: 'Sends deposit and balance requests on schedule — marking money received stays yours.', href: '/autopilot#stage-4' },
+          { label: 'Automated Confirmation', desc: 'Confirms dates, intent, and availability with both sides.', href: '/automations/confirmation' },
+          { label: 'Automated Collection', desc: 'Gathers traveller documents and supplier booking confirmations.', href: '/automations/collection' },
+          { label: 'Automated Payment', desc: 'Sends deposit and balance requests on schedule — marking money received stays yours.', href: '/automations/payment' },
         ],
       },
     ],

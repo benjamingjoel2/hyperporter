@@ -1,0 +1,45 @@
+---
+/** Automations index — the six automations in the menu, each on a page of its own. */
+import Base from '../../layouts/Base.astro';
+import Mockup from '../../components/Mockup.astro';
+import PhotoHero from '../../components/PhotoHero.astro';
+import { AUTOMATIONS } from '../../lib/content/detail';
+---
+
+<Base
+  title="Automations"
+  description="Six automations that run the nine stages for you — Inquiry, Quotation, Follow-up, Confirmation, Collection and Payment — each with the step a person always takes."
+  currentNav="automations"
+>
+  <PhotoHero>
+    <div class="sec wrap page-hero">
+      <div class="page-hero-copy">
+        <p class="eyebrow rv">Automations — Autopilot</p>
+        <h1 class="rv">Six automations, one engine.</h1>
+        <p class="lede rv">
+          Autopilot runs the nine stages from Inquiry to Completed. These are the six pieces of work it
+          takes off your hands, and, on each, the moment it hands back to a person.
+        </p>
+        <div class="rv" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
+          <a class="btn-o" href="/autopilot">The full overview of Autopilot</a>
+        </div>
+      </div>
+      <Mockup screen="pipeline" />
+    </div>
+  </PhotoHero>
+
+  <div class="sec-tight wrap">
+    <div class="rel-grid rv">
+      {
+        AUTOMATIONS.map((a) => (
+          <a class="rel" href={`/automations/${a.slug}`}>
+            <span class="rel-k">{a.tier}</span>
+            <b>{a.name}</b>
+            <p>{a.title}</p>
+            <span class="plink">Open &rarr;</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Base>

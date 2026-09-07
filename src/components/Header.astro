@@ -20,6 +20,7 @@ interface Props {
   current?:
     | 'home'
     | 'product'
+    | 'automations'
     | 'solutions'
     | 'customers'
     | 'pricing'
@@ -40,6 +41,7 @@ const showRail = path === '/' || path === '/autopilot';
 const ACTIVE: Record<string, NavItem['id']> = {
   product: 'tools',
   solutions: 'tools',
+  automations: 'automations',
   customers: 'solutions',
   pricing: 'pricing',
   security: 'resources',

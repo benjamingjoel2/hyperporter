@@ -102,9 +102,16 @@ Pricing · Resources, with the wordmark on the left and Log in / Get started
 on the right, both pointing at portal.hyperporter.com. Tools, Automations,
 Solutions and Resources open a full-width panel in the harvey.ai format:
 described items in labelled columns and a feature card on the right. It is
-all data in `src/lib/content/nav.ts`; every item links to a real place —
-product features carry ids from their names (`/portal#crm`), and the nine
-stages carry `stage-N` hashes that `/autopilot` opens on arrival.
+all data in `src/lib/content/nav.ts`. Every Tools item has a page of its
+own at `/tools/[slug]` and every Automation at `/automations/[slug]` (Sep
+2026, founder's ask — the anchors on the layer pages read as "the same page
+again" from the menu). Both collections are `src/lib/content/detail.ts`,
+rendered through `components/DetailPage.astro`: hero with a screen, what it
+does, how it works, the step a person always takes (automations), where it
+is available, related pages, next step. `/tools` and `/automations` are the
+indexes. The layer pages `/portal`, `/autopilot`, `/intelligence`,
+`/horizon` stay as they were; Overview in the Automations menu is
+`/autopilot`.
 
 ## Known gaps — these need doing
 
