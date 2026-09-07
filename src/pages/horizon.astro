@@ -21,7 +21,8 @@ const product = byProduct('horizon');
   description="A vetted list of DMCs and suppliers across 130+ countries — search, quote, and book directly from your CRM, on every tier including free."
   currentNav="product"
 >
-  <ProductPage product={product}>
+  <ProductPage product={product} photoHero>
+    <img slot="hero-bg" class="p-photo-bg" src="/hero.jpg" alt="" />
     <Fragment slot="hero-aside">
       <Mockup screen="horizon" />
     </Fragment>

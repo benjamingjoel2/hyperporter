@@ -1,0 +1,13 @@
+---
+/**
+ * The hero on the photograph, as /autopilot opens: the section pulls up
+ * under the transparent bar, the image holds still behind it, the text goes
+ * white and the chrome goes dark. Wrap a page's hero in it; ProductPage
+ * does the same through its `photoHero` prop.
+ */
+---
+
+<div class="p-top p-top-photo" data-chrome="dark">
+  <img class="p-photo-bg" src="/hero.jpg" alt="" />
+  <slot />
+</div>
