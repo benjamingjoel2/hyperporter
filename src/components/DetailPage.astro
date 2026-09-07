@@ -1,0 +1,119 @@
+---
+/**
+ * One tool or one automation, on a page of its own: the hero with a screen
+ * of it, what it does, how it works, the step a person always takes (on
+ * the automations), where it is available, three related pages and the
+ * next step. Both collections render through this so they read as one
+ * family; the copy is each page's own, in lib/content/detail.ts.
+ */
+import Mockup from './Mockup.astro';
+import PhotoHero from './PhotoHero.astro';
+import { resolveRelated } from '../lib/content/detail';
+import type { DetailPage } from '../lib/content/detail';
+
+interface Props {
+  page: DetailPage;
+  kind: 'tool' | 'automation';
+}
+
+const { page, kind } = Astro.props;
+const eyebrow = `${kind === 'tool' ? 'Tools' : 'Automations'} — ${page.layer}`;
+const related = page.related.map(resolveRelated);
+---
+
+<PhotoHero>
+  <div class="sec wrap page-hero">
+    <div class="page-hero-copy">
+      <p class="eyebrow rv">{eyebrow}</p>
+      <h1 class="rv">{page.title}</h1>
+      <p class="lede rv">{page.lede}</p>
+      <div class="rv" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
+        <a class="btn" href="https://portal.hyperporter.com">Get started free</a>
+        <a class="btn-o" href="/pricing">See pricing</a>
+      </div>
+    </div>
+    <Mockup screen={page.screen} />
+  </div>
+</PhotoHero>
+
+<div class="sec-tight wrap">
+  <h2 class="rv">{page.whatTitle}</h2>
+  <div class="reasons rv">
+    {
+      page.what.map((r) => (
+        <div>
+          <b>{r.title}</b>
+          <p>{r.body}</p>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<div class="sec-tight wrap">
+  <h2 class="rv">{page.howTitle}</h2>
+  <div class="flist rv">
+    {
+      page.how.map((s) => (
+        <div class="fitem">
+          <div class="fn">{s.n}</div>
+          <div>
+            <b>{s.name}</b>
+            <p>{s.body}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+{
+  /* Amber is the site's mark for a human / manual state, and this is the
+     one place on an automation page it belongs. */
+  page.human && (
+    <div class="sec-tight wrap">
+      <div class="human-note rv">
+        <p class="eyebrow">Where a person steps in</p>
+        <p>{page.human}</p>
+      </div>
+    </div>
+  )
+}
+
+<div class="sec-tight wrap">
+  <div class="avail rv">
+    <div>
+      <p class="eyebrow">Available on</p>
+      <div class="avail-tier">{page.tier}</div>
+      <p>{page.tierNote}</p>
+    </div>
+    <a class="plink" href="/pricing">Compare tiers &rarr;</a>
+  </div>
+</div>
+
+<div class="sec-tight wrap">
+  <p class="eyebrow rv">Related</p>
+  <div class="rel-grid rv">
+    {
+      related.map((r) => (
+        <a class="rel" href={r.href}>
+          <span class="rel-k">{r.page.layer}</span>
+          <b>{r.page.name}</b>
+          <p>{r.page.title}</p>
+          <span class="plink">Open &rarr;</span>
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<div class="sec-tight wrap">
+  <div class="nextup rv">
+    <div>
+      <p class="eyebrow" style="margin-bottom:0">{page.next.eyebrow}</p>
+      <h3>{page.next.title}</h3>
+      <p>{page.next.desc}</p>
+    </div>
+    <a class="plink" href={page.next.href}>{page.next.cta} &rarr;</a>
+  </div>
+</div>
