@@ -198,6 +198,8 @@ Port the design system and the landmark SVG generator across as-is. They work.
 - Terse and direct. Explain reasoning *before* implementing, not after.
 - One decision at a time; wait for confirmation before moving to the next.
 - Make targeted edits. Do not rebuild or "improve" things that weren't asked about.
+- A request for a section includes its heading and sub-line, unless told otherwise.
+  Draft the copy; do not ship the section headless and wait to be asked.
 - Push back on overstatement, wordiness, and visual clutter.
 - Short punchy lines for positioning copy. Cleanly structured prose for spec documents.
 
