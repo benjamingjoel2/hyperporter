@@ -1379,7 +1379,9 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .mega-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px clamp(40px,6vw,120px);max-width:880px}
 /* Three groups take three columns, one each, so a long panel reads across
    rather than down. */
-.mega-groups.three{grid-template-columns:repeat(3,minmax(0,1fr));gap:36px clamp(28px,3.5vw,64px);max-width:none}
+.mega-groups.three{grid-template-columns:repeat(3,minmax(0,1fr));gap:36px clamp(28px,3.5vw,64px);max-width:1180px}
+/* No feature card: the groups take the whole band. */
+.mega-in.no-feat{grid-template-columns:minmax(0,1fr)}
 .mega-group{display:flex;flex-direction:column;min-width:0}
 .mega .mega-head{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 6px;white-space:nowrap}
 /* Scoped under .mega so these beat `.links a`. */

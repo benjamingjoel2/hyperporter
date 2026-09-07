@@ -82,13 +82,6 @@ export const NAV: NavItem[] = [
         ],
       },
     ],
-    feature: {
-      card: 'whatsapp',
-      title: 'Introducing WhatsApp integration',
-      badge: 'New',
-      desc: 'Real WhatsApp Business API, connected straight into your relay — every reply lands in the right trip automatically.',
-      href: '/solutions/communication',
-    },
   },
 
   {
