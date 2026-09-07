@@ -1,12 +1,12 @@
 ---
 /**
- * One tool or one automation, on a page of its own: the hero with a screen
- * of it, what it does, how it works, the step a person always takes (on
+ * One tool or one automation, on a page of its own: the hero with its steps
+ * as a clickable card, what it does, how it works, the step a person always takes (on
  * the automations), where it is available, three related pages and the
  * next step. Both collections render through this so they read as one
  * family; the copy is each page's own, in lib/content/detail.ts.
  */
-import Mockup from './Mockup.astro';
+import DemoCard from './DemoCard.astro';
 import PhotoHero from './PhotoHero.astro';
 import { resolveRelated } from '../lib/content/detail';
 import type { DetailPage } from '../lib/content/detail';
@@ -22,7 +22,7 @@ const related = page.related.map(resolveRelated);
 ---
 
 <PhotoHero>
-  <div class="sec wrap page-hero">
+  <div class="sec wrap page-hero demo-hero">
     <div class="page-hero-copy">
       <p class="eyebrow rv">{eyebrow}</p>
       <h1 class="rv">{page.title}</h1>
@@ -32,7 +32,9 @@ const related = page.related.map(resolveRelated);
         <a class="btn-o" href="/pricing">See pricing</a>
       </div>
     </div>
-    <Mockup screen={page.screen} />
+    {/* Not a picture: the page's own steps, clickable, in the thread card
+        /autopilot opens with. */}
+    <DemoCard page={page} kind={kind} />
   </div>
 </PhotoHero>
 
