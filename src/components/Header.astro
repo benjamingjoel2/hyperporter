@@ -13,6 +13,7 @@ import { FEED } from '../lib/feed';
 import { NAV, DRAWER } from '../lib/content/nav';
 import type { NavItem } from '../lib/content/nav';
 import NavFeature from './NavFeature.astro';
+import { navIcon } from '../lib/navIcons';
 
 interface Props {
   current?:
@@ -97,8 +98,11 @@ const stream = row + row;
                         <p class="mega-head">{g.heading || '\u00a0'}</p>
                         {g.items.map((r) => (
                           <a class="mega-row" href={r.href}>
-                            <b>{r.label}</b>
-                            <span>{r.desc}</span>
+                            <span class="mega-ico-box" set:html={navIcon(r.label)} />
+                            <span class="mega-row-t">
+                              <b>{r.label}</b>
+                              <span>{r.desc}</span>
+                            </span>
                           </a>
                         ))}
                       </div>
@@ -153,8 +157,11 @@ const stream = row + row;
                     {g.heading && <p class="dsub-h">{g.heading}</p>}
                     {g.items.map((r) => (
                       <a class="ditem" href={r.href}>
-                        <b>{r.label}</b>
-                        <span>{r.desc}</span>
+                        <span class="mega-ico-box" set:html={navIcon(r.label)} />
+                        <span class="mega-row-t">
+                          <b>{r.label}</b>
+                          <span>{r.desc}</span>
+                        </span>
                       </a>
                     ))}
                   </>
