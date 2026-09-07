@@ -1097,10 +1097,97 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
   padding:5px 11px;border-radius:99px}
 @media (max-width:560px){.fitem{grid-template-columns:1fr;gap:6px}}
 
+/* ---------- the reference's list-and-snippet accordion (lib/accordion.ts) ---------- */
+/* The reference's layout for the layers: a list on hairlines, the open
+   item in ink with its body under it, the snippet beside. The open item's
+   top rule is drawn heavier, as on the reference. */
+.lg-acc{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(40px,7vw,120px);align-items:start;
+  --acc-ease:cubic-bezier(.2,.7,.2,1)}
+.lg-acc-list{border-bottom:1px solid var(--line)}
+.lg-acc-item{border-top:1px solid var(--line);transition:border-color .5s var(--acc-ease)}
+.lg-acc-item.on{border-top-color:var(--paper)}
+.lg-acc-btn{display:block;width:100%;margin:0;padding:24px 0;border:0;background:none;text-align:left;
+  font-family:var(--display);font-size:clamp(22px,2.1vw,28px);letter-spacing:-.02em;line-height:1.15;
+  color:var(--muted);cursor:pointer;transition:color .5s var(--acc-ease),padding .6s var(--acc-ease)}
+.lg-acc-btn:hover{color:var(--paper)}
+.lg-acc-item.on .lg-acc-btn{color:var(--paper);padding-bottom:14px}
+/* The body opens by growing a grid row from 0fr to 1fr — the one way to
+   animate to an unknown height without measuring it — and fades in a beat
+   behind the height so the text arrives into space that already exists. */
+.lg-acc-body{display:grid;grid-template-rows:0fr;opacity:0;max-width:44ch;
+  transition:grid-template-rows .65s var(--acc-ease),opacity .45s var(--acc-ease)}
+.lg-acc-body > div{min-height:0;overflow:hidden}
+.lg-acc-item.on .lg-acc-body{grid-template-rows:1fr;opacity:1;transition:grid-template-rows .65s var(--acc-ease),opacity .6s var(--acc-ease) .15s}
+.lg-acc-item.on .lg-acc-body > div{padding-bottom:30px}
+.lg-acc-body p{margin:8px 0 0;color:var(--muted);font-size:16px;line-height:1.5}
+/* The snippets share one grid cell; the open one fades and settles in over
+   the one leaving, so the frame never blinks empty. */
+.lg-acc-shot{position:sticky;top:calc(var(--chrome-h,77px) + 24px);display:grid}
+.lg-acc-shot > div{grid-area:1/1;opacity:0;transform:translateY(10px) scale(.985);visibility:hidden;
+  transition:opacity .7s var(--acc-ease),transform .8s var(--acc-ease),visibility 0s .7s}
+.lg-acc-shot > div.on{opacity:1;transform:none;visibility:visible;transition:opacity .7s var(--acc-ease) .1s,transform .8s var(--acc-ease) .1s,visibility 0s}
+@media (max-width:1180px){
+  .lg-acc{grid-template-columns:1fr;gap:28px}
+  .lg-acc-shot{position:static;order:-1}
+}
+/* On a dark ground — the solutions pages' "how they use it" section. */
+.acc-dark{background:#0B0E12;color:#EDEFF2;padding-block:clamp(88px,10vw,160px)}
+.acc-dark .lg-acc-list{border-bottom-color:#2A313A}
+.acc-dark .lg-acc-item{border-top-color:#2A313A}
+.acc-dark .lg-acc-item.on{border-top-color:#fff}
+.acc-dark .lg-acc-btn{color:#7C838C}
+.acc-dark .lg-acc-btn:hover,.acc-dark .lg-acc-item.on .lg-acc-btn{color:#fff}
+.acc-dark .lg-acc-body p{color:#B4BBC3}
+/* The heading sits over the snippet column, as on the reference. */
+.acc-dark .lg-acc-head{grid-column:2;margin:0 0 clamp(20px,2.4vw,32px)}
+.acc-dark .lg-acc-head h2{color:#fff;margin:0}
+@media (max-width:1180px){.acc-dark .lg-acc-head{grid-column:1;order:-2}}
+
+/* ---------- three points with icons (components/Points.astro) ---------- */
+.pts-sec h2{max-width:22ch;margin:0 0 clamp(36px,4.5vw,64px)}
+.pts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(28px,4vw,64px)}
+.pt b{display:block;font-weight:400;font-size:19px;letter-spacing:-.012em;margin:22px 0 12px}
+.pt p{margin:0;color:var(--muted);font-size:15.5px;line-height:1.55;max-width:34ch}
+.pt-ico{width:26px;height:26px;display:block;color:var(--paper)}
+@media (max-width:900px){.pts{grid-template-columns:1fr;gap:34px}}
+
+/* ---------- the closing statement band (components/CtaBand.astro) ---------- */
+.cta-band{background:#0B0E12;color:#fff;padding-block:clamp(88px,11vw,170px)}
+.cta-band-t{font-family:var(--display);font-size:clamp(24px,2.6vw,36px);letter-spacing:-.018em;line-height:1.28;
+  max-width:26ch;margin:0 0 clamp(26px,3vw,40px);color:#8A9098}
+.cta-band-t b{font-weight:400;color:#fff}
+
 /* ---------- tool and automation pages (components/DetailPage.astro) ---------- */
+/* Text only in the hero; the card sits under it on the same photograph,
+   the way /autopilot's nine-stage band does. */
+.hero-solo{display:block}
+.hero-solo .page-hero-copy{max-width:60ch}
+.demo-band{position:relative;z-index:1;padding:0 var(--pad) clamp(44px,5vw,76px);max-width:var(--max);margin:0 auto}
+.demo-glass{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,4vw,64px);align-items:center;
+  border-radius:18px;padding:clamp(26px,3.2vw,44px);
+  background:rgba(13,16,22,.66);border:1px solid rgba(255,255,255,.12);
+  -webkit-backdrop-filter:saturate(1.3) blur(20px);backdrop-filter:saturate(1.3) blur(20px)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.demo-glass{background:rgba(13,16,22,.9)}}
+.demo-lead .eyebrow{color:rgba(255,255,255,.62);margin:0 0 14px}
+.demo-lead .dek{color:rgba(255,255,255,.86);margin:0 0 18px;font-size:16px;line-height:1.6;max-width:44ch}
+.demo-lead .demo-tier{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.62);line-height:1.7}
+.demo-lead .demo-tier b{color:#fff;font-weight:400}
+.demo-glass .thread{background:rgba(13,16,22,.55)}
+@media (max-width:1000px){.demo-glass{grid-template-columns:1fr}}
+
+/* ---------- solutions pages (pages/customers/[slug].astro) ---------- */
+/* The reference's solutions hero: light, headline left, lede and button
+   right, one wide photograph under both. */
+.sol-hero{padding-top:clamp(40px,5vw,72px)}
+.sol-hero-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(30px,5vw,80px);align-items:center}
+.sol-hero-grid h1{margin:0}
+.sol-hero-grid .lede{margin:0 0 26px}
+.sol-hero-photo{display:block;width:100%;aspect-ratio:16/7;object-fit:cover;border-radius:14px;margin-top:clamp(36px,4.5vw,64px);
+  filter:brightness(.9) saturate(.9)}
+@media (max-width:900px){.sol-hero-grid{grid-template-columns:1fr;gap:20px}.sol-hero-photo{aspect-ratio:4/3}}
+
 /* The hero's right column holds the clickable card, which wants the width
    /autopilot's thread card has rather than the 460px a screen gets. */
-.page-hero.demo-hero{grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:clamp(40px,7vw,120px);align-items:center}
 /* More air than the /autopilot card: this one is read step by step. */
 .thread.demo{padding:28px}
 .thread.demo .th{padding-bottom:20px}
@@ -1111,7 +1198,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .thread.demo .ft{margin-top:22px;padding-top:20px}
 .thread.demo .demo-k{display:flex;align-items:center;gap:8px;color:var(--signal)}
 .thread.demo .demo-k i{width:7px;height:7px;border-radius:50%;background:var(--signal)}
-@media (max-width:900px){.page-hero.demo-hero{grid-template-columns:1fr}}
+
 /* The step a person always takes. Amber: the site's mark for a human or
    manual state, and this is the one place on an automation page it belongs. */
 .human-note{border-left:2px solid var(--amber);padding:6px 0 6px 28px;max-width:64ch}
