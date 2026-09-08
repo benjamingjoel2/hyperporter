@@ -26,6 +26,17 @@ import Audit from './Audit.astro';
 import Relay from './Relay.astro';
 import Login from './Login.astro';
 import Book from './Book.astro';
+import Board from './Board.astro';
+import Share from './Share.astro';
+import Sides from './Sides.astro';
+import Itinerary from './Itinerary.astro';
+import Invoice from './Invoice.astro';
+import Whatsapp from './Whatsapp.astro';
+import Parse from './Parse.astro';
+import Quoting from './Quoting.astro';
+import Followup from './Followup.astro';
+import Reconfirm from './Reconfirm.astro';
+import Collect from './Collect.astro';
 
 export const SCREENS: Record<string, any> = {
   dashboard: Dashboard,
@@ -51,6 +62,17 @@ export const SCREENS: Record<string, any> = {
   relay: Relay,
   login: Login,
   book: Book,
+  board: Board,
+  share: Share,
+  sides: Sides,
+  itinerary: Itinerary,
+  invoice: Invoice,
+  whatsapp: Whatsapp,
+  parse: Parse,
+  quoting: Quoting,
+  followup: Followup,
+  reconfirm: Reconfirm,
+  collect: Collect,
 };
 
 export const SCREEN_ALT: Record<string, string> = {
@@ -77,6 +99,17 @@ export const SCREEN_ALT: Record<string, string> = {
   relay: 'A live trip: a traveller’s WhatsApp relayed to the driver and back, and one question escalated to a person.',
   login: 'The sign-in screen after requesting a magic link — no password to set.',
   book: 'A single agent’s book of clients with each one’s current stage.',
+  board: 'The CRM board: trips as cards in their stage columns — Quotation, Confirmation, Booking.',
+  share: 'Proposal Share: one proposal offered as a live link, a PDF or a text message, opened twice.',
+  sides: 'One trip, two dashboards: the traveller’s side with itinerary and deposit, the supplier’s side with request and quote.',
+  itinerary: 'The Itinerary generator’s first draft: three day-blocks, each priced from the account’s Vault and cited to its contract page.',
+  invoice: 'Payments & Invoicing: a deposit marked received by a person, a balance requested, the invoice generated from the proposal.',
+  whatsapp: 'The WhatsApp Business API connected: an incoming message matched to a new inquiry, the reply sent from the thread.',
+  parse: 'Automated Inquiry: an email parsed into a brief, the missing budget asked for, confirmation with the traveller pending.',
+  quoting: 'Automated Quotation: three requests sent at once — one replied, one reminded, one declined and re-routed.',
+  followup: 'Automated Follow-up: a proposal nudge and a feedback request queued, a voucher reminder done, one reply flagged to a person.',
+  reconfirm: 'Automated Confirmation: two suppliers re-confirmed, one room change put to the traveller, one unavailable supplier replaced from the board.',
+  collect: 'Automated Collection: passports and vouchers in, a flight number asked for, a late driver contact flagged.',
 };
 
 /** Ground colour and the layer named in the corner chip, per screen. */
@@ -104,4 +137,15 @@ export const SCREEN_META: Record<string, { ground: 'warm' | 'slate' | 'sand' | '
   relay: { ground: 'photo', app: 'Autopilot' },
   login: { ground: 'sand', app: 'Portal' },
   book: { ground: 'warm', app: 'Portal' },
+  board: { ground: 'slate', app: 'Portal' },
+  share: { ground: 'warm', app: 'Portal' },
+  sides: { ground: 'sand', app: 'Portal' },
+  itinerary: { ground: 'photo', app: 'Intelligence' },
+  invoice: { ground: 'warm', app: 'Portal' },
+  whatsapp: { ground: 'teal', app: 'Portal' },
+  parse: { ground: 'sand', app: 'Autopilot' },
+  quoting: { ground: 'slate', app: 'Autopilot' },
+  followup: { ground: 'warm', app: 'Autopilot' },
+  reconfirm: { ground: 'photo', app: 'Autopilot' },
+  collect: { ground: 'sand', app: 'Autopilot' },
 };
