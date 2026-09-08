@@ -16,6 +16,11 @@ labelled placeholder instead of breaking.
 | `s5.jpg`        | Card: traveller on the ground                | portrait   |
 | `s6.jpg`        | Card: local operator / guide                 | portrait   |
 | `t1.jpg` … `t3.jpg` | Small thumbnails, top-right of the hero  | landscape  |
+| `<page slug>.jpg` | That page's hero. `portal.jpg`, `autopilot.jpg`, `atlas-ai.jpg`, `quotation-board.jpg`, `confirmation.jpg`, `travel-agencies.jpg`, `dmcs.jpg` … the slug is the last part of the page's address. | wide, 2400px |
+
+Files must be real JPEGs. Unsplash downloads are often AVIF files with a
+`.jpg` name — open and re-save them as JPEG first, or the build converts
+nothing and the browser may refuse them.
 
 ## Licensing
 

@@ -11,6 +11,9 @@ import Base from '../layouts/Base.astro';
 import ProductPage from '../components/ProductPage.astro';
 import { byProduct, AUTOPILOT_TARGETS } from '../lib/content/products';
 import { STAGES } from '../lib/stages';
+import { photoFor } from '../lib/photos';
+
+const photo = photoFor('autopilot');
 
 const product = byProduct('autopilot');
 
@@ -25,9 +28,10 @@ const CURRENT_STAGE = 3;
   description="Full nine-stage automation, from Inquiry through Post-Trip, with human escalation points built in by design."
   currentNav="product"
 >
-  <ProductPage product={product} photoHero>
+  <ProductPage product={product} photoHero photoSpan>
     {/* The photograph the hero and the nine-stage band both sit on. */}
-    <img slot="hero-bg" class="p-photo-bg" src="/hero.jpg" alt="" />
+    <img slot="hero-bg" class:list={["p-photo-bg", { "p-photo-true": photo.own }]} src={photo.src} alt="" />
+    {photo.own && <div slot="hero-bg" class="p-photo-veil" aria-hidden="true" />}
 
     {/* Beside the headline rather than below it: the card is the hero's
         illustration, not a section of its own. */}
@@ -120,7 +124,7 @@ const CURRENT_STAGE = 3;
             <div class="ap-pills">
               {
                 STAGES.map((s, i) => (
-                  <button class="ap-pill" type="button" aria-expanded="false" aria-controls={`s${i}`}>
+                  <button class="ap-pill" id={`ap-stage-${i}`} type="button" aria-expanded="false" aria-controls={`s${i}`}>
                     <em>{s.n}</em> {s.name} <i aria-hidden="true">+</i>
                   </button>
                 ))
@@ -326,7 +330,12 @@ const CURRENT_STAGE = 3;
       show(Math.min(Math.floor(progress * pills.length), pills.length - 1));
     };
 
+    let modeKnown = false;
     const setMode = (): void => {
+      /* Only a real change of mode resets the pills; a resize that stays in
+         the same mode would otherwise close whatever the reader had open. */
+      if (modeKnown && pinning === canPin.matches) return;
+      modeKnown = true;
       pinning = canPin.matches;
       band.classList.toggle('ap-pinned', pinning);
       if (pinning) {
@@ -346,6 +355,46 @@ const CURRENT_STAGE = 3;
     };
 
     setMode();
+
+    /* Arriving on /autopilot#stage-N from the nav opens that stage. Pinned,
+       the scroll position is what selects a stage, so the page scrolls to the
+       point in the track where stage N is the one shown; unpinned, the pill
+       is simply clicked. */
+    const goTo = (i: number): void => {
+      if (pinning) {
+        /* Walk the track until the wanted stage is the one shown — the
+           mapping from scroll to stage depends on where the band pins, so it
+           is read back rather than computed. Nothing on the page carries the
+           hash as an id, so the browser makes no jump of its own. */
+        const span = band.offsetHeight - stick.offsetHeight;
+        const top0 = band.getBoundingClientRect().top + window.scrollY;
+        const n = pills.length * 12;
+        for (let k = 0; k <= n; k++) {
+          window.scrollTo({ top: top0 + (span * k) / n, behavior: 'instant' as ScrollBehavior });
+          step();
+          if (shown === i) {
+            /* A few steps further in, so the reader is not left on the
+               boundary where a pixel of movement flips it back. */
+            window.scrollTo({ top: top0 + (span * Math.min(k + 4, n)) / n, behavior: 'instant' as ScrollBehavior });
+            step();
+            break;
+          }
+        }
+      } else {
+        show(i);
+        pills[i]?.scrollIntoView({ block: 'center' });
+      }
+    };
+    /* Arriving on /autopilot#stage-N from the nav opens that stage, on load
+       and again if the hash changes in place. */
+    const arrive = (): void => {
+      const m = /^#stage-(\d)$/.exec(location.hash);
+      if (m) requestAnimationFrame(() => goTo(Number(m[1])));
+    };
+    if (document.readyState === 'complete') arrive();
+    else window.addEventListener('load', arrive);
+    window.addEventListener('hashchange', arrive);
+
     canPin.addEventListener('change', setMode);
     window.addEventListener(
       'scroll',

@@ -7,12 +7,12 @@
  * src/styles/legora-home.css at the rule that uses them. The shape, in
  * order: a 100vh photographic hero with the headline at 87% down, a
  * full-viewport band of the nine stages, the four layers as 4:5 portrait
- * cards, the four segments on a dark band, the four boxes and the close. The reference's statement
+ * cards, the two sides of the market as a pair of cards, the four boxes and the close. The reference's statement
  * block, carousel, gallery, interstitial, stat rows and vision block were
  * removed (Sep 2026) at the founder's instruction.
  *
  * Content comes from the content modules, as everywhere else on this site —
- * PRODUCTS and MOVES — so
+ * PRODUCTS and WHY — so
  * the page stays thin and cannot drift from /product, /autopilot or
  * /security.
  *
@@ -23,7 +23,7 @@
  * post-pilot, not held. Do not turn that last one into a seal.
  */
 import Base from '../layouts/Base.astro';
-import { PRODUCTS, MOVES } from '../lib/content/products';
+import { PRODUCTS, WHY } from '../lib/content/products';
 import Mockup from '../components/Mockup.astro';
 
 // The screen each layer shows — the part of the interface that layer is.
@@ -60,33 +60,25 @@ const PILLARS = [
   },
 ];
 
-/** Who it is for: four segments, in the reference's alternating rows — the
-    snippet on one side, the name, one line and a link on the other. The
-    snippet is the part of the product that segment lives in. */
-const SEGMENTS = [
+/** Who it is for: the two sides of the market, in the reference's pair of
+    cards — the name, one line and a link, and a screen of the side of the
+    product that side lives in. */
+const SIDES = [
   {
-    name: 'Travel agencies',
-    line: 'Multi-agent teams on one shared CRM and one brand. Every agent, every trip, one stage engine.',
-    href: '/customers/travel-agencies',
-    screen: 'team',
+    side: 'reseller',
+    name: 'For Resellers',
+    line: 'Travel agencies, independent advisors, content creators — coordinate your traveller and your supplier in one thread, not three apps.',
+    href: '/customers/agent-portal',
+    cta: 'Explore Hyperporter for Resellers',
+    screen: 'crm',
   },
   {
-    name: 'Advisors',
-    line: 'Look like a full agency without the overhead — branded proposals, magic links, a real CRM.',
-    href: '/customers/independent-advisors',
-    screen: 'proposal',
-  },
-  {
-    name: 'DMCs',
-    line: 'Reply the way you already do, and get discovered by agencies as the network grows.',
-    href: '/customers/dmcs',
-    screen: 'quote',
-  },
-  {
-    name: 'Tour operators',
-    line: 'Quote from your own rates, and keep your full quoted rate on every booking.',
-    href: '/customers/tour-operators',
-    screen: 'vault',
+    side: 'supplier',
+    name: 'For Suppliers',
+    line: 'DMCs and tour operators — organise inbound requests and quote from one place, free from day one, keeping your full quoted rate on every booking.',
+    href: '/customers/supplier-portal',
+    cta: 'Explore Hyperporter for Suppliers',
+    screen: 'request',
   },
 ];
 
@@ -136,9 +128,9 @@ const SEGMENTS = [
     </svg>
       <div class="lg-hero-veil"></div>
       <div class="lg-hero-in">
-        <h1>Inquiry to booking,<br />without the email threads.</h1>
+        <h1>Run your trips on Autopilot.</h1>
         <div class="lg-hero-sub">
-          <span>One connected system for agencies, DMCs and tour operators.</span>
+          <span>AI-powered operating system for travel agencies, DMCs, and tour operators.</span>
           <a class="btn btn-lg" href="https://portal.hyperporter.com">Get started free <i aria-hidden="true">&rarr;</i></a>
         </div>
       </div>
@@ -148,16 +140,15 @@ const SEGMENTS = [
     <section class="lg-pipe-sec" id="stages" data-chrome="dark">
       <div class="wrap">
         <div class="lg-pipe-lead">
-          <p class="eyebrow rv">System overview</p>
-          <h2 class="rv">Four moves, start to finish.</h2>
+          <p class="eyebrow rv">System overview — Why Hyperporter</p>
+          <h2 class="rv">Build a modern travel business.</h2>
         </div>
         <div class="lg-pipe rv">
           <div class="lg-pipe-rail"><span aria-hidden="true"></span></div>
           <ol class="lg-pipe-row">
             {
-              MOVES.map((m, i) => (
+              WHY.map((m, i) => (
                 <li class="lg-pnode">
-                  <span class="lg-pnum" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                   <span class="lg-pdot" aria-hidden="true" />
                   <h3>{m.name}</h3>
                   <p>{m.body}</p>
@@ -166,8 +157,8 @@ const SEGMENTS = [
             }
           </ol>
         </div>
-        <a class="lg-read rv" href="/autopilot">
-          <span aria-hidden="true">&#8627;</span> <span>All nine stages, on Autopilot</span>
+        <a class="lg-read rv" href="/product">
+          <span aria-hidden="true">&#8627;</span> <span>See the whole system</span>
         </a>
       </div>
     </section>
@@ -221,22 +212,28 @@ const SEGMENTS = [
       </div>
     </section>
 
-    <section class="lg-segs" data-chrome="dark" id="customers">
+    <section class="lg-sides" id="customers">
       <div class="wrap">
-        {
-          SEGMENTS.map((g, i) => (
-            <div class:list={['lg-seg', { flip: i % 2 === 1 }]}>
-              <div class="lg-seg-shot">
-                <Mockup screen={g.screen} />
+        <div class="lg-sides-head">
+          <h2>One platform for travel work.</h2>
+          <p>Resellers and suppliers do their best work on Hyperporter. Run everything your team and your trips need in one place.</p>
+        </div>
+        <div class="lg-sides-grid">
+          {
+            SIDES.map((g) => (
+              <div class="lg-side" data-side={g.side}>
+                <div class="lg-side-copy">
+                  <h2>{g.name}</h2>
+                  <p>{g.line}</p>
+                  <a class="lg-side-btn" href={g.href}>{g.cta}</a>
+                </div>
+                <div class="lg-side-shot">
+                  <Mockup screen={g.screen} />
+                </div>
               </div>
-              <div class="lg-seg-copy">
-                <h2>{g.name}</h2>
-                <p>{g.line}</p>
-                <a class="lg-seg-btn" href={g.href} aria-label={`Learn more about ${g.name}`}>Learn more</a>
-              </div>
-            </div>
-          ))
-        }
+            ))
+          }
+        </div>
       </div>
     </section>
 
@@ -269,30 +266,7 @@ const SEGMENTS = [
 </Base>
 
 <script>
-  /**
-   * Four layers: the list on the left opens one layer at a time and
-   * cross-fades the snippet on the right to match. Open state is a class;
-   * the transitions live in CSS. Closed bodies and snippets are `inert` so
-   * they are out of the tab order and the accessibility tree.
-   */
-  const items = Array.from(document.querySelectorAll<HTMLElement>('.lg-acc-item'));
-  const shots = Array.from(document.querySelectorAll<HTMLElement>('.lg-acc-shot > div'));
-  items.forEach((item, i) => {
-    const btn = item.querySelector<HTMLButtonElement>('.lg-acc-btn');
-    btn?.addEventListener('click', () => {
-      items.forEach((it, j) => {
-        const on = j === i;
-        it.classList.toggle('on', on);
-        it.querySelector('.lg-acc-btn')?.setAttribute('aria-expanded', on ? 'true' : 'false');
-        const body = it.querySelector<HTMLElement>('.lg-acc-body');
-        if (body) body.inert = !on;
-        if (shots[j]) {
-          shots[j].classList.toggle('on', on);
-          shots[j].inert = !on;
-        }
-      });
-    });
-  });
+  import '../lib/accordion';
 </script>
 
 <script>

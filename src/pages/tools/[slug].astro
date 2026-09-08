@@ -1,0 +1,20 @@
+---
+/** One page per tool in the Tools menu. Content: lib/content/detail.ts. */
+import Base from '../../layouts/Base.astro';
+import DetailPage from '../../components/DetailPage.astro';
+import { TOOLS } from '../../lib/content/detail';
+import type { DetailPage as Page } from '../../lib/content/detail';
+
+export function getStaticPaths() {
+  return TOOLS.map((t) => ({ params: { slug: t.slug }, props: { page: t } }));
+}
+
+const { page } = Astro.props as { page: Page };
+// The first sentence of the lede is the meta description; the whole lede
+// runs long for a search snippet.
+const description = page.lede.split(/(?<=\.)\s/)[0];
+---
+
+<Base title={page.name} description={description} currentNav="product">
+  <DetailPage page={page} kind="tool" />
+</Base>

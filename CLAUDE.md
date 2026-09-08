@@ -97,6 +97,33 @@ Built from the founder's content file — 26 views, ~4,900 words.
 Content lives in `src/lib/content/{products,solutions,customers,pricing}.ts`, not in
 the page files. Pages are thin; edit the content modules.
 
+The bar (Sep 2026, founder's grouping) is Tools · Automations · Solutions ·
+Pricing · Resources, with the wordmark on the left and Log in / Get started
+on the right, both pointing at portal.hyperporter.com. Tools, Automations,
+Solutions and Resources open a full-width panel in the harvey.ai format:
+described items in labelled columns and a feature card on the right. It is
+all data in `src/lib/content/nav.ts`. Every Tools item has a page of its
+own at `/tools/[slug]` and every Automation at `/automations/[slug]` (Sep
+2026, founder's ask — the anchors on the layer pages read as "the same page
+again" from the menu). Both collections are `src/lib/content/detail.ts`,
+rendered through `components/DetailPage.astro` in the founder's sequence
+(after harvey.ai): hero, text only, on the photograph; the overview band
+under it on the same photograph, with the page's steps as a clickable
+card (`DemoCard.astro`); three points with icons (`Points.astro`,
+icons guessed from the point's title in `lib/pointIcons.ts`); "How it
+works" as the list-and-snippet accordion (`lib/accordion.ts`, CSS in
+global.css, shared with the homepage); the step a person always takes
+(automations, amber); the closing statement band (`CtaBand.astro`).
+`/tools` and `/automations` are the indexes.
+
+The solutions pages (`/customers/[slug]`) follow the reference's solutions
+sequence: a light hero with the headline left, the lede and button right
+and one wide photograph under both; three points with icons; "How X use
+Hyperporter" as the accordion on a dark ground with the screen beside;
+the closing band. The pricing ladder they used to end on is /pricing. The layer pages `/portal`, `/autopilot`, `/intelligence`,
+`/horizon` stay as they were; Overview in the Automations menu is
+`/autopilot`.
+
 ## Known gaps — these need doing
 
 1. **No URLs.** All 137 destinations, 7 regions, and 7 blog posts are unindexable. This is why
@@ -189,6 +216,8 @@ Port the design system and the landmark SVG generator across as-is. They work.
 - Terse and direct. Explain reasoning *before* implementing, not after.
 - One decision at a time; wait for confirmation before moving to the next.
 - Make targeted edits. Do not rebuild or "improve" things that weren't asked about.
+- A request for a section includes its heading and sub-line, unless told otherwise.
+  Draft the copy; do not ship the section headless and wait to be asked.
 - Push back on overstatement, wordiness, and visual clutter.
 - Short punchy lines for positioning copy. Cleanly structured prose for spec documents.
 

@@ -1,0 +1,61 @@
+---
+/**
+ * The feature card in a nav panel — and in the open group of the phone
+ * drawer, so both render the same thing. A dark illustration drawn in
+ * markup, then the title, an optional badge, and one line.
+ */
+import type { MegaFeature } from '../lib/content/nav';
+
+interface Props {
+  feature: MegaFeature;
+}
+const { feature } = Astro.props;
+
+/* The dots on the Horizon card: a spread that reads as a map without being
+   one. Percent positions inside the card. */
+const DOTS = [
+  [22, 40], [30, 30], [38, 55], [47, 22], [52, 46], [58, 70], [64, 38], [70, 60],
+  [76, 28], [82, 48], [88, 36], [35, 72], [56, 84], [45, 66],
+];
+---
+
+<a class="mega-feat" href={feature.href}>
+  <div class:list={['mega-card', `mega-card-${feature.card}`]} aria-hidden="true">
+    {
+      feature.card === 'whatsapp' && (
+        <>
+          <span class="mc-kicker">WhatsApp integration</span>
+          <span class="mc-bub">Hi! Any update on our Peru dates?</span>
+          <span class="mc-bub me">Confirmed — Nov 12, 8 days. Sending the itinerary now.</span>
+          <span class="mc-bub">Perfect, thank you!</span>
+        </>
+      )
+    }
+    {
+      feature.card === 'escalation' && (
+        <>
+          <span class="mc-row"><i></i>J. Mendes asked about private guide access<em>Reply</em></span>
+          <span class="mc-row"><i></i>Andes Roots requested a date change<em>Review</em></span>
+          <span class="mc-row ok"><i></i>Kenya deposit confirmed by supplier<em>Approve</em></span>
+        </>
+      )
+    }
+    {feature.card === 'horizon' && DOTS.map(([x, y]) => <i class="mc-dot" style={`left:${x}%;top:${y}%`}></i>)}
+    {
+      feature.card === 'reading' && (
+        <>
+          <span class="mc-kicker">From the blog</span>
+          <span class="mc-title">Nine stages: building a shared vocabulary for trip operations</span>
+          <span class="mc-line" style="width:88%"></span>
+          <span class="mc-line" style="width:72%"></span>
+          <span class="mc-line" style="width:80%"></span>
+        </>
+      )
+    }
+  </div>
+  <p class="mega-feat-t">
+    {feature.title}
+    {feature.badge && <span class="mega-new">{feature.badge}</span>}
+  </p>
+  <p class="mega-feat-d">{feature.desc}</p>
+</a>

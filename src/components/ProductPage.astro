@@ -13,6 +13,10 @@ interface Props {
   product: Product;
   /** Open on a photograph, homepage-style; the page passes the image in `hero-bg`. */
   photoHero?: boolean;
+  /** The photograph runs on under `after-hero` as a sticky full-viewport
+      image the band scrolls over — /autopilot's stage band. Without it the
+      photograph is the hero's own size and stops with it. */
+  photoSpan?: boolean;
 }
 
 const { product } = Astro.props;
@@ -22,13 +26,16 @@ const { eyebrow, title, lede, features, featuresTitle, cases, casesTitle, next }
 // thread there. Without it the hero stays a single column, so the other
 // three product pages are unaffected.
 const hasAside = Astro.slots.has('hero-aside');
-const { photoHero = false } = Astro.props;
+const { photoHero = false, photoSpan = false } = Astro.props;
+
+// An id per feature, from its name, so the nav can link straight to one.
+const anchor = (name: string): string => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 ---
 
 {/* `photoHero` puts the hero and whatever follows it in `after-hero` on one
     photograph, the way the homepage opens — the page supplies the image in
     `hero-bg`. Without it this wrapper is an unstyled div. */}
-<div class:list={['p-top', { 'p-top-photo': photoHero }]} data-chrome={photoHero ? 'dark' : undefined}>
+<div class:list={['p-top', { 'p-top-photo': photoHero, 'p-top-fit': photoHero && !photoSpan }]} data-chrome={photoHero ? 'dark' : undefined}>
   {photoHero && <slot name="hero-bg" />}
   <div class="sec wrap">
     <div class:list={['p-hero', { 'p-hero-split': hasAside }]}>
@@ -45,8 +52,11 @@ const { photoHero = false } = Astro.props;
     </div>
   </div>
 
-  <slot name="after-hero" />
+  {/* Only a spanning photograph keeps what follows the hero on it. */}
+  {photoSpan && <slot name="after-hero" />}
 </div>
+
+{!photoSpan && <slot name="after-hero" />}
 
 {
   /* A product whose page shows its own list some other way passes none —
@@ -57,7 +67,7 @@ const { photoHero = false } = Astro.props;
       {featuresTitle && <h2 class="rv">{featuresTitle}</h2>}
       <div class="flist rv">
         {features.map((f) => (
-          <div class="fitem">
+          <div class="fitem" id={anchor(f.name)}>
             <div class="fn">{f.n}</div>
             <div>
               <b>{f.name}</b>

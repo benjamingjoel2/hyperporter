@@ -269,9 +269,26 @@ export const AUTOPILOT_TARGETS: { metric: string; before: string; after: string 
  * not software and nobody logs into it, so the move is what the agency gets
  * from it, not a product they open.
  */
-export const MOVES: { name: string; body: string }[] = [
-  { name: 'Inquiry received', body: 'Any channel — form, email or WhatsApp — arrives as one structured brief.' },
-  { name: 'Autopilot runs it', body: 'Planning, quoting, booking and live support, with escalation points built in.' },
-  { name: 'Horizon fills gaps', body: 'A vetted operator wherever the trip is going, on any tier including free.' },
-  { name: 'Trip goes live', body: 'Relay handled end to end; only the exceptions reach a person.' },
+/** The homepage's "Why Hyperporter" band: the four reasons, one per layer,
+    in the founder's order and names (Sep 2026, renamed and halved the
+    same month); the terminology rules hold — Portal is the platform,
+    Atlas answers from the account's own Vault, escalation is designed in,
+    Horizon is a list and the supplier keeps their full rate. */
+export const WHY: { name: string; body: string }[] = [
+  {
+    name: 'Operating System',
+    body: 'Portal is the foundation: CRM, magic links, inquiry form, proposal generator. One thread per trip, free on every tier.',
+  },
+  {
+    name: 'AI Assistance',
+    body: 'Atlas answers from your own Vault — your contracts, rates, history — and cites its source. Trained on your account’s data and nobody else’s.',
+  },
+  {
+    name: 'Automation',
+    body: 'Autopilot runs the nine stages, Inquiry through Post-Trip, on their own. The moments that need a person are designed in, not left as gaps.',
+  },
+  {
+    name: 'Network',
+    body: 'Horizon is a vetted list of DMCs and suppliers across 130+ countries, searched from the CRM. The supplier always receives their full quoted rate.',
+  },
 ];

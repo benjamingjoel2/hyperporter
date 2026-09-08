@@ -62,8 +62,13 @@
   /* Buttons, inputs and segmented controls. Not pills — a small, even
      corner, as on the reference. Label chips keep their own pill radius. */
   --radius:6px;
-  --pad:clamp(20px,3.2vw,48px);
-  --max:1680px;
+  /* Content runs no wider than the reference's — about 1,300px with a
+     tenth of the viewport either side — after the founder found the
+     1,680px measure hard to read (Sep 2026). The bar keeps the wider
+     measure so the wordmark and the actions stay near the edges. */
+  --pad:clamp(20px,8vw,120px);
+  --max:1320px;
+  --bar-max:1680px;
   --photo:url("/hero.jpg");
 }
 *{box-sizing:border-box}
@@ -158,18 +163,12 @@ header.top.over{background:rgba(10,14,18,.42);
 header.top.over::before{opacity:1}
 
 header.top.over .links > a,header.top.over .mega-trigger,header.top.over .mark,header.top.over .bar-acts .login{color:#fff;opacity:.94}
+header.top.over .bar-acts .login{border-color:rgba(255,255,255,.4)}
+header.top.over .cta-nav{background:#fff;color:var(--paper);border-color:#fff}
 header.top.over .links a:hover,header.top.over .mark:hover .glyph{opacity:1}
 header.top.over .mark .glyph{color:#fff}
-header.top.over .rail{border-color:rgba(255,255,255,.22)}
-/* The tag needs a ground of its own or the marquee scrolls visibly behind
-   the label and the two sets of letters interleave. */
-header.top.over .rail .tag{color:#fff;background:rgba(6,10,13,.96);
-  border-right-color:rgba(255,255,255,.22)}
-header.top.over .rail .ent{color:rgba(255,255,255,.82)}
-header.top.over .rail .ent b{color:#fff}
-/* Over light content the tag still needs its own ground, for the same
-   reason — but tinted to the page, not to a scrim. */
-header.top:not(.over) .rail .tag{background:var(--raise)}
+header.top.over .burger span{background:#fff}
+body.drawer-open header.top .burger span{background:var(--paper)}
 /* Nav left, wordmark centred, actions right — the reference's arrangement.
    Three grid columns rather than flex, so the wordmark is centred on the
    viewport and not merely "after the nav": with flex it drifts whenever the
@@ -178,95 +177,94 @@ header.top:not(.over) .rail .tag{background:var(--raise)}
    paints over the ticker rather than under it. Safe now that the panel is
    anchored to its trigger — it was not when the panel was full-bleed, since
    a positioned .bar became its containing block and boxed it in. */
-.bar{max-width:var(--max);margin:0 auto;padding:0 var(--pad);height:76px;
+.bar{max-width:var(--bar-max);margin:0 auto;padding:0 clamp(20px,3.2vw,48px);height:72px;
   position:relative;z-index:2;
-  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px}
-.mark{display:flex;align-items:center;gap:11px;text-decoration:none;justify-self:center;white-space:nowrap}
+  /* Equal outer tracks, so the items sit on the page's centre whatever the
+     wordmark and the buttons weigh. */
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:clamp(20px,3vw,44px)}
+.mark{display:flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap;justify-self:start}
 .mark .glyph{width:24px;height:24px;display:block;color:var(--paper);transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
 .mark .glyph svg{width:100%;height:100%;display:block}
 .mark .glyph svg rect{fill:currentColor}
 .mark .glyph svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6;stroke-linecap:butt}
 .mark:hover .glyph{color:var(--signal);transform:rotate(90deg)}
-.mark .word{font-family:var(--display);font-weight:400;font-size:19px;letter-spacing:.14em;text-transform:uppercase}
-.links{display:flex;gap:2px;align-items:center;min-width:0}
+.mark .word{font-family:var(--display);font-weight:400;font-size:21px;letter-spacing:-.025em}
+.links{display:flex;gap:4px;align-items:center;justify-content:center;min-width:0}
 .links a{background:none;border:0;color:var(--paper);opacity:.85;padding:8px 11px;font-size:14px;letter-spacing:-.01em;border-radius:6px;position:relative;transition:opacity .2s,background .2s}
-.links a:hover{opacity:1;background:rgba(13,16,22,.05)}
+.links a:hover{opacity:1}
 .links a.act{opacity:1}
-.links a.act::after{content:"";position:absolute;left:14px;right:14px;bottom:2px;height:1px;background:var(--signal)}
+/* The current item and an open panel's trigger both carry the reference's
+   underline: a 2px rule sitting on the bar's bottom edge. */
+.links a.act::after,.mega-wrap.open>.mega-trigger::after{content:"";position:absolute;left:11px;right:11px;bottom:-19px;height:2px;background:currentColor}
 @keyframes blip{0%,100%{opacity:1}50%{opacity:.25}}
-.bar-acts{display:flex;gap:18px;align-items:center;justify-content:flex-end;justify-self:end}
-.bar-acts .login{font-size:14px;color:var(--paper);opacity:.85}
-.bar-acts .login:hover{opacity:1}
-.cta-nav{display:inline-flex;align-items:center;gap:9px;background:var(--signal);color:#fff;border:0;
-  padding:10px 16px;border-radius:var(--radius);font-weight:400;font-size:14px;letter-spacing:-.01em;
-  transition:background .18s ease}
-.cta-nav:hover{background:var(--signal-hi)}
-.cta-nav i{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.16);
-  display:grid;place-items:center;font-style:normal;font-size:11px;line-height:1}
-.burger{display:none;background:none;border:1px solid var(--line-2);border-radius:6px;padding:10px}
-.burger span{display:block;width:18px;height:1.5px;background:var(--paper);margin:4px 0}
-/* Mobile menu: a full-height sheet below the chrome, on the same dark glass
-   as the desktop dropdown, so the two read as one component at two sizes. */
+.bar-acts{display:flex;gap:10px;align-items:center;justify-content:flex-end;justify-self:end}
+.bar-acts .login{font-size:14px;color:var(--paper);padding:9px 16px;border:1px solid var(--line-2);border-radius:var(--radius);transition:border-color .2s,background .2s}
+.bar-acts .login:hover{border-color:var(--paper)}
+.cta-nav{display:inline-flex;align-items:center;background:var(--paper);color:#fff;border:1px solid var(--paper);
+  padding:9px 16px;border-radius:var(--radius);font-size:14px;white-space:nowrap;transition:background .2s,color .2s}
+.cta-nav:hover{background:#000}
+.burger{display:none;background:none;border:0;padding:10px;margin-right:-10px}
+.burger span{display:block;width:20px;height:1.5px;background:var(--paper);margin:5px 0}
+/* Mobile menu, in the reference's format: a light sheet below the chrome,
+   the top-level items in display type with a chevron, the open one listing
+   its items with their line and ending on the feature card, and the two
+   actions pinned to the bottom with the list fading under them. */
 .drawer{display:none;position:fixed;left:0;right:0;top:var(--chrome-h,111px);bottom:0;z-index:65;
-  background:rgba(13,16,22,.86);
-  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
-  overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .drawer{background:rgba(13,16,22,.97)}
-}
+  background:var(--void);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .drawer.open{display:block}
-/* With the drawer open the bar is the top edge of the same dark sheet, not
-   glass over a photograph: the hero scrim leaves it a washed grey that reads
-   as a seam against the panel below. Take the drawer's own ground instead. */
-body.drawer-open header.top{background:rgba(13,16,22,.86);border-bottom-color:rgba(255,255,255,.10)}
+/* The bar becomes the top edge of the same light sheet. */
+body.drawer-open header.top{background:var(--void);border-bottom-color:transparent}
 body.drawer-open header.top::before{opacity:0}
-body.drawer-open header.top .rail{border-top-color:rgba(255,255,255,.10)}
-body.drawer-open header.top .rail .tag{border-right-color:rgba(255,255,255,.14)}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  body.drawer-open header.top{background:rgba(13,16,22,.97)}
-}
 /* The page behind must not scroll while the sheet covers it, or a flick on
    the overlay moves the article underneath and the menu appears to jump. */
 body.drawer-open{overflow:hidden}
 
-.drawer-in{padding:8px 0 40px}
+.drawer-in{padding:28px 0 140px}
 .drow{display:flex;align-items:center;justify-content:space-between;gap:16px;
-  width:100%;background:none;border:0;border-bottom:1px solid rgba(255,255,255,.10);
-  color:rgba(255,255,255,.94);font-family:inherit;font-size:19px;letter-spacing:-.015em;
-  padding:18px var(--pad);text-align:left;cursor:pointer}
-.drow svg{width:12px;height:8px;flex:none;opacity:.6;transition:transform .22s ease}
+  width:100%;background:none;border:0;color:var(--paper);font-family:var(--display);
+  font-size:clamp(30px,8.5vw,38px);letter-spacing:-.03em;line-height:1.1;
+  padding:12px var(--pad);text-align:left;cursor:pointer}
+.drow svg{width:14px;height:9px;flex:none;opacity:.75;transition:transform .22s ease}
 .dtog[aria-expanded="true"] svg{transform:rotate(180deg)}
-.dtog[aria-expanded="true"]{color:#fff}
 
-.dsub{padding:2px 0 14px;background:rgba(0,0,0,.16);border-bottom:1px solid rgba(255,255,255,.10)}
+.dsub{padding:10px 0 34px}
 .dsub[hidden]{display:none}
-.dsub-h{margin:14px 0 4px;padding:0 var(--pad);
-  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-  color:rgba(255,255,255,.46)}
-.dsub a{display:block;padding:11px var(--pad);font-size:16px;color:rgba(255,255,255,.82)}
-.dsub a:active{color:#fff}
+.dsub-h{margin:14px 0 2px;padding:0 var(--pad);
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.ditem{display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;align-items:start;padding:10px var(--pad);color:var(--paper)}
+.ditem b{display:block;font-weight:400;font-size:16px;letter-spacing:-.01em;margin:3px 0 4px}
+.ditem .mega-row-t > span{display:block;font-size:15px;line-height:1.45;color:var(--muted);max-width:40ch}
+.dsub .mega-feat{display:block;margin:18px var(--pad) 0}
 
-.drawer-foot{display:flex;flex-direction:column;gap:14px;padding:26px var(--pad) 0}
-.drawer-login{color:rgba(255,255,255,.82);font-size:16px}
-.drawer-cta{justify-content:center;padding:15px 18px;font-size:16px}
+.drawer-foot{position:fixed;left:0;right:0;bottom:0;z-index:66;display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  padding:18px var(--pad) calc(18px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,var(--void) 72%,rgba(250,250,249,0))}
+.drawer:not(.open) .drawer-foot{display:none}
+.drawer-cta,.drawer-login{display:block;text-align:center;padding:16px 12px;border-radius:var(--radius);font-size:16px;letter-spacing:-.01em}
+.drawer-cta{background:var(--paper);color:#fff;border:1px solid var(--paper)}
+.drawer-login{color:var(--paper);border:1px solid var(--paper)}
 
 /* Burger turns into a close cross while the sheet is open. */
-.burger span{transition:transform .22s ease,opacity .18s ease,background .22s ease}
-.burger.on{border-color:rgba(255,255,255,.34)}
-.burger.on span{background:#fff}
-.burger.on span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.burger span{transition:transform .22s ease,opacity .18s ease}
+.burger.on span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
 .burger.on span:nth-child(2){opacity:0}
-.burger.on span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+.burger.on span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
 
 /* ---- dispatch rail (signature) ---- */
-.rail{height:34px;position:relative;z-index:1;display:flex;align-items:center;overflow:hidden;border-top:1px solid var(--line);background:transparent}
-.rail .tag{flex-shrink:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);padding:0 18px;height:100%;display:flex;align-items:center;border-right:1px solid var(--line);background:var(--raise);position:relative;z-index:1}
+/* The rail sits under the bar, in flow, on the two pages that carry it,
+   and both of those open on a dark photograph: it is pulled up over the
+   hero with the bar (--rail-h, below), so it is always over dark ground
+   and is drawn for that. Above the hero's own content, below the bar. */
+.rail{height:34px;position:relative;z-index:5;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.22);background:transparent}
+/* The tag needs a ground of its own or the marquee scrolls visibly behind
+   the label and the two sets of letters interleave. */
+.rail .tag{flex-shrink:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#fff;padding:0 18px;height:100%;display:flex;align-items:center;border-right:1px solid rgba(255,255,255,.22);background:rgba(6,10,13,.96);position:relative;z-index:1}
 /* 2900s, not 58s: the strip now carries 600 entries instead of 12, and
    the duration has to scale with it or the text would blur past. */
 .rail .stream{display:flex;white-space:nowrap;animation:march 2900s linear infinite}
 .rail .stream:hover{animation-play-state:paused}
-.rail .ent{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:0 26px;display:flex;align-items:center;gap:9px}
-.rail .ent b{color:var(--muted);font-weight:400}
+.rail .ent{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.82);padding:0 26px;display:flex;align-items:center;gap:9px}
+.rail .ent b{color:#fff;font-weight:400}
 .rail .ent u{text-decoration:none;color:var(--signal)}
 .rail .ent.h u{color:var(--amber)}
 @keyframes march{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -379,7 +377,14 @@ p{margin:0 0 16px}
 .tpanel[hidden]{display:none}
 /* Both variants are rendered; the toggle picks one. min-height keeps the
    card from jumping when the manual view has one line instead of two. */
+/* A panel arriving eases in — a short rise and fade — rather than
+   snapping; `hidden` coming off restarts the animation. Chips carry their
+   own colour transitions. */
 .tpanel{min-height:118px}
+@media (prefers-reduced-motion:no-preference){
+  .tpanel{animation:panel-in .5s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes panel-in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+}
 .v-manual{display:none}
 .thread.manual .v-auto{display:none}
 .thread.manual .v-manual{display:block}
@@ -922,19 +927,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
   .fgrid{grid-template-columns:1fr}
   .fcell{padding:28px 0!important;border-right:0!important}
 }
-/* The three-track bar gives the nav and the actions equal columns, and six
-   links need more than half of anything under ~1340px, where they ran
-   under the wordmark. Below that the outer tracks size to their content
-   and the mark centres in what is left; below 1150 the word goes and the
-   glyph alone stands in, until the burger takes over at 860. */
-@media (max-width:1340px){
-  .bar{grid-template-columns:auto minmax(0,1fr) auto}
-}
-@media (max-width:1150px){
-  .mark .word{display:none}
-  .links a{padding:8px 9px}
-}
-@media (max-width:860px){
+@media (max-width:920px){
   .links,.bar .cta-nav,.bar-acts .login,.sys{display:none}
   .mark .word{display:inline}
   .burger{display:block}
@@ -1111,6 +1104,130 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
   padding:5px 11px;border-radius:99px}
 @media (max-width:560px){.fitem{grid-template-columns:1fr;gap:6px}}
 
+/* ---------- the reference's list-and-snippet accordion (lib/accordion.ts) ---------- */
+/* The reference's layout for the layers: a list on hairlines, the open
+   item in ink with its body under it, the snippet beside. The open item's
+   top rule is drawn heavier, as on the reference. */
+.lg-acc{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(40px,7vw,120px);align-items:start;
+  --acc-ease:cubic-bezier(.2,.7,.2,1)}
+.lg-acc-list{border-bottom:1px solid var(--line)}
+.lg-acc-item{border-top:1px solid var(--line);transition:border-color .5s var(--acc-ease)}
+.lg-acc-item.on{border-top-color:var(--paper)}
+.lg-acc-btn{display:block;width:100%;margin:0;padding:24px 0;border:0;background:none;text-align:left;
+  font-family:var(--display);font-size:clamp(22px,2.1vw,28px);letter-spacing:-.02em;line-height:1.15;
+  color:var(--muted);cursor:pointer;transition:color .5s var(--acc-ease),padding .6s var(--acc-ease)}
+.lg-acc-btn:hover{color:var(--paper)}
+.lg-acc-item.on .lg-acc-btn{color:var(--paper);padding-bottom:14px}
+/* The body opens by growing a grid row from 0fr to 1fr — the one way to
+   animate to an unknown height without measuring it — and fades in a beat
+   behind the height so the text arrives into space that already exists. */
+.lg-acc-body{display:grid;grid-template-rows:0fr;opacity:0;max-width:44ch;
+  transition:grid-template-rows .65s var(--acc-ease),opacity .45s var(--acc-ease)}
+.lg-acc-body > div{min-height:0;overflow:hidden;transform:translateY(8px);transition:transform .6s var(--acc-ease)}
+.lg-acc-item.on .lg-acc-body > div{transform:none;transition:transform .7s var(--acc-ease) .1s}
+.lg-acc-item.on .lg-acc-body{grid-template-rows:1fr;opacity:1;transition:grid-template-rows .65s var(--acc-ease),opacity .6s var(--acc-ease) .15s}
+.lg-acc-item.on .lg-acc-body > div{padding-bottom:30px}
+.lg-acc-body p{margin:8px 0 0;color:var(--muted);font-size:16px;line-height:1.5}
+/* The snippets share one grid cell; the open one fades and settles in over
+   the one leaving, so the frame never blinks empty. */
+.lg-acc-shot{position:sticky;top:calc(var(--chrome-h,77px) + 24px);display:grid}
+.lg-acc-shot > div{grid-area:1/1;opacity:0;transform:translateY(10px) scale(.985);visibility:hidden;
+  transition:opacity .7s var(--acc-ease),transform .8s var(--acc-ease),visibility 0s .7s}
+.lg-acc-shot > div.on{opacity:1;transform:none;visibility:visible;transition:opacity .7s var(--acc-ease) .1s,transform .8s var(--acc-ease) .1s,visibility 0s}
+@media (max-width:1180px){
+  .lg-acc{grid-template-columns:1fr;gap:28px}
+  .lg-acc-shot{position:static;order:-1}
+}
+/* On a dark ground — the solutions pages' "how they use it" section. */
+.acc-dark{background:#0B0E12;color:#EDEFF2;padding-block:clamp(88px,10vw,160px)}
+.acc-dark .lg-acc-list{border-bottom-color:#2A313A}
+.acc-dark .lg-acc-item{border-top-color:#2A313A}
+.acc-dark .lg-acc-item.on{border-top-color:#fff}
+.acc-dark .lg-acc-btn{color:#7C838C}
+.acc-dark .lg-acc-btn:hover,.acc-dark .lg-acc-item.on .lg-acc-btn{color:#fff}
+.acc-dark .lg-acc-body p{color:#B4BBC3}
+/* The heading sits over the snippet column, as on the reference. */
+.acc-dark .lg-acc-head{grid-column:2;margin:0 0 clamp(20px,2.4vw,32px)}
+.acc-dark .lg-acc-head h2{color:#fff;margin:0}
+@media (max-width:1180px){.acc-dark .lg-acc-head{grid-column:1;order:-2}}
+
+/* ---------- three points with icons (components/Points.astro) ---------- */
+.pts-sec h2{max-width:22ch;margin:0 0 clamp(36px,4.5vw,64px)}
+.pts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(28px,4vw,64px)}
+.pt b{display:block;font-weight:400;font-size:19px;letter-spacing:-.012em;margin:22px 0 12px}
+.pt p{margin:0;color:var(--muted);font-size:15.5px;line-height:1.55;max-width:34ch}
+.pt-ico{width:26px;height:26px;display:block;color:var(--paper)}
+@media (max-width:900px){.pts{grid-template-columns:1fr;gap:34px}}
+
+/* ---------- the closing statement band (components/CtaBand.astro) ---------- */
+.cta-band{background:#0B0E12;color:#fff;padding-block:clamp(88px,11vw,170px)}
+.cta-band-t{font-family:var(--display);font-size:clamp(24px,2.6vw,36px);letter-spacing:-.018em;line-height:1.28;
+  max-width:26ch;margin:0 0 clamp(26px,3vw,40px);color:#8A9098}
+.cta-band-t b{font-weight:400;color:#fff}
+
+/* ---------- tool and automation pages (components/DetailPage.astro) ---------- */
+/* Text only in the hero; the card sits under it on the same photograph,
+   the way /autopilot's nine-stage band does. */
+.hero-solo{display:block}
+.hero-solo .page-hero-copy{max-width:60ch}
+.demo-band{position:relative;z-index:1;padding:0 var(--pad) clamp(44px,5vw,76px);max-width:var(--max);margin:0 auto}
+.demo-glass{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,4vw,64px);align-items:center;
+  border-radius:18px;padding:clamp(26px,3.2vw,44px);
+  background:rgba(13,16,22,.66);border:1px solid rgba(255,255,255,.12);
+  -webkit-backdrop-filter:saturate(1.3) blur(20px);backdrop-filter:saturate(1.3) blur(20px)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.demo-glass{background:rgba(13,16,22,.9)}}
+.demo-lead .eyebrow{color:rgba(255,255,255,.62);margin:0 0 14px}
+.demo-lead .dek{color:rgba(255,255,255,.86);margin:0 0 18px;font-size:16px;line-height:1.6;max-width:44ch}
+.demo-lead .demo-tier{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.62);line-height:1.7}
+.demo-lead .demo-tier b{color:#fff;font-weight:400}
+.demo-glass .thread{background:rgba(13,16,22,.55)}
+@media (max-width:1000px){.demo-glass{grid-template-columns:1fr}}
+
+/* ---------- solutions pages (pages/customers/[slug].astro) ---------- */
+/* The reference's solutions hero: light, headline left, lede and button
+   right, one wide photograph under both. */
+.sol-hero{padding-top:clamp(40px,5vw,72px)}
+.sol-hero-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(30px,5vw,80px);align-items:center}
+.sol-hero-grid h1{margin:0}
+.sol-hero-grid .lede{margin:0 0 26px}
+.sol-hero-photo{display:block;width:100%;aspect-ratio:16/7;object-fit:cover;border-radius:14px;margin-top:clamp(36px,4.5vw,64px);
+  filter:brightness(.9) saturate(.9)}
+@media (max-width:900px){.sol-hero-grid{grid-template-columns:1fr;gap:20px}.sol-hero-photo{aspect-ratio:4/3}}
+
+/* The hero's right column holds the clickable card, which wants the width
+   /autopilot's thread card has rather than the 460px a screen gets. */
+/* More air than the /autopilot card: this one is read step by step. */
+.thread.demo{padding:28px}
+.thread.demo .th{padding-bottom:20px}
+.thread.demo .demo-shot{margin:22px 0 0}
+.thread.demo .chips{gap:8px;margin:22px 0 20px}
+.thread.demo .tpanel{min-height:0}
+.thread.demo .chip{white-space:normal;text-align:left;line-height:1.3;padding:8px 11px}
+.thread.demo .line{padding:16px 0;gap:13px;line-height:1.5}
+.thread.demo .ft{margin-top:22px;padding-top:20px}
+.thread.demo .demo-k{display:flex;align-items:center;gap:8px;color:var(--signal)}
+.thread.demo .demo-k i{width:7px;height:7px;border-radius:50%;background:var(--signal)}
+
+/* The step a person always takes. Amber: the site's mark for a human or
+   manual state, and this is the one place on an automation page it belongs. */
+.human-note{border-left:2px solid var(--amber);padding:6px 0 6px 28px;max-width:64ch}
+.human-note .eyebrow{color:var(--amber);margin-bottom:10px}
+.human-note p:last-child{margin:0;font-size:17px;line-height:1.5;color:var(--muted)}
+/* Where it is available: the tier in display type, one line under it. */
+.avail{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;border-top:1px solid var(--line-2);padding-top:clamp(26px,3vw,40px)}
+.avail .eyebrow{margin-bottom:10px}
+.avail-tier{font-family:var(--display);font-size:clamp(26px,3vw,36px);letter-spacing:-.02em;margin:0 0 8px}
+.avail > div > p:last-child{margin:0;color:var(--muted);max-width:56ch;font-size:15px}
+/* Related pages and the two index pages: cards, three across. */
+.rel-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.2vw,26px);margin-top:clamp(20px,2.6vw,30px)}
+.rel{display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);border-radius:14px;padding:clamp(20px,2.4vw,28px);background:var(--raise);color:var(--paper);text-decoration:none;transition:border-color .2s,background .2s}
+.rel:hover{border-color:var(--line-2);background:var(--ink)}
+.rel-k{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--signal)}
+.rel b{font-weight:400;font-size:18px;letter-spacing:-.01em}
+.rel p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.5;flex:1}
+.rel .plink{margin-top:8px}
+@media (max-width:900px){.rel-grid{grid-template-columns:1fr}.avail{grid-template-columns:1fr}}
+
 /* Three-up reason cards, used on the segment pages. */
 .reasons{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.2vw,28px);margin-top:clamp(24px,3vw,38px)}
 .reasons>div{border-top:2px solid var(--signal);padding-top:18px}
@@ -1173,14 +1290,33 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
    height pulled back out of the flow, it holds still while the hero and the
    pinned stage panel scroll over it, and leaves with the section. */
 .p-top-photo{position:relative;background:#1A1D21;color:#fff;
-  margin-top:calc(-1 * var(--chrome-h,111px));padding-top:var(--chrome-h,111px)}
+  margin-top:calc(-1 * (var(--chrome-h,77px) + var(--rail-h,0px)));padding-top:calc(var(--chrome-h,77px) + var(--rail-h,0px))}
 .p-photo-bg{position:sticky;top:0;z-index:0;display:block;width:100%;
   height:100vh;height:100svh;object-fit:cover;
   filter:grayscale(.4) brightness(.5);margin-bottom:-100vh;margin-bottom:-100svh}
+/* A photograph supplied for the page is shown as supplied — no grey, only
+   enough dimming for white type — rather than graded down like the shared
+   placeholder. */
+.p-photo-bg.p-photo-true{filter:brightness(.82) saturate(.9)}
+/* …and a dark veil over it, heaviest at the top where the headline sits,
+   so white type holds on a bright sky, white marble or sunlit sand
+   (founder's ask, Sep 2026: the copy must read on every photograph). */
+.p-top-photo > .p-photo-veil.p-photo-veil{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,10,13,.78) 0%,rgba(6,10,13,.58) 45%,rgba(6,10,13,.72) 100%)}
 .p-top-photo > :not(.p-photo-bg){position:relative;z-index:1}
+/* The hero's own size: the photograph fills the section and stops with it.
+   Only /autopilot keeps the sticky full-viewport image, for the band that
+   scrolls over it. */
+.p-top-fit{overflow:hidden}
+.p-top-fit .p-photo-bg{position:absolute;inset:0;height:100%;margin:0}
 .p-top-photo .eyebrow{color:rgba(255,255,255,.62)}
 .p-top-photo h1{color:#fff}
 .p-top-photo .lede{color:rgba(255,255,255,.82)}
+.p-top-photo .btn-o{color:#fff;border-color:rgba(255,255,255,.42)}
+.p-top-photo .btn-o:hover{border-color:#fff}
+/* The hero and whatever follows sit on one image; the light section after
+   it needs its own top padding back, since `.sec + .sec-tight` removes it. */
+.p-top-photo + .sec-tight{padding-top:clamp(34px,3.8vw,58px)}
 
 /* The thread card on the photograph: the nav dropdown's glass, not a white
    card — a white card on a dark photograph is a dialog box. */
@@ -1364,51 +1500,90 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 
    `position:relative` on the wrapper so the panel anchors under its own
    trigger; the old panel was full-bleed and anchored to the bar. */
-.mega-wrap{position:relative;display:inline-flex}
-.mega-trigger{display:inline-flex;align-items:center;gap:6px;border-radius:999px}
+.mega-wrap{display:inline-flex}
+.mega-trigger{display:inline-flex;align-items:center;gap:6px;position:relative}
 .mega-trigger .chev{width:9px;height:6px;opacity:.45;transition:transform .25s,opacity .25s}
 .mega-wrap.open .chev{transform:rotate(180deg);opacity:.9}
-/* The trigger takes a pill while its panel is open, as on the reference. */
-.mega-wrap.open>.mega-trigger{background:rgba(255,255,255,.16);opacity:1}
-header.top:not(.over) .mega-wrap.open>.mega-trigger{background:rgba(13,16,22,.07)}
+.mega-wrap.open>.mega-trigger{opacity:1}
 
+/* The panel: a full-width light band hung from the bar, in the reference's
+   format. Positioned against `.bar` (the nearest positioned ancestor) and
+   pulled out to the viewport edges. Always light, whatever the bar is doing
+   over a photograph — its text is the page's ink. */
 .mega{
-  position:absolute;top:calc(100% + 10px);left:0;z-index:80;
-  min-width:280px;padding:14px;border-radius:15px;
-  /* The reference uses .4 black. Over a light page that composites to a mid
-     grey and puts its white links at 2.75:1 — under the 4.5 minimum, on
-     their site as much as ours. .66 is the least that clears it: measured
-     5.9:1 here, and it still reads as the same smoked-glass panel. */
-  background:rgba(13,16,22,.66);
-  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
-  display:grid;grid-template-columns:repeat(var(--mega-cols,2),minmax(120px,max-content));
-  gap:4px 26px;
-}
-/* No backdrop-filter: the panel would be 40% black over live text and
-   unreadable, so it goes near-solid instead. */
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .mega{background:rgba(13,16,22,.94)}
+  position:absolute;top:100%;left:calc(50% - 50vw);width:100vw;z-index:80;
+  background:var(--raise);color:var(--paper);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  box-shadow:0 30px 60px -30px rgba(12,22,34,.25);
 }
 .mega[hidden]{display:none}
-.mega-col{display:flex;flex-direction:column;min-width:0}
-.mega .mega-head{
-  font-family:var(--mono);font-size:11px;letter-spacing:.04em;font-weight:400;
-  color:rgba(255,255,255,.66);margin:6px 0 6px 10px;white-space:nowrap;
-}
-/* The first heading in each column sits flush; later ones get air above so
-   a second group reads as separate rather than as a run-on list. */
-.mega-col .mega-head + a{margin-top:0}
-/* Scoped under .mega so these beat `.links a`, which is (0,1,1) and would
-   otherwise hand the panel the bar's dark ink — invisible on dark glass.
-   That was the bug: the panel links were rendering at 3:1, not the 6.3:1 I
-   had measured, because I measured the background and assumed the text. */
-.mega .mega-row{
-  display:block;padding:7px 10px;border-radius:8px;white-space:nowrap;
-  font-size:14px;letter-spacing:-.01em;color:rgba(255,255,255,.92);opacity:1;
-  transition:background .16s ease,color .16s ease;
-}
-.mega .mega-row:hover{background:rgba(255,255,255,.12);color:#fff}
-.mega .mega-row:focus-visible{outline:2px solid rgba(255,255,255,.6);outline-offset:-2px}
+.mega-in{max-width:var(--max);margin:0 auto;padding:44px var(--pad) 52px;
+  display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:clamp(28px,3vw,48px);align-items:start}
+/* The feature column stands off the groups behind a full-height hairline,
+   the same rule that separates the groups from each other. */
+.mega-side{align-self:stretch;border-left:1px solid var(--line);padding-left:clamp(28px,3vw,48px)}
+.mega-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 0;max-width:880px}
+/* Columns share the band equally, a hairline between them, each padded off
+   its rule so the rows never touch it. */
+.mega-group + .mega-group{border-left:1px solid var(--line);padding-left:clamp(28px,3vw,48px)}
+.mega-group:not(:last-child){padding-right:clamp(28px,3vw,48px)}
+/* Three groups take three columns, one each, so a long panel reads across
+   rather than down. */
+.mega-groups.three{grid-template-columns:repeat(3,minmax(0,1fr));max-width:none}
+/* No feature card: the groups take the whole band. */
+.mega-in.no-feat{grid-template-columns:minmax(0,1fr)}
+.mega-group{display:flex;flex-direction:column;min-width:0}
+/* A group spanning two columns: its rows run down the first column, then
+   the second, under one heading. --rows is set in the markup. */
+.mega-group.wide{grid-column:span 2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto repeat(var(--rows,4),auto);grid-auto-flow:column;column-gap:clamp(28px,3vw,48px);align-content:start}
+.mega-group.wide .mega-head{grid-column:1/-1;grid-row:1}
+.mega .mega-head{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:0 0 6px;white-space:nowrap}
+/* Scoped under .mega so these beat `.links a`. */
+.mega .mega-row{display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;align-items:start;padding:14px 12px;margin:0 -12px;color:var(--paper);opacity:1;text-decoration:none;max-width:calc(34ch + 74px);border-radius:10px;background:none;transition:background .15s ease}
+/* The icon in its tinted square. A shade lighter on the hover card so it
+   still separates from the ground. */
+.mega-ico-box{width:36px;height:36px;border-radius:9px;background:var(--ink);display:grid;place-items:center;color:var(--paper);flex:none;transition:background .15s ease}
+.mega-ico{width:22px;height:22px;display:block}
+.mega .mega-row:hover .mega-ico-box{background:var(--raise)}
+/* Each panel's icons wear their own box, so a glance tells the three
+   apart: Tools in the tinted square, Automations in a dark square with
+   the icon in white, Solutions in a circle drawn as an outline. */
+.mega-ico-box.ico-automations,.mega .mega-row:hover .mega-ico-box.ico-automations{background:var(--paper);color:#fff}
+.mega-ico-box.ico-solutions,.mega .mega-row:hover .mega-ico-box.ico-solutions{background:transparent;border:1.5px solid var(--paper);border-radius:50%}
+/* The automation icons carry the A⁺ mark, which wants a size up to read. */
+.mega-wrap[data-mega="automations"] .mega-ico,.dsub .mega-ico{width:24px;height:24px}
+.mega-row-t{min-width:0}
+.mega .mega-row b{display:block;font-weight:400;font-size:15px;letter-spacing:-.01em;line-height:1.3;margin:2px 0 4px}
+/* A short measure, so the line breaks early and each row reads as a
+   name over two or three brief lines rather than one long one. */
+.mega .mega-row-t > span{display:block;font-size:13.5px;line-height:1.5;color:var(--muted);max-width:27ch}
+.mega .mega-row:hover{background:var(--ink)}
+.mega .mega-row:hover b{color:var(--signal)}
+.mega .mega-row:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+/* Feature card. */
+/* The feature sits in a tinted card of its own, image and caption together,
+   so it reads as one object beside the columns. */
+.mega .mega-feat,.dsub .mega-feat{display:block;color:var(--paper);text-decoration:none;opacity:1;padding:14px 14px 20px;
+  background:var(--ink);border:1px solid var(--line);border-radius:16px;transition:background .2s,border-color .2s}
+.mega .mega-feat:hover,.dsub .mega-feat:hover{background:var(--steel);border-color:var(--line-2)}
+.mega-card{position:relative;min-height:170px;border-radius:12px;background:#0B0E12;color:#EDEFF2;padding:18px 20px;overflow:hidden;
+  display:flex;flex-direction:column;gap:8px;font-size:12px;line-height:1.35}
+.mc-kicker{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#7FD1C7;margin-bottom:2px}
+.mc-bub{align-self:flex-start;max-width:78%;padding:7px 10px;border-radius:9px;background:#1A2028;color:#EDEFF2}
+.mc-bub.me{align-self:flex-end;background:#124A47;border:1px solid #1E6B65}
+.mc-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #1A2028;color:#D6DBE1}
+.mc-row:last-child{border-bottom:0}
+.mc-row i{width:6px;height:6px;border-radius:50%;background:var(--amber);flex:none}
+.mc-row.ok i{background:#4FB3BD}
+.mc-row em{font-style:normal;margin-left:auto;font-size:9.5px;font-weight:600;padding:3px 8px;border-radius:999px;background:#153F3C;color:#9FE2D8}
+.mc-dot{position:absolute;width:5px;height:5px;border-radius:50%;background:#7FD1C7;box-shadow:0 0 0 3px rgba(127,209,199,.12)}
+.mc-title{font-size:13.5px;line-height:1.35;color:#fff;margin:2px 0 6px}
+.mc-line{height:6px;border-radius:3px;background:#222932}
+.mega-feat-t{margin:16px 2px 8px;font-size:15px;font-weight:400;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mega-new{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:#DDF3E4;color:#146B4A}
+.mega-feat-d{margin:0 2px;font-size:13.5px;line-height:1.45;color:var(--muted)}
+.mega .mega-feat:hover .mega-feat-t,.dsub .mega-feat:hover .mega-feat-t{color:var(--signal)}
+@media (max-width:1180px){.mega-in{grid-template-columns:minmax(0,1fr) 260px;gap:28px}.mega-side{padding-left:28px}}
 
 /* Panels are pointer affordances; below this width the drawer lists
    everything inside them instead. */
@@ -1436,5 +1611,16 @@ header.top:not(.over) .mega-wrap.open>.mega-trigger{background:rgba(13,16,22,.07
   opacity:0;pointer-events:none;
   transition:opacity .22s ease;
 }
+/* While a panel is open the bar is dark whatever is behind it, as on the
+   reference: the panel hangs off a dark bar even over a light page. The
+   text rules are the `.over` set; the ground is opaque rather than glass. */
+header.top.mega-open .links > a,header.top.mega-open .mega-trigger,header.top.mega-open .mark,header.top.mega-open .bar-acts .login{color:#fff;opacity:.94}
+header.top.mega-open .bar-acts .login{border-color:rgba(255,255,255,.4)}
+header.top.mega-open .cta-nav{background:#fff;color:var(--paper);border-color:#fff}
+header.top.mega-open .links a:hover,header.top.mega-open .mark:hover .glyph{opacity:1}
+header.top.mega-open .mark .glyph{color:#fff}
+header.top.mega-open .burger span{background:#fff}
+header.top.mega-open{background:var(--paper);border-bottom-color:rgba(255,255,255,.12)}
+header.top.mega-open::before{opacity:0}
 header.top.mega-open .mega-scrim{opacity:1}
 @media (max-width:1080px){.mega-scrim{display:none}}
