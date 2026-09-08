@@ -270,25 +270,25 @@ export const AUTOPILOT_TARGETS: { metric: string; before: string; after: string 
  * from it, not a product they open.
  */
 /** The homepage's "Why Hyperporter" band: the four reasons, one per layer,
-    in the founder's order and names (Sep 2026). Each body is expanded from
-    the one-line brief; the terminology rules hold — Portal is the platform,
+    in the founder's order and names (Sep 2026, renamed and halved the
+    same month); the terminology rules hold — Portal is the platform,
     Atlas answers from the account's own Vault, escalation is designed in,
     Horizon is a list and the supplier keeps their full rate. */
 export const WHY: { name: string; body: string }[] = [
   {
-    name: 'Modern Platform',
-    body: 'Portal is the foundation: a CRM, magic links, a public inquiry form and a proposal generator, built for how trips actually run. One thread per trip for your team, your traveller and your supplier. Free on every tier, for both sides of the market.',
+    name: 'Operating System',
+    body: 'Portal is the foundation: CRM, magic links, inquiry form, proposal generator. One thread per trip, free on every tier.',
   },
   {
-    name: 'Intelligence',
-    body: 'Atlas answers from your own Vault — your contracts, your rates, your history — and cites where each answer came from. It is trained on your account’s data and nobody else’s. Itineraries and quotes draw on what you already know.',
+    name: 'AI Assistance',
+    body: 'Atlas answers from your own Vault — your contracts, rates, history — and cites its source. Trained on your account’s data and nobody else’s.',
   },
   {
-    name: 'Automate',
-    body: 'Autopilot runs the nine stages, Inquiry through Post-Trip, on their own: parsing, quoting, follow-ups, confirmations and payment requests. The moments that need a person are designed in and flagged by what to do next, not left as gaps.',
+    name: 'Automation',
+    body: 'Autopilot runs the nine stages, Inquiry through Post-Trip, on their own. The moments that need a person are designed in, not left as gaps.',
   },
   {
     name: 'Network',
-    body: 'Horizon is a vetted list of DMCs and suppliers across 130+ countries, searched straight from the CRM. Request quotes from the right operators wherever the trip is going, on every tier including free. The supplier always receives their full quoted rate.',
+    body: 'Horizon is a vetted list of DMCs and suppliers across 130+ countries, searched from the CRM. The supplier always receives their full quoted rate.',
   },
 ];
