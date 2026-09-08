@@ -1199,10 +1199,11 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 /* More air than the /autopilot card: this one is read step by step. */
 .thread.demo{padding:28px}
 .thread.demo .th{padding-bottom:20px}
-.thread.demo .chips{gap:8px;margin:24px 0}
+.thread.demo .demo-shot{margin:22px 0 0}
+.thread.demo .chips{gap:8px;margin:22px 0 20px}
+.thread.demo .tpanel{min-height:0}
 .thread.demo .chip{white-space:normal;text-align:left;line-height:1.3;padding:8px 11px}
 .thread.demo .line{padding:16px 0;gap:13px;line-height:1.5}
-.thread.demo .tpanel{min-height:124px}
 .thread.demo .ft{margin-top:22px;padding-top:20px}
 .thread.demo .demo-k{display:flex;align-items:center;gap:8px;color:var(--signal)}
 .thread.demo .demo-k i{width:7px;height:7px;border-radius:50%;background:var(--signal)}

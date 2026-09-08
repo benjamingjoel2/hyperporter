@@ -172,3 +172,12 @@
 .mk-card{padding:.6em .7em;border-radius:.5em;background:rgba(13,16,22,.045);box-shadow:inset 0 0 0 1px rgba(13,16,22,.06)}
 .mk-card b{display:block;font-weight:400;font-size:.9em;color:var(--paper);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mk-card small{display:block;font-size:.74em;color:var(--dim);margin-top:.15em}
+
+/* Bare: the screen alone, no ground, no app chip, the panel in flow at the
+   full width of whatever holds it — for the hero card on a tool page, which
+   is already a dark panel of its own. */
+.mk.bare{aspect-ratio:auto;background:none;border-radius:0;overflow:visible;isolation:auto}
+.mk.bare .mk-stage{position:relative;inset:auto;font-size:clamp(10px,2.7cqw,13.5px)}
+.mk.bare .mk-panel{position:relative;left:auto;right:auto;top:auto;bottom:auto;transform:none;width:100%;max-width:none;
+  background:rgba(255,255,255,.96);box-shadow:0 0 0 1px rgba(255,255,255,.5) inset,0 1em 2.4em rgba(0,0,0,.35)}
+.mk.bare .mk-back,.mk.bare .mk-app{display:none}
