@@ -1199,14 +1199,23 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 /* More air than the /autopilot card: this one is read step by step. */
 .thread.demo{padding:28px}
 .thread.demo .th{padding-bottom:20px}
-.thread.demo .demo-shot{margin:22px 0 0}
-.thread.demo .chips{gap:8px;margin:22px 0 20px}
-.thread.demo .tpanel{min-height:0}
-.thread.demo .chip{white-space:normal;text-align:left;line-height:1.3;padding:8px 11px}
-.thread.demo .line{padding:16px 0;gap:13px;line-height:1.5}
-.thread.demo .ft{margin-top:22px;padding-top:20px}
-.thread.demo .demo-k{display:flex;align-items:center;gap:8px;color:var(--signal)}
-.thread.demo .demo-k i{width:7px;height:7px;border-radius:50%;background:var(--signal)}
+/* The screen is the whole card below the header, and it is a button: each
+   click reveals the next row. Rows still to come hold their space but are
+   not seen, so the card never changes height. */
+.demo-play{display:block;width:100%;margin:22px 0 0;padding:0;border:0;background:none;color:inherit;
+  font:inherit;text-align:left;cursor:pointer;position:relative;border-radius:1.1em}
+.demo-play:focus-visible{outline:2px solid #4FB3BD;outline-offset:6px}
+.demo-play .demo-wait{visibility:hidden;opacity:0;transform:translateY(6px)}
+.demo-play .mk-row,.demo-play .mk-msg,.demo-play .mk-field,.demo-play .mk-card,.demo-play .mk-sum,.demo-play .mk-btn.block,.demo-play .mk-kpis > *{
+  transition:opacity .45s ease,transform .45s ease,visibility 0s linear 0s}
+.demo-play .demo-wait{transition:opacity .2s ease,transform .2s ease,visibility 0s linear .2s}
+.demo-pill{position:absolute;z-index:2;right:14px;bottom:-14px;display:inline-flex;align-items:center;gap:8px;
+  padding:7px 12px;border-radius:999px;background:#0D1016;color:rgba(255,255,255,.86);
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);pointer-events:none}
+.demo-pill i{width:7px;height:7px;border-radius:50%;background:#4FB3BD}
+.demo-play.done .demo-pill i{background:rgba(255,255,255,.5)}
+@media (hover:hover){.demo-play:hover .demo-pill{background:#151a22}}
 
 /* The step a person always takes. Amber: the site's mark for a human or
    manual state, and this is the one place on an automation page it belongs. */
