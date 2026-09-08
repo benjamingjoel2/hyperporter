@@ -5,13 +5,14 @@ import ProductPage from '../components/ProductPage.astro';
 import Mockup from '../components/Mockup.astro';
 import { byProduct } from '../lib/content/products';
 import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 const product = byProduct('portal');
 
 /* Portal's own photograph, once it is in the repo: drop the file in as
    public/photos/portal.jpg and the hero picks it up at the next build.
    Until then it opens on the shared hero photo like every other page. */
-const HERO = existsSync(new URL('../../public/photos/portal.jpg', import.meta.url)) ? '/photos/portal.jpg' : '/hero.jpg';
+const HERO = existsSync(join(process.cwd(), 'public/photos/portal.jpg')) ? '/photos/portal.jpg' : '/hero.jpg';
 ---
 
 <Base
