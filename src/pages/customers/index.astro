@@ -3,6 +3,7 @@
 import Base from '../../layouts/Base.astro';
 import { OVERVIEWS, SEGMENTS, SIDE_LABEL, SIDE_SUB } from '../../lib/content/customers';
 import Mockup from '../../components/Mockup.astro';
+import PhotoHero from '../../components/PhotoHero.astro';
 
 const SIDES = [
   {
@@ -21,18 +22,20 @@ const SIDES = [
   description="Same product underneath. Different starting point, depending on whether you're sourcing suppliers or being sourced."
   currentNav="customers"
 >
-  <div class="sec wrap page-hero">
-    <div class="page-hero-copy">
+  <PhotoHero>
+    <div class="sec wrap page-hero">
+      <div class="page-hero-copy">
 
-      <p class="eyebrow rv">Customers</p>
-      <h1 class="rv">Whichever side of the booking you're on.</h1>
-      <p class="lede rv">
-        Same product underneath. Different starting point, depending on whether you're sourcing
-        suppliers or being sourced.
-      </p>
+        <p class="eyebrow rv">Customers</p>
+        <h1 class="rv">Whichever side of the booking you're on.</h1>
+        <p class="lede rv">
+          Same product underneath. Different starting point, depending on whether you're sourcing
+          suppliers or being sourced.
+        </p>
+      </div>
+      <Mockup screen="contacts" />
     </div>
-    <Mockup screen="contacts" />
-  </div>
+  </PhotoHero>
 
   <div class="sec-tight wrap">
     <div class="sides rv">

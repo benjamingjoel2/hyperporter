@@ -18,7 +18,8 @@ const product = byProduct('intelligence');
   description="An AI layer trained on your own contracts, rates and history — queryable, quotable, and able to suggest full itineraries."
   currentNav="product"
 >
-  <ProductPage product={product}>
+  <ProductPage product={product} photoHero>
+    <img slot="hero-bg" class="p-photo-bg" src="/hero.jpg" alt="" />
     <Fragment slot="hero-aside">
       <Mockup screen="atlas" />
     </Fragment>

@@ -1,0 +1,42 @@
+---
+/** Tools index — the thirteen tools in the menu, each on a page of its own. */
+import Base from '../../layouts/Base.astro';
+import Mockup from '../../components/Mockup.astro';
+import PhotoHero from '../../components/PhotoHero.astro';
+import { TOOLS } from '../../lib/content/detail';
+---
+
+<Base
+  title="Tools"
+  description="Thirteen tools across Portal, Autopilot and Intelligence — the CRM, the inquiry form, the Quotation Board, the Vault, Atlas and the rest — each on a page of its own."
+  currentNav="product"
+>
+  <PhotoHero photo="tools">
+    <div class="sec wrap page-hero">
+      <div class="page-hero-copy">
+        <p class="eyebrow rv">Tools</p>
+        <h1 class="rv">Every tool, on its own page.</h1>
+        <p class="lede rv">
+          Thirteen tools across Portal, Autopilot and Intelligence. Each page says what the tool does,
+          how it works, and which tier it lands on.
+        </p>
+      </div>
+      <Mockup screen="dashboard" />
+    </div>
+  </PhotoHero>
+
+  <div class="sec-tight wrap">
+    <div class="rel-grid rv">
+      {
+        TOOLS.map((t) => (
+          <a class="rel" href={`/tools/${t.slug}`}>
+            <span class="rel-k">{t.tier === t.layer ? t.layer : `${t.layer} · ${t.tier}`}</span>
+            <b>{t.name}</b>
+            <p>{t.title}</p>
+            <span class="plink">Open &rarr;</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Base>

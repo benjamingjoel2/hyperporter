@@ -1,0 +1,30 @@
+---
+/**
+ * Three points under a heading, each with a small line icon above it —
+ * the reference's "how teams stay ahead" section. Used on the tool,
+ * automation and solutions pages.
+ */
+import { guessIcon, pointIcon } from '../lib/pointIcons';
+
+interface Props {
+  title: string;
+  points: { title: string; body: string }[];
+}
+
+const { title, points } = Astro.props;
+---
+
+<section class="sec wrap pts-sec">
+  <h2 class="rv">{title}</h2>
+  <div class="pts rv">
+    {
+      points.map((p, i) => (
+        <div class="pt">
+          <span class="pt-ico-wrap" set:html={pointIcon(guessIcon(p.title, i))} />
+          <b>{p.title}</b>
+          <p>{p.body}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
