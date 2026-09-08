@@ -1,0 +1,1 @@
+import"./accordion.BYCpXB4l.js";
