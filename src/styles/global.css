@@ -1297,11 +1297,12 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 /* A photograph supplied for the page is shown as supplied — no grey, only
    enough dimming for white type — rather than graded down like the shared
    placeholder. */
-.p-photo-bg.p-photo-true{filter:brightness(.9)}
-/* …and a soft veil over it, heavier at the top where the headline sits,
-   so white type holds on a bright sky or a sunlit room. */
+.p-photo-bg.p-photo-true{filter:brightness(.82) saturate(.9)}
+/* …and a dark veil over it, heaviest at the top where the headline sits,
+   so white type holds on a bright sky, white marble or sunlit sand
+   (founder's ask, Sep 2026: the copy must read on every photograph). */
 .p-top-photo > .p-photo-veil.p-photo-veil{position:absolute;inset:0;z-index:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(6,10,13,.62) 0%,rgba(6,10,13,.4) 45%,rgba(6,10,13,.58) 100%)}
+  background:linear-gradient(180deg,rgba(6,10,13,.78) 0%,rgba(6,10,13,.58) 45%,rgba(6,10,13,.72) 100%)}
 .p-top-photo > :not(.p-photo-bg){position:relative;z-index:1}
 /* The hero's own size: the photograph fills the section and stops with it.
    Only /autopilot keeps the sticky full-viewport image, for the band that
