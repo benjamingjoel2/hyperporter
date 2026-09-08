@@ -20,6 +20,7 @@ import type { Overview, Segment } from '../../lib/content/customers';
 import Mockup from '../../components/Mockup.astro';
 import Points from '../../components/Points.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import { photoFor } from '../../lib/photos';
 
 // The screen each segment opens on: the part of the product that segment
 // actually lives in. Suppliers see their own side — requests and quotes —
@@ -51,6 +52,14 @@ const page = (overview ?? segment)!;
 const features = page.features;
 const who = (segment ? segment.name : overview!.side === 'reseller' ? 'resellers' : 'suppliers').toLowerCase();
 const howTitle = overview ? overview.sectionTitle : `How ${who} use Hyperporter`;
+// The page's own photograph, or a near one: agents share the advisors'
+// picture, the two overviews borrow their side's lead segment.
+const PHOTO_ALIAS: Record<string, string[]> = {
+  'travel-agents': ['independent-advisors'],
+  'agent-portal': ['travel-agencies'],
+  'supplier-portal': ['dmcs'],
+};
+const photo = photoFor(page.slug, ...(PHOTO_ALIAS[page.slug] ?? []));
 ---
 
 <Base
@@ -74,7 +83,7 @@ const howTitle = overview ? overview.sectionTitle : `How ${who} use Hyperporter`
         </div>
       </div>
     </div>
-    <img class="sol-hero-photo rv" src="/hero.jpg" alt="" />
+    <img class="sol-hero-photo rv" src={photo.src} alt="" />
   </section>
 
   {segment && <Points title={`How ${who} stay ahead`} points={segment.reasons} />}

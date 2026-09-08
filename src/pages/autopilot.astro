@@ -11,6 +11,9 @@ import Base from '../layouts/Base.astro';
 import ProductPage from '../components/ProductPage.astro';
 import { byProduct, AUTOPILOT_TARGETS } from '../lib/content/products';
 import { STAGES } from '../lib/stages';
+import { photoFor } from '../lib/photos';
+
+const photo = photoFor('autopilot');
 
 const product = byProduct('autopilot');
 
@@ -27,7 +30,8 @@ const CURRENT_STAGE = 3;
 >
   <ProductPage product={product} photoHero photoSpan>
     {/* The photograph the hero and the nine-stage band both sit on. */}
-    <img slot="hero-bg" class="p-photo-bg" src="/hero.jpg" alt="" />
+    <img slot="hero-bg" class:list={["p-photo-bg", { "p-photo-true": photo.own }]} src={photo.src} alt="" />
+    {photo.own && <div slot="hero-bg" class="p-photo-veil" aria-hidden="true" />}
 
     {/* Beside the headline rather than below it: the card is the hero's
         illustration, not a section of its own. */}
