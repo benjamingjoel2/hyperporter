@@ -7,10 +7,15 @@
  * mark for a human / manual state — so the card cannot overstate what is
  * automatic.
  *
+ * The page's own screen sits above the chips, so the card shows the tool
+ * the page is about; the steps under it are what you click.
+ *
  * Every panel is rendered server-side and toggled with `hidden`, so with
  * JS off the card still shows the first step rather than going blank.
  */
+import '../styles/mockup.css';
 import type { DetailPage } from '../lib/content/detail';
+import { SCREENS, SCREEN_ALT } from './mockups/index';
 
 interface Props {
   page: DetailPage;
@@ -19,6 +24,12 @@ interface Props {
 
 const { page, kind } = Astro.props;
 const id = `${kind}-${page.slug}`;
+/* The page's own screen — the same one its "How it works" shows — sits in
+   the card above the steps, so the card is a picture of this tool and not
+   the same chip panel on every page. Bare: no ground, no chip, the panel at
+   the card's full width. */
+const Screen = SCREENS[page.screen];
+if (!Screen) throw new Error(`DemoCard: no screen named "${page.screen}" for ${page.slug}.`);
 const START = 0;
 
 /* A step is a person's when its name says so: "You choose", "Marked by
@@ -31,6 +42,9 @@ const sentences = (body: string): string[] => body.split(/(?<=\.)\s+/);
   <div class="th">
     <span>{page.name}</span>
     <span>{page.tier === page.layer ? <b>{page.layer}</b> : <>{page.layer} · <b>{page.tier}</b></>}</span>
+  </div>
+  <div class="mk bare demo-shot" role="img" aria-label={SCREEN_ALT[page.screen]}>
+    <div class="mk-stage" aria-hidden="true"><Screen /></div>
   </div>
   <div class="chips" role="tablist" aria-label={`${page.name}, step by step`}>
     {
