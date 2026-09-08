@@ -21,7 +21,7 @@ const HERO = existsSync(join(process.cwd(), 'public/photos/portal.jpg')) ? '/pho
   currentNav="product"
 >
   <ProductPage product={product} photoHero>
-    <img slot="hero-bg" class="p-photo-bg" src={HERO} alt="" />
+    <img slot="hero-bg" class:list={["p-photo-bg", { "p-photo-true": HERO !== "/hero.jpg" }]} src={HERO} alt="" />
     <Fragment slot="hero-aside">
       <Mockup screen="crm" />
     </Fragment>
