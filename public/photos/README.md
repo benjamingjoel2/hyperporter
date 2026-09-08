@@ -16,6 +16,7 @@ labelled placeholder instead of breaking.
 | `s5.jpg`        | Card: traveller on the ground                | portrait   |
 | `s6.jpg`        | Card: local operator / guide                 | portrait   |
 | `t1.jpg` … `t3.jpg` | Small thumbnails, top-right of the hero  | landscape  |
+| `portal.jpg`    | The /portal hero, behind the headline          | wide, 2400px |
 
 ## Licensing
 
