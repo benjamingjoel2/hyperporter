@@ -117,7 +117,7 @@ export const TOOLS: DetailPage[] = [
     title: 'Every trip on a board, every stage in view.',
     lede: 'The client and supplier database, connected to trip staging. Each trip moves through nine stages from Inquiry to Completed, and the board shows where every one of them is right now.',
     overview: 'The CRM is a board of trips, each at one of nine stages, with the travellers and suppliers on it as contacts with a history. On Showcase you move the stages by hand. From Autopilot up, the engine moves them for you.',
-    screen: 'crm',
+    screen: 'board',
     whatTitle: 'What the CRM workflow does',
     what: [
       { title: 'Stages, not statuses', body: 'Nine named stages with a meaning each — Inquiry, Planning, Quotation, Confirmation, Booking, Ready, Traveling, Post-Trip, Completed — so the whole team reads a trip the same way.' },
@@ -195,7 +195,7 @@ export const TOOLS: DetailPage[] = [
     title: 'One proposal, shared as a link, a PDF or a message.',
     lede: 'A branded itinerary and quote, built from what is already on the trip record, and shared the way the traveller prefers: a link that stays current, a PDF for their inbox, or a text message with the link in it.',
     overview: 'A proposal is built from the trip record and shared as a link that stays current, a PDF, or a text message. Your brand is on it; the traveller accepts on their side of the link.',
-    screen: 'brand',
+    screen: 'share',
     whatTitle: 'What Proposal Share does',
     what: [
       { title: 'Built, not written', body: 'The proposal draws its days, its prices and its terms from the trip record. Change the itinerary and the proposal changes with it.' },
@@ -221,7 +221,7 @@ export const TOOLS: DetailPage[] = [
     title: 'Each side gets their own view of the trip.',
     lede: 'The traveller sees the itinerary, the price and where to pay. The supplier sees the request, their quote and the confirmation. Both are views of the same trip record, and neither sees the other’s side.',
     overview: 'Every trip has a traveller’s side and a supplier’s side, each a view of the same record through its own magic link. Neither side needs an account, and neither sees the other’s.',
-    screen: 'contacts',
+    screen: 'sides',
     whatTitle: 'What each side sees',
     what: [
       { title: 'The traveller’s side', body: 'The current itinerary, the total, payment instructions and a place to ask a question. No login: the magic link is the door.' },
@@ -299,7 +299,7 @@ export const TOOLS: DetailPage[] = [
     title: 'A first draft of the trip, from what you already know.',
     lede: 'Give it the brief and the Itinerary generator drafts the days — the places, the pacing, the suppliers you already use there and the rates you have on file — as a starting point you edit, not a page you fill.',
     overview: 'Give it the brief and it drafts the days from the suppliers and rates in your Vault, shaped like your past trips. The draft lands on the trip at Planning for you to edit, then becomes the proposal.',
-    screen: 'proposal',
+    screen: 'itinerary',
     whatTitle: 'What the generator does',
     what: [
       { title: 'Starts from your Vault', body: 'It proposes the suppliers whose contracts are in your Vault and prices the draft from their current rates. Nothing is invented from a directory.' },
@@ -325,7 +325,7 @@ export const TOOLS: DetailPage[] = [
     title: 'Deposits, balances and invoices, tied to the booking.',
     lede: 'Every trip carries its own payment schedule. Instructions appear on the traveller’s link, invoices are generated from the trip record, and what has been received is always marked by a person.',
     overview: 'Each trip carries a payment schedule shown on the traveller’s link, and invoices generated from the accepted proposal. Requests go out on schedule from Autopilot; marking money received is always a person’s action.',
-    screen: 'payments',
+    screen: 'invoice',
     whatTitle: 'What it does',
     what: [
       { title: 'A schedule per trip', body: 'Deposit and balance, with due dates, set on the trip and shown on the traveller’s side. Reminders go out as each falls due.' },
@@ -377,7 +377,7 @@ export const TOOLS: DetailPage[] = [
     title: 'Real WhatsApp, straight into the thread.',
     lede: 'Not a screenshot of a chat pasted into a note. The WhatsApp Business API connected to your account, so a traveller’s message arrives on the trip thread and your reply goes back to their phone.',
     overview: 'The real WhatsApp Business API connected to your account: a traveller’s message lands on the trip thread, your reply goes back to their phone, and a new request becomes an inquiry.',
-    screen: 'relay',
+    screen: 'whatsapp',
     whatTitle: 'What the integration does',
     what: [
       { title: 'Messages on the record', body: 'Every WhatsApp message about a trip lands on that trip’s thread, beside the emails and the dashboard questions.' },
@@ -406,7 +406,7 @@ export const AUTOMATIONS: DetailPage[] = [
     title: 'From the first message to a confirmed brief, untouched.',
     lede: 'A form, an email or a WhatsApp arrives. Automated Inquiry reads it, asks the traveller the questions it cannot answer, and confirms the brief with them before the trip moves to Planning.',
     overview: 'Stage one of the nine. A message arrives on any channel, is parsed into a brief, the gaps are asked about, and the traveller confirms it before the trip moves to Planning.',
-    screen: 'inquiry',
+    screen: 'parse',
     whatTitle: 'What it automates',
     what: [
       { title: 'Parsing', body: 'Dates, destination, travellers and budget pulled out of whatever was written, however it was written.' },
@@ -433,7 +433,7 @@ export const AUTOMATIONS: DetailPage[] = [
     title: 'Every supplier asked at once, every reply managed.',
     lede: 'Each part of the trip — hotels, transport, activities — goes to the suppliers qualified for it, in parallel. Replies come back onto the Quotation Board, your margin is applied, and the traveller never sees a number before you do.',
     overview: 'Stage three. Each part of the trip goes to every qualified supplier at once, replies come back to the Quotation Board with your margin applied, and you choose which to accept.',
-    screen: 'sourcing',
+    screen: 'quoting',
     whatTitle: 'What it automates',
     what: [
       { title: 'Sending', body: 'One request per part, to each qualified supplier on your list — or a Horizon supplier where you have none — from the trip’s magic link.' },
@@ -460,7 +460,7 @@ export const AUTOMATIONS: DetailPage[] = [
     title: 'Reminders sent, nudges timed, quiet leads won back.',
     lede: 'A proposal opened twice and not answered. A voucher still missing five days out. A traveller home for a week with no feedback asked for. Automated Follow-up sends the message you would have sent, at the moment you would have sent it.',
     overview: 'Across the stages. Proposal nudges, pre-departure reminders and post-trip feedback requests go out at the moment you would have sent them, and every reply comes back to the thread.',
-    screen: 'inbox',
+    screen: 'followup',
     whatTitle: 'What it automates',
     what: [
       { title: 'Proposal nudges', body: 'A traveller who has opened the proposal and gone quiet gets a short check-in, timed from when they last looked.' },
@@ -487,7 +487,7 @@ export const AUTOMATIONS: DetailPage[] = [
     title: 'Nothing is booked until it is checked again.',
     lede: 'The moment a proposal is accepted, every supplier on it is asked to re-confirm dates, availability and price. A small change is resolved with the traveller directly. A real problem finds a backup. A person steps in only if neither works.',
     overview: 'Stage four. When a proposal is accepted, every supplier on it re-confirms dates and price. Small changes go to the traveller, a real problem finds a backup, and only the rest reaches you.',
-    screen: 'pipeline',
+    screen: 'reconfirm',
     whatTitle: 'What it automates',
     what: [
       { title: 'Re-verification', body: 'Each supplier is asked to confirm the exact dates and rate they quoted, now that the traveller has said yes.' },
@@ -514,7 +514,7 @@ export const AUTOMATIONS: DetailPage[] = [
     title: 'The last mile chased down before it is a problem.',
     lede: 'Passport details from the traveller. Vouchers, pickup times and a driver’s number from each supplier. Automated Collection asks for each, tracks what has come in, and reminds whoever is late — so that on departure day nothing is missing.',
     overview: 'Stage six. Traveller documents and supplier vouchers are requested, tracked and chased before departure, so nothing is missing on the day.',
-    screen: 'crm',
+    screen: 'collect',
     whatTitle: 'What it automates',
     what: [
       { title: 'Traveller documents', body: 'Passport details, dietary needs, arrival flight — requested on the traveller’s link and stored on the trip.' },

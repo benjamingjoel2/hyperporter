@@ -1,0 +1,22 @@
+---
+/** CRM workflow — the board: every trip in a stage column, moved along. */
+const COLS: [string, [string, string][]][] = [
+  ['Quotation', [['Nairobi · 9 nights', 'Lena & Mark · 2 quotes in'], ['Tbilisi · 7 nights', 'Ines Dubois · waiting on 1']]],
+  ['Confirmation', [['Cusco · 6 nights', 'Re-checking with Andes Trail']]],
+  ['Booking', [['Marrakesh · 4 nights', 'Deposit requested · €880'], ['Hanoi · 11 nights', 'Balance due 20 Feb']]],
+];
+---
+<div class="mk-panel wide">
+  <div class="mk-head"><b>Trips</b><small>9 stages · 7 open</small></div>
+  <div class="mk-cols">
+    {COLS.map(([name, cards]) => (
+      <div class="mk-col">
+        <small>{name}</small>
+        {cards.map(([t, s]) => (
+          <div class="mk-card"><b>{t}</b><small>{s}</small></div>
+        ))}
+      </div>
+    ))}
+  </div>
+  <span class="mk-fine">Manual on Showcase. From Autopilot up, the engine moves the cards for you.</span>
+</div>
