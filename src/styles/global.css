@@ -1299,7 +1299,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .p-photo-bg.p-photo-true{filter:brightness(.9)}
 /* …and a soft veil over it, heavier at the top where the headline sits,
    so white type holds on a bright sky or a sunlit room. */
-.p-photo-veil{position:absolute;inset:0;z-index:0;pointer-events:none;
+.p-top-photo > .p-photo-veil{position:absolute;inset:0;z-index:0;pointer-events:none;
   background:linear-gradient(180deg,rgba(6,10,13,.62) 0%,rgba(6,10,13,.4) 45%,rgba(6,10,13,.58) 100%)}
 .p-top-photo > :not(.p-photo-bg){position:relative;z-index:1}
 /* The hero's own size: the photograph fills the section and stops with it.
