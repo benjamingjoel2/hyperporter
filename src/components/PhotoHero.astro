@@ -4,10 +4,22 @@
  * under the transparent bar, the image holds still behind it, the text goes
  * white and the chrome goes dark. Wrap a page's hero in it; ProductPage
  * does the same through its `photoHero` prop.
+ *
+ * `photo` names the page (its slug); a supplied public/photos/<slug>.jpg is
+ * used as supplied, otherwise the shared hero photo, graded down.
  */
+import { photoFor } from '../lib/photos';
+
+interface Props {
+  photo?: string | string[];
+}
+
+const { photo } = Astro.props;
+const shot = photo ? photoFor(...(Array.isArray(photo) ? photo : [photo])) : { src: '/hero.jpg', own: false };
 ---
 
 <div class="p-top p-top-photo p-top-fit" data-chrome="dark">
-  <img class="p-photo-bg" src="/hero.jpg" alt="" />
+  <img class:list={['p-photo-bg', { 'p-photo-true': shot.own }]} src={shot.src} alt="" />
+  {shot.own && <div class="p-photo-veil" aria-hidden="true" />}
   <slot />
 </div>
