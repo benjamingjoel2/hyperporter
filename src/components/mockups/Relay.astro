@@ -1,15 +1,13 @@
 ---
-/** Support Relay — the traveller and the ground team through one number
-    each. Routine is relayed; a change to a booking is yours: take it over
-    and answer. */
-const REPLIES = ['Perfect, 15:00 it is. Thank you so much!'];
+/** Support Relay — routine relayed; a change is yours. */
+const REPLIES = ['Perfect, 15:00. Thank you!'];
 ---
 <div class="mk-panel wide" data-thread>
   <div class="mk-head"><b><span class="mk-dot amb"></span>Kyoto — day 4 of 8</b><small>Traveling</small></div>
-  <div class="mk-msg"><span class="mk-via">WhatsApp · Sofia</span><p>Train was delayed — we'll reach Arashiyama around 10:40 instead of 10. Is the driver okay to wait?</p></div>
-  <div class="mk-msg me"><span class="mk-via">Relayed · driver confirmed</span><p>No problem at all — Ito-san will be at the north exit at 10:40.</p></div>
-  <div class="mk-row plain" style="border-top:1px solid var(--line);border-bottom:0;padding-top:.8em"><div><b>Can the 14:00 tea ceremony move to 15:00?</b><small>Changes a booked supplier — flagged for you, not answered</small></div><button type="button" class="mk-btn amb" data-live="set" data-done="Yours" data-reveal=".js-relay" data-small="Yours now · reply below and it goes to Sofia" data-clear="amb">Take over</button></div>
-  <form class="mk-composer js-relay" hidden data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="WhatsApp · Sofia" data-me-via="You · to Sofia">
+  <div class="mk-msg"><span class="mk-via">Sofia · WhatsApp</span><p>Train delayed. Arriving 10:40, not 10. Can the driver wait?</p></div>
+  <div class="mk-msg me"><span class="mk-via">Relayed · driver</span><p>No problem. North exit, 10:40.</p></div>
+  <div class="mk-row plain" style="border-top:1px solid var(--line);border-bottom:0;padding-top:.8em"><div><b>Can the tea ceremony move to 15:00?</b><small>Changes a booking · yours</small></div><button type="button" class="mk-btn amb" data-live="set" data-done="Yours" data-reveal=".js-relay" data-small="Reply below" data-clear="amb">Take over</button></div>
+  <form class="mk-composer js-relay" hidden data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="Sofia · WhatsApp" data-me-via="You">
     <input type="text" placeholder="Answer Sofia…" aria-label="Reply to Sofia" autocomplete="off" />
     <button type="submit" class="mk-btn sig">Send</button>
   </form>
