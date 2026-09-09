@@ -1,23 +1,22 @@
 ---
-/** CRM Workflow — the board of trips. Click a card and it moves to the
-    next stage, the way it does by hand on Showcase. */
+/** CRM Workflow — the board. Click a card to move it on. */
 const COLS: [string, [string, string][]][] = [
-  ['Quotation', [['Nairobi · 9 nights', 'Lena & Mark · 2 quotes in'], ['Tbilisi · 7 nights', 'Ines Dubois · waiting on 1']]],
-  ['Confirmation', [['Cusco · 6 nights', 'Re-checking with Andes Trail']]],
-  ['Booking', [['Marrakesh · 4 nights', 'Deposit requested · €880'], ['Hanoi · 11 nights', 'Balance due 20 Feb']]],
+  ['Quotation', [['Nairobi · 9 nights', '2 quotes in'], ['Tbilisi · 7 nights', 'Waiting on 1']]],
+  ['Confirmation', [['Cusco · 6 nights', 'Re-checking']]],
+  ['Booking', [['Marrakesh · 4 nights', 'Deposit requested'], ['Hanoi · 11 nights', 'Balance due 20 Feb']]],
 ];
 ---
 <div class="mk-panel wide">
-  <div class="mk-head"><b>Trips</b><small>9 stages · 7 open</small></div>
+  <div class="mk-head"><b>Trips</b><small>7 open</small></div>
   <div class="mk-cols">
     {COLS.map(([name, cards]) => (
       <div class="mk-col">
         <small>{name}</small>
         {cards.map(([t, s]) => (
-          <div class="mk-card" data-live="move" data-moved="Moved by you · just now"><b>{t}</b><small>{s}</small></div>
+          <div class="mk-card" data-live="move" data-moved="Moved just now"><b>{t}</b><small>{s}</small></div>
         ))}
       </div>
     ))}
   </div>
-  <span class="mk-fine">Click a card to move it on. Manual on Showcase; from Autopilot up, the engine moves the cards for you.</span>
+  <span class="mk-fine">Click a card to move it on.</span>
 </div>

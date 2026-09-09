@@ -1,18 +1,14 @@
 ---
-/** Three-way Inbox — traveller, supplier and you on one thread. Type and
-    the traveller answers. */
-const REPLIES = [
-  'Amazing, thank you. Could the driver pick us up at 9 instead of 8 on the first morning?',
-  'Perfect, all good on our side. See you in Marrakesh!',
-];
+/** Three-way Inbox — traveller, supplier and you on one thread. */
+const REPLIES = ['Amazing. Can pickup be 9 instead of 8?', 'Perfect. See you in Marrakesh!'];
 ---
 <div class="mk-panel wide" data-thread>
   <div class="mk-head"><b>Marrakesh — 4 nights</b><small>Priya Nair</small></div>
-  <div class="mk-msg"><span class="mk-via">WhatsApp · traveller</span><p>Can we make the second night a riad with a rooftop? Otherwise the plan is perfect.</p></div>
-  <div class="mk-msg"><span class="mk-via">Email · Atlas Maroc DMC</span><p>Confirmed — terrace suite, 10 Feb, same rate. Voucher attached.</p></div>
-  <div class="mk-msg me"><span class="mk-via">WhatsApp · you</span><p>Rooftop it is, same price. The updated proposal is on your link.</p></div>
-  <form class="mk-composer" data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="WhatsApp · traveller" data-me-via="WhatsApp · you">
-    <input type="text" placeholder="Reply to both, from one thread…" aria-label="Reply" autocomplete="off" />
+  <div class="mk-msg"><span class="mk-via">Priya · WhatsApp</span><p>Second night in a riad with a rooftop?</p></div>
+  <div class="mk-msg"><span class="mk-via">Atlas Maroc · email</span><p>Confirmed. Terrace suite, same rate.</p></div>
+  <div class="mk-msg me"><span class="mk-via">You</span><p>Rooftop it is. Updated on your link.</p></div>
+  <form class="mk-composer" data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="Priya · WhatsApp" data-me-via="You">
+    <input type="text" placeholder="Reply…" aria-label="Reply" autocomplete="off" />
     <button type="submit" class="mk-btn sig">Send</button>
   </form>
 </div>

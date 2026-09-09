@@ -1,21 +1,21 @@
 ---
-/** Atlas — ask it something about your own contracts and it answers from
-    the Vault, with a citation. The composer is live: type a question. */
+/** Atlas — ask about your own contracts; it answers from the Vault with a
+    citation. The composer is live. */
 const REPLIES = [
-  'Your Offbeat Mara contract lists full board at USD 410 per person per night through March, with a four-night minimum. Source: Offbeat contract 2026.pdf · p.2.',
-  'Andes Trail’s Sacred Valley tariff is valid to December 2026: USD 385 per person for the two-day walking programme, transfers included. Source: Andes Trail — Sacred Valley tariff.xlsx.',
-  'Nothing in your Vault covers that yet. Upload the contract and I’ll read it — I don’t answer from outside data.',
+  'Offbeat Mara: USD 410 pp/night, full board, March. Source: Offbeat 2026.pdf · p.2.',
+  'Andes Trail: USD 385 pp, two-day walk, valid to Dec 2026. Source: Sacred Valley tariff.xlsx.',
+  'Not in your Vault yet. Upload the contract and I’ll read it.',
 ];
 ---
 <div class="mk-panel wide" data-thread>
-  <div class="mk-msg me"><p>What did we agree with Rift Valley for Mara North game drives this March — and is the park fee included?</p></div>
+  <div class="mk-msg me"><p>Rift Valley, Mara North game drives, March — park fee included?</p></div>
   <svg class="mk-spark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.6 5.4 4.6 9.4 10 10-5.4.6-9.4 4.6-10 10-.6-5.4-4.6-9.4-10-10 5.4-.6 9.4-4.6 10-10z"/></svg>
-  <div class="mk-msg"><p>Your 2026 agreement sets shared game drives at <b>USD 95</b> per person per day through 31 March. Conservancy fees are <b>not</b> included — USD 116 per adult per night. For two, add USD 928 to the March quote.</p>
+  <div class="mk-msg"><p><b>USD 95</b> pp per day through 31 March. Park fees <b>not</b> included: USD 116 per adult per night.</p>
     <span class="mk-cite"><i></i>Rift Valley GS — rates 2026.pdf · p.2, p.5</span>
-    <span class="mk-fine">From your Vault only · no outside data</span></div>
-  <div class="mk-foot"><button type="button" class="mk-btn o" data-live="set" data-done="Copied">Copy</button><button type="button" class="mk-btn" data-live="set" data-done="Added to quote">Add to quote</button></div>
-  <form class="mk-composer" data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="Atlas · from your Vault" data-me-via="You">
-    <input type="text" placeholder="Ask about your own contracts…" aria-label="Ask Atlas" autocomplete="off" />
+    <span class="mk-fine">From your Vault only</span></div>
+  <div class="mk-foot"><button type="button" class="mk-btn o" data-live="set" data-done="Copied">Copy</button><button type="button" class="mk-btn" data-live="set" data-done="Added">Add to quote</button></div>
+  <form class="mk-composer" data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="Atlas" data-me-via="You">
+    <input type="text" placeholder="Ask about your contracts…" aria-label="Ask Atlas" autocomplete="off" />
     <button type="submit" class="mk-btn sig">Ask</button>
   </form>
 </div>

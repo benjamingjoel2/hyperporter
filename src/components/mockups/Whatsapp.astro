@@ -1,19 +1,14 @@
 ---
-/** WhatsApp Integration — a Business number on the thread. Type a reply
-    and the traveller answers. */
-const REPLIES = [
-  'Great — early March works, and it’s two adults. Budget-wise, mid-range is fine.',
-  'Perfect. We’re flexible by a day or two either side if that helps.',
-  'Thank you! Looking forward to seeing the plan.',
-];
+/** WhatsApp Integration — a Business number on the thread. */
+const REPLIES = ['Early March works. Two adults, mid-range.', 'Flexible by a day either side.', 'Thank you! Can’t wait.'];
 ---
 <div class="mk-panel wide" data-thread>
-  <div class="mk-head"><b><span class="mk-dot"></span>WhatsApp Business</b><small>+254 ··· 8810 · connected</small></div>
-  <div class="mk-msg"><span class="mk-via">WhatsApp · +49 ··· 4471</span><p>Hi! Two of us, Kenya in early March, about 9 nights. Mara for sure. Can you put something together?</p></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Matched · new contact, new inquiry</b><small>Lena Ortiz · trip KE-2291 created at Inquiry</small></div></div>
-  <div class="mk-msg me"><span class="mk-via">From the thread · you</span><p>Happy to. Two quick questions and I'll send a first plan today.</p></div>
-  <form class="mk-composer" data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="WhatsApp · Lena Ortiz" data-me-via="From the thread · you">
-    <input type="text" placeholder="Reply on WhatsApp, from the thread…" aria-label="Reply" autocomplete="off" />
+  <div class="mk-head"><b><span class="mk-dot"></span>WhatsApp Business</b><small>Connected</small></div>
+  <div class="mk-msg"><span class="mk-via">Lena · WhatsApp</span><p>Hi! Two of us, Kenya in March, 9 nights. Mara for sure.</p></div>
+  <div class="mk-row"><span class="mk-chk"></span><div><b>New contact, new inquiry</b><small>Lena Ortiz · KE-2291</small></div></div>
+  <div class="mk-msg me"><span class="mk-via">You</span><p>Happy to. First plan today.</p></div>
+  <form class="mk-composer" data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="Lena · WhatsApp" data-me-via="You">
+    <input type="text" placeholder="Reply…" aria-label="Reply" autocomplete="off" />
     <button type="submit" class="mk-btn sig">Send</button>
   </form>
 </div>

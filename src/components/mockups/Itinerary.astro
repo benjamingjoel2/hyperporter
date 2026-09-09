@@ -1,10 +1,9 @@
 ---
-/** Itinerary Generator — a draft from your own contracts. Each line can be
-    swapped for the other option in your Vault; the price follows. */
+/** Itinerary Generator — a draft from your Vault. Swap any line. */
 const DAYS: [string, string, string, string, string, string, string][] = [
-  ['Day 1', 'Nairobi · Hemingways, 1 night', '€310 pp', 'Rift Valley GS 2026 · p.4', 'Nairobi · Giraffe Manor, 1 night', '€540 pp', 'Rift Valley GS 2026 · p.6'],
-  ['Day 2–5', 'Mara North · Offbeat Mara, full board', '€410 pp', 'Offbeat contract · p.2', 'Mara North · Kicheche Mara, full board', '€455 pp', 'Kicheche 2026 · p.1'],
-  ['Day 6–8', 'Naboisho · walking safaris', '€385 pp', 'Rift Valley GS 2026 · p.7', 'Naboisho · Encounter Mara, game drives', '€395 pp', 'Rift Valley GS 2026 · p.8'],
+  ['Day 1', 'Nairobi · Hemingways', '€310 pp', 'Rift Valley 2026 · p.4', 'Nairobi · Giraffe Manor', '€540 pp', 'Rift Valley 2026 · p.6'],
+  ['Day 2–5', 'Mara North · Offbeat Mara', '€410 pp', 'Offbeat contract · p.2', 'Mara North · Kicheche Mara', '€455 pp', 'Kicheche 2026 · p.1'],
+  ['Day 6–8', 'Naboisho · walking safaris', '€385 pp', 'Rift Valley 2026 · p.7', 'Naboisho · Encounter Mara', '€395 pp', 'Rift Valley 2026 · p.8'],
 ];
 ---
 <div class="mk-panel wide">
@@ -12,5 +11,5 @@ const DAYS: [string, string, string, string, string, string, string][] = [
   {DAYS.map(([d, what, rate, cite, altWhat, altRate, altCite]) => (
     <div class="mk-row" data-alt-what={altWhat} data-alt-rate={altRate} data-alt-cite={altCite}><span class="mk-ico">{d.replace('Day ', '')}</span><div><b>{what}</b><small><span class="mk-cite"><i></i>{cite}</span></small></div><span class="r">{rate}</span><button type="button" class="mk-btn o" data-live="swap" data-label="Swap" data-back="Swap back">Swap</button></div>
   ))}
-  <div class="mk-foot"><span class="mk-fine">Swap any line for the other option in your Vault. Then send it as the proposal.</span><button type="button" class="mk-btn" data-live="set" data-done="Sent as proposal" data-fine="On Lena &amp; Mark's link now, with every line cited.">Send as proposal</button></div>
+  <div class="mk-foot"><span class="mk-fine">Swap any line, then send.</span><button type="button" class="mk-btn" data-live="set" data-done="Sent" data-fine="On their link now.">Send as proposal</button></div>
 </div>

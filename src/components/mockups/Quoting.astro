@@ -1,15 +1,13 @@
 ---
-/** Automated Quotation — one request per supplier, all at once; the late
-    one reminded, the decline re-routed. Open the board to set your margin
-    and choose. */
+/** Automated Quotation — every supplier asked at once. */
 ---
 <div class="mk-panel wide">
-  <div class="mk-head"><b>Quote requests · Nairobi</b><small>Sent 09:02 · 3 suppliers</small></div>
+  <div class="mk-head"><b>Quote requests · Nairobi</b><small>3 suppliers · 09:02</small></div>
   <div class="mk-row"><span class="mk-chk"></span><div><b>Rift Valley Ground Services</b><small>Replied 09:41</small></div><span class="r">€4,180</span></div>
-  <div class="mk-row"><span class="mk-chk now"></span><div><b>Acacia Safari Logistics</b><small>No reply by 12:00 · reminder sent</small></div><button type="button" class="mk-btn o" data-live="set" data-done="Reminded again" data-small="Second reminder sent by you · just now">Remind again</button></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Karen Overland Co. → Mara Plains</b><small>Declined · re-routed to the next qualified supplier</small></div><span class="r">€4,505</span></div>
+  <div class="mk-row"><span class="mk-chk now"></span><div><b>Acacia Safari Logistics</b><small>Reminder sent 12:00</small></div><button type="button" class="mk-btn o" data-live="set" data-done="Reminded" data-small="Second reminder · just now">Remind</button></div>
+  <div class="mk-row"><span class="mk-chk"></span><div><b>Karen Overland → Mara Plains</b><small>Declined · re-routed</small></div><span class="r">€4,505</span></div>
   <div class="js-board" hidden>
-    <div class="mk-sum" data-margin data-pct="18" data-base="4180"><span class="mk-p">With your <span class="mk-stepper"><button type="button" data-live="margin" data-step="-1" aria-label="Lower the margin">−</button><b data-margin-out>18%</b><button type="button" data-live="margin" data-step="1" aria-label="Raise the margin">+</button></span> margin</span><b data-margin-sum>€4,932</b></div>
+    <div class="mk-sum" data-margin data-pct="18" data-base="4180"><span class="mk-p">Your <span class="mk-stepper"><button type="button" data-live="margin" data-step="-1" aria-label="Lower the margin">−</button><b data-margin-out>18%</b><button type="button" data-live="margin" data-step="1" aria-label="Raise the margin">+</button></span> margin</span><b data-margin-sum>€4,932</b></div>
   </div>
-  <div class="mk-foot"><span class="mk-fine">Replies land on the Quotation Board. You choose; your margin goes on top.</span><button type="button" class="mk-btn o" data-live="set" data-done="Board open" data-reveal=".js-board" data-fine="Set your margin. Nothing goes to the traveller until you approve it.">Open board</button></div>
+  <div class="mk-foot"><span class="mk-fine">Replies land on the board. You choose.</span><button type="button" class="mk-btn o" data-live="set" data-done="Board open" data-reveal=".js-board" data-fine="Set your margin, then approve.">Open board</button></div>
 </div>
