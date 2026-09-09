@@ -8,7 +8,7 @@ const { screen } = Astro.props;
 const text = WITHOUT[screen];
 if (!text) throw new Error(`Without: no text for screen "${screen}". Add one to lib/content/without.ts.`);
 ---
-<div class="mk-without">
+<div class="mk-panel wide"><div class="mk-without">
   <span class="mk-lbl">Traditionally</span>
   <p>{text}</p>
-</div>
+</div></div>
