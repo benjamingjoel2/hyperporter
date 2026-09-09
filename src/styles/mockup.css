@@ -178,6 +178,42 @@
    is already a dark panel of its own. */
 .mk.bare{aspect-ratio:auto;background:none;border-radius:0;overflow:visible;isolation:auto}
 .mk.bare .mk-stage{position:relative;inset:auto;font-size:clamp(10px,2.7cqw,13.5px)}
+.mk.bare .mk-stage{font-size:clamp(11px,1.15cqw,15px)}
 .mk.bare .mk-panel{position:relative;left:auto;right:auto;top:auto;bottom:auto;transform:none;width:100%;max-width:none;
-  background:rgba(255,255,255,.96);box-shadow:0 0 0 1px rgba(255,255,255,.5) inset,0 1em 2.4em rgba(0,0,0,.35)}
+  padding:0;background:none;box-shadow:none;border-radius:0}
 .mk.bare .mk-back,.mk.bare .mk-app{display:none}
+
+/* Dark: the panel as dark glass with light type — the tool, automation and
+   solutions pages (founder's ask, Sep 2026), and the bare screen in the
+   hero card, which sits in a dark card already. Tokens flip; the few
+   hard-coded tints below flip with them. Teal and amber are lifted the way
+   the site lifts them on dark grounds. */
+.mk.dark,.mk.bare{--paper:#F2F3F1;--muted:rgba(255,255,255,.74);--dim:rgba(255,255,255,.52);
+  --line:rgba(255,255,255,.12);--line-2:rgba(255,255,255,.26);--ink:rgba(255,255,255,.07);--raise:rgba(255,255,255,.1);
+  --steel:rgba(255,255,255,.12);--signal:#4FB3BD;--signal-hi:#63C2CB;--signal-dim:rgba(79,179,189,.2);--amber:#E2A94E}
+.mk.dark .mk-panel{background:rgba(13,16,22,.8);box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 1.4em 3.2em rgba(0,0,0,.35)}
+.mk.dark[data-ground="teal"] .mk-panel{background:rgba(13,16,22,.84)}
+.mk.dark .mk-back{background:rgba(13,16,22,.45);color:var(--paper)}
+.mk.dark .mk-back i{background:rgba(255,255,255,.16)}
+.mk.dark .mk-back p,.mk.dark .mk-back .row{color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.1)}
+.mk.dark .mk-btn,.mk.bare .mk-btn{color:#0D1016}
+.mk.dark .mk-btn.sig,.mk.bare .mk-btn.sig,.mk.dark .mk-btn.amb,.mk.bare .mk-btn.amb{color:#0D1016}
+.mk.dark .mk-btn.o,.mk.bare .mk-btn.o{color:var(--paper)}
+.mk.dark .mk-tag.amb,.mk.bare .mk-tag.amb{background:rgba(226,169,78,.16)}
+.mk.dark .mk-tag.red,.mk.bare .mk-tag.red{background:rgba(224,123,117,.14);color:#E07B75}
+.mk.dark .mk-ico.pdf,.mk.bare .mk-ico.pdf{color:#E07B75}
+.mk.dark .mk-cite i,.mk.bare .mk-cite i{background:#E07B75}
+.mk.dark .mk-field div,.mk.bare .mk-field div{background:rgba(255,255,255,.06)}
+.mk.dark .mk-search,.mk.bare .mk-search{background:rgba(255,255,255,.07)}
+.mk.dark .mk-stage .mk-msg p,.mk.bare .mk-stage .mk-msg p{background:rgba(255,255,255,.08)}
+.mk.dark .mk-stage .mk-msg.me p,.mk.bare .mk-stage .mk-msg.me p{background:#12606A;color:#fff}
+.mk.dark .mk-via,.mk.bare .mk-via{background:rgba(255,255,255,.08)}
+.mk.dark .mk-cite,.mk.bare .mk-cite{background:rgba(255,255,255,.06)}
+.mk.dark .mk-kpi,.mk.bare .mk-kpi{background:rgba(255,255,255,.06)}
+.mk.dark .mk-meter,.mk.bare .mk-meter{background:rgba(255,255,255,.12)}
+.mk.dark .mk-rail i,.mk.bare .mk-rail i{background:rgba(255,255,255,.14)}
+.mk.dark .mk-card,.mk.bare .mk-card{background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.mk.dark .mk-row.done b,.mk.bare .mk-row.done b{text-decoration-color:rgba(255,255,255,.4)}
+.mk.dark .mk-app{background:rgba(13,16,22,.85);color:var(--paper)}
+.mk.dark .mk-app svg .ring{stroke:var(--paper)}
+.mk.dark .mk-app svg rect{fill:var(--paper)}

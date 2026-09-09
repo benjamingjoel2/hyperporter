@@ -43,17 +43,10 @@ const cta =
     </div>
   </div>
 
-  {/* The overview, under the hero on the same photograph: a lead beside the
-      page's own steps, clickable. */}
-  <div class="demo-band">
-    <div class="demo-glass rv">
-      <div class="demo-lead">
-        <p class="eyebrow">{page.layer} · {page.name}</p>
-        <p class="dek">{page.overview}</p>
-        <p class="demo-tier">Available on <b>{page.tier}</b> · {page.tierNote}</p>
-      </div>
-      <DemoCard page={page} kind={kind} />
-    </div>
+  {/* Under the hero on the same photograph: the page's own screen, alone and
+      at the band's full width, stepped through on click. */}
+  <div class="demo-band rv">
+    <DemoCard page={page} kind={kind} />
   </div>
 </PhotoHero>
 
@@ -88,7 +81,7 @@ const cta =
     </div>
     <div class="lg-acc-shot">
       <div class="on">
-        <Mockup screen={page.screen} />
+        <Mockup screen={page.screen} dark />
       </div>
     </div>
   </div>

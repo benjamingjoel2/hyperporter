@@ -37,8 +37,10 @@ import Quoting from './Quoting.astro';
 import Followup from './Followup.astro';
 import Reconfirm from './Reconfirm.astro';
 import Collect from './Collect.astro';
+import Engine from './Engine.astro';
 
 export const SCREENS: Record<string, any> = {
+  engine: Engine,
   dashboard: Dashboard,
   crm: Crm,
   contacts: Contacts,
@@ -76,6 +78,7 @@ export const SCREENS: Record<string, any> = {
 };
 
 export const SCREEN_ALT: Record<string, string> = {
+  engine: 'The Quotation stage of one trip with automation on: three suppliers asked at once, one reminded, one decline re-routed. Switched off, the same lines are a person\'s to do.',
   dashboard: 'One account’s four layers: Portal and Horizon included, Autopilot switched on, Intelligence available.',
   crm: 'A trip record in Portal — travellers, stage, proposal link and two supplier quotes — floating over the trips list.',
   contacts: 'The Portal people list: travellers and suppliers with their latest thread.',
@@ -114,6 +117,7 @@ export const SCREEN_ALT: Record<string, string> = {
 
 /** Ground colour and the layer named in the corner chip, per screen. */
 export const SCREEN_META: Record<string, { ground: 'warm' | 'slate' | 'sand' | 'teal' | 'photo'; app: string }> = {
+  engine: { ground: 'slate', app: 'Autopilot' },
   dashboard: { ground: 'photo', app: 'Portal' },
   crm: { ground: 'warm', app: 'Portal' },
   contacts: { ground: 'slate', app: 'Portal' },

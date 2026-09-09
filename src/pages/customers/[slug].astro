@@ -50,7 +50,9 @@ const { overview, segment } = Astro.props as {
 
 const page = (overview ?? segment)!;
 const features = page.features;
-const who = (segment ? segment.name : overview!.side === 'reseller' ? 'resellers' : 'suppliers').toLowerCase();
+// Lower-cased for mid-sentence, unless the name is an initialism ("DMCs").
+const asWho = (name: string): string => (/^[A-Z]{2}/.test(name) ? name : name.toLowerCase());
+const who = segment ? asWho(segment.name) : overview!.side === 'reseller' ? 'resellers' : 'suppliers';
 const howTitle = overview ? overview.sectionTitle : `How ${who} use Hyperporter`;
 // The page's own photograph, or a near one: agents share the advisors'
 // picture, the two overviews borrow their side's lead segment.
@@ -119,7 +121,7 @@ const photo = photoFor(page.slug, ...(PHOTO_ALIAS[page.slug] ?? []));
         </div>
         <div class="lg-acc-shot">
           <div class="on">
-            <Mockup screen={SCREEN[page.slug]} />
+            <Mockup screen={SCREEN[page.slug]} dark />
           </div>
         </div>
       </div>
