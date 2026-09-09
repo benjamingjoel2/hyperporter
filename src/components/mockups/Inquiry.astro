@@ -1,13 +1,15 @@
 ---
-/** The public inquiry form, on the agency's own page. */
+/** Inquiry Form — the public form. The fields are editable; Send lands it
+    in the CRM as a brief with a contact attached. */
 ---
 <div class="mk-back"><b>Meridian Travel Co.</b><i class="l"></i><i class="m"></i><i class="l"></i><i class="s"></i><i class="m"></i><i class="l"></i></div>
 <div class="mk-panel right">
   <div><span class="mk-lbl">New inquiry</span><p class="mk-title">Tell us about the trip</p></div>
   <div class="mk-row2">
-    <div class="mk-field"><label>Where to</label><div>Kenya — the Mara</div></div>
-    <div class="mk-field"><label>When</label><div>First week of March</div></div>
+    <div class="mk-field"><label>Where to</label><div contenteditable="true" spellcheck="false">Kenya — the Mara</div></div>
+    <div class="mk-field"><label>When</label><div contenteditable="true" spellcheck="false">First week of March</div></div>
   </div>
-  <div class="mk-field"><label>Budget, per person</label><div class="focus">€4,000 – 4,500</div></div>
-  <div class="mk-foot"><span class="mk-fine">Lands in the CRM as a brief</span><span class="mk-btn sig">Send inquiry</span></div>
+  <div class="mk-field"><label>Budget, per person</label><div contenteditable="true" spellcheck="false" class="focus">€4,000 – 4,500</div></div>
+  <div class="mk-row js-landed" hidden><span class="mk-chk"></span><div><b>In the CRM · KE-2292 at Inquiry</b><small>New contact created · the brief is on the thread</small></div><span class="mk-tag">Landed</span></div>
+  <div class="mk-foot"><span class="mk-fine">Edit anything, then send. It lands in the CRM as a brief.</span><button type="button" class="mk-btn sig" data-live="set" data-done="Sent" data-reveal=".js-landed" data-fine="Landed as a brief, with the contact attached.">Send inquiry</button></div>
 </div>

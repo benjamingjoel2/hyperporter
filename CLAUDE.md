@@ -109,7 +109,8 @@ again" from the menu). Both collections are `src/lib/content/detail.ts`,
 rendered through `components/DetailPage.astro` in the founder's sequence
 (after harvey.ai): hero, text only, on the photograph; the overview band
 under it on the same photograph, with the page's own screen as the
-card, stepped through row by row on click (`DemoCard.astro`); three points with icons (`Points.astro`,
+card, and the screen works — `lib/live.ts` makes its buttons, rows,
+cards, fields and chat boxes respond (`DemoCard.astro`); three points with icons (`Points.astro`,
 icons guessed from the point's title in `lib/pointIcons.ts`); "How it
 works" as the list-and-snippet accordion (`lib/accordion.ts`, CSS in
 global.css, shared with the homepage); the step a person always takes

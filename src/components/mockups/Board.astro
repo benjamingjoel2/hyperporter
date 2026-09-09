@@ -1,5 +1,6 @@
 ---
-/** CRM workflow — the board: every trip in a stage column, moved along. */
+/** CRM Workflow — the board of trips. Click a card and it moves to the
+    next stage, the way it does by hand on Showcase. */
 const COLS: [string, [string, string][]][] = [
   ['Quotation', [['Nairobi · 9 nights', 'Lena & Mark · 2 quotes in'], ['Tbilisi · 7 nights', 'Ines Dubois · waiting on 1']]],
   ['Confirmation', [['Cusco · 6 nights', 'Re-checking with Andes Trail']]],
@@ -13,10 +14,10 @@ const COLS: [string, [string, string][]][] = [
       <div class="mk-col">
         <small>{name}</small>
         {cards.map(([t, s]) => (
-          <div class="mk-card"><b>{t}</b><small>{s}</small></div>
+          <div class="mk-card" data-live="move" data-moved="Moved by you · just now"><b>{t}</b><small>{s}</small></div>
         ))}
       </div>
     ))}
   </div>
-  <span class="mk-fine">Manual on Showcase. From Autopilot up, the engine moves the cards for you.</span>
+  <span class="mk-fine">Click a card to move it on. Manual on Showcase; from Autopilot up, the engine moves the cards for you.</span>
 </div>

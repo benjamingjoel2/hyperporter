@@ -1,11 +1,17 @@
 ---
 /** Automated Follow-up — the messages you would have sent, at the moment
-    you would have sent them; a reply that needs a decision is flagged. */
+    you would have sent them. Send one early; answer the reply that needs
+    you. */
+const REPLIES = ['A week later works perfectly — thank you!'];
 ---
-<div class="mk-panel wide">
+<div class="mk-panel wide" data-thread>
   <div class="mk-head"><b>Follow-ups</b><small>This week · 3 scheduled</small></div>
-  <div class="mk-row"><span class="mk-chk now"></span><div><b>Proposal nudge · Lena &amp; Mark</b><small>Opened 3 days ago, no answer · sends tomorrow 09:00</small></div><span class="mk-tag grey">Queued</span></div>
+  <div class="mk-row"><span class="mk-chk now"></span><div><b>Proposal nudge · Lena &amp; Mark</b><small>Opened 3 days ago, no answer · sends tomorrow 09:00</small></div><button type="button" class="mk-btn o" data-live="set" data-done="Sent" data-small="Sent by you · just now">Send now</button></div>
   <div class="mk-row"><span class="mk-chk"></span><div><b>Voucher reminder · Atlas Maroc</b><small>5 days to departure · sent, voucher received</small></div><span class="mk-tag">Done</span></div>
-  <div class="mk-row"><span class="mk-chk now"></span><div><b>Feedback request · Sofia</b><small>Home 7 days · sends Friday</small></div><span class="mk-tag grey">Queued</span></div>
-  <div class="mk-row plain" style="border-top:1px solid var(--line);border-bottom:0;padding-top:.8em"><div><b>"Could we push it a week later?"</b><small>Reply to a nudge · a change, so flagged to you</small></div><span class="mk-btn amb">Reply</span></div>
+  <div class="mk-row"><span class="mk-chk now"></span><div><b>Feedback request · Sofia</b><small>Home 7 days · sends Friday</small></div><button type="button" class="mk-btn o" data-live="set" data-done="Sent" data-small="Sent by you · just now">Send now</button></div>
+  <div class="mk-row plain" style="border-top:1px solid var(--line);border-bottom:0;padding-top:.8em"><div><b>"Could we push it a week later?"</b><small>Reply to a nudge · a change, so flagged to you</small></div><button type="button" class="mk-btn amb" data-live="set" data-done="Yours" data-reveal=".js-reply" data-small="Yours now · reply below">Reply</button></div>
+  <form class="mk-composer js-reply" hidden data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="Lena Ortiz" data-me-via="You · to Lena">
+    <input type="text" placeholder="Answer Lena…" aria-label="Reply to Lena" autocomplete="off" />
+    <button type="submit" class="mk-btn sig">Send</button>
+  </form>
 </div>

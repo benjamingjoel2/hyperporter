@@ -11,9 +11,8 @@
  * The agency, the suppliers, the trips and the prices are invented. There is
  * no caption saying so — the founder asked for none — so keep them plausible
  * and keep them consistent with the copy around them.
- * The frame is `role="img"` with the snippet's description as its label; the
- * interface inside is hidden from assistive tech, because reading a fake
- * table aloud helps nobody.
+ * The screens work (lib/live.ts): buttons, rows, cards and chat boxes
+ * respond, so the frame is a labelled group and its controls are reachable.
  *
  * An unknown screen name throws rather than rendering an empty frame.
  */
@@ -39,8 +38,8 @@ const meta = SCREEN_META[screen];
 ---
 
 <div class:list={['mockup', klass]}>
-  <div class:list={['mk', { tall, dark }]} data-ground={meta.ground} role="img" aria-label={SCREEN_ALT[screen]}>
-    <div class="mk-stage" aria-hidden="true">
+  <div class:list={['mk', { tall, dark }]} data-ground={meta.ground} role="group" aria-label={SCREEN_ALT[screen]}>
+    <div class="mk-stage">
       <Screen />
     </div>
     <span class="mk-app" aria-hidden="true">
@@ -49,3 +48,7 @@ const meta = SCREEN_META[screen];
     </span>
   </div>
 </div>
+
+<script>
+  import '../lib/live';
+</script>

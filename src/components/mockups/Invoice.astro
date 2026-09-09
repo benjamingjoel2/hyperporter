@@ -1,11 +1,16 @@
 ---
-/** Payments & Invoicing — one trip's schedule, the invoice off the record,
-    and money marked received by a person. */
+/** Payments & Invoicing — the schedule and the invoice. Mark the balance
+    received by hand; open the invoice to see its lines. */
 ---
 <div class="mk-panel wide">
   <div class="mk-head"><b>Payments · Marrakesh</b><small>MA-0937 · Priya Nair</small></div>
   <div class="mk-row"><span class="mk-chk"></span><div><b>Deposit · €880</b><small>Due 12 Jan · marked received by Ines, 14 Jan</small></div><span class="mk-tag">Received</span></div>
-  <div class="mk-row"><span class="mk-chk wait"></span><div><b>Balance · €3,520</b><small>Due 20 Feb · request sent, reminder in 5 days</small></div><span class="mk-tag amb">Needs you</span></div>
-  <div class="mk-row"><span class="mk-ico pdf">PDF</span><div><b>Invoice INV-0937</b><small>Generated from the accepted proposal · same lines, same total</small></div><span class="mk-btn o">Open</span></div>
-  <span class="mk-fine">Requests go out on their own. Money received is always marked by hand.</span>
+  <div class="mk-row" data-live="tick" data-on="Received" data-off="Needs you" data-off-amber="true"><span class="mk-chk wait"></span><div><b>Balance · €3,520</b><small>Due 20 Feb · request sent, reminder in 5 days</small></div><span class="mk-tag amb">Needs you</span></div>
+  <div class="mk-row"><span class="mk-ico pdf">PDF</span><div><b>Invoice INV-0937</b><small>Generated from the accepted proposal · same lines, same total</small></div><button type="button" class="mk-btn o" data-live="set" data-done="Open" data-reveal=".js-invoice">Open</button></div>
+  <div class="js-invoice" hidden>
+    <div class="mk-row plain"><div><b>Riad Yasmine · 4 nights, terrace suite</b><small>Atlas Maroc DMC</small></div><span class="r">€2,960</span></div>
+    <div class="mk-row plain"><div><b>Transfers and the Atlas day trip</b><small>Atlas Maroc DMC</small></div><span class="r">€1,440</span></div>
+    <div class="mk-sum"><span class="mk-p">Total · deposit €880 received</span><b>€4,400</b></div>
+  </div>
+  <span class="mk-fine">Click the balance line when the money lands. Requests go out on their own; money received is always marked by hand.</span>
 </div>

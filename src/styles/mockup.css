@@ -217,3 +217,51 @@
 .mk.dark .mk-app{background:rgba(13,16,22,.85);color:var(--paper)}
 .mk.dark .mk-app svg .ring{stroke:var(--paper)}
 .mk.dark .mk-app svg rect{fill:var(--paper)}
+
+/* ---- live -------------------------------------------------------------
+   The screens respond (lib/live.ts). Controls are real buttons and inputs;
+   these give them the panel's look, a pressed state, and the small motions
+   that make a change read as a change. */
+.mk button.mk-btn{font:inherit;border:0;cursor:pointer;transition:transform .15s ease,background .2s ease,color .2s ease,box-shadow .2s ease}
+.mk button.mk-btn:active{transform:scale(.97)}
+.mk button.mk-btn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.mk .mk-btn.done,.mk.dark .mk-btn.done,.mk.bare .mk-btn.done,.mk.dark .mk-btn.sig.done,.mk.bare .mk-btn.sig.done,.mk.dark .mk-btn.amb.done,.mk.bare .mk-btn.amb.done{background:none;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line-2);cursor:default}
+.mk .mk-btn.done::before{content:"✓ ";color:var(--signal)}
+.mk .mk-btn.o.done::before{content:"✓ "}
+.mk [data-live="tick"],.mk [data-live="move"],.mk [data-live="ask"] .ph,.mk .mk-tog[data-live]{cursor:pointer}
+.mk [data-live="tick"]:hover b,.mk [data-live="move"]:hover b{color:var(--signal)}
+.mk [data-live="tick"]:focus-visible,.mk [data-live="move"]:focus-visible,.mk [data-live="ask"]:focus-visible{outline:2px solid var(--signal);outline-offset:2px;border-radius:.4em}
+.mk .mk-row.is-done > div > b{color:var(--muted)}
+.mk .mk-card[data-live="move"]{cursor:pointer;transition:transform .15s ease}
+.mk .mk-card[data-live="move"]:hover{transform:translateY(-1px);box-shadow:inset 0 0 0 1px var(--signal)}
+.mk .mk-card[data-live="move"]::after{content:"→";float:right;color:var(--dim);font-size:.8em;margin-top:.1em}
+.mk-col:last-child .mk-card[data-live="move"]::after{content:"✓";color:var(--signal)}
+.mk .mk-tog[data-live]{cursor:pointer;border:0;padding:0}
+.mk .mk-tog[data-live]:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+/* An editable field. */
+.mk .mk-field div[contenteditable]{cursor:text;transition:box-shadow .2s ease}
+.mk .mk-field div[contenteditable]:focus{outline:0;box-shadow:inset 0 0 0 1.5px var(--signal)}
+/* A chat composer: input plus send. */
+.mk-composer{display:flex;gap:.5em;align-items:center;padding-top:.6em;border-top:1px solid var(--line)}
+.mk-composer input{flex:1;min-width:0;font:inherit;font-size:.95em;color:var(--paper);background:rgba(13,16,22,.05);border:0;border-radius:2em;padding:.6em .95em;box-shadow:inset 0 0 0 1px var(--line-2)}
+.mk-composer input::placeholder{color:var(--dim)}
+.mk-composer input:focus{outline:0;box-shadow:inset 0 0 0 1.5px var(--signal)}
+.mk.dark .mk-composer input,.mk.bare .mk-composer input{background:rgba(255,255,255,.06)}
+.mk .mk-stage .mk-typing p{display:inline-flex;gap:.3em;padding:.7em .9em}
+.mk-typing i{width:.4em;height:.4em;border-radius:50%;background:var(--dim);animation:mk-blink 1s infinite}
+.mk-typing i:nth-child(2){animation-delay:.2s}.mk-typing i:nth-child(3){animation-delay:.4s}
+@keyframes mk-blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+/* The margin control. */
+.mk-stepper{display:inline-flex;align-items:center;gap:.4em}
+.mk-stepper button{width:1.7em;height:1.7em;border-radius:50%;border:0;background:var(--ink);color:var(--paper);font:inherit;cursor:pointer;display:grid;place-items:center;line-height:1}
+.mk-stepper button:hover{background:var(--signal);color:#fff}
+.mk-stepper b{font-weight:400;min-width:2.6em;text-align:center;font-variant-numeric:tabular-nums}
+/* Small motions. */
+.mk-in{animation:mk-rise .4s cubic-bezier(.2,.7,.2,1) both}
+@keyframes mk-rise{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.mk-shake{animation:mk-shake .35s ease}
+@keyframes mk-shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+/* The hint in the corner of a live card. */
+.mk-live{display:inline-flex;align-items:center;gap:.5em;font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.mk-live i{width:.6em;height:.6em;border-radius:50%;background:var(--signal);box-shadow:0 0 0 .25em var(--signal-dim)}
+@media (prefers-reduced-motion:reduce){.mk-in,.mk-shake,.mk-typing i{animation:none}}
