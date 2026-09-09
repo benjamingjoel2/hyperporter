@@ -1180,7 +1180,12 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .demo-band{position:relative;z-index:1;padding:0 var(--pad) clamp(44px,5vw,76px);max-width:var(--max);margin:0 auto}
 /* The card alone, at the band's full width (founder's ask, Sep 2026: no
    lead beside it, the illustration fills the area). */
-.demo-band .thread.demo{max-width:none;width:100%}
+.demo-band .thread.demo{max-width:none;width:100%;display:flex;flex-direction:column;
+  min-height:min(calc(100vh - 140px),960px)}
+/* The screen fills the card's height, its rows centred in the room. */
+.demo-band .thread.demo .demo-play{flex:1;display:flex;flex-direction:column;justify-content:center}
+.demo-band .thread.demo .demo-play .mk{width:100%}
+@media (max-width:760px){.demo-band .thread.demo{min-height:0}}
 
 /* ---------- solutions pages (pages/customers/[slug].astro) ---------- */
 /* The reference's solutions hero: light, headline left, lede and button
@@ -1202,6 +1207,19 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
    click reveals the next row. Rows still to come hold their space but are
    not seen, so the card never changes height. */
 .demo-play{display:block;width:100%;margin:22px 0 0;padding:0 0 30px;position:relative}
+/* With / Without: the header's left side is the switch; the body holds
+   both views and shows one. */
+.thread.demo .th{align-items:center}
+.demo-mode{display:inline-flex;gap:6px}
+.demo-mode .chip{letter-spacing:.1em;padding:7px 10px}
+.p-top-photo .thread .demo-mode .chip{color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.16)}
+.p-top-photo .thread .demo-mode .chip:hover{color:#fff;border-color:rgba(255,255,255,.4)}
+.p-top-photo .thread .demo-mode .chip.now{background:#4FB3BD;border-color:#4FB3BD;color:#06181B}
+.thread.demo .mk .v-without{display:none}
+.thread.demo.without .mk .v-with{display:none}
+.thread.demo.without .mk .v-without{display:flex}
+.thread.demo.without .demo-pill i{background:#E2A94E;box-shadow:0 0 0 3px rgba(226,169,78,.25)}
+@media (max-width:560px){.thread.demo .th{flex-wrap:wrap;gap:10px}}
 .demo-pill{position:absolute;z-index:2;right:0;bottom:0;display:inline-flex;align-items:center;gap:8px;
   padding:7px 12px;border-radius:999px;background:#0D1016;color:rgba(255,255,255,.86);
   font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;
