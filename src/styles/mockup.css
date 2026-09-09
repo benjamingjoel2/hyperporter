@@ -265,3 +265,8 @@
 .mk-live{display:inline-flex;align-items:center;gap:.5em;font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
 .mk-live i{width:.6em;height:.6em;border-radius:50%;background:var(--signal);box-shadow:0 0 0 .25em var(--signal-dim)}
 @media (prefers-reduced-motion:reduce){.mk-in,.mk-shake,.mk-typing i{animation:none}}
+
+/* The traditional side: plain text, generous size, a measure that reads. */
+.mk-without{max-width:34em;display:flex;flex-direction:column;gap:.9em;padding:.5em 0}
+.mk-without .mk-lbl{color:var(--amber)}
+.mk .mk-stage .mk-without p{font-size:1.45em;line-height:1.45;color:var(--paper);letter-spacing:-.01em}
