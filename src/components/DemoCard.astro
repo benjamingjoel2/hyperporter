@@ -3,12 +3,17 @@
  * The illustration on a tool or automation hero: the page's own screen, and
  * it works. Buttons do what they say, rows tick, cards move, chat boxes
  * answer back, fields take what you type (lib/live.ts). A person can use
- * the tool on the page before they have signed up for it. Nothing leaves
- * the page; the line under the screen says it is a demonstration.
+ * the tool on the page before they have signed up for it.
+ *
+ * The header is a switch: With Hyperporter is the working screen; Without
+ * Hyperporter is the same job, same trip, done by hand across inboxes and
+ * spreadsheets (mockups/Without.astro), every line amber because every
+ * line is a person's. Both are in the markup; `.demo.without` picks one.
  */
 import '../styles/mockup.css';
 import type { DetailPage } from '../lib/content/detail';
 import { SCREENS, SCREEN_ALT } from './mockups/index';
+import Without from './mockups/Without.astro';
 
 interface Props {
   page: DetailPage;
@@ -22,17 +27,40 @@ if (!Screen) throw new Error(`DemoCard: no screen named "${page.screen}" for ${p
 
 <div class="thread demo" data-demo>
   <div class="th">
-    <span>{page.name}</span>
+    <span class="demo-mode" role="group" aria-label="With or without Hyperporter">
+      <button type="button" class="chip now" data-mode="with" aria-pressed="true">With Hyperporter</button>
+      <button type="button" class="chip" data-mode="without" aria-pressed="false">Without Hyperporter</button>
+    </span>
     <span>{page.tier === page.layer ? <b>{page.layer}</b> : <>{page.layer} · <b>{page.tier}</b></>}</span>
   </div>
   <div class="demo-play">
     <div class="mk bare demo-shot" role="group" aria-label={`${page.name}, a working demonstration. ${SCREEN_ALT[page.screen]}`}>
-      <div class="mk-stage"><Screen /></div>
+      <div class="mk-stage">
+        <div class="v v-with"><Screen /></div>
+        <div class="v v-without"><Without screen={page.screen} /></div>
+      </div>
     </div>
-    <span class="demo-pill" aria-hidden="true"><i></i><span>Live demo · try it</span></span>
+    <span class="demo-pill" aria-hidden="true"><i></i><span data-demo-pill>Live demo · try it</span></span>
   </div>
 </div>
 
 <script>
   import '../lib/live';
+  /* The With / Without switch. Delegated, so it works wherever the card is
+     rendered, the bundled preview included. */
+  document.addEventListener('click', (event) => {
+    const btn = (event.target as Element | null)?.closest<HTMLButtonElement>('[data-demo] [data-mode]');
+    if (!btn) return;
+    const card = btn.closest<HTMLElement>('[data-demo]');
+    if (!card) return;
+    const without = btn.dataset.mode === 'without';
+    card.classList.toggle('without', without);
+    card.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => {
+      const on = b === btn;
+      b.classList.toggle('now', on);
+      b.setAttribute('aria-pressed', String(on));
+    });
+    const pill = card.querySelector<HTMLElement>('[data-demo-pill]');
+    if (pill) pill.textContent = without ? 'The same job, by hand' : 'Live demo · try it';
+  });
 </script>

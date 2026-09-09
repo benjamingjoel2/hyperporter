@@ -1,0 +1,18 @@
+---
+/** The by-hand side of a screen: the same job without Hyperporter, from
+    lib/content/without.ts. Every line is a person's, so every mark is
+    amber — the site's one colour for a human, manual state. */
+import { WITHOUT } from '../../lib/content/without';
+
+interface Props { screen: string }
+const { screen } = Astro.props;
+const w = WITHOUT[screen];
+if (!w) throw new Error(`Without: no by-hand view for screen "${screen}". Add one to lib/content/without.ts.`);
+---
+<div class="mk-panel wide">
+  <div class="mk-head"><b>{w.head[0]}</b><small>{w.head[1]}</small></div>
+  {w.rows.map(([t, s, tag]) => (
+    <div class="mk-row"><span class="mk-chk hold"></span><div><b>{t}</b><small>{s}</small></div><span class="mk-tag amb">{tag}</span></div>
+  ))}
+  <span class="mk-fine">{w.fine}</span>
+</div>
