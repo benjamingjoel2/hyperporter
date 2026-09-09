@@ -394,7 +394,7 @@ p{margin:0 0 16px}
 .thread.manual .mk .v-auto{display:none}
 .thread.manual .mk .v-manual{display:flex}
 .thread .mk.bare{margin-top:18px}
-.thread .mk.bare .mk-panel{padding:0}
+
 /* Off state: the switch goes grey and the knob slides back. */
 .toggle{background:none;border:0;padding:0;cursor:pointer;font:inherit;color:var(--signal)}
 .toggle span{transition:background .25s,border-color .25s}
@@ -1180,14 +1180,8 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .demo-band{position:relative;z-index:1;padding:0 var(--pad) clamp(44px,5vw,76px);max-width:var(--max);margin:0 auto}
 /* The card alone, at the band's full width (founder's ask, Sep 2026: no
    lead beside it, the illustration fills the area). */
-.demo-band .thread.demo{max-width:none;width:100%;display:flex;flex-direction:column;
-  background:#0D1016;-webkit-backdrop-filter:none;backdrop-filter:none;border-color:rgba(255,255,255,.1);
-  min-height:min(calc(100vh - 140px),960px)}
-/* The screen fills the card's height, its rows centred in the room. */
-.demo-band .thread.demo .demo-play{flex:1;display:flex;flex-direction:column;justify-content:center}
-.demo-band .thread.demo .demo-play .mk{width:100%}
-@media (max-width:760px){.demo-band .thread.demo{min-height:0}}
-.demo-band .thread.demo.demo-chat{min-height:0}
+.demo-band .thread.demo{max-width:720px;width:100%;margin:0 auto;
+  background:#0D1016;-webkit-backdrop-filter:none;backdrop-filter:none;border-color:rgba(255,255,255,.1)}
 
 /* ---------- solutions pages (pages/customers/[slug].astro) ---------- */
 /* The reference's solutions hero: light, headline left, lede and button
