@@ -1,15 +1,15 @@
 ---
-/** Automated Inquiry — a message becomes a brief; the gap is asked about;
-    nothing moves until the traveller confirms. */
+/** Automated Inquiry — a message becomes a brief. Edit the fields; click
+    the gap to see the traveller's reply come in and the brief confirmed. */
 ---
 <div class="mk-panel wide">
   <div class="mk-head"><b>New inquiry</b><small>via email · 09:14</small></div>
   <div class="mk-msg sys"><p>"Two of us, Kenya in early March, about 9 nights, Mara for sure. Budget-wise, mid-range."</p></div>
   <div class="mk-row2">
-    <div class="mk-field"><label>Where</label><div>Kenya · Mara</div></div>
-    <div class="mk-field"><label>When</label><div>3 – 12 March</div></div>
-    <div class="mk-field"><label>Who</label><div>2 adults</div></div>
-    <div class="mk-field"><label>Budget</label><div class="ph focus">Asked · awaiting reply</div></div>
+    <div class="mk-field"><label>Where</label><div contenteditable="true" spellcheck="false">Kenya · Mara</div></div>
+    <div class="mk-field"><label>When</label><div contenteditable="true" spellcheck="false">3 – 12 March</div></div>
+    <div class="mk-field"><label>Who</label><div contenteditable="true" spellcheck="false">2 adults</div></div>
+    <div class="mk-field" data-live="ask" data-answer="€4,000 – 4,500 per person" data-then=".js-confirm" data-then-small="Lena said yes · moved to Planning"><label>Budget</label><div class="ph focus">Asked · click to see the reply land</div></div>
   </div>
-  <div class="mk-row plain" style="border-bottom:0"><div><b>Confirm the brief with the traveller</b><small>Sent to Lena · moves to Planning on "yes"</small></div><span class="mk-chk wait"></span></div>
+  <div class="mk-row plain js-confirm" style="border-bottom:0"><div><b>Confirm the brief with the traveller</b><small>Sent to Lena · moves to Planning on "yes"</small></div><span class="mk-chk wait"></span></div>
 </div>

@@ -1,5 +1,6 @@
 ---
-/** Payments — the request went out on its own; marking it received is yours. */
+/** Automated Payment — the request went out on its own; money received
+    is a person's to mark. Mark it. */
 ---
 <div class="mk-panel">
   <div class="mk-head"><b><span class="mk-dot amb"></span>Deposit · Marrakesh</b><small>MA-0937</small></div>
@@ -8,6 +9,6 @@
     <div class="mk-kpi"><span>From</span><b style="font-size:1.05em">Priya Nair</b></div>
   </div>
   <div class="mk-row"><span class="mk-chk"></span><div><b>Request sent with the proposal</b><small>Automatic · 09:31</small></div></div>
-  <div class="mk-row"><span class="mk-chk wait"></span><div><b>Money received</b><small>A person marks this. Always.</small></div><span class="mk-tag amb">Needs you</span></div>
-  <span class="mk-btn amb block">Mark received</span>
+  <div class="mk-row js-money"><span class="mk-chk wait"></span><div><b>Money received</b><small>A person marks this. Always.</small></div><span class="mk-tag amb">Needs you</span></div>
+  <div class="mk-row plain" style="border-bottom:0;padding-bottom:0"><div class="mk-fine">Click below when the money lands.</div><button type="button" class="mk-btn amb" data-live="set" data-row=".js-money" data-done="Received · marked by you" data-tag="Received" data-small="Marked by you · just now" data-clear="amb">Mark received</button></div>
 </div>

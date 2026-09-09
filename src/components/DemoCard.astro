@@ -1,15 +1,10 @@
 ---
 /**
- * The interactive illustration on a tool or automation hero: the page's own
- * screen — the same one its "How it works" shows — and nothing else. The
- * screen plays itself: it opens on its first row, and each click or tap
- * reveals the next, so a person walks the tool's story at their own pace
- * and sees the tool doing it, not a list of steps under a picture. A small
- * pill in the corner says where they are; at the end, one more click starts
- * over.
- *
- * Every row is in the markup from the start and hidden with a class, so
- * with JS off the whole screen shows at once.
+ * The illustration on a tool or automation hero: the page's own screen, and
+ * it works. Buttons do what they say, rows tick, cards move, chat boxes
+ * answer back, fields take what you type (lib/live.ts). A person can use
+ * the tool on the page before they have signed up for it. Nothing leaves
+ * the page; the line under the screen says it is a demonstration.
  */
 import '../styles/mockup.css';
 import type { DetailPage } from '../lib/content/detail';
@@ -30,41 +25,14 @@ if (!Screen) throw new Error(`DemoCard: no screen named "${page.screen}" for ${p
     <span>{page.name}</span>
     <span>{page.tier === page.layer ? <b>{page.layer}</b> : <>{page.layer} · <b>{page.tier}</b></>}</span>
   </div>
-  <button type="button" class="demo-play" aria-label={`${SCREEN_ALT[page.screen]} Click to step through.`}>
-    <div class="mk bare demo-shot" aria-hidden="true">
+  <div class="demo-play">
+    <div class="mk bare demo-shot" role="group" aria-label={`${page.name}, a working demonstration. ${SCREEN_ALT[page.screen]}`}>
       <div class="mk-stage"><Screen /></div>
     </div>
-    <span class="demo-pill" aria-hidden="true"><i></i><span data-demo-pill>Click to step through</span></span>
-  </button>
+    <span class="demo-pill" aria-hidden="true"><i></i><span>Live demo · try it</span></span>
+  </div>
 </div>
 
 <script>
-  /**
-   * The screen as a stepper. The beats are the rows a person would watch
-   * appear — list rows, messages, fields, cards, totals — in document order.
-   * Everything else in the panel (head, meter, footnotes) stays put.
-   */
-  const BEATS = '.mk-row, .mk-msg, .mk-field, .mk-card, .mk-sum, .mk-btn.block, .mk-kpis > *';
-
-  const arm = (card: HTMLElement): void => {
-    const play = card.querySelector<HTMLButtonElement>('.demo-play');
-    const pill = card.querySelector<HTMLElement>('[data-demo-pill]');
-    if (!play || play.dataset.armed) return;
-    play.dataset.armed = '1';
-    const beats = Array.from(play.querySelectorAll<HTMLElement>(BEATS)).filter(
-      (b) => !b.parentElement?.closest(BEATS) || b.matches('.mk-field, .mk-card'),
-    );
-    if (beats.length < 2) { pill?.closest('.demo-pill')?.remove(); return; }
-
-    let shown = 1;
-    const paint = (): void => {
-      beats.forEach((b, i) => b.classList.toggle('demo-wait', i >= shown));
-      if (pill) pill.textContent = shown >= beats.length ? 'Click to start over' : `Step ${shown} of ${beats.length} · click for the next`;
-      play.classList.toggle('done', shown >= beats.length);
-    };
-    play.addEventListener('click', () => { shown = shown >= beats.length ? 1 : shown + 1; paint(); });
-    paint();
-  };
-
-  document.querySelectorAll<HTMLElement>('[data-demo]').forEach(arm);
+  import '../lib/live';
 </script>

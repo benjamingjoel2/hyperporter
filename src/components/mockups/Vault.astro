@@ -1,5 +1,6 @@
 ---
-/** Tour operators — their own contracts and rates, indexed for Atlas. */
+/** Document Vault — the account's own contracts and rate sheets, read on
+    upload. Upload one and watch it index. */
 const D = [
   ['Rift Valley GS — rates 2026.pdf', 'Kenya · 48 rates · valid to Oct 2026', 'Indexed'],
   ['Atlas Maroc 2026.pdf', 'Morocco · 112 rates · valid to Dec 2026', 'Indexed'],
@@ -8,8 +9,13 @@ const D = [
 ---
 <div class="mk-panel wide">
   <div class="mk-head"><b>Vault</b><small>61 documents · 1,204 rates</small></div>
-  {D.map(([d, m, st]) => (
-    <div class="mk-row"><span class:list={['mk-ico', { pdf: d.endsWith('.pdf') }]}>{d.endsWith('.pdf') ? 'PDF' : 'XLS'}</span><div><b>{d}</b><small>{m}</small></div><span class:list={['mk-tag', { amb: st === 'Indexing' }]}>{st}</span></div>
-  ))}
-  <span class="mk-fine">Atlas answers from these and nothing else. Nothing here is shared with any other account.</span>
+  <div data-list>
+    {D.map(([d, m, st]) => (
+      <div class="mk-row"><span class:list={['mk-ico', { pdf: d.endsWith('.pdf') }]}>{d.endsWith('.pdf') ? 'PDF' : 'XLS'}</span><div><b>{d}</b><small>{m}</small></div><span class:list={['mk-tag', { amb: st === 'Indexing' }]}>{st}</span></div>
+    ))}
+  </div>
+  <template>
+    <div class="mk-row"><span class="mk-ico pdf">PDF</span><div><b>Kilimanjaro Trails — 2026 tariff.pdf</b><small>Tanzania · reading rates and validity…</small></div><span class="mk-tag amb">Indexing</span></div>
+  </template>
+  <div class="mk-foot"><span class="mk-fine">Atlas answers from these and nothing else. Nothing here is shared with any other account.</span><button type="button" class="mk-btn sig" data-live="add" data-then-to="Indexed" data-head-to="62 documents · 1,240 rates">Upload</button></div>
 </div>
