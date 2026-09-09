@@ -21,17 +21,19 @@ interface Props {
 }
 
 const { page } = Astro.props;
+/* Conversation screens sit in a card that fits them rather than the tall
+   one (founder's ask). */
+const CHAT = new Set(['atlas', 'whatsapp', 'inbox', 'relay', 'followup']);
 const Screen = SCREENS[page.screen];
 if (!Screen) throw new Error(`DemoCard: no screen named "${page.screen}" for ${page.slug}.`);
 ---
 
-<div class="thread demo" data-demo>
+<div class:list={['thread demo', { 'demo-chat': CHAT.has(page.screen) }]} data-demo>
   <div class="th">
     <span class="demo-mode" role="group" aria-label="With or without Hyperporter">
       <button type="button" class="chip now" data-mode="with" aria-pressed="true">With Hyperporter</button>
       <button type="button" class="chip" data-mode="without" aria-pressed="false">Without Hyperporter</button>
     </span>
-    <span>{page.tier === page.layer ? <b>{page.layer}</b> : <>{page.layer} · <b>{page.tier}</b></>}</span>
   </div>
   <div class="demo-play">
     <div class="mk bare demo-shot" role="group" aria-label={`${page.name}, a working demonstration. ${SCREEN_ALT[page.screen]}`}>

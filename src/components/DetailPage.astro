@@ -22,7 +22,7 @@ interface Props {
 }
 
 const { page, kind } = Astro.props;
-const eyebrow = `${kind === 'tool' ? 'Tools' : 'Automations'} — ${page.layer}`;
+const eyebrow = page.name;
 const id = `${kind}-${page.slug}`;
 const cta =
   kind === 'tool'

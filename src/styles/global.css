@@ -1187,6 +1187,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .demo-band .thread.demo .demo-play{flex:1;display:flex;flex-direction:column;justify-content:center}
 .demo-band .thread.demo .demo-play .mk{width:100%}
 @media (max-width:760px){.demo-band .thread.demo{min-height:0}}
+.demo-band .thread.demo.demo-chat{min-height:0}
 
 /* ---------- solutions pages (pages/customers/[slug].astro) ---------- */
 /* The reference's solutions hero: light, headline left, lede and button
