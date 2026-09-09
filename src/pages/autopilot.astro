@@ -12,6 +12,9 @@ import ProductPage from '../components/ProductPage.astro';
 import { byProduct, AUTOPILOT_TARGETS } from '../lib/content/products';
 import { STAGES } from '../lib/stages';
 import { photoFor } from '../lib/photos';
+import Engine from '../components/mockups/Engine.astro';
+import { SCREEN_ALT } from '../components/mockups/index';
+import '../styles/mockup.css';
 
 const photo = photoFor('autopilot');
 
@@ -38,65 +41,22 @@ const CURRENT_STAGE = 3;
     <Fragment slot="hero-aside">
       <div class="thread">
         <div class="th"><span>Thread <b>KE-2291</b></span><span>Nairobi · 9 nights</span></div>
-        {/* Tab pattern: each chip switches the card to that stage. All
-            nine panels are rendered server-side and toggled with `hidden`,
-            so with JS off the card still shows stage 3 rather than going
-            blank. */}
-        <div class="chips" role="tablist" aria-label="Pipeline stage">
-          {
-            STAGES.map((s, i) => (
-              <button
-                type="button"
-                role="tab"
-                id={`stage-tab-${i}`}
-                aria-controls={`stage-panel-${i}`}
-                aria-selected={i + 1 === CURRENT_STAGE ? 'true' : 'false'}
-                tabindex={i + 1 === CURRENT_STAGE ? 0 : -1}
-                class:list={['chip', { done: i + 1 < CURRENT_STAGE, now: i + 1 === CURRENT_STAGE }]}
-              >
-                {s.name}
-              </button>
-            ))
-          }
+        {/* The screen: the Quotation stage of one trip, and the switch below
+            flips it between automation on and the same trip by hand. Both
+            states are in the markup; `.thread.manual` picks one. */}
+        <div
+          class="mk bare"
+          role="img"
+          aria-label={SCREEN_ALT.engine}
+          data-auto-needs={STAGES[CURRENT_STAGE - 1].cls === 'Automatic' ? 'nothing' : 'a person'}
+          data-manual-needs="all of it"
+        >
+          <div class="mk-stage" aria-hidden="true"><Engine /></div>
         </div>
-
-        {
-          STAGES.map((s, i) => (
-            <div
-              class="tpanel"
-              id={`stage-panel-${i}`}
-              role="tabpanel"
-              aria-labelledby={`stage-tab-${i}`}
-              data-auto-needs={s.cls === 'Automatic' ? 'nothing' : 'a person'}
-              data-manual-needs="all of it"
-              hidden={i + 1 !== CURRENT_STAGE}
-            >
-              {/* Autopilot on. Amber marks human-touchpoint states only. */}
-              <div class="v v-auto">
-                <div class:list={['line', { amb: s.cls !== 'Automatic' }]}>
-                  <i />
-                  <span>{s.note}</span>
-                </div>
-                <div class="line">
-                  <i />
-                  <span>{s.one}</span>
-                </div>
-              </div>
-              {/* Autopilot off -- the same step done by hand, so every
-                  line is a human-touchpoint state and reads amber. */}
-              <div class="v v-manual">
-                <div class="line amb">
-                  <i />
-                  <span>{s.manual}</span>
-                </div>
-              </div>
-            </div>
-          ))
-        }
 
         <div class="ft">
           <button class="toggle" id="ap-toggle" type="button" aria-pressed="true">
-            <span /> Autopilot
+            <span /> Automation
           </button>
           <span id="ap-needs">Needs you &middot; nothing</span>
         </div>
@@ -198,67 +158,27 @@ const CURRENT_STAGE = 3;
 </Base>
 
 <script>
-  /**
-   * Hero thread card: the chips act as tabs over the nine stage panels.
-   * Chips to the left of the selected one read as "done", so the card still
-   * behaves as a progress display rather than a plain switcher.
-   */
-  const tablist = document.querySelector<HTMLElement>('.thread .chips[role="tablist"]');
+  /* The Automation switch is real: off swaps the screen to the by-hand
+     version of the same stage and rewrites the "needs you" state. */
+  const thread = document.querySelector<HTMLElement>('.thread');
+  const screen = thread?.querySelector<HTMLElement>('.mk.bare');
+  const toggle = document.querySelector<HTMLButtonElement>('#ap-toggle');
+  const needs = document.querySelector<HTMLElement>('#ap-needs');
 
-  if (tablist) {
-    const tabs = Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+  const syncNeeds = (): void => {
+    if (!screen || !needs) return;
+    const on = toggle?.getAttribute('aria-pressed') !== 'false';
+    const value = on ? screen.dataset.autoNeeds : screen.dataset.manualNeeds;
+    needs.textContent = `Needs you \u00b7 ${value ?? 'nothing'}`;
+  };
 
-    const select = (index: number, focus = true): void => {
-      tabs.forEach((tab, i) => {
-        const on = i === index;
-        tab.setAttribute('aria-selected', String(on));
-        tab.tabIndex = on ? 0 : -1;
-        tab.classList.toggle('now', on);
-        tab.classList.toggle('done', i < index);
-        const panel = document.getElementById(tab.getAttribute('aria-controls') ?? '');
-        if (panel) panel.hidden = !on;
-      });
-      if (focus) tabs[index].focus();
-      syncNeeds();
-    };
-
-    tabs.forEach((tab, i) => tab.addEventListener('click', () => select(i, false)));
-
-    /* The Autopilot switch is real: off swaps every panel to the by-hand
-       version of that stage and rewrites the "needs you" state. */
-    const thread = document.querySelector<HTMLElement>('.thread');
-    const toggle = document.querySelector<HTMLButtonElement>('#ap-toggle');
-    const needs = document.querySelector<HTMLElement>('#ap-needs');
-
-    const syncNeeds = (): void => {
-      const panel = document.querySelector<HTMLElement>('.tpanel:not([hidden])');
-      if (!panel || !needs) return;
-      const on = toggle?.getAttribute('aria-pressed') !== 'false';
-      const value = on ? panel.dataset.autoNeeds : panel.dataset.manualNeeds;
-      needs.textContent = `Needs you \u00b7 ${value ?? 'nothing'}`;
-    };
-
-    toggle?.addEventListener('click', () => {
-      const on = toggle.getAttribute('aria-pressed') !== 'false';
-      toggle.setAttribute('aria-pressed', String(!on));
-      thread?.classList.toggle('manual', on);
-      syncNeeds();
-    });
-
-    tablist.addEventListener('keydown', (event: KeyboardEvent) => {
-      const current = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
-      let next: number;
-      switch (event.key) {
-        case 'ArrowRight': next = (current + 1) % tabs.length; break;
-        case 'ArrowLeft':  next = (current - 1 + tabs.length) % tabs.length; break;
-        case 'Home':       next = 0; break;
-        case 'End':        next = tabs.length - 1; break;
-        default: return;
-      }
-      event.preventDefault();
-      select(next);
-    });
-  }
+  toggle?.addEventListener('click', () => {
+    const on = toggle.getAttribute('aria-pressed') !== 'false';
+    toggle.setAttribute('aria-pressed', String(!on));
+    thread?.classList.toggle('manual', on);
+    syncNeeds();
+  });
+  syncNeeds();
 </script>
 
 <script>

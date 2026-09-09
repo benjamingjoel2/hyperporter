@@ -24,10 +24,13 @@ interface Props {
   screen: string;
   /** 4:5 portrait for the homepage cards; the default is 4:3. */
   tall?: boolean;
+  /** Dark glass panel with light type, for the tool, automation and
+      solutions pages (founder's ask, Sep 2026). */
+  dark?: boolean;
   class?: string;
 }
 
-const { screen, tall = false, class: klass = '' } = Astro.props;
+const { screen, tall = false, dark = false, class: klass = '' } = Astro.props;
 const Screen = SCREENS[screen];
 if (!Screen) {
   throw new Error(`Mockup: no screen named "${screen}". Add one to components/mockups/index.ts.`);
@@ -36,7 +39,7 @@ const meta = SCREEN_META[screen];
 ---
 
 <div class:list={['mockup', klass]}>
-  <div class:list={['mk', { tall }]} data-ground={meta.ground} role="img" aria-label={SCREEN_ALT[screen]}>
+  <div class:list={['mk', { tall, dark }]} data-ground={meta.ground} role="img" aria-label={SCREEN_ALT[screen]}>
     <div class="mk-stage" aria-hidden="true">
       <Screen />
     </div>
