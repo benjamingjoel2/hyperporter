@@ -51,12 +51,11 @@
 .mk-back.rows{padding:1.6em 1.8em}
 .mk-back .row{display:flex;justify-content:space-between;gap:1em;padding:.7em 0;border-bottom:1px solid rgba(13,16,22,.08);color:rgba(13,16,22,.65)}
 .mk[data-ground="teal"] .mk-back{background:rgba(255,255,255,.28)}
-/* A photograph in the sheet's place: same footprint and the same fade at
-   its foot, so the panel still floats over something rather than on it. */
-.mk-back-photo{padding:0;background:var(--back-photo) center/cover no-repeat;border-radius:.6em;
-  box-shadow:0 1em 2.4em rgba(12,22,34,.18);
-  -webkit-mask-image:linear-gradient(180deg,#000 74%,transparent 100%);
-  mask-image:linear-gradient(180deg,#000 74%,transparent 100%)}
+/* A photograph as the whole ground of the frame, with the panel floating
+   on it — the sheet's slot, but filling the frame edge to edge. */
+.mk-back-photo{inset:0;left:0;top:0;width:auto;height:auto;padding:0;border-radius:0;
+  background:var(--back-photo) center/cover no-repeat;box-shadow:none;
+  -webkit-mask-image:none;mask-image:none}
 
 /* App chip, bottom-left: which layer this is. */
 .mk-app{position:absolute;left:5%;bottom:6%;z-index:2;display:inline-flex;align-items:center;gap:.5em;
