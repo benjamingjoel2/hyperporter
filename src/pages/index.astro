@@ -26,6 +26,8 @@ import Base from '../layouts/Base.astro';
 import { PRODUCTS, WHY } from '../lib/content/products';
 import { NAV } from '../lib/content/nav';
 import HandHold from '../components/HandHold.astro';
+import { AUTOMATION_HEADLINE } from '../lib/content/rails';
+import { photoFor } from '../lib/photos';
 import { TOOLS, AUTOMATIONS } from '../lib/content/detail';
 import Mockup from '../components/Mockup.astro';
 
@@ -51,7 +53,13 @@ const cardsFor = (id: 'tools' | 'automations') => {
       const slug = i.href.split('/').pop()!;
       const d = DETAIL_BY_SLUG.get(slug);
       if (!d) throw new Error(`Homepage carousel: no detail page for "${slug}".`);
-      return { kind: id === 'tools' ? 'Tool' : 'Automation', label: i.label, desc: i.desc, href: i.href, screen: d.screen, overview: d.overview };
+      const headline = AUTOMATION_HEADLINE[slug];
+      if (id === 'automations' && !headline) throw new Error(`Homepage carousel: no headline for automation "${slug}".`);
+      return {
+        kind: id === 'tools' ? 'Tool' : 'Automation',
+        label: i.label, desc: i.desc, href: i.href, screen: d.screen, overview: d.overview,
+        headline, photo: photoFor(slug).src,
+      };
     });
 };
 
@@ -59,8 +67,8 @@ const cardsFor = (id: 'tools' | 'automations') => {
    asked the reader to scroll past the tools to reach the automations; two
    rails let them start at whichever they came for. */
 const RAILS = [
-  { id: 'tools', title: 'Every tool.', line: 'The interface you work in, from inquiry to invoice.', href: '/tools', cta: 'All tools', cards: cardsFor('tools') },
-  { id: 'automations', title: 'Every automation.', line: 'The steps that run on their own — and the ones a person still takes.', href: '/automations', cta: 'All automations', cards: cardsFor('automations') },
+  { id: 'tools', variant: 'screen', title: 'Every tool.', line: 'The interface you work in, from inquiry to invoice.', href: '/tools', cta: 'All tools', cards: cardsFor('tools') },
+  { id: 'automations', variant: 'photo', title: 'Every automation.', line: 'The steps that run on their own — and the ones a person still takes.', href: '/automations', cta: 'All automations', cards: cardsFor('automations') },
 ];
 
 const LAYERS = [
@@ -264,7 +272,7 @@ const SIDES = [
     {/* Every tool and every automation, one rail each. */}
     {
       RAILS.map((r) => (
-        <section class="lg-cat" id={r.id === 'tools' ? 'everything' : 'every-automation'}>
+        <section class:list={['lg-cat', r.variant === 'photo' && 'lg-cat-photo']} id={r.id === 'tools' ? 'everything' : 'every-automation'}>
           <div class="wrap lg-cat-head">
             <div>
               <h2>{r.title}</h2>
@@ -279,10 +287,23 @@ const SIDES = [
               {r.cards.map((c) => (
                 <li class="lg-card">
                   <a href={c.href} data-card data-kind={c.kind} data-name={c.label} data-copy={c.overview}>
-                    <span class="lg-card-kind">{c.kind}</span>
-                    <b>{c.label}</b>
-                    <span class="lg-card-desc">{c.desc}</span>
-                    <span class="lg-card-shot"><Mockup screen={c.screen} /></span>
+                    {r.variant === 'photo' ? (
+                      /* The automation's own page photograph, graded down so
+                         white type reads over it, with the name as the label
+                         and the card's claim set large above it. */
+                      <>
+                        <span class="lg-card-bg" style={`background-image:url(${c.photo})`} />
+                        <span class="lg-card-kind">{c.label}</span>
+                        <b>{c.headline}</b>
+                      </>
+                    ) : (
+                      <>
+                        <span class="lg-card-kind">{c.kind}</span>
+                        <b>{c.label}</b>
+                        <span class="lg-card-desc">{c.desc}</span>
+                        <span class="lg-card-shot"><Mockup screen={c.screen} /></span>
+                      </>
+                    )}
                     <span class="lg-card-more" aria-hidden="true">+</span>
                   </a>
                 </li>
