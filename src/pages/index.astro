@@ -301,58 +301,99 @@ const SIDES = [
 </script>
 
 <script>
-  /* The catalogue rail: the arrows scroll by one card's width, and go dim
-     at either end. Touch and wheel scrolling need no help. */
-  const rail = document.querySelector<HTMLElement>('[data-rail]');
-  const prev = document.querySelector<HTMLButtonElement>('[data-rail-prev]');
-  const next = document.querySelector<HTMLButtonElement>('[data-rail-next]');
+  /* The catalogue rail and the panel a card opens.
+   *
+   * Everything is delegated from the document rather than bound to elements
+   * at load: the bundled preview runs a page's script once and then swaps
+   * route markup in and out, so anything captured up front points at a DOM
+   * that is no longer on screen. Delegation survives that, and costs
+   * nothing on the real page.
+   */
+  const railOf = (el: Element): HTMLElement | null =>
+    el.closest('.lg-cat')?.querySelector<HTMLElement>('[data-rail]') ?? null;
 
-  if (rail && prev && next) {
-    const step = (): number => {
-      const card = rail.querySelector<HTMLElement>('.lg-card');
-      if (!card) return rail.clientWidth * 0.8;
-      const gap = parseFloat(getComputedStyle(rail.querySelector('[data-rail-track]')!).columnGap || '18');
-      return card.getBoundingClientRect().width + gap;
-    };
+  const stepOf = (rail: HTMLElement): number => {
+    const card = rail.querySelector<HTMLElement>('.lg-card');
+    const track = rail.querySelector<HTMLElement>('[data-rail-track]');
+    if (!card) return rail.clientWidth * 0.8;
+    const gap = parseFloat(track ? getComputedStyle(track).columnGap || '18' : '18');
+    return card.getBoundingClientRect().width + (Number.isNaN(gap) ? 18 : gap);
+  };
 
-    const sync = (): void => {
-      const max = rail.scrollWidth - rail.clientWidth;
-      prev.disabled = rail.scrollLeft < 4;
-      next.disabled = rail.scrollLeft > max - 4;
-    };
+  const syncArrows = (rail: HTMLElement): void => {
+    const section = rail.closest('.lg-cat');
+    const prev = section?.querySelector<HTMLButtonElement>('[data-rail-prev]');
+    const next = section?.querySelector<HTMLButtonElement>('[data-rail-next]');
+    const max = rail.scrollWidth - rail.clientWidth;
+    if (prev) prev.disabled = rail.scrollLeft < 4;
+    if (next) next.disabled = rail.scrollLeft > max - 4;
+  };
 
-    prev.addEventListener('click', () => rail.scrollBy({ left: -step(), behavior: 'smooth' }));
-    next.addEventListener('click', () => rail.scrollBy({ left: step(), behavior: 'smooth' }));
-    rail.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('resize', sync);
-    sync();
-  }
+  /* Capture, not bubble: the bundled preview installs its own click handler
+     that turns every in-site link into a route change. Ours has to see the
+     card first and stop the event there, or the preview navigates away
+     instead of opening the panel. */
+  document.addEventListener('click', (event) => {
+    const target = event.target as Element | null;
+    if (!target) return;
 
-  /* A card opens its panel; Learn more inside it goes to the page. Without
-     this script the card is simply a link to the same page. */
-  const modal = document.querySelector<HTMLDialogElement>('[data-modal]');
-  if (modal) {
-    const kind = modal.querySelector<HTMLElement>('[data-modal-kind]')!;
-    const title = modal.querySelector<HTMLElement>('[data-modal-title]')!;
-    const copy = modal.querySelector<HTMLElement>('[data-modal-copy]')!;
-    const link = modal.querySelector<HTMLAnchorElement>('[data-modal-link]')!;
+    const arrow = target.closest<HTMLButtonElement>('[data-rail-prev],[data-rail-next]');
+    if (arrow) {
+      const rail = railOf(arrow);
+      if (rail) {
+        const back = arrow.hasAttribute('data-rail-prev');
+        rail.scrollBy({ left: back ? -stepOf(rail) : stepOf(rail), behavior: 'smooth' });
+      }
+      return;
+    }
 
-    document.querySelectorAll<HTMLAnchorElement>('[data-card]').forEach((card) => {
-      card.addEventListener('click', (event) => {
-        event.preventDefault();
-        kind.textContent = card.dataset.kind ?? '';
-        title.textContent = card.dataset.name ?? '';
-        copy.textContent = card.dataset.copy ?? '';
-        link.href = card.getAttribute('href') ?? '/tools';
-        modal.showModal();
-      });
-    });
+    const card = target.closest<HTMLAnchorElement>('[data-card]');
+    if (card) {
+      const modal = document.querySelector<HTMLDialogElement>('[data-modal]');
+      if (!modal) return; /* No dialog: the card stays a plain link. */
+      event.preventDefault();
+      event.stopPropagation();
+      const set = (sel: string, text: string): void => {
+        const el = modal.querySelector<HTMLElement>(sel);
+        if (el) el.textContent = text;
+      };
+      set('[data-modal-kind]', card.dataset.kind ?? '');
+      set('[data-modal-title]', card.dataset.name ?? '');
+      set('[data-modal-copy]', card.dataset.copy ?? '');
+      const link = modal.querySelector<HTMLAnchorElement>('[data-modal-link]');
+      if (link) link.href = card.getAttribute('href') ?? '/tools';
+      modal.showModal();
+      return;
+    }
 
-    modal.querySelector('[data-modal-close]')!.addEventListener('click', () => modal.close());
-    /* Clicking the backdrop closes it: the dialog's own box is the only
-       thing inside, so a click landing on the element itself is outside it. */
-    modal.addEventListener('click', (event) => { if (event.target === modal) modal.close(); });
-  }
+    const closer = target.closest('[data-modal-close]');
+    if (closer) {
+      closer.closest('dialog')?.close();
+      return;
+    }
+
+    /* A click that lands on the dialog element itself is on its backdrop. */
+    if (target.matches('dialog[data-modal]')) (target as HTMLDialogElement).close();
+  }, true);
+
+  /* Scroll does not bubble, so listen in the capture phase. */
+  document.addEventListener(
+    'scroll',
+    (event) => {
+      const rail = event.target as HTMLElement | null;
+      if (rail?.matches?.('[data-rail]')) syncArrows(rail);
+    },
+    { capture: true, passive: true },
+  );
+
+  const syncAll = (): void =>
+    document.querySelectorAll<HTMLElement>('[data-rail]').forEach(syncArrows);
+  window.addEventListener('resize', syncAll);
+  syncAll();
+  /* The rail may arrive after this runs — in the preview, or with a late
+     render — so settle the arrows once more on the next frames. */
+  requestAnimationFrame(syncAll);
+  window.setTimeout(syncAll, 400);
 </script>
 
 <script>
