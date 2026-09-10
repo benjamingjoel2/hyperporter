@@ -56,7 +56,7 @@ export const LADDERS: Ladder[] = [
       {
         name: 'Showcase',
         kind: 'Workflow',
-        amount: '$0',
+        amount: '€0',
         note: '20 trips/mo',
         features: [
           'Public inquiry form link',
@@ -160,7 +160,7 @@ export const LADDERS: Ladder[] = [
       {
         name: 'Showcase',
         kind: 'Workflow',
-        amount: '$0',
+        amount: '€0',
         note: 'Forever, no upgrade pressure',
         features: ['CRM access and quoting', 'Listed on Horizon, at no cost', 'Itinerary / proposal generator'],
         cta: 'Get started',
