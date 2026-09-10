@@ -43,10 +43,17 @@ const cta =
     </div>
   </div>
 
-  {/* Under the hero on the same photograph: the page's own screen, alone and
-      at the band's full width, stepped through on click. */}
-  <div class="demo-band rv">
-    <DemoCard page={page} kind={kind} />
+  {/* The overview, under the hero on the same photograph: a lead beside the
+      page's own screen, which works. */}
+  <div class="demo-band">
+    <div class="demo-glass rv">
+      <div class="demo-lead">
+        <p class="eyebrow">{page.layer} · {page.name}</p>
+        <p class="dek">{page.overview}</p>
+        <p class="demo-tier">Available on <b>{page.tier}</b> · {page.tierNote}</p>
+      </div>
+      <DemoCard page={page} kind={kind} />
+    </div>
   </div>
 </PhotoHero>
 
