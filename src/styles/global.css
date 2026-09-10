@@ -1202,6 +1202,22 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .thread.demo .ft{margin-top:22px;padding-top:20px}
 .thread.demo .demo-k{display:flex;align-items:center;gap:8px;color:var(--signal)}
 .thread.demo .demo-k i{width:7px;height:7px;border-radius:50%;background:var(--signal)}
+/* The With / Without switch, top left. Both sides are rendered; the class
+   on the card picks one, so the card never goes blank with JS off. */
+.demo-mode{display:inline-flex;gap:6px;flex-shrink:0}
+/* The two sides of the switch stay on one line; only the step chips wrap. */
+.thread.demo .demo-mode .chip{white-space:nowrap}
+.thread.demo .th{align-items:flex-start;gap:18px}
+.thread.demo .th > span:last-child{text-align:right;padding-top:7px}
+.thread.demo .v-without{display:none}
+.thread.demo.without .v-with{display:none}
+.thread.demo.without .v-without{display:block}
+/* The traditional side carries the height the chip row and its panel have
+   on the other side, so flipping the switch does not jolt the band the
+   card sits in — and the space falls under the paragraph, not above it. */
+.thread.demo .v-without.tpanel{min-height:241px}
+/* No top rule on the lone traditional line: there is no list above it. */
+.thread.demo .v-without .line{border-top:0;padding-top:0}
 
 /* The step a person always takes. Amber: the site's mark for a human or
    manual state, and this is the one place on an automation page it belongs. */
