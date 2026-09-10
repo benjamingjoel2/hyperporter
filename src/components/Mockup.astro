@@ -35,13 +35,10 @@ if (!Screen) {
   throw new Error(`Mockup: no screen named "${screen}". Add one to components/mockups/index.ts.`);
 }
 const meta = SCREEN_META[screen];
-/* A screen may name its own photograph for the ground; otherwise the
-   photographic ground falls back to the page's --photo. */
-const ground = meta.photo ? `--photo:url("${meta.photo}")` : undefined;
 ---
 
 <div class:list={['mockup', klass]}>
-  <div class:list={['mk', { tall, dark, 'mk-own': !!meta.photo }]} data-ground={meta.ground} style={ground} role="group" aria-label={SCREEN_ALT[screen]}>
+  <div class:list={['mk', { tall, dark }]} data-ground={meta.ground} role="group" aria-label={SCREEN_ALT[screen]}>
     <div class="mk-stage">
       <Screen />
     </div>

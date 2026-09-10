@@ -25,11 +25,6 @@
 .mk[data-ground="photo"]::before{content:"";position:absolute;inset:-4%;
   background:var(--photo) center/cover;filter:blur(3px) saturate(.8);opacity:.9}
 .mk[data-ground="photo"]::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.18)}
-/* A screen that names its own photograph gets it nearly as shot — the
-   generic ground is blurred because it stands in for anything, but a chosen
-   picture is meant to be seen behind the panel. */
-.mk.mk-own[data-ground="photo"]::before{filter:blur(1px) saturate(.95);opacity:1}
-.mk.mk-own[data-ground="photo"]::after{background:rgba(255,255,255,.08)}
 
 .mk-stage{position:absolute;inset:0;font-size:clamp(10px,2.6cqw,14px);line-height:1.35;z-index:1}
 .mk.tall .mk-stage{font-size:clamp(10px,3.3cqw,14px)}
