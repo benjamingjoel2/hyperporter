@@ -12,13 +12,18 @@
 const openItem = (acc: HTMLElement, index: number): void => {
   const items = Array.from(acc.querySelectorAll<HTMLElement>('.lg-acc-item'));
   const shots = Array.from(acc.querySelectorAll<HTMLElement>('.lg-acc-shot > div'));
+  /* Only pair shots with items when there is one of each — the homepage
+     ladder. The tool, automation and solutions pages show a single screen
+     beside a list of several, and pairing by index cleared it the moment
+     anything but the first item was opened, leaving an empty column. */
+  const paired = shots.length === items.length;
   items.forEach((it, j) => {
     const on = j === index;
     it.classList.toggle('on', on);
     it.querySelector('.lg-acc-btn')?.setAttribute('aria-expanded', on ? 'true' : 'false');
     const body = it.querySelector<HTMLElement>('.lg-acc-body');
     if (body) body.inert = !on;
-    if (shots[j]) {
+    if (paired && shots[j]) {
       shots[j].classList.toggle('on', on);
       shots[j].inert = !on;
     }
