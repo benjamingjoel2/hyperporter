@@ -659,6 +659,14 @@ p{margin:0 0 16px}
   border:1px solid var(--line);border-radius:3px;background:var(--ink)}
 .post-cover svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 
+/* The legal pages (privacy, terms) are documents, so they borrow the
+   article's prose styles rather than keeping a class family of their own —
+   the .art-* set they used was removed when the blog was rebuilt (ec1879c)
+   and they had been rendering unstyled since. */
+.legal-top{max-width:64ch;margin-bottom:clamp(30px,4vw,48px)}
+.legal-top h1{margin:0 0 18px}
+.legal-top .lede{margin:0}
+
 /* The rail. Every band of the article uses it, so the label column stays on
    one axis from the meta at the top to "Up next" at the bottom. */
 .post-rail{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);

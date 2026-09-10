@@ -6,7 +6,8 @@
  * + network services, manual payment marking, no consumer relationship).
  *
  * DRAFT — must be reviewed by counsel before launch. noindex until then.
- * Reuses the article (.art-*) styles rather than inventing a new layout.
+ * Reuses the article prose styles (.post-body) rather than inventing a
+ * layout of its own.
  */
 import Base from '../layouts/Base.astro';
 
@@ -15,15 +16,15 @@ const updated = '20 August 2026';
 
 <Base title="Terms & Conditions" description="The terms governing use of Hyperporter's Autopilot software and Horizon network services." noindex>
   <div class="sec wrap">
-    <div class="art-top">
-      <div class="b-meta"><em>Legal</em><span>Last updated {updated}</span></div>
-      <h1 class="art-title">Terms &amp; Conditions</h1>
-      <p class="art-dek">
+    <div class="legal-top">
+      <p class="eyebrow">Legal &middot; Last updated {updated}</p>
+      <h1>Terms &amp; Conditions</h1>
+      <p class="lede">
         These terms govern your use of Hyperporter's services. They are a working draft pending legal review — if
         you have questions, contact <a href="mailto:hello@hyperporter.com">hello@hyperporter.com</a>.
       </p>
     </div>
-    <div class="art-body">
+    <div class="post-body">
       <h2>1. Who we are</h2>
       <p>
         Hyperporter ("we", "us") provides travel operations infrastructure to travel businesses: <strong>Autopilot</strong>,
