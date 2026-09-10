@@ -30,36 +30,6 @@ import Mockup from '../components/Mockup.astro';
 const CARD_SCREEN: Record<string, string> = { portal: 'crm', autopilot: 'pipeline', intelligence: 'atlas', horizon: 'horizon' };
 import '../styles/legora-home.css';
 
-/** The four boxes on the dark band: one per layer, named by what it does
-    rather than by its product name — the product names are the list above.
-    The layer each one is stands in the badge slot as a link. */
-const PILLARS = [
-  {
-    title: 'Workflow',
-    body: 'CRM, magic links, the public inquiry form and the proposal generator. One thread per trip, free on every tier, for both sides of the market.',
-    layer: 'Portal',
-    href: '/portal',
-  },
-  {
-    title: 'Automation',
-    body: 'Nine stages, Inquiry through Post-Trip, run on their own. The points where a person takes over are designed in, not left over.',
-    layer: 'Autopilot',
-    href: '/autopilot',
-  },
-  {
-    title: 'Intelligence',
-    body: 'Atlas answers from your own Vault — your contracts, your rates, your history. Trained on your account’s data and nobody else’s.',
-    layer: 'Intelligence',
-    href: '/intelligence',
-  },
-  {
-    title: 'Network',
-    body: 'A vetted list of DMCs and suppliers across 130+ countries, searched from the CRM and ready to quote. On every tier, including free.',
-    layer: 'Horizon',
-    href: '/horizon',
-  },
-];
-
 /** Who it is for: the two sides of the market, in the reference's pair of
     cards — the name, one line and a link, and a screen of the side of the
     product that side lives in. */
@@ -230,26 +200,6 @@ const SIDES = [
                 <div class="lg-side-shot">
                   <Mockup screen={g.screen} />
                 </div>
-              </div>
-            ))
-          }
-        </div>
-      </div>
-    </section>
-
-    <section class="lg-sec-dark" data-chrome="dark">
-      <div class="wrap">
-        <h2>One system, four layers.</h2>
-        <a class="lg-read" href="/product"><span aria-hidden="true">&#8627;</span> <span>See the product</span></a>
-        <div class="lg-certs">
-          {
-            PILLARS.map((c) => (
-              <div class="lg-cert">
-                <b>{c.title}</b>
-                <p>{c.body}</p>
-                <a class="lg-layer" href={c.href}>
-                  <span aria-hidden="true">&#8627;</span> <span>{c.layer}</span>
-                </a>
               </div>
             ))
           }
