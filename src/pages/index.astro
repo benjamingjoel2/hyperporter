@@ -25,9 +25,9 @@
 import Base from '../layouts/Base.astro';
 import { PRODUCTS, WHY } from '../lib/content/products';
 import { NAV } from '../lib/content/nav';
-import HandHold from '../components/HandHold.astro';
 import { AUTOMATION_HEADLINE } from '../lib/content/rails';
 import { photoFor } from '../lib/photos';
+import { navIcon } from '../lib/navIcons';
 import { TOOLS, AUTOMATIONS } from '../lib/content/detail';
 import Mockup from '../components/Mockup.astro';
 
@@ -67,7 +67,7 @@ const cardsFor = (id: 'tools' | 'automations') => {
    asked the reader to scroll past the tools to reach the automations; two
    rails let them start at whichever they came for. */
 const RAILS = [
-  { id: 'tools', variant: 'screen', title: 'Every tool.', line: 'The interface you work in, from inquiry to invoice.', href: '/tools', cta: 'All tools', cards: cardsFor('tools') },
+  { id: 'tools', variant: 'icon', title: 'Every tool.', line: 'The interface you work in, from inquiry to invoice.', href: '/tools', cta: 'All tools', cards: cardsFor('tools') },
   { id: 'automations', variant: 'photo', title: 'Every automation.', line: 'The steps that run on their own — and the ones a person still takes.', href: '/automations', cta: 'All automations', cards: cardsFor('automations') },
 ];
 
@@ -226,20 +226,14 @@ const SIDES = [
             ))
           }
         </div>
-        {/* The device, held. The wrapper is the sticky element so the hand
-            travels with it; the palm sits behind the device and the thumb
-            in front of it. */}
-        <div class="lg-hold">
-          <HandHold />
-          <div class="lg-acc-shot">
-            {
-              LAYERS.map((p, i) => (
-                <div id={`layer-shot-${i}`} class:list={{ on: i === 0 }} inert={i !== 0}>
-                  <Mockup screen={CARD_SCREEN[p.slug]} />
-                </div>
-              ))
-            }
-          </div>
+        <div class="lg-acc-shot">
+          {
+            LAYERS.map((p, i) => (
+              <div id={`layer-shot-${i}`} class:list={{ on: i === 0 }} inert={i !== 0}>
+                <Mockup screen={CARD_SCREEN[p.slug]} />
+              </div>
+            ))
+          }
         </div>
       </div>
     </section>
@@ -273,7 +267,7 @@ const SIDES = [
     {
       RAILS.map((r, i) => (
         <section
-          class:list={['lg-cat', r.variant === 'photo' && 'lg-cat-photo', i === 0 && 'lg-cat-lead']}
+          class:list={['lg-cat', `lg-cat-${r.variant}`, i === 0 && 'lg-cat-lead']}
           id={r.id === 'tools' ? 'everything' : 'every-automation'}
         >
           <div class="wrap lg-cat-head">
@@ -300,11 +294,15 @@ const SIDES = [
                         <b>{c.headline}</b>
                       </>
                     ) : (
+                      /* The tool's own line icon, in the bottom corner
+                         (founder's ask, Sep 2026) — the screen that used to
+                         fill the foot was clipped by the card and is better
+                         seen full size on the tool's own page. */
                       <>
                         <span class="lg-card-kind">{c.kind}</span>
                         <b>{c.label}</b>
                         <span class="lg-card-desc">{c.desc}</span>
-                        <span class="lg-card-shot"><Mockup screen={c.screen} /></span>
+                        <span class="lg-card-ico" set:html={navIcon(c.label)} />
                       </>
                     )}
                     <span class="lg-card-more" aria-hidden="true">+</span>
