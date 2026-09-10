@@ -25,6 +25,7 @@
 import Base from '../layouts/Base.astro';
 import { PRODUCTS, WHY } from '../lib/content/products';
 import { NAV } from '../lib/content/nav';
+import HandHold from '../components/HandHold.astro';
 import { TOOLS, AUTOMATIONS } from '../lib/content/detail';
 import Mockup from '../components/Mockup.astro';
 
@@ -42,7 +43,7 @@ const CARD_SCREEN: Record<string, string> = { portal: 'crm', autopilot: 'pipelin
    than an automation, so it is not a card. */
 const DETAIL_BY_SLUG = new Map([...TOOLS, ...AUTOMATIONS].map((d) => [d.slug, d]));
 
-const CARDS = (['tools', 'automations'] as const).flatMap((id) => {
+const cardsFor = (id: 'tools' | 'automations') => {
   const nav = NAV.find((n) => n.id === id)!;
   return (nav.groups ?? []).flatMap((g) => g.items)
     .filter((i) => i.href !== '/autopilot')
@@ -52,7 +53,15 @@ const CARDS = (['tools', 'automations'] as const).flatMap((id) => {
       if (!d) throw new Error(`Homepage carousel: no detail page for "${slug}".`);
       return { kind: id === 'tools' ? 'Tool' : 'Automation', label: i.label, desc: i.desc, href: i.href, screen: d.screen, overview: d.overview };
     });
-});
+};
+
+/* One rail each (Sep 2026, founder's ask). Sixteen cards on a single rail
+   asked the reader to scroll past the tools to reach the automations; two
+   rails let them start at whichever they came for. */
+const RAILS = [
+  { id: 'tools', title: 'Every tool.', line: 'The interface you work in, from inquiry to invoice.', href: '/tools', cta: 'All tools', cards: cardsFor('tools') },
+  { id: 'automations', title: 'Every automation.', line: 'The steps that run on their own — and the ones a person still takes.', href: '/automations', cta: 'All automations', cards: cardsFor('automations') },
+];
 
 const LAYERS = [
   ...PRODUCTS.map((p) => ({ slug: p.slug, label: p.label, availability: p.availability, summary: p.summary, href: `/${p.slug}` })),
@@ -209,14 +218,20 @@ const SIDES = [
             ))
           }
         </div>
-        <div class="lg-acc-shot">
-          {
-            LAYERS.map((p, i) => (
-              <div id={`layer-shot-${i}`} class:list={{ on: i === 0 }} inert={i !== 0}>
-                <Mockup screen={CARD_SCREEN[p.slug]} />
-              </div>
-            ))
-          }
+        {/* The device, held. The wrapper is the sticky element so the hand
+            travels with it; the palm sits behind the device and the thumb
+            in front of it. */}
+        <div class="lg-hold">
+          <HandHold />
+          <div class="lg-acc-shot">
+            {
+              LAYERS.map((p, i) => (
+                <div id={`layer-shot-${i}`} class:list={{ on: i === 0 }} inert={i !== 0}>
+                  <Mockup screen={CARD_SCREEN[p.slug]} />
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -246,47 +261,51 @@ const SIDES = [
       </div>
     </section>
 
-    {/* Everything in one place, as a carousel of cards. */}
-    <section class="lg-cat" id="everything">
-      <div class="wrap lg-cat-head">
-        <h2>Every tool, every automation.</h2>
-        <div class="lg-cat-links">
-          <a class="lg-read" href="/tools"><span aria-hidden="true">&#8627;</span> <span>All tools</span></a>
-          <a class="lg-read" href="/automations"><span aria-hidden="true">&#8627;</span> <span>All automations</span></a>
-        </div>
-      </div>
-      <div class="lg-rail" data-rail>
-        <ul class="lg-rail-track" data-rail-track>
-          {
-            CARDS.map((c) => (
-              <li class="lg-card">
-                <a href={c.href} data-card data-kind={c.kind} data-name={c.label} data-copy={c.overview}>
-                  <span class="lg-card-kind">{c.kind}</span>
-                  <b>{c.label}</b>
-                  <span class="lg-card-desc">{c.desc}</span>
-                  <span class="lg-card-shot"><Mockup screen={c.screen} /></span>
-                  <span class="lg-card-more" aria-hidden="true">+</span>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-      <div class="wrap lg-rail-nav">
-        <button type="button" class="lg-arrow" data-rail-prev aria-label="Previous">&#8249;</button>
-        <button type="button" class="lg-arrow" data-rail-next aria-label="Next">&#8250;</button>
-      </div>
+    {/* Every tool and every automation, one rail each. */}
+    {
+      RAILS.map((r) => (
+        <section class="lg-cat" id={r.id === 'tools' ? 'everything' : 'every-automation'}>
+          <div class="wrap lg-cat-head">
+            <div>
+              <h2>{r.title}</h2>
+              <p>{r.line}</p>
+            </div>
+            <div class="lg-cat-links">
+              <a class="lg-read" href={r.href}><span aria-hidden="true">&#8627;</span> <span>{r.cta}</span></a>
+            </div>
+          </div>
+          <div class="lg-rail" data-rail>
+            <ul class="lg-rail-track" data-rail-track>
+              {r.cards.map((c) => (
+                <li class="lg-card">
+                  <a href={c.href} data-card data-kind={c.kind} data-name={c.label} data-copy={c.overview}>
+                    <span class="lg-card-kind">{c.kind}</span>
+                    <b>{c.label}</b>
+                    <span class="lg-card-desc">{c.desc}</span>
+                    <span class="lg-card-shot"><Mockup screen={c.screen} /></span>
+                    <span class="lg-card-more" aria-hidden="true">+</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="wrap lg-rail-nav">
+            <button type="button" class="lg-arrow" data-rail-prev aria-label="Previous">&#8249;</button>
+            <button type="button" class="lg-arrow" data-rail-next aria-label="Next">&#8250;</button>
+          </div>
+        </section>
+      ))
+    }
 
-      {/* Opened by a card. With JS off the cards are plain links and this
-          never shows, so the page still reaches every tool. */}
-      <dialog class="lg-modal" data-modal aria-labelledby="card-modal-title">
-        <button type="button" class="lg-modal-x" data-modal-close aria-label="Close">&times;</button>
-        <p class="lg-modal-kind" data-modal-kind></p>
-        <h3 id="card-modal-title" data-modal-title></h3>
-        <p class="lg-modal-copy" data-modal-copy></p>
-        <a class="lg-read" data-modal-link href="/tools"><span aria-hidden="true">&#8627;</span> <span>Learn more</span></a>
-      </dialog>
-    </section>
+    {/* Opened by a card on either rail. With JS off the cards are plain
+        links and this never shows, so the page still reaches every page. */}
+    <dialog class="lg-modal" data-modal aria-labelledby="card-modal-title">
+      <button type="button" class="lg-modal-x" data-modal-close aria-label="Close">&times;</button>
+      <p class="lg-modal-kind" data-modal-kind></p>
+      <h3 id="card-modal-title" data-modal-title></h3>
+      <p class="lg-modal-copy" data-modal-copy></p>
+      <a class="lg-read" data-modal-link href="/tools"><span aria-hidden="true">&#8627;</span> <span>Learn more</span></a>
+    </dialog>
 
     <section class="lg-close wrap">
       <h2>Run your next trip on<br />infrastructure, not inboxes.</h2>

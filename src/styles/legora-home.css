@@ -265,9 +265,13 @@ section.lg-close{text-align:center;padding-block:var(--sec-gap)}
    at the foot. The rail scrolls by touch, wheel or the two arrows, and
    snaps to a card. */
 section.lg-cat{padding-block:var(--sec-gap);overflow:hidden}
+/* Tools then automations: one rail each, and the pair reads as one spread
+   rather than two sections, so the second starts closer. */
+section.lg-cat + section.lg-cat{padding-top:clamp(40px,4.6vw,68px)}
 .lg-cat-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
   margin-bottom:clamp(28px,3.4vw,44px)}
 .lg-cat-head h2{margin:0;max-width:18ch}
+.lg-cat-head p{margin:10px 0 0;max-width:46ch;color:var(--muted);font-size:16px;line-height:1.5}
 .lg-cat-links{display:flex;gap:26px;flex:none}
 
 .lg-rail{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
