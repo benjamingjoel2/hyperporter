@@ -271,8 +271,11 @@ const SIDES = [
 
     {/* Every tool and every automation, one rail each. */}
     {
-      RAILS.map((r) => (
-        <section class:list={['lg-cat', r.variant === 'photo' && 'lg-cat-photo']} id={r.id === 'tools' ? 'everything' : 'every-automation'}>
+      RAILS.map((r, i) => (
+        <section
+          class:list={['lg-cat', r.variant === 'photo' && 'lg-cat-photo', i === 0 && 'lg-cat-lead']}
+          id={r.id === 'tools' ? 'everything' : 'every-automation'}
+        >
           <div class="wrap lg-cat-head">
             <div>
               <h2>{r.title}</h2>
