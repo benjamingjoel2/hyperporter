@@ -118,7 +118,9 @@
   --lg-num-h:clamp(52px,6.4vw,88px);
   --lg-num-gap:26px;
   --lg-lit:#3FA9B4}
-.lg-pipe-lead{max-width:34ch;margin-bottom:clamp(46px,5.4vw,78px)}
+/* Wide enough for the two-line heading to hold its own breaks. */
+.lg-pipe-lead{max-width:none;margin-bottom:clamp(46px,5.4vw,78px)}
+.lg-pipe-lead h2 br{display:inline}
 .lg-pipe-lead .eyebrow{color:#9AA1AA;margin-bottom:16px}
 .lg-pipe-lead h2{color:#fff;margin:0}
 
@@ -141,9 +143,14 @@
 .lg-pipe-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
   gap:clamp(18px,2.4vw,34px);list-style:none;margin:0;padding:0;position:relative}
 .lg-pnode{margin:0}
+
 .lg-pdot{display:block;width:11px;height:11px;border-radius:50%;
   background:#0B0E12;border:1px solid var(--lg-lit);
-  margin:-5.5px 0 28px;position:relative;z-index:2}
+  margin:-5.5px auto 28px;position:relative;z-index:2}
+/* Each node's dot is centred over its own column, so the four sit evenly
+   along the rail rather than bunched at the left edge of each. */
+.lg-pnode{text-align:center}
+.lg-pnode p{margin-inline:auto}
 .lg-pnode h3{font-size:19px;letter-spacing:-.018em;color:#fff;margin:0 0 9px}
 .lg-pnode p{font-size:14.5px;line-height:1.6;color:#9AA1AA;margin:0;max-width:36ch}
 
