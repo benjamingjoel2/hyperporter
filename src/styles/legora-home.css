@@ -303,6 +303,26 @@ section.lg-cat + section.lg-cat{padding-top:clamp(40px,4.6vw,68px)}
 .lg-arrow:disabled{opacity:.32;cursor:default}
 .lg-arrow:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
 
+/* The automation rail takes the reference's card instead: a tall portrait
+   with the page's own photograph full-bleed behind it, the name small at
+   the top, the card's claim large under it, and the + in the corner. The
+   photograph is graded down twice — once on the picture, once with a
+   scrim top and bottom — so white type reads wherever the subject falls. */
+.lg-cat-photo .lg-card{flex-basis:clamp(244px,22vw,296px)}
+.lg-cat-photo .lg-card > a{aspect-ratio:53/88;padding:26px 24px;background:#0B0E12;justify-content:flex-start}
+.lg-cat-photo .lg-card > a:hover{background:#0B0E12}
+.lg-card-bg{position:absolute;inset:0;background-size:cover;background-position:50% 42%;
+  filter:brightness(.78) saturate(.92);transition:transform .5s ease}
+.lg-cat-photo .lg-card > a:hover .lg-card-bg{transform:scale(1.03)}
+.lg-card-bg::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(6,10,13,.62),rgba(6,10,13,.24) 44%,rgba(6,10,13,.52))}
+.lg-cat-photo .lg-card-kind{position:relative;color:rgba(255,255,255,.78);margin-bottom:10px}
+.lg-cat-photo .lg-card b{position:relative;margin:0;color:#fff;font-size:clamp(20px,1.7vw,24px);
+  line-height:1.18;text-shadow:0 1px 14px rgba(6,10,13,.35)}
+/* Bottom-right on a photograph, where the reference puts it. */
+.lg-cat-photo .lg-card-more{top:auto;right:16px;bottom:16px;
+  background:rgba(255,255,255,.94);color:#0B0E12}
+
 @media (max-width:640px){
   .lg-cat-head{flex-direction:column;align-items:flex-start;gap:14px}
   .lg-cat-links{gap:20px}
