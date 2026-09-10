@@ -1,23 +1,30 @@
 ---
 /**
- * The illustration on a tool or automation hero: the page's own screen in
- * the thread card /autopilot opens with, and it works. Buttons do what they
- * say, rows tick, cards move, chat boxes answer back, fields take what you
- * type (lib/live.ts). Nothing leaves the page; the line under the screen
- * says it is a demonstration.
+ * The clickable illustration on a tool or automation hero: the page's own
+ * "how it works" steps as chips over a panel, in the thread card /autopilot
+ * opens with. Click a step, read what happens at it, see whether it needs
+ * a person. Steps that are a person's to take read amber, the site's one
+ * mark for a human / manual state — so the card cannot overstate what is
+ * automatic.
+ *
+ * Every panel is rendered server-side and toggled with `hidden`, so with
+ * JS off the card still shows the first step rather than going blank.
  */
-import '../styles/mockup.css';
 import type { DetailPage } from '../lib/content/detail';
-import { SCREENS, SCREEN_ALT } from './mockups/index';
 
 interface Props {
   page: DetailPage;
   kind: 'tool' | 'automation';
 }
 
-const { page } = Astro.props;
-const Screen = SCREENS[page.screen];
-if (!Screen) throw new Error(`DemoCard: no screen named "${page.screen}" for ${page.slug}.`);
+const { page, kind } = Astro.props;
+const id = `${kind}-${page.slug}`;
+const START = 0;
+
+/* A step is a person's when its name says so: "You choose", "Marked by
+   hand", "Money is marked by a person", "Hand it to you". */
+const needsYou = (name: string): boolean => /^you\b|hand it to you|by hand|by a person|you mark/i.test(name);
+const sentences = (body: string): string[] => body.split(/(?<=\.)\s+/);
 ---
 
 <div class="thread demo" data-demo>
@@ -25,14 +32,90 @@ if (!Screen) throw new Error(`DemoCard: no screen named "${page.screen}" for ${p
     <span>{page.name}</span>
     <span>{page.tier === page.layer ? <b>{page.layer}</b> : <>{page.layer} · <b>{page.tier}</b></>}</span>
   </div>
-  <div class="demo-play">
-    <div class="mk bare demo-shot" role="group" aria-label={`${page.name}, a working demonstration. ${SCREEN_ALT[page.screen]}`}>
-      <div class="mk-stage"><Screen /></div>
-    </div>
-    <span class="demo-pill" aria-hidden="true"><i></i><span>Live demo · try it</span></span>
+  <div class="chips" role="tablist" aria-label={`${page.name}, step by step`}>
+    {
+      page.how.map((s, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`${id}-tab-${i}`}
+          aria-controls={`${id}-panel-${i}`}
+          aria-selected={i === START ? 'true' : 'false'}
+          tabindex={i === START ? 0 : -1}
+          class:list={['chip', { now: i === START }]}
+        >
+          {s.name}
+        </button>
+      ))
+    }
+  </div>
+  {
+    page.how.map((s, i) => (
+      <div
+        class="tpanel"
+        id={`${id}-panel-${i}`}
+        role="tabpanel"
+        aria-labelledby={`${id}-tab-${i}`}
+        data-needs={needsYou(s.name) ? 'a person' : 'nothing'}
+        hidden={i !== START}
+      >
+        {sentences(s.body).map((t) => (
+          <div class:list={['line', { amb: needsYou(s.name) }]}>
+            <i />
+            <span>{t}</span>
+          </div>
+        ))}
+      </div>
+    ))
+  }
+  <div class="ft">
+    <span class="demo-k"><i aria-hidden="true" /> Click a step</span>
+    <span data-needs-out>Needs you &middot; {needsYou(page.how[START].name) ? 'a person' : 'nothing'}</span>
   </div>
 </div>
 
 <script>
-  import '../lib/live';
+  /**
+   * Chips as tabs over the step panels, the same pattern as the /autopilot
+   * card: chips left of the selected one read as done, arrows move between
+   * them, and the footer says whether the step needs a person.
+   */
+  document.querySelectorAll<HTMLElement>('[data-demo]').forEach((card) => {
+    const tablist = card.querySelector<HTMLElement>('[role="tablist"]');
+    const out = card.querySelector<HTMLElement>('[data-needs-out]');
+    if (!tablist) return;
+    const tabs = Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+
+    const select = (index: number, focus: boolean): void => {
+      tabs.forEach((tab, i) => {
+        const on = i === index;
+        tab.setAttribute('aria-selected', String(on));
+        tab.tabIndex = on ? 0 : -1;
+        tab.classList.toggle('now', on);
+        tab.classList.toggle('done', i < index);
+        const panel = card.querySelector<HTMLElement>(`#${CSS.escape(tab.getAttribute('aria-controls') ?? '')}`);
+        if (panel) {
+          panel.hidden = !on;
+          if (on && out) out.textContent = `Needs you · ${panel.dataset.needs ?? 'nothing'}`;
+        }
+      });
+      if (focus) tabs[index].focus();
+    };
+
+    tabs.forEach((tab, i) => tab.addEventListener('click', () => select(i, false)));
+
+    tablist.addEventListener('keydown', (event: KeyboardEvent) => {
+      const current = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+      let next: number;
+      switch (event.key) {
+        case 'ArrowRight': next = (current + 1) % tabs.length; break;
+        case 'ArrowLeft':  next = (current - 1 + tabs.length) % tabs.length; break;
+        case 'Home':       next = 0; break;
+        case 'End':        next = tabs.length - 1; break;
+        default: return;
+      }
+      event.preventDefault();
+      select(next, true);
+    });
+  });
 </script>
