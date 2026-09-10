@@ -271,6 +271,13 @@ section.lg-cat{padding-block:var(--sec-gap);overflow:hidden}
    rail closes on a short gap and the one after it opens straight on. */
 section.lg-cat-lead{padding-bottom:clamp(34px,3.6vw,52px)}
 section.lg-cat + section.lg-cat{padding-top:0}
+/* The last rail ends on two small arrows rather than a band of content, so
+   a full section gap either side of it read as a hole before the closing
+   statement. Both sides give way. */
+section.lg-cat-last{padding-bottom:clamp(40px,4.4vw,64px)}
+/* General sibling, not adjacent: the panel a card opens is a <dialog>
+   between the last rail and this band, and it counts as a sibling. */
+section.lg-cat ~ section.lg-close{padding-top:clamp(44px,4.8vw,70px)}
 .lg-cat-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
   margin-bottom:clamp(28px,3.4vw,44px)}
 .lg-cat-head h2{margin:0;max-width:18ch}
