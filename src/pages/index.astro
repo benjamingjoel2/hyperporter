@@ -185,13 +185,13 @@ const SIDES = [
                   aria-expanded={i === 0 ? 'true' : 'false'}
                   aria-controls={`layer-body-${i}`}
                 >
-                  {p.name}
+                  {p.label}
                 </button>
                 <div class="lg-acc-body" id={`layer-body-${i}`} inert={i !== 0}>
                   <div>
                     <span class="lg-avail">{p.availability}</span>
                     <p>{p.summary}</p>
-                    <a class="lg-read" href={`/${p.slug}`} aria-label={`Learn more about ${p.name}`}>
+                    <a class="lg-read" href={`/${p.slug}`} aria-label={`Learn more about ${p.label}`}>
                       <span aria-hidden="true">&#8627;</span> <span>Learn more</span>
                     </a>
                   </div>
@@ -215,7 +215,7 @@ const SIDES = [
     <section class="lg-sides" id="customers">
       <div class="wrap">
         <div class="lg-sides-head">
-          <h2>One platform for travel work.</h2>
+          <h2>Tailored for your business</h2>
           <p>Resellers and suppliers do their best work on Hyperporter. Run everything your team and your trips need in one place.</p>
         </div>
         <div class="lg-sides-grid">
