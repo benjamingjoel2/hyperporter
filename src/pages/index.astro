@@ -24,6 +24,7 @@
  */
 import Base from '../layouts/Base.astro';
 import { PRODUCTS, WHY } from '../lib/content/products';
+import { NAV } from '../lib/content/nav';
 import Mockup from '../components/Mockup.astro';
 
 // The screen each layer shows — the part of the interface that layer is.
@@ -32,6 +33,20 @@ const CARD_SCREEN: Record<string, string> = { portal: 'crm', autopilot: 'pipelin
 /* The ladder: the four layers, and under them the channels an account
    connects. Integration is not a fifth layer and has no page of its own,
    so it carries no "Learn more". */
+/* Everything in one place: the Tools and Automations menus flattened into
+   a directory, read straight from nav.ts so the section cannot drift from
+   the menu. The Automations "Overview" row points at /autopilot, which is
+   the layer page rather than a single automation, so it is dropped here. */
+const CATALOGUE = (['tools', 'automations'] as const).map((id) => {
+  const nav = NAV.find((n) => n.id === id)!;
+  return {
+    id,
+    label: nav.label,
+    href: id === 'tools' ? '/tools' : '/automations',
+    items: (nav.groups ?? []).flatMap((g) => g.items).filter((i) => i.href !== '/autopilot'),
+  };
+});
+
 const LAYERS = [
   ...PRODUCTS.map((p) => ({ slug: p.slug, label: p.label, availability: p.availability, summary: p.summary, href: `/${p.slug}` })),
   {
@@ -222,6 +237,37 @@ const SIDES = [
           }
         </div>
       </div>
+    </section>
+
+    {/* Everything in one place: every tool and every automation, listed. */}
+    <section class="lg-cat wrap" id="everything">
+      <div class="lg-cat-lead">
+        <h2>Every tool, every automation.</h2>
+        <p class="dek">Thirteen tools and six automations, on one platform. Open any of them.</p>
+      </div>
+      {
+        CATALOGUE.map((g) => (
+          <div class="lg-cat-group rv">
+            <div class="lg-cat-head">
+              <h3>{g.label}</h3>
+              <a class="lg-read" href={g.href}><span aria-hidden="true">&#8627;</span> <span>See all {g.label.toLowerCase()}</span></a>
+            </div>
+            <ul class="lg-cat-grid">
+              {g.items.map((i) => (
+                <li>
+                  <a href={i.href}>
+                    <b>{i.label}</b>
+                    <span>{i.desc}</span>
+                  </a>
+                </li>
+              ))}
+              {/* Empty cells so the last row closes across the grid rather
+                  than trailing a rule under half of it. */}
+              {Array.from({ length: (4 - (g.items.length % 4)) % 4 }).map(() => <li class="pad" aria-hidden="true" />)}
+            </ul>
+          </div>
+        ))
+      }
     </section>
 
     <section class="lg-close wrap">

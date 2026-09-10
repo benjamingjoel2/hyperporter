@@ -258,3 +258,33 @@ section.lg-close{text-align:center;padding-block:var(--sec-gap)}
   /* the blanket rule above doesn't cover scroll-behavior */
   .lg-dest-row{scroll-behavior:auto}
 }
+
+/* ---------------- everything in one place ---------------- */
+/* Every tool and every automation, read from nav.ts. A directory rather
+   than a feature grid: the job is to show the whole surface at once. */
+section.lg-cat{padding-block:var(--sec-gap)}
+.lg-cat-lead{max-width:62ch;margin-bottom:clamp(36px,4.4vw,60px)}
+.lg-cat-lead h2{margin:0 0 12px}
+.lg-cat-group + .lg-cat-group{margin-top:clamp(44px,5vw,72px)}
+.lg-cat-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;
+  padding-bottom:16px;border-bottom:1px solid var(--line-2)}
+.lg-cat-head h3{margin:0;font-family:var(--display);font-size:clamp(21px,2.1vw,27px);
+  letter-spacing:-.018em;font-weight:400;color:var(--paper)}
+/* Fixed column counts, so the padding cells below always land in the right
+   places to close the final row. */
+.lg-cat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:0;list-style:none;margin:0;padding:0}
+.lg-cat-grid li{border-bottom:1px solid var(--line)}
+.lg-cat-grid a{display:block;padding:20px 22px 20px 0;text-decoration:none;
+  transition:background .25s ease,padding-left .25s ease}
+.lg-cat-grid a:hover{background:rgba(13,16,22,.028);padding-left:14px}
+.lg-cat-grid b{display:block;font-weight:400;font-size:16.5px;letter-spacing:-.006em;
+  color:var(--paper);margin-bottom:5px}
+.lg-cat-grid span{display:block;font-size:14px;line-height:1.55;color:var(--muted)}
+.lg-cat-grid a:hover b{color:var(--signal)}
+@media (max-width:1040px){.lg-cat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){
+  .lg-cat-grid{grid-template-columns:1fr}
+  .lg-cat-grid li.pad{display:none}
+  .lg-cat-head{flex-direction:column;align-items:flex-start;gap:10px}
+}
