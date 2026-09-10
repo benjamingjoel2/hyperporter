@@ -25,6 +25,7 @@
 import Base from '../layouts/Base.astro';
 import { PRODUCTS, WHY } from '../lib/content/products';
 import { NAV } from '../lib/content/nav';
+import { TOOLS, AUTOMATIONS } from '../lib/content/detail';
 import Mockup from '../components/Mockup.astro';
 
 // The screen each layer shows — the part of the interface that layer is.
@@ -33,18 +34,24 @@ const CARD_SCREEN: Record<string, string> = { portal: 'crm', autopilot: 'pipelin
 /* The ladder: the four layers, and under them the channels an account
    connects. Integration is not a fifth layer and has no page of its own,
    so it carries no "Learn more". */
-/* Everything in one place: the Tools and Automations menus flattened into
-   a directory, read straight from nav.ts so the section cannot drift from
-   the menu. The Automations "Overview" row points at /autopilot, which is
-   the layer page rather than a single automation, so it is dropped here. */
-const CATALOGUE = (['tools', 'automations'] as const).map((id) => {
+/* Everything in one place, as a carousel: every tool and every automation
+   as a card — its layer, its name, the menu's one line, and its own screen.
+   Names and lines come from nav.ts so the section cannot drift from the
+   menu; the screen comes from detail.ts, matched on the page's slug. The
+   Automations "Overview" row points at /autopilot, a layer page rather
+   than an automation, so it is not a card. */
+const DETAIL_BY_SLUG = new Map([...TOOLS, ...AUTOMATIONS].map((d) => [d.slug, d]));
+
+const CARDS = (['tools', 'automations'] as const).flatMap((id) => {
   const nav = NAV.find((n) => n.id === id)!;
-  return {
-    id,
-    label: nav.label,
-    href: id === 'tools' ? '/tools' : '/automations',
-    items: (nav.groups ?? []).flatMap((g) => g.items).filter((i) => i.href !== '/autopilot'),
-  };
+  return (nav.groups ?? []).flatMap((g) => g.items)
+    .filter((i) => i.href !== '/autopilot')
+    .map((i) => {
+      const slug = i.href.split('/').pop()!;
+      const d = DETAIL_BY_SLUG.get(slug);
+      if (!d) throw new Error(`Homepage carousel: no detail page for "${slug}".`);
+      return { kind: id === 'tools' ? 'Tool' : 'Automation', label: i.label, desc: i.desc, href: i.href, screen: d.screen, overview: d.overview };
+    });
 });
 
 const LAYERS = [
@@ -239,35 +246,46 @@ const SIDES = [
       </div>
     </section>
 
-    {/* Everything in one place: every tool and every automation, listed. */}
-    <section class="lg-cat wrap" id="everything">
-      <div class="lg-cat-lead">
+    {/* Everything in one place, as a carousel of cards. */}
+    <section class="lg-cat" id="everything">
+      <div class="wrap lg-cat-head">
         <h2>Every tool, every automation.</h2>
-        <p class="dek">Thirteen tools and six automations, on one platform. Open any of them.</p>
+        <div class="lg-cat-links">
+          <a class="lg-read" href="/tools"><span aria-hidden="true">&#8627;</span> <span>All tools</span></a>
+          <a class="lg-read" href="/automations"><span aria-hidden="true">&#8627;</span> <span>All automations</span></a>
+        </div>
       </div>
-      {
-        CATALOGUE.map((g) => (
-          <div class="lg-cat-group rv">
-            <div class="lg-cat-head">
-              <h3>{g.label}</h3>
-              <a class="lg-read" href={g.href}><span aria-hidden="true">&#8627;</span> <span>See all {g.label.toLowerCase()}</span></a>
-            </div>
-            <ul class="lg-cat-grid">
-              {g.items.map((i) => (
-                <li>
-                  <a href={i.href}>
-                    <b>{i.label}</b>
-                    <span>{i.desc}</span>
-                  </a>
-                </li>
-              ))}
-              {/* Empty cells so the last row closes across the grid rather
-                  than trailing a rule under half of it. */}
-              {Array.from({ length: (4 - (g.items.length % 4)) % 4 }).map(() => <li class="pad" aria-hidden="true" />)}
-            </ul>
-          </div>
-        ))
-      }
+      <div class="lg-rail" data-rail>
+        <ul class="lg-rail-track" data-rail-track>
+          {
+            CARDS.map((c) => (
+              <li class="lg-card">
+                <a href={c.href} data-card data-kind={c.kind} data-name={c.label} data-copy={c.overview}>
+                  <span class="lg-card-kind">{c.kind}</span>
+                  <b>{c.label}</b>
+                  <span class="lg-card-desc">{c.desc}</span>
+                  <span class="lg-card-shot"><Mockup screen={c.screen} /></span>
+                  <span class="lg-card-more" aria-hidden="true">+</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="wrap lg-rail-nav">
+        <button type="button" class="lg-arrow" data-rail-prev aria-label="Previous">&#8249;</button>
+        <button type="button" class="lg-arrow" data-rail-next aria-label="Next">&#8250;</button>
+      </div>
+
+      {/* Opened by a card. With JS off the cards are plain links and this
+          never shows, so the page still reaches every tool. */}
+      <dialog class="lg-modal" data-modal aria-labelledby="card-modal-title">
+        <button type="button" class="lg-modal-x" data-modal-close aria-label="Close">&times;</button>
+        <p class="lg-modal-kind" data-modal-kind></p>
+        <h3 id="card-modal-title" data-modal-title></h3>
+        <p class="lg-modal-copy" data-modal-copy></p>
+        <a class="lg-read" data-modal-link href="/tools"><span aria-hidden="true">&#8627;</span> <span>Learn more</span></a>
+      </dialog>
     </section>
 
     <section class="lg-close wrap">
@@ -280,6 +298,61 @@ const SIDES = [
 
 <script>
   import '../lib/accordion';
+</script>
+
+<script>
+  /* The catalogue rail: the arrows scroll by one card's width, and go dim
+     at either end. Touch and wheel scrolling need no help. */
+  const rail = document.querySelector<HTMLElement>('[data-rail]');
+  const prev = document.querySelector<HTMLButtonElement>('[data-rail-prev]');
+  const next = document.querySelector<HTMLButtonElement>('[data-rail-next]');
+
+  if (rail && prev && next) {
+    const step = (): number => {
+      const card = rail.querySelector<HTMLElement>('.lg-card');
+      if (!card) return rail.clientWidth * 0.8;
+      const gap = parseFloat(getComputedStyle(rail.querySelector('[data-rail-track]')!).columnGap || '18');
+      return card.getBoundingClientRect().width + gap;
+    };
+
+    const sync = (): void => {
+      const max = rail.scrollWidth - rail.clientWidth;
+      prev.disabled = rail.scrollLeft < 4;
+      next.disabled = rail.scrollLeft > max - 4;
+    };
+
+    prev.addEventListener('click', () => rail.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => rail.scrollBy({ left: step(), behavior: 'smooth' }));
+    rail.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  }
+
+  /* A card opens its panel; Learn more inside it goes to the page. Without
+     this script the card is simply a link to the same page. */
+  const modal = document.querySelector<HTMLDialogElement>('[data-modal]');
+  if (modal) {
+    const kind = modal.querySelector<HTMLElement>('[data-modal-kind]')!;
+    const title = modal.querySelector<HTMLElement>('[data-modal-title]')!;
+    const copy = modal.querySelector<HTMLElement>('[data-modal-copy]')!;
+    const link = modal.querySelector<HTMLAnchorElement>('[data-modal-link]')!;
+
+    document.querySelectorAll<HTMLAnchorElement>('[data-card]').forEach((card) => {
+      card.addEventListener('click', (event) => {
+        event.preventDefault();
+        kind.textContent = card.dataset.kind ?? '';
+        title.textContent = card.dataset.name ?? '';
+        copy.textContent = card.dataset.copy ?? '';
+        link.href = card.getAttribute('href') ?? '/tools';
+        modal.showModal();
+      });
+    });
+
+    modal.querySelector('[data-modal-close]')!.addEventListener('click', () => modal.close());
+    /* Clicking the backdrop closes it: the dialog's own box is the only
+       thing inside, so a click landing on the element itself is outside it. */
+    modal.addEventListener('click', (event) => { if (event.target === modal) modal.close(); });
+  }
 </script>
 
 <script>
