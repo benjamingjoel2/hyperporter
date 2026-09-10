@@ -1137,13 +1137,35 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .lg-acc-body p{margin:8px 0 0;color:var(--muted);font-size:16px;line-height:1.5}
 /* The snippets share one grid cell; the open one fades and settles in over
    the one leaving, so the frame never blinks empty. */
-.lg-acc-shot{position:sticky;top:calc(var(--chrome-h,77px) + 24px);display:grid}
+/* The shot sits in a foldable phone held open: one wide screen with a
+   crease down the middle, the layer's own interface inside it. Moving
+   down the ladder changes what the phone is showing. */
+.lg-acc-shot{position:sticky;top:calc(var(--chrome-h,77px) + 24px);display:grid;
+  padding:10px;border-radius:26px;
+  background:linear-gradient(150deg,#3A3F47,#15181D 38%,#0E1116 62%,#2C3138);
+  box-shadow:0 0 0 1px rgba(255,255,255,.10) inset,0 2px 3px rgba(255,255,255,.16) inset,
+    0 26px 60px rgba(8,12,18,.32),0 6px 16px rgba(8,12,18,.18)}
+/* The crease, and the camera above it. */
+.lg-acc-shot::before{content:"";position:absolute;z-index:3;top:10px;bottom:10px;left:50%;width:14px;
+  transform:translateX(-50%);pointer-events:none;
+  background:linear-gradient(90deg,rgba(8,12,18,.055),rgba(8,12,18,.02) 38%,rgba(255,255,255,.05) 50%,rgba(8,12,18,.02) 62%,rgba(8,12,18,.055))}
+.lg-acc-shot::after{content:"";position:absolute;z-index:4;top:17px;left:50%;width:6px;height:6px;
+  transform:translateX(-50%);border-radius:50%;background:#05070A;
+  box-shadow:0 0 0 1px rgba(255,255,255,.12)}
+.lg-acc-shot .mk{border-radius:17px;aspect-ratio:3/2}
+/* A wider, shorter screen: the interface inside is drawn a size down so a
+   panel composed for 4:3 still sits clear of the bezel. */
+.lg-acc-shot .mk-stage{font-size:clamp(9px,1.95cqw,12.5px)}
 .lg-acc-shot > div{grid-area:1/1;opacity:0;transform:translateY(10px) scale(.985);visibility:hidden;
   transition:opacity .7s var(--acc-ease),transform .8s var(--acc-ease),visibility 0s .7s}
 .lg-acc-shot > div.on{opacity:1;transform:none;visibility:visible;transition:opacity .7s var(--acc-ease) .1s,transform .8s var(--acc-ease) .1s,visibility 0s}
 @media (max-width:1180px){
   .lg-acc{grid-template-columns:1fr;gap:28px}
-  .lg-acc-shot{position:static;order:-1}
+  .lg-acc-shot{position:static;order:-1;padding:7px;border-radius:20px}
+  .lg-acc-shot::before{top:7px;bottom:7px}
+  .lg-acc-shot .mk{border-radius:14px;aspect-ratio:4/3}
+  /* Folded shut on a phone: no crease down a single pane. */
+  .lg-acc-shot::before,.lg-acc-shot::after{display:none}
 }
 /* On a dark ground — the solutions pages' "how they use it" section. */
 .acc-dark{background:#0B0E12;color:#EDEFF2;padding-block:clamp(88px,10vw,160px)}
