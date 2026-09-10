@@ -116,10 +116,10 @@ export const SCREEN_ALT: Record<string, string> = {
 };
 
 /** Ground colour and the layer named in the corner chip, per screen. */
-export const SCREEN_META: Record<string, { ground: 'warm' | 'slate' | 'sand' | 'teal' | 'photo'; app: string }> = {
+export const SCREEN_META: Record<string, { photo?: string; ground: 'warm' | 'slate' | 'sand' | 'teal' | 'photo'; app: string }> = {
   engine: { ground: 'slate', app: 'Autopilot' },
   dashboard: { ground: 'photo', app: 'Portal' },
-  crm: { ground: 'warm', app: 'Portal' },
+  crm: { ground: 'photo', photo: '/photos/office-glass.jpg', app: 'Portal' },
   contacts: { ground: 'slate', app: 'Portal' },
   inquiry: { ground: 'sand', app: 'Portal' },
   proposal: { ground: 'warm', app: 'Portal' },
