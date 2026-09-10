@@ -54,7 +54,7 @@
 /* A photograph as the whole ground of the frame, with the panel floating
    on it — the sheet's slot, but filling the frame edge to edge. */
 .mk-back-photo{inset:0;left:0;top:0;width:auto;height:auto;padding:0;border-radius:0;
-  background:var(--back-photo) center/cover no-repeat;box-shadow:none;
+  background:var(--back-photo) var(--back-pos,center)/cover no-repeat;box-shadow:none;
   -webkit-mask-image:none;mask-image:none}
 
 /* App chip, bottom-left: which layer this is. */
