@@ -1,6 +1,10 @@
 # build output
 dist/
 
+# The single-file preview bundle (scripts/build-preview.py). Regenerated
+# from dist/ before every review; published as an artifact, never committed.
+preview-site.html
+
 # generated types
 .astro/
 
