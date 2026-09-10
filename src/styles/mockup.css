@@ -178,7 +178,6 @@
    is already a dark panel of its own. */
 .mk.bare{aspect-ratio:auto;background:none;border-radius:0;overflow:visible;isolation:auto}
 .mk.bare .mk-stage{position:relative;inset:auto;font-size:clamp(10px,2.7cqw,13.5px)}
-.mk.bare .mk-stage{font-size:clamp(12px,2.3cqw,15px)}
 .mk.bare .mk-panel{position:relative;left:auto;right:auto;top:auto;bottom:auto;transform:none;width:100%;max-width:none;
   background:rgba(255,255,255,.96);box-shadow:0 0 0 1px rgba(255,255,255,.5) inset,0 1em 2.4em rgba(0,0,0,.35)}
 .mk.bare .mk-back,.mk.bare .mk-app{display:none}
