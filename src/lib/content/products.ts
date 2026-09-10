@@ -35,6 +35,10 @@ export interface Product {
   /** Order in the ladder, as shown on /product. */
   n: string;
   name: string;
+  /** Plain-English name for the layer where it is listed as a category —
+      the homepage ladder and /product (Sep 2026, founder's rename). The
+      product name itself stays on the layer's own page and in the copy. */
+  label: string;
   eyebrow: string;
   /** Short line for the ladder on /product. */
   summary: string;
@@ -53,6 +57,7 @@ export const PRODUCTS: Product[] = [
     slug: 'portal',
     n: '01',
     name: 'Portal',
+    label: 'Operating System',
     eyebrow: 'Product — Portal',
     availability: 'Always included',
     summary:
@@ -107,6 +112,7 @@ export const PRODUCTS: Product[] = [
     slug: 'autopilot',
     n: '02',
     name: 'Autopilot',
+    label: 'Workflow Automation',
     eyebrow: 'Product — Autopilot',
     availability: 'From Autopilot',
     summary:
@@ -138,6 +144,7 @@ export const PRODUCTS: Product[] = [
     slug: 'intelligence',
     n: '03',
     name: 'Intelligence',
+    label: 'AI Assistance',
     eyebrow: 'Product — Intelligence',
     availability: 'From Intelligence',
     summary:
@@ -202,6 +209,7 @@ export const PRODUCTS: Product[] = [
     slug: 'horizon',
     n: '04',
     name: 'Horizon',
+    label: 'Global Network',
     eyebrow: 'Product — Horizon, for agencies',
     availability: 'For Resellers, every tier',
     summary:
