@@ -285,7 +285,7 @@ section.lg-cat + section.lg-cat{padding-top:0}
 .lg-rail::-webkit-scrollbar{display:none}
 .lg-rail-track{display:flex;gap:18px;list-style:none;margin:0;padding:0}
 .lg-card{flex:0 0 clamp(252px,23vw,308px);scroll-snap-align:start}
-.lg-card > a{display:flex;flex-direction:column;height:100%;padding:24px 24px 0;
+.lg-card > a{display:flex;flex-direction:column;height:100%;padding:24px;
   border-radius:18px;background:var(--ink);text-decoration:none;
   transition:background .3s ease,transform .3s ease;overflow:hidden}
 .lg-card > a:hover{background:var(--steel);transform:translateY(-2px)}
@@ -294,9 +294,19 @@ section.lg-cat + section.lg-cat{padding-top:0}
 .lg-card b{font-family:var(--display);font-weight:400;font-size:20px;letter-spacing:-.016em;
   line-height:1.2;color:var(--paper);margin-bottom:9px}
 .lg-card-desc{font-size:14px;line-height:1.55;color:var(--muted);margin-bottom:22px}
-.lg-card-shot{display:block;margin-top:auto;border-radius:10px 10px 0 0;overflow:hidden;
-  box-shadow:0 -1px 0 rgba(13,16,22,.06)}
+.lg-card-shot{display:block;margin-top:auto;margin-inline:-24px;margin-bottom:-24px;
+  border-radius:10px 10px 0 0;overflow:hidden;box-shadow:0 -1px 0 rgba(13,16,22,.06)}
 .lg-card-shot .mk{border-radius:10px 10px 0 0}
+
+/* The tool rail's card ends on the tool's own line icon rather than a
+   screen (founder's ask, Sep 2026): the screen was clipped by the card,
+   and it is better seen full size on the tool's own page. */
+.lg-cat-icon .lg-card > a{min-height:clamp(216px,19vw,246px)}
+.lg-cat-icon .lg-card-desc{margin-bottom:0}
+.lg-card-ico{display:block;margin-top:auto;padding-top:24px;color:var(--dim);
+  transition:color .3s ease}
+.lg-card-ico svg{display:block;width:26px;height:26px}
+.lg-card > a:hover .lg-card-ico{color:var(--paper)}
 
 .lg-rail-nav{display:flex;justify-content:flex-end;gap:10px;margin-top:clamp(22px,2.6vw,34px)}
 .lg-arrow{width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;
