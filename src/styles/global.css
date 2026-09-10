@@ -1140,7 +1140,14 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 /* The shot sits in a foldable phone held open: one wide screen with a
    crease down the middle, the layer's own interface inside it. Moving
    down the ladder changes what the phone is showing. */
-.lg-acc-shot{position:sticky;top:calc(var(--chrome-h,77px) + 24px);display:grid;
+/* The hand is drawn around the device: the wrapper is what sticks, so the
+   artwork travels with the screen, and it is what sets the stacking —
+   palm behind, device over it, thumb over that. */
+.lg-hold{position:sticky;top:calc(var(--chrome-h,77px) + 24px);isolation:isolate}
+.hh{position:absolute;right:-9%;bottom:-14%;width:34%;height:auto;pointer-events:none}
+.hh-back{z-index:0}
+.hh-front{z-index:2}
+.lg-acc-shot{position:relative;z-index:1;display:grid;
   padding:10px;border-radius:26px;
   background:linear-gradient(150deg,#3A3F47,#15181D 38%,#0E1116 62%,#2C3138);
   box-shadow:0 0 0 1px rgba(255,255,255,.10) inset,0 2px 3px rgba(255,255,255,.16) inset,
@@ -1161,7 +1168,10 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .lg-acc-shot > div.on{opacity:1;transform:none;visibility:visible;transition:opacity .7s var(--acc-ease) .1s,transform .8s var(--acc-ease) .1s,visibility 0s}
 @media (max-width:1180px){
   .lg-acc{grid-template-columns:1fr;gap:28px}
-  .lg-acc-shot{position:static;order:-1;padding:7px;border-radius:20px}
+  /* One pane, full width, and no room either side for a hand. */
+  .lg-hold{position:static;order:-1}
+  .hh{display:none}
+  .lg-acc-shot{padding:7px;border-radius:20px}
   .lg-acc-shot::before{top:7px;bottom:7px}
   .lg-acc-shot .mk{border-radius:14px;aspect-ratio:4/3}
   /* Folded shut on a phone: no crease down a single pane. */
