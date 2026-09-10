@@ -277,26 +277,25 @@ export const AUTOPILOT_TARGETS: { metric: string; before: string; after: string 
  * not software and nobody logs into it, so the move is what the agency gets
  * from it, not a product they open.
  */
-/** The homepage's "Why Hyperporter" band: the four reasons, one per layer,
-    in the founder's order and names (Sep 2026, renamed and halved the
-    same month); the terminology rules hold — Portal is the platform,
+/** The homepage's "Why Hyperporter" band: four points along a trip rather
+    than the four layers (Sep 2026, founder's rename); the terminology rules hold — Portal is the platform,
     Atlas answers from the account's own Vault, escalation is designed in,
     Horizon is a list and the supplier keeps their full rate. */
 export const WHY: { name: string; body: string }[] = [
   {
-    name: 'Operating System',
-    body: 'Portal is the foundation: CRM, magic links, inquiry form, proposal generator. One thread per trip, free on every tier.',
+    name: 'Inquiry',
+    body: 'Requests land as a brief from any channel, with the contact and the trip already created.',
   },
   {
-    name: 'AI Assistance',
-    body: 'Atlas answers from your own Vault — your contracts, rates, history — and cites its source. Trained on your account’s data and nobody else’s.',
+    name: 'Quotation',
+    body: 'Every qualified supplier asked at once. Replies land on one board; your margin goes on top.',
   },
   {
-    name: 'Automation',
-    body: 'Autopilot runs the nine stages, Inquiry through Post-Trip, on their own. The moments that need a person are designed in, not left as gaps.',
+    name: 'Booking',
+    body: 'Every supplier re-confirmed before anything is booked, and deposits requested on schedule.',
   },
   {
-    name: 'Network',
-    body: 'Horizon is a vetted list of DMCs and suppliers across 130+ countries, searched from the CRM. The supplier always receives their full quoted rate.',
+    name: 'Support',
+    body: 'Traveller and ground team on one thread. Anything that is not routine reaches a person.',
   },
 ];
