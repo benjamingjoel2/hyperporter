@@ -1140,26 +1140,13 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 /* The shot sits in a foldable phone held open: one wide screen with a
    crease down the middle, the layer's own interface inside it. Moving
    down the ladder changes what the phone is showing. */
-/* The shot sits in a tablet held in landscape: one screen, an even bezel,
-   and the camera centred above it. Moving down the ladder changes what
-   the tablet is showing. A single pane — the foldable's crease is gone
-   (founder's instruction, Sep 2026). */
-.lg-acc-shot{position:sticky;top:calc(var(--chrome-h,77px) + 24px);display:grid;
-  padding:14px;border-radius:26px;
-  background:linear-gradient(150deg,#3A3F47,#15181D 38%,#0E1116 62%,#2C3138);
-  box-shadow:0 0 0 1px rgba(255,255,255,.10) inset,0 2px 3px rgba(255,255,255,.16) inset,
-    0 26px 60px rgba(8,12,18,.32),0 6px 16px rgba(8,12,18,.18)}
-/* The camera, centred in the top bezel. */
-.lg-acc-shot::after{content:"";position:absolute;z-index:4;top:5.5px;left:50%;width:5px;height:5px;
-  transform:translateX(-50%);border-radius:50%;background:#05070A;
-  box-shadow:0 0 0 1px rgba(255,255,255,.12)}
-.lg-acc-shot .mk{border-radius:14px;aspect-ratio:4/3}
+.lg-acc-shot{position:sticky;top:calc(var(--chrome-h,77px) + 24px);display:grid}
 .lg-acc-shot > div{grid-area:1/1;opacity:0;transform:translateY(10px) scale(.985);visibility:hidden;
   transition:opacity .7s var(--acc-ease),transform .8s var(--acc-ease),visibility 0s .7s}
 .lg-acc-shot > div.on{opacity:1;transform:none;visibility:visible;transition:opacity .7s var(--acc-ease) .1s,transform .8s var(--acc-ease) .1s,visibility 0s}
 @media (max-width:1180px){
   .lg-acc{grid-template-columns:1fr;gap:28px}
-  .lg-acc-shot{position:static;order:-1;padding:10px;border-radius:20px}
+  .lg-acc-shot{position:static;order:-1}
 }
 /* On a dark ground — the solutions pages' "how they use it" section. */
 .acc-dark{background:#0B0E12;color:#EDEFF2;padding-block:clamp(88px,10vw,160px)}
