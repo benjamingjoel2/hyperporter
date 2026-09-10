@@ -27,7 +27,22 @@ import { PRODUCTS, WHY } from '../lib/content/products';
 import Mockup from '../components/Mockup.astro';
 
 // The screen each layer shows — the part of the interface that layer is.
-const CARD_SCREEN: Record<string, string> = { portal: 'crm', autopilot: 'pipeline', intelligence: 'atlas', horizon: 'horizon' };
+const CARD_SCREEN: Record<string, string> = { portal: 'crm', autopilot: 'pipeline', intelligence: 'atlas', horizon: 'horizon', integrations: 'integrations' };
+
+/* The ladder: the four layers, and under them the channels an account
+   connects. Integration is not a fifth layer and has no page of its own,
+   so it carries no "Learn more". */
+const LAYERS = [
+  ...PRODUCTS.map((p) => ({ slug: p.slug, label: p.label, availability: p.availability, summary: p.summary, href: `/${p.slug}` })),
+  {
+    slug: 'integrations',
+    label: 'Integration',
+    availability: 'From Autopilot',
+    summary:
+      'WhatsApp Business and email connected onto the same trip thread, and magic links that need no connecting at all — your travellers and suppliers keep the channel they already use.',
+    href: '',
+  },
+];
 import '../styles/legora-home.css';
 
 /** Who it is for: the two sides of the market, in the reference's pair of
@@ -135,8 +150,8 @@ const SIDES = [
 
     <section class="lg-sec wrap">
       <div class="lg-sec-lead">
-        <h2>With everything in one platform.</h2>
-        <p class="dek">Four toolkits. Countless integrations.</p>
+        <h2>Manage everything in one platform.</h2>
+        <p class="dek">Four toolkits. In the palm of your hands.</p>
       </div>
       {/* The reference's layout for this: a hairline list of the layers on
           the left, one open with its description and link, and the matching
@@ -146,7 +161,7 @@ const SIDES = [
       <div class="lg-acc">
         <div class="lg-acc-list">
           {
-            PRODUCTS.map((p, i) => (
+            LAYERS.map((p, i) => (
               <div class:list={['lg-acc-item', { on: i === 0 }]}>
                 <button
                   type="button"
@@ -161,9 +176,11 @@ const SIDES = [
                   <div>
                     <span class="lg-avail">{p.availability}</span>
                     <p>{p.summary}</p>
-                    <a class="lg-read" href={`/${p.slug}`} aria-label={`Learn more about ${p.label}`}>
-                      <span aria-hidden="true">&#8627;</span> <span>Learn more</span>
-                    </a>
+                    {p.href && (
+                      <a class="lg-read" href={p.href} aria-label={`Learn more about ${p.label}`}>
+                        <span aria-hidden="true">&#8627;</span> <span>Learn more</span>
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
@@ -172,7 +189,7 @@ const SIDES = [
         </div>
         <div class="lg-acc-shot">
           {
-            PRODUCTS.map((p, i) => (
+            LAYERS.map((p, i) => (
               <div id={`layer-shot-${i}`} class:list={{ on: i === 0 }} inert={i !== 0}>
                 <Mockup screen={CARD_SCREEN[p.slug]} />
               </div>

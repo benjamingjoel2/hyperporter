@@ -7,6 +7,7 @@ import Dashboard from './Dashboard.astro';
 import Crm from './Crm.astro';
 import Reseller from './Reseller.astro';
 import Supplier from './Supplier.astro';
+import Integrations from './Integrations.astro';
 import Contacts from './Contacts.astro';
 import Inquiry from './Inquiry.astro';
 import Proposal from './Proposal.astro';
@@ -47,6 +48,7 @@ export const SCREENS: Record<string, any> = {
   crm: Crm,
   reseller: Reseller,
   supplier: Supplier,
+  integrations: Integrations,
   contacts: Contacts,
   inquiry: Inquiry,
   proposal: Proposal,
@@ -87,6 +89,7 @@ export const SCREEN_ALT: Record<string, string> = {
   crm: 'A trip record in Portal — travellers, stage, proposal link and two supplier quotes — floating over the trips list.',
   reseller: 'A trip record in Portal — travellers, stage, proposal link and two supplier quotes — floating over a photograph.',
   supplier: 'A supplier’s request queue: a structured quote request from an agency, with its deadline, over a photograph.',
+  integrations: 'The channels an account has connected: WhatsApp Business, email, and the magic links that need no connecting.',
   contacts: 'The Portal people list: travellers and suppliers with their latest thread.',
   inquiry: 'The public inquiry form on an agency’s own page, filled in for a trip to Kenya.',
   proposal: 'A branded proposal for nine nights in the Mara beside its magic link and branding settings.',
@@ -128,6 +131,7 @@ export const SCREEN_META: Record<string, { ground: 'warm' | 'slate' | 'sand' | '
   crm: { ground: 'warm', app: 'Portal' },
   reseller: { ground: 'warm', app: 'Portal' },
   supplier: { ground: 'sand', app: 'Supplier Portal' },
+  integrations: { ground: 'warm', app: 'Portal' },
   contacts: { ground: 'slate', app: 'Portal' },
   inquiry: { ground: 'sand', app: 'Portal' },
   proposal: { ground: 'warm', app: 'Portal' },
