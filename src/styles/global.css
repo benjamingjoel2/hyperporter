@@ -618,18 +618,19 @@ p{margin:0 0 16px}
 .bx-chip.on{background:var(--paper);color:var(--raise)}
 
 /* ---- three-up grid ---- */
-/* Square and nearly touching: the reference's grid is 458px squares with a
-   9px gutter, and the images are what carry the page. */
+/* The reference's card, in its order: the picture, then the title large
+   under it, then the date alone in grey. No standfirst — the title and
+   the picture carry the card, and three lines of summary under each one
+   turned the row into a wall of text. Rows are set well apart; the
+   gutter between columns stays tight. */
 .bx-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:36px clamp(9px,.8vw,12px)}
-.bx-card .bx-cover{aspect-ratio:16/9;margin-bottom:16px}
-.bx-card time{display:block;font-size:12.5px;color:var(--dim);margin-bottom:9px;
-  font-variant-numeric:tabular-nums}
-.bx-card h3{font-size:19px;letter-spacing:-.018em;line-height:1.26;margin:0 0 10px;
-  transition:color .25s}
+  gap:clamp(48px,5vw,76px) clamp(16px,1.5vw,22px)}
+.bx-card .bx-cover{aspect-ratio:16/9;margin-bottom:clamp(18px,1.6vw,24px)}
+.bx-card h3{font-size:clamp(19px,1.55vw,24px);letter-spacing:-.02em;line-height:1.22;
+  margin:0 0 clamp(14px,1.3vw,20px);transition:color .25s}
 .bx-card:hover h3{color:var(--signal)}
-.bx-card p{font-size:14px;line-height:1.55;color:var(--muted);margin:0;
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.bx-card time{display:block;font-size:14px;color:var(--dim);
+  font-variant-numeric:tabular-nums}
 
 .bx-empty{color:var(--dim);font-size:15px;padding:40px 0}
 

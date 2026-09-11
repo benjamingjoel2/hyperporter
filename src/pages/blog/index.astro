@@ -81,9 +81,8 @@ const cats = ['All', ...Array.from(new Set(posts.map((p) => p.data.cat)))];
         rest.map((p) => (
           <a class="bx-card rv" href={`/blog/${p.id}`} data-cat={p.data.cat}>
             <div class="bx-cover" set:html={blogCover(p.id, p.data.cat)} />
-            <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
             <h3>{p.data.title}</h3>
-            <p>{p.data.dek}</p>
+            <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
           </a>
         ))
       }
