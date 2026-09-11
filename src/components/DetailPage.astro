@@ -14,7 +14,6 @@ import Points from './Points.astro';
 import CtaBand from './CtaBand.astro';
 import StepScreen from './StepScreen.astro';
 import { STEP_SCREENS } from '../lib/content/steps';
-import { SCREEN_META } from './mockups/index';
 import type { DetailPage } from '../lib/content/detail';
 
 interface Props {
@@ -32,9 +31,6 @@ if (!steps) throw new Error(`No step screens for "${page.slug}" (content/steps.t
 if (steps.length !== page.how.length) {
   throw new Error(`"${page.slug}": ${page.how.length} steps but ${steps.length} screens.`);
 }
-/* Only the app chip is taken from the page's own screen now; the
-   ground is the plain grey one on every step. */
-const meta = SCREEN_META[page.screen];
 const cta =
   kind === 'tool'
     ? { lead: `${page.name} is part of ${page.layer}.`, rest: 'Start free on Showcase, and switch on what you need as the trips come in.' }
@@ -87,14 +83,14 @@ const cta =
         ))
       }
     </div>
-    <div class="lg-acc-shot">
+    <div class="lg-acc-shot lg-acc-ipad">
       {
         steps.map((sc, i) => (
           <div class:list={{ on: i === 0 }} inert={i !== 0}>
             <StepScreen
               screen={sc}
               ground="warm"
-              app={meta.app}
+              app={page.name}
               alt={`${page.name}: ${page.how[i].name}`}
             />
           </div>
