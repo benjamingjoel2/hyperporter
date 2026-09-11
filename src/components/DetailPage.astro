@@ -52,18 +52,18 @@ const cta =
         <a class="btn" href="https://portal.hyperporter.com">Get started free</a>
         <a class="btn-o" href="/pricing">See pricing</a>
       </div>
+      <p class="hero-tier rv">Available on <b>{page.tier}</b> · {page.tierNote}</p>
     </div>
   </div>
 
   {/* The overview, under the hero on the same photograph: a lead beside the
       page's own screen, which works. */}
+  {/* The demo alone, centred in the band (founder's ask, Sep 2026: no
+      description beside it — the screen is the whole point, so give it the
+      width). The tier line moves under the hero buttons, where it belongs
+      with the rest of the page's own facts. */}
   <div class="demo-band">
     <div class="demo-glass rv">
-      <div class="demo-lead">
-        <p class="eyebrow">{page.layer} · {page.name}</p>
-        <p class="dek">{page.overview}</p>
-        <p class="demo-tier">Available on <b>{page.tier}</b> · {page.tierNote}</p>
-      </div>
       <DemoCard page={page} kind={kind} />
     </div>
   </div>

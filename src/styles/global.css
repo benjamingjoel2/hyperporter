@@ -1176,17 +1176,25 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .hero-solo{display:block}
 .hero-solo .page-hero-copy{max-width:60ch}
 .demo-band{position:relative;z-index:1;padding:0 var(--pad) clamp(44px,5vw,76px);max-width:var(--max);margin:0 auto}
-.demo-glass{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,4vw,64px);align-items:center;
+/* The demo alone, centred: no lead column beside it any more, so it takes
+   the band and stops short of the full measure so the screen inside stays
+   a product shot rather than a wall. */
+.demo-glass{display:block;max-width:860px;margin:0 auto;
   border-radius:18px;padding:clamp(26px,3.2vw,44px);
   background:rgba(13,16,22,.66);border:1px solid rgba(255,255,255,.12);
   -webkit-backdrop-filter:saturate(1.3) blur(20px);backdrop-filter:saturate(1.3) blur(20px)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.demo-glass{background:rgba(13,16,22,.9)}}
+/* The tier line under the hero buttons, where the rest of the page's own
+   facts sit. */
+.hero-tier{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(255,255,255,.66);line-height:1.7;margin:22px 0 0}
+.hero-tier b{color:#fff;font-weight:400}
 .demo-lead .eyebrow{color:rgba(255,255,255,.62);margin:0 0 14px}
 .demo-lead .dek{color:rgba(255,255,255,.86);margin:0 0 18px;font-size:16px;line-height:1.6;max-width:44ch}
 .demo-lead .demo-tier{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.62);line-height:1.7}
 .demo-lead .demo-tier b{color:#fff;font-weight:400}
 .demo-glass .thread{background:rgba(13,16,22,.55)}
-@media (max-width:1000px){.demo-glass{grid-template-columns:1fr}}
+
 /* ---------- solutions pages (pages/customers/[slug].astro) ---------- */
 /* The reference's solutions hero: light, headline left, lede and button
    right, one wide photograph under both. */
@@ -1197,6 +1205,20 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .sol-hero-photo{display:block;width:100%;aspect-ratio:16/7;object-fit:cover;border-radius:14px;margin-top:clamp(36px,4.5vw,64px);
   filter:brightness(.9) saturate(.9)}
 @media (max-width:900px){.sol-hero-grid{grid-template-columns:1fr;gap:20px}.sol-hero-photo{aspect-ratio:4/3}}
+
+/* The screen inside the demo: no card chrome around it, and the frame
+   keeps the shape a product shot wants. */
+.demo-play .mockup{margin:0}
+.demo-play .mk{border-radius:12px;aspect-ratio:16/10}
+/* The traditional side takes the same box as the screen, with its one
+   line centred in it — so flipping the switch does not resize the card or
+   leave the paragraph stranded at the top of a hole. */
+.thread.demo .v-without.demo-plain{aspect-ratio:16/10;align-content:center;
+  justify-items:center;padding:0 clamp(16px,4vw,60px)}
+/* Only once the switch has picked it — setting display here unconditionally
+   outranks the rule that hides it, and both sides end up in flow. */
+.thread.demo.without .v-without.demo-plain{display:grid}
+.thread.demo .v-without.demo-plain .line{border-top:0;padding:0;max-width:52ch;font-size:15px}
 
 /* More air than the /autopilot card: this one is read step by step. */
 .thread.demo{padding:28px}
