@@ -1,5 +1,6 @@
 /**
- * One page per nav item (Sep 2026, founder's ask): the thirteen Tools and
+ * One page per nav item (Sep 2026, founder's ask): the twelve Tools, the
+ * two Integrations and
  * the six Automations each get a page of their own at /tools/[slug] and
  * /automations/[slug], instead of an anchor on a layer page that read as
  * "the same page again" from the menu.
@@ -261,7 +262,7 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'Automatic steps are shown', body: 'When Autopilot sends a quote request or a reminder, it appears on the thread as a step, so the history is complete.' },
       { n: '04', name: 'Anything urgent is flagged', body: 'A message that needs a person is flagged and organised by what to do next, rather than lost in the sequence.' },
     ],
-    related: ['client-supplier-dashboard', 'whatsapp-integration', 'support-relay'],
+    related: ['client-supplier-dashboard', 'whatsapp', 'support-relay'],
     next: { eyebrow: 'Up next', title: 'Bring WhatsApp onto the thread.', desc: 'The WhatsApp integration connects the real Business API straight into your inbox.', cta: 'See the WhatsApp integration', href: '/tools/whatsapp-integration' },
   },
   {
@@ -365,11 +366,19 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'Routine is handled', body: 'Pickup times, meeting points and confirmations relay without your involvement and are logged on the thread.' },
       { n: '04', name: 'Urgent breaks through', body: 'Anything flagged reaches you on your phone with the context, and the thread shows what needs deciding.' },
     ],
-    related: ['whatsapp-integration', 'three-way-inbox', 'client-supplier-dashboard'],
+    related: ['whatsapp', 'three-way-inbox', 'client-supplier-dashboard'],
     next: { eyebrow: 'Up next', title: 'The channel underneath the relay.', desc: 'The WhatsApp integration connects the Business API the relay runs on.', cta: 'See the WhatsApp integration', href: '/tools/whatsapp-integration' },
   },
+
+];
+
+/* Integrations: the channels your travellers and suppliers already use,
+   connected onto the trip thread. WhatsApp moved out of Tools when the
+   Integrations menu was added (Sep 2026, founder's ask); /tools/whatsapp-integration
+   redirects to its new home. */
+export const INTEGRATIONS: DetailPage[] = [
   {
-    slug: 'whatsapp-integration',
+    slug: 'whatsapp',
     name: 'WhatsApp integration',
     layer: 'Portal',
     tier: 'Add-on',
@@ -393,6 +402,32 @@ export const TOOLS: DetailPage[] = [
     ],
     related: ['three-way-inbox', 'support-relay', 'inquiry-form'],
     next: { eyebrow: 'Up next', title: 'Turn a message into a brief.', desc: 'Automated Inquiry parses an incoming WhatsApp, email or form into a structured lead.', cta: 'See Automated Inquiry', href: '/automations/inquiry' },
+  },
+  {
+    slug: 'email',
+    name: 'Email integration',
+    layer: 'Portal',
+    tier: 'Showcase',
+    tierNote: 'Included on every tier. Forwarding on Showcase; your own address connected from Autopilot up.',
+    title: 'The inbox, on the trip it belongs to.',
+    lede: 'Forward your enquiries address into Hyperporter, or connect it outright, and every message about a trip lands on that trip\u2019s thread \u2014 beside the WhatsApps and the dashboard questions, not in a folder somebody has to remember to check.',
+    overview: 'Your enquiries address connected to Hyperporter: a message about a trip lands on that trip\u2019s thread, your reply goes back from your own address, and a message that reads like a new request becomes an inquiry.',
+    screen: 'inbox',
+    whatTitle: 'What the integration does',
+    what: [
+      { title: 'Threaded by trip', body: 'A message is matched to the contact and their open trip, so the conversation sits with the itinerary and the quotes rather than in a mailbox of its own.' },
+      { title: 'Replies from your address', body: 'Answer on the thread; it arrives from your own domain. The traveller never sees a Hyperporter address.' },
+      { title: 'Inquiries through it', body: 'A message that reads like a new request is parsed into a brief on Autopilot, the same as the form or a WhatsApp.' },
+    ],
+    howTitle: 'How it is set up',
+    how: [
+      { n: '01', name: 'Point the address at us', body: 'Forward hello@ on Showcase, or connect the mailbox outright from Autopilot up. Either way it stays your address.' },
+      { n: '02', name: 'Match the sender', body: 'Messages are matched to a contact and their open trip. An unknown sender becomes a new inquiry instead of being dropped.' },
+      { n: '03', name: 'Work the thread', body: 'Read and reply in the 3-way inbox, beside the WhatsApp messages and the supplier replies about the same trip.' },
+      { n: '04', name: 'Keep the record', body: 'Every message stays on the trip after it is over \u2014 what was agreed, and when, without anyone forwarding a chain.' },
+    ],
+    related: ['whatsapp', 'three-way-inbox', 'inquiry-form'],
+    next: { eyebrow: 'Next', title: 'The 3-way inbox', desc: 'Where the email, the WhatsApp and the supplier reply about one trip sit together.', cta: 'Open 3-way inbox', href: '/tools/three-way-inbox' },
   },
 ];
 
@@ -577,6 +612,8 @@ export const byAutomation = (slug: string): DetailPage => {
 export const resolveRelated = (slug: string): { page: DetailPage; href: string } => {
   const t = TOOLS.find((x) => x.slug === slug);
   if (t) return { page: t, href: `/tools/${t.slug}` };
+  const i = INTEGRATIONS.find((x) => x.slug === slug);
+  if (i) return { page: i, href: `/integrations/${i.slug}` };
   const a = AUTOMATIONS.find((x) => x.slug === slug);
   if (a) return { page: a, href: `/automations/${a.slug}` };
   throw new Error(`No tool or automation "${slug}" to relate to`);
