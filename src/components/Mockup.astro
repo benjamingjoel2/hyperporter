@@ -26,10 +26,13 @@ interface Props {
   /** Dark glass panel with light type, for the tool, automation and
       solutions pages (founder's ask, Sep 2026). */
   dark?: boolean;
+  /** Override the screen's own ground. The ladder and the step screens
+      all sit on the plain grey one (founder's ask, Sep 2026). */
+  ground?: string;
   class?: string;
 }
 
-const { screen, tall = false, dark = false, class: klass = '' } = Astro.props;
+const { screen, tall = false, dark = false, ground, class: klass = '' } = Astro.props;
 const Screen = SCREENS[screen];
 if (!Screen) {
   throw new Error(`Mockup: no screen named "${screen}". Add one to components/mockups/index.ts.`);
@@ -38,7 +41,7 @@ const meta = SCREEN_META[screen];
 ---
 
 <div class:list={['mockup', klass]}>
-  <div class:list={['mk', { tall, dark }]} data-ground={meta.ground} role="group" aria-label={SCREEN_ALT[screen]}>
+  <div class:list={['mk', { tall, dark }]} data-ground={ground ?? meta.ground} role="group" aria-label={SCREEN_ALT[screen]}>
     <div class="mk-stage">
       <Screen />
     </div>

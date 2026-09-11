@@ -230,7 +230,7 @@ const SIDES = [
           {
             LAYERS.map((p, i) => (
               <div id={`layer-shot-${i}`} class:list={{ on: i === 0 }} inert={i !== 0}>
-                <Mockup screen={CARD_SCREEN[p.slug]} />
+                <Mockup screen={CARD_SCREEN[p.slug]} ground="warm" />
               </div>
             ))
           }
