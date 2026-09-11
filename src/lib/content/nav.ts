@@ -129,10 +129,11 @@ export const NAV: NavItem[] = [
       },
     ],
     feature: {
-      card: 'whatsapp',
-      title: 'One thread, either channel',
-      desc: 'A traveller writes on WhatsApp, a supplier replies by email, and both land on the same trip — beside the quotes, not in two inboxes.',
-      href: '/tools/three-way-inbox',
+      card: 'horizon',
+      title: 'Horizon: Supplier network',
+      badge: 'New',
+      desc: 'A live, vetted list of DMCs and suppliers across 130+ countries — see who you can source before you quote.',
+      href: '/horizon',
     },
   },
 
@@ -158,11 +159,10 @@ export const NAV: NavItem[] = [
       },
     ],
     feature: {
-      card: 'horizon',
-      title: 'Horizon: Supplier network',
-      badge: 'New',
-      desc: 'A live, vetted list of DMCs and suppliers across 130+ countries — see who you can source before you quote.',
-      href: '/horizon',
+      card: 'reading',
+      title: 'Why your clients will love the Hyperporter interface',
+      desc: 'Travellers do not want an app. They want to know what was booked, what it cost and what happens next — without asking you.',
+      href: '/blog/why-your-clients-will-love-the-hyperporter-interface',
     },
   },
 
