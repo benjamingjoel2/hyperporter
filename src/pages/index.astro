@@ -71,14 +71,16 @@ const cardsFor = (id: 'tools' | 'automations') => {
    not inside it. Three cards, so it is a rail rather than a grid. */
 const CONNECT = [
   {
-    screen: 'whatsapp',
+    photo: '/photos/connect-whatsapp.jpg',
+    alt: 'A traveller\u2019s WhatsApp thread with a hotel, open on a phone.',
     lead: 'WhatsApp integration.',
     rest: 'The real Business API connected to your account — a traveller\u2019s message lands on the trip thread, and your reply goes back to their phone.',
     cta: 'Learn more about WhatsApp',
     href: '/integrations/whatsapp',
   },
   {
-    screen: 'inbox',
+    photo: '/photos/connect-email.jpg',
+    alt: 'A booking confirmation open in an email client on a laptop.',
     lead: 'Email integration.',
     rest: 'Your enquiries address threaded onto the trip it belongs to, so the conversation sits with the itinerary and the quotes rather than in a folder.',
     cta: 'Learn more about Email',
@@ -86,6 +88,7 @@ const CONNECT = [
   },
   {
     screen: 'horizon',
+    dark: true,
     lead: 'Horizon.',
     rest: 'A vetted list of DMCs and tour operators to source from \u2014 see who covers a destination, and what they reply like, before you quote.',
     cta: 'Learn more about Horizon',
@@ -359,7 +362,9 @@ const SIDES = [
             CONNECT.map((c) => (
               <li class="lg-conn-card">
                 <span class="lg-conn-shot">
-                  <Mockup screen={c.screen} ground="warm" />
+                  {c.photo
+                    ? <img src={c.photo} alt={c.alt} width="1200" height="800" loading="lazy" decoding="async" />
+                    : <Mockup screen={c.screen!} dark={c.dark} />}
                 </span>
                 <p class="lg-conn-cap">
                   <b>{c.lead}</b> {c.rest}
