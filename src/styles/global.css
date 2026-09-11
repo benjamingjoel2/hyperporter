@@ -626,8 +626,12 @@ p{margin:0 0 16px}
 .bx-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
   gap:clamp(48px,5vw,76px) clamp(16px,1.5vw,22px)}
 .bx-card .bx-cover{aspect-ratio:16/9;margin-bottom:clamp(18px,1.6vw,24px)}
+/* Two lines, then an ellipsis, as the reference does. A long title
+   running to three made its card taller than the rest of the row and
+   pushed the second row of six off the screen. */
 .bx-card h3{font-size:clamp(19px,1.55vw,24px);letter-spacing:-.02em;line-height:1.22;
-  margin:0 0 clamp(14px,1.3vw,20px);transition:color .25s}
+  margin:0 0 clamp(14px,1.3vw,20px);transition:color .25s;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .bx-card:hover h3{color:var(--signal)}
 .bx-card time{display:block;font-size:14px;color:var(--dim);
   font-variant-numeric:tabular-nums}
