@@ -21,6 +21,7 @@ import Mockup from '../../components/Mockup.astro';
 import Points from '../../components/Points.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { photoFor } from '../../lib/photos';
+import '../../styles/solutions.css';
 
 // The screen each segment opens on: the part of the product that segment
 // actually lives in. Suppliers see their own side — requests and quotes —
@@ -85,7 +86,7 @@ const photo = photoFor(page.slug, ...(PHOTO_ALIAS[page.slug] ?? []));
         </div>
       </div>
     </div>
-    <img class="sol-hero-photo rv" src={photo.src} alt="" />
+    <img class="sol-hero-photo rv" src={photo.src} alt={`${page.name} at work.`} />
   </section>
 
   {segment && <Points title={`How ${who} stay ahead`} points={segment.reasons} />}
