@@ -1139,9 +1139,23 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .lg-acc-shot > div{grid-area:1/1;opacity:0;transform:translateY(10px) scale(.985);visibility:hidden;
   transition:opacity .7s var(--acc-ease),transform .8s var(--acc-ease),visibility 0s .7s}
 .lg-acc-shot > div.on{opacity:1;transform:none;visibility:visible;transition:opacity .7s var(--acc-ease) .1s,transform .8s var(--acc-ease) .1s,visibility 0s}
+/* The step screens on a tool or automation page sit in a tablet held in
+   landscape: an even dark bezel with the camera centred above the screen
+   (founder's ask, Sep 2026). Scoped to those pages — the homepage ladder
+   and the solutions band show the screen on its own. */
+.lg-acc-ipad{padding:14px;border-radius:26px;
+  background:linear-gradient(150deg,#3A3F47,#15181D 38%,#0E1116 62%,#2C3138);
+  box-shadow:0 0 0 1px rgba(255,255,255,.10) inset,0 2px 3px rgba(255,255,255,.16) inset,
+    0 26px 60px rgba(8,12,18,.32),0 6px 16px rgba(8,12,18,.18)}
+.lg-acc-ipad::after{content:"";position:absolute;z-index:4;top:5.5px;left:50%;width:5px;height:5px;
+  transform:translateX(-50%);border-radius:50%;background:#05070A;
+  box-shadow:0 0 0 1px rgba(255,255,255,.12)}
+.lg-acc-ipad .mk{border-radius:14px}
+
 @media (max-width:1180px){
   .lg-acc{grid-template-columns:1fr;gap:28px}
   .lg-acc-shot{position:static;order:-1}
+  .lg-acc-ipad{padding:10px;border-radius:20px}
 }
 /* On a dark ground — the solutions pages' "how they use it" section. */
 .acc-dark{background:#0B0E12;color:#EDEFF2;padding-block:clamp(88px,10vw,160px)}
