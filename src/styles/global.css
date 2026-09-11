@@ -632,20 +632,27 @@ p{margin:0 0 16px}
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 
 /* ---- more stories ---- */
-.bx-more{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);
-  gap:clamp(24px,4vw,70px);margin-top:clamp(48px,6vw,90px)}
-.bx-more-label{padding-top:26px}
-.bx-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:clamp(16px,1.4vw,24px);align-items:end;
-  border-top:1px solid var(--line);padding:24px 0}
+/* The label sits over the list, not in a column beside it: as a column it
+   left a 300px hole running the length of the list and pushed every row
+   off the axis the cards above stand on. */
+.bx-more{margin-top:clamp(48px,6vw,90px)}
+.bx-more-label{display:block;margin-bottom:10px}
+/* The copy takes the larger share: at 1fr each, a two-line title sat
+   beside a 280px-tall picture of nothing much. */
+/* Explicit rows: the cover spans both, and is taller than the copy, so
+   without them the date's row stretched and left a hole under it. */
+.bx-row{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);
+  grid-template-rows:auto 1fr;
+  gap:clamp(24px,3vw,56px);column-gap:clamp(24px,3vw,56px);row-gap:0;
+  align-items:start;border-top:1px solid var(--line);padding:26px 0}
 .bx-row time{grid-column:1;font-size:12.5px;color:var(--dim);
   font-variant-numeric:tabular-nums;align-self:start}
 .bx-row-copy{grid-column:1}
 .bx-row h3{font-size:clamp(19px,1.9vw,23px);letter-spacing:-.018em;line-height:1.26;
-  margin:14px 0 9px;transition:color .25s}
+  margin:9px 0 9px;transition:color .25s}
 .bx-row:hover h3{color:var(--signal)}
 .bx-row p{font-size:14px;line-height:1.55;color:var(--muted);margin:0;max-width:56ch}
-.bx-row .bx-cover{grid-column:2;grid-row:1 / span 2;aspect-ratio:16/9;align-self:center}
+.bx-row .bx-cover{grid-column:2;grid-row:1 / span 2;aspect-ratio:16/9;align-self:start}
 .bx-empty{color:var(--dim);font-size:15px;padding:40px 0}
 
 /* ---- article ---- */
@@ -742,8 +749,7 @@ p{margin:0 0 16px}
     flex-direction:column-reverse;justify-content:flex-start}
   .bx-feat-meta{flex-direction:row;gap:14px;align-items:baseline}
   .bx-grid{grid-template-columns:1fr;gap:34px}
-  .bx-more,.post-rail{grid-template-columns:1fr;gap:16px}
-  .bx-more-label{padding-top:0}
+  .post-rail{grid-template-columns:1fr;gap:16px}
   .bx-row{grid-template-columns:1fr;gap:14px}
   .bx-row .bx-cover{grid-column:1;grid-row:auto;order:-1}
   .post-more-grid{grid-template-columns:1fr;gap:30px}
