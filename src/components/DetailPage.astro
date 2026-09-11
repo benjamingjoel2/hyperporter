@@ -13,7 +13,9 @@ import DemoCard from './DemoCard.astro';
 import PhotoHero from './PhotoHero.astro';
 import Points from './Points.astro';
 import CtaBand from './CtaBand.astro';
-import Mockup from './Mockup.astro';
+import StepScreen from './StepScreen.astro';
+import { STEP_SCREENS } from '../lib/content/steps';
+import { SCREEN_META } from './mockups/index';
 import type { DetailPage } from '../lib/content/detail';
 
 interface Props {
@@ -24,6 +26,14 @@ interface Props {
 const { page, kind } = Astro.props;
 const eyebrow = page.name;
 const id = `${kind}-${page.slug}`;
+/* A screen per step, so the accordion swaps it as you move down the list.
+   The build fails if a page's steps and its screens fall out of step. */
+const steps = STEP_SCREENS[page.slug];
+if (!steps) throw new Error(`No step screens for "${page.slug}" (content/steps.ts).`);
+if (steps.length !== page.how.length) {
+  throw new Error(`"${page.slug}": ${page.how.length} steps but ${steps.length} screens.`);
+}
+const meta = SCREEN_META[page.screen];
 const cta =
   kind === 'tool'
     ? { lead: `${page.name} is part of ${page.layer}.`, rest: 'Start free on Showcase, and switch on what you need as the trips come in.' }
@@ -87,9 +97,18 @@ const cta =
       }
     </div>
     <div class="lg-acc-shot">
-      <div class="on">
-        <Mockup screen={page.screen} />
-      </div>
+      {
+        steps.map((sc, i) => (
+          <div class:list={{ on: i === 0 }} inert={i !== 0}>
+            <StepScreen
+              screen={sc}
+              ground={meta.ground}
+              app={meta.app}
+              alt={`${page.name}: ${page.how[i].name}`}
+            />
+          </div>
+        ))
+      }
     </div>
   </div>
 </section>

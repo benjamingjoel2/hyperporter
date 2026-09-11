@@ -1,0 +1,82 @@
+---
+/**
+ * One screen for one step of a page's "How it works" (founder's ask, Sep
+ * 2026: the screen has to change as you click down the list, and each one
+ * has to show what its step says).
+ *
+ * The screens are data, not components — a page has four of them, and
+ * hand-building 76 files would guarantee they drift from the copy beside
+ * them. content/steps.ts describes each one in the primitives the mock-up
+ * kit already has, and this renders it.
+ *
+ * The site's rules hold here as everywhere: amber only on a step a person
+ * takes, suppliers never shown inside Horizon, Atlas answering from the
+ * account's own Vault, the supplier receiving their full quoted rate.
+ */
+import '../styles/mockup.css';
+import type { StepScreen } from '../lib/content/steps';
+
+interface Props {
+  screen: StepScreen;
+  /** The page's own ground and app chip, so the four steps sit on the
+      same surface its other screens do. */
+  ground: string;
+  app: string;
+  alt: string;
+}
+const { screen, ground, app, alt } = Astro.props;
+const { head, rows = [], msgs = [], composer, foot } = screen;
+---
+
+<div class="mockup">
+  <div class="mk" data-ground={ground} role="group" aria-label={alt}>
+    <div class="mk-stage">
+      <div class="mk-panel wide">
+  {head && (
+    <div class="mk-head">
+      <b>{head[0]}</b>
+      <small>{head[1]}</small>
+    </div>
+  )}
+
+  {msgs.map((m) => (
+    <div class:list={['mk-msg', { me: m.from === 'me', typing: m.state === 'typing' }]}>
+      <span>{m.text}</span>
+      {m.cite && <span class="mk-cite">{m.cite}</span>}
+    </div>
+  ))}
+
+  {rows.map((r) => (
+    <div class:list={['mk-row', { plain: !r.icon }]}>
+      {r.icon && <span class:list={['mk-ico', { pdf: r.icon === 'PDF' }]}>{r.icon}</span>}
+      <div>
+        <b>{r.b}</b>
+        {r.s && <small>{r.s}</small>}
+      </div>
+      {r.tag && <span class:list={['mk-tag', { amb: r.amber }]}>{r.tag}</span>}
+      {r.state && <span class:list={['mk-chk', r.state]} />}
+      {r.fine && <span class="mk-fine">{r.fine}</span>}
+    </div>
+  ))}
+
+  {composer && (
+    <div class="mk-composer">
+      <span class="mk-field">{composer[0]}</span>
+      <span class="mk-btn sig">{composer[1]}</span>
+    </div>
+  )}
+
+        {foot && (
+          <div class="mk-foot">
+            <span class="mk-fine">{foot[0]}</span>
+            {foot[1] && <span class:list={['mk-btn', { sig: !foot[2], amb: foot[2] }]}>{foot[1]}</span>}
+          </div>
+        )}
+      </div>
+    </div>
+    <span class="mk-app" aria-hidden="true">
+      <svg viewBox="0 0 100 100"><circle class="ring" cx="50" cy="50" r="44" /><rect x="32.5" y="26" width="7.5" height="47" /><rect x="60" y="26" width="7.5" height="47" /><rect x="32.5" y="46.5" width="35" height="7.5" /></svg>
+      {app}
+    </span>
+  </div>
+</div>
