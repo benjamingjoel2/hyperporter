@@ -1139,10 +1139,11 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .lg-acc-shot > div{grid-area:1/1;opacity:0;transform:translateY(10px) scale(.985);visibility:hidden;
   transition:opacity .7s var(--acc-ease),transform .8s var(--acc-ease),visibility 0s .7s}
 .lg-acc-shot > div.on{opacity:1;transform:none;visibility:visible;transition:opacity .7s var(--acc-ease) .1s,transform .8s var(--acc-ease) .1s,visibility 0s}
-/* The step screens on a tool or automation page sit in a tablet held in
-   landscape: an even dark bezel with the camera centred above the screen
-   (founder's ask, Sep 2026). Scoped to those pages — the homepage ladder
-   and the solutions band show the screen on its own. */
+/* The ladder's screens and the step screens on a tool or automation page
+   sit in a tablet held in landscape: an even dark bezel with the camera
+   centred above the screen (founder's ask, Sep 2026). The solutions band
+   is the one that keeps its screen on its own — it sits on the dark
+   ground, where a dark bezel would disappear. */
 .lg-acc-ipad{padding:14px;border-radius:26px;
   background:linear-gradient(150deg,#3A3F47,#15181D 38%,#0E1116 62%,#2C3138);
   box-shadow:0 0 0 1px rgba(255,255,255,.10) inset,0 2px 3px rgba(255,255,255,.16) inset,
