@@ -29,10 +29,14 @@ interface Props {
   /** Override the screen's own ground. The ladder and the step screens
       all sit on the plain grey one (founder's ask, Sep 2026). */
   ground?: string;
+  /** Override the app chip. Where a screen is shown under a name of its
+      own — the ladder's layers, a tool's page — the chip says that name
+      rather than the layer the screen was drawn for. */
+  app?: string;
   class?: string;
 }
 
-const { screen, tall = false, dark = false, ground, class: klass = '' } = Astro.props;
+const { screen, tall = false, dark = false, ground, app, class: klass = '' } = Astro.props;
 const Screen = SCREENS[screen];
 if (!Screen) {
   throw new Error(`Mockup: no screen named "${screen}". Add one to components/mockups/index.ts.`);
@@ -47,7 +51,7 @@ const meta = SCREEN_META[screen];
     </div>
     <span class="mk-app" aria-hidden="true">
       <svg viewBox="0 0 100 100"><circle class="ring" cx="50" cy="50" r="44" /><rect x="32.5" y="26" width="7.5" height="47" /><rect x="60" y="26" width="7.5" height="47" /><rect x="32.5" y="46.5" width="35" height="7.5" /></svg>
-      {meta.app}
+      {app ?? meta.app}
     </span>
   </div>
 </div>
