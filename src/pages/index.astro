@@ -66,6 +66,33 @@ const cardsFor = (id: 'tools' | 'automations') => {
 /* One rail each (Sep 2026, founder's ask). Sixteen cards on a single rail
    asked the reader to scroll past the tools to reach the automations; two
    rails let them start at whichever they came for. */
+/* The Integrations carousel (Sep 2026, founder's ask, after apple.com's
+   Connectivity section): a wide screen per card with its caption under it,
+   not inside it. Three cards, so it is a rail rather than a grid. */
+const CONNECT = [
+  {
+    screen: 'whatsapp',
+    lead: 'WhatsApp integration.',
+    rest: 'The real Business API connected to your account — a traveller\u2019s message lands on the trip thread, and your reply goes back to their phone.',
+    cta: 'Learn more about WhatsApp',
+    href: '/integrations/whatsapp',
+  },
+  {
+    screen: 'inbox',
+    lead: 'Email integration.',
+    rest: 'Your enquiries address threaded onto the trip it belongs to, so the conversation sits with the itinerary and the quotes rather than in a folder.',
+    cta: 'Learn more about Email',
+    href: '/integrations/email',
+  },
+  {
+    screen: 'horizon',
+    lead: 'Horizon.',
+    rest: 'A vetted list of DMCs and tour operators to source from \u2014 see who covers a destination, and what they reply like, before you quote.',
+    cta: 'Learn more about Horizon',
+    href: '/horizon',
+  },
+];
+
 const RAILS = [
   { id: 'tools', variant: 'icon', title: 'Every tool.', line: 'The interface you work in, from inquiry to invoice.', href: '/tools', cta: 'All tools', cards: cardsFor('tools') },
   { id: 'automations', variant: 'photo', title: 'Every automation.', line: 'The steps that run on their own — and the ones a person still takes.', href: '/automations', cta: 'All automations', cards: cardsFor('automations') },
@@ -319,6 +346,38 @@ const SIDES = [
       ))
     }
 
+    {/* Integrations, in the reference's carousel shape: the screen large,
+        the caption under it, the arrows bottom right. It carries .lg-cat so
+        the rail's own arrow wiring picks it up. */}
+    <section class="lg-cat lg-cat-conn" id="integrations">
+      <div class="wrap lg-conn-head">
+        <h2>Integrations.<br />The channels they already use.</h2>
+      </div>
+      <div class="lg-rail" data-rail>
+        <ul class="lg-rail-track" data-rail-track>
+          {
+            CONNECT.map((c) => (
+              <li class="lg-conn-card">
+                <span class="lg-conn-shot">
+                  <Mockup screen={c.screen} ground="warm" />
+                </span>
+                <p class="lg-conn-cap">
+                  <b>{c.lead}</b> {c.rest}
+                </p>
+                <a class="lg-read" href={c.href}>
+                  <span aria-hidden="true">&#8627;</span> <span>{c.cta}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="wrap lg-rail-nav">
+        <button type="button" class="lg-arrow" data-rail-prev aria-label="Previous">&#8249;</button>
+        <button type="button" class="lg-arrow" data-rail-next aria-label="Next">&#8250;</button>
+      </div>
+    </section>
+
     {/* Opened by a card on either rail. With JS off the cards are plain
         links and this never shows, so the page still reaches every page. */}
     <dialog class="lg-modal" data-modal aria-labelledby="card-modal-title">
@@ -354,7 +413,7 @@ const SIDES = [
     el.closest('.lg-cat')?.querySelector<HTMLElement>('[data-rail]') ?? null;
 
   const stepOf = (rail: HTMLElement): number => {
-    const card = rail.querySelector<HTMLElement>('.lg-card');
+    const card = rail.querySelector<HTMLElement>('.lg-card, .lg-conn-card');
     const track = rail.querySelector<HTMLElement>('[data-rail-track]');
     if (!card) return rail.clientWidth * 0.8;
     const gap = parseFloat(track ? getComputedStyle(track).columnGap || '18' : '18');
