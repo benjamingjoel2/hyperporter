@@ -1,21 +1,22 @@
 ---
 /**
- * The clickable illustration on a tool or automation hero: the page's own
- * "how it works" steps as chips over a panel, in the thread card /autopilot
- * opens with. Click a step, read what happens at it, see whether it needs
- * a person. Steps that are a person's to take read amber, the site's one
- * mark for a human / manual state — so the card cannot overstate what is
- * automatic.
+ * The demo on a tool or automation hero. It is the whole band now
+ * (founder's ask, Sep 2026: no description column beside it), so it is
+ * the page's own screen at full size — and it works. Buttons do what
+ * they say, rows tick, cards move, fields take what you type and chat
+ * boxes answer back (lib/live.ts, wired in by Mockup). A person can use
+ * the tool on the page before they have signed up for it.
  *
- * The header is a switch: With Hyperporter is the steps; Without
- * Hyperporter is the same job, same trip, handled the traditional way —
- * one plain paragraph (lib/content/without.ts), amber because every part
- * of it is a person's. Both sides are in the markup; `.demo.without`
- * picks one.
+ * The header is a switch. With Hyperporter is that working screen;
+ * Without Hyperporter is the same job, same trip, handled the
+ * traditional way — one plain paragraph (content/without.ts), amber
+ * because all of it is a person's. Both sides are in the markup and a
+ * class picks one, so with JS off the screen is still there.
  *
- * Every panel is rendered server-side and toggled with `hidden`, so with
- * JS off the card still shows the first step rather than going blank.
+ * How it works, step by step, is the accordion further down the page;
+ * this band is for using the thing, not reading about it.
  */
+import Mockup from './Mockup.astro';
 import type { DetailPage } from '../lib/content/detail';
 import { WITHOUT } from '../lib/content/without';
 
@@ -24,16 +25,9 @@ interface Props {
   kind: 'tool' | 'automation';
 }
 
-const { page, kind } = Astro.props;
-const id = `${kind}-${page.slug}`;
-const START = 0;
+const { page } = Astro.props;
 const without = WITHOUT[page.screen];
 if (!without) throw new Error(`DemoCard: no "without" paragraph for screen "${page.screen}" (${page.slug}).`);
-
-/* A step is a person's when its name says so: "You choose", "Marked by
-   hand", "Money is marked by a person", "Hand it to you". */
-const needsYou = (name: string): boolean => /^you\b|hand it to you|by hand|by a person|you mark/i.test(name);
-const sentences = (body: string): string[] => body.split(/(?<=\.)\s+/);
 ---
 
 <div class="thread demo" data-demo>
@@ -44,115 +38,37 @@ const sentences = (body: string): string[] => body.split(/(?<=\.)\s+/);
     </span>
     <span>{page.tier === page.layer ? <b>{page.layer}</b> : <>{page.layer} · <b>{page.tier}</b></>}</span>
   </div>
-  <div class="chips v v-with" role="tablist" aria-label={`${page.name}, step by step`}>
-    {
-      page.how.map((s, i) => (
-        <button
-          type="button"
-          role="tab"
-          id={`${id}-tab-${i}`}
-          aria-controls={`${id}-panel-${i}`}
-          aria-selected={i === START ? 'true' : 'false'}
-          tabindex={i === START ? 0 : -1}
-          class:list={['chip', { now: i === START }]}
-        >
-          {s.name}
-        </button>
-      ))
-    }
+
+  <div class="v v-with demo-play">
+    <Mockup screen={page.screen} ground="warm" />
   </div>
-  {
-    page.how.map((s, i) => (
-      <div
-        class="tpanel v v-with"
-        id={`${id}-panel-${i}`}
-        role="tabpanel"
-        aria-labelledby={`${id}-tab-${i}`}
-        data-needs={needsYou(s.name) ? 'a person' : 'nothing'}
-        hidden={i !== START}
-      >
-        {sentences(s.body).map((t) => (
-          <div class:list={['line', { amb: needsYou(s.name) }]}>
-            <i />
-            <span>{t}</span>
-          </div>
-        ))}
-      </div>
-    ))
-  }
-  {/* The same job, handled the traditional way. Amber throughout: all of
-      it is a person's. */}
-  <div class="tpanel v v-without">
+
+  <div class="v v-without demo-plain">
     <div class="line amb"><i /><span>{without}</span></div>
   </div>
+
   <div class="ft">
-    <span class="demo-k"><i aria-hidden="true" /> <span data-demo-k>Click a step</span></span>
-    <span data-needs-out>Needs you &middot; {needsYou(page.how[START].name) ? 'a person' : 'nothing'}</span>
+    <span class="demo-k"><i aria-hidden="true" /> <span data-demo-k>Live demo &middot; try it</span></span>
+    <span data-demo-side>Everything here is invented</span>
   </div>
 </div>
 
 <script>
-  /**
-   * Chips as tabs over the step panels, the same pattern as the /autopilot
-   * card: chips left of the selected one read as done, arrows move between
-   * them, and the footer says whether the step needs a person.
-   */
-  document.querySelectorAll<HTMLElement>('[data-demo]').forEach((card) => {
-    const tablist = card.querySelector<HTMLElement>('[role="tablist"]');
-    const out = card.querySelector<HTMLElement>('[data-needs-out]');
-    if (!tablist) return;
-    const tabs = Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
-
-    const select = (index: number, focus: boolean): void => {
-      tabs.forEach((tab, i) => {
-        const on = i === index;
-        tab.setAttribute('aria-selected', String(on));
-        tab.tabIndex = on ? 0 : -1;
-        tab.classList.toggle('now', on);
-        tab.classList.toggle('done', i < index);
-        const panel = card.querySelector<HTMLElement>(`#${CSS.escape(tab.getAttribute('aria-controls') ?? '')}`);
-        if (panel) {
-          panel.hidden = !on;
-          if (on && out) out.textContent = `Needs you · ${panel.dataset.needs ?? 'nothing'}`;
-        }
-      });
-      if (focus) tabs[index].focus();
-    };
-
-    tabs.forEach((tab, i) => tab.addEventListener('click', () => select(i, false)));
-
-    /* The With / Without switch. The steps and the paragraph are both in
-       the markup; the class picks one, and the footer says which. */
-    card.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const off = btn.dataset.mode === 'without';
-        card.classList.toggle('without', off);
-        card.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => {
-          const on = b === btn;
-          b.classList.toggle('now', on);
-          b.setAttribute('aria-pressed', String(on));
-        });
-        const key = card.querySelector<HTMLElement>('[data-demo-k]');
-        if (key) key.textContent = off ? 'The same job, by hand' : 'Click a step';
-        if (out) {
-          const panel = card.querySelector<HTMLElement>('.tpanel.v-with:not([hidden])');
-          out.textContent = off ? 'Needs you · all of it' : `Needs you · ${panel?.dataset.needs ?? 'nothing'}`;
-        }
-      });
+  /* The With / Without switch. Delegated, so it works wherever the card
+     is rendered, the bundled preview included. */
+  document.addEventListener('click', (event) => {
+    const btn = (event.target as Element | null)?.closest?.<HTMLButtonElement>('[data-demo] [data-mode]');
+    if (!btn) return;
+    const card = btn.closest<HTMLElement>('[data-demo]');
+    if (!card) return;
+    const off = btn.dataset.mode === 'without';
+    card.classList.toggle('without', off);
+    card.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => {
+      const on = b === btn;
+      b.classList.toggle('now', on);
+      b.setAttribute('aria-pressed', String(on));
     });
-
-    tablist.addEventListener('keydown', (event: KeyboardEvent) => {
-      const current = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
-      let next: number;
-      switch (event.key) {
-        case 'ArrowRight': next = (current + 1) % tabs.length; break;
-        case 'ArrowLeft':  next = (current - 1 + tabs.length) % tabs.length; break;
-        case 'Home':       next = 0; break;
-        case 'End':        next = tabs.length - 1; break;
-        default: return;
-      }
-      event.preventDefault();
-      select(next, true);
-    });
+    const key = card.querySelector<HTMLElement>('[data-demo-k]');
+    if (key) key.textContent = off ? 'The same job, by hand' : 'Live demo · try it';
   });
 </script>
