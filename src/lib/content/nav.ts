@@ -41,7 +41,7 @@ export interface MegaFeature {
 }
 
 export interface NavItem {
-  id: 'tools' | 'automations' | 'solutions' | 'pricing' | 'resources';
+  id: 'tools' | 'automations' | 'integrations' | 'solutions' | 'pricing' | 'resources';
   label: string;
   href: string;
   groups?: MegaGroup[];
@@ -75,7 +75,6 @@ export const NAV: NavItem[] = [
           { label: 'Itinerary generator', desc: 'Builds itineraries automatically from what is in the vault.', href: '/tools/itinerary-generator' },
           { label: 'Payments & Invoicing', desc: 'Collect deposits and balances, and generate invoices tied to the booking.', href: '/tools/payments-invoicing' },
           { label: 'Support relay', desc: 'Multiple ground-team contacts, live support on the ground.', href: '/tools/support-relay' },
-          { label: 'WhatsApp integration', desc: 'Real WhatsApp Business API, connected straight into your relay.', href: '/tools/whatsapp-integration' },
         ],
       },
     ],
@@ -113,9 +112,33 @@ export const NAV: NavItem[] = [
     },
   },
 
+  /* Integrations (Sep 2026, founder's ask): the channels a traveller or a
+     supplier already writes on, connected onto the trip thread. WhatsApp
+     moved here out of Tools. */
+  {
+    id: 'integrations',
+    label: 'Integrations',
+    href: '/integrations',
+    groups: [
+      {
+        heading: 'Channels',
+        items: [
+          { label: 'WhatsApp', desc: 'Real WhatsApp Business API, connected to the trip thread.', href: '/integrations/whatsapp' },
+          { label: 'Email', desc: 'Your enquiries address, threaded onto the trip it belongs to.', href: '/integrations/email' },
+        ],
+      },
+    ],
+    feature: {
+      card: 'whatsapp',
+      title: 'One thread, either channel',
+      desc: 'A traveller writes on WhatsApp, a supplier replies by email, and both land on the same trip — beside the quotes, not in two inboxes.',
+      href: '/tools/three-way-inbox',
+    },
+  },
+
   {
     id: 'solutions',
-    label: 'Solutions',
+    label: 'Customers',
     href: '/customers',
     groups: [
       {

@@ -49,6 +49,9 @@ export default defineConfig({
     '/os': '/portal',
     '/customers/agent-os': '/customers/agent-portal',
     '/customers/supplier-os': '/customers/supplier-portal',
+    // WhatsApp moved out of Tools when the Integrations menu was added
+    // (Sep 2026); the old tool URL follows it.
+    '/tools/whatsapp-integration': '/integrations/whatsapp',
   },
   integrations: [
     mdx(),

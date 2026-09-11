@@ -507,7 +507,45 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
     },
   ],
 
-  'whatsapp-integration': [
+  email: [
+    {
+      head: ['Your address', 'hello@meridiantravel.co'],
+      rows: [
+        { b: 'Forwarded on Showcase', s: 'One rule in your mail provider', state: 'done' },
+        { b: 'Connected from Autopilot up', s: 'The mailbox itself', state: 'done' },
+        { b: 'Still your domain', s: 'No Hyperporter address anywhere', state: 'done' },
+      ],
+      foot: ['The address your clients already write to.'],
+    },
+    {
+      head: ['Who is this?', 'Matching'],
+      rows: [
+        { b: 'lena.ortiz@\u2026', s: 'Matched · Lena Ortiz, KE-2291', state: 'done' },
+        { b: 'ops@riftvalleygs.co.ke', s: 'Matched · Rift Valley Ground Services', state: 'done' },
+        { b: 'j.whitfield@\u2026', s: 'New · becomes an inquiry', state: 'now' },
+      ],
+      foot: ['An unknown sender starts a trip rather than being dropped.'],
+    },
+    {
+      head: ['Thread', 'Nairobi \u2014 9 nights'],
+      msgs: [
+        { text: 'Could we push the Mara nights back by one day?', from: 'them' },
+        { text: 'Checking with the camp now \u2014 I will come back to you today.', from: 'me' },
+      ],
+      foot: ['Answered on the trip. Sent from your own address.'],
+    },
+    {
+      head: ['After the trip', 'KE-2291'],
+      rows: [
+        { b: 'Every message kept', s: 'Traveller, supplier, in order', state: 'done' },
+        { b: 'Beside the quotes', s: 'What was agreed, and when', state: 'done' },
+        { b: 'Nothing to forward', s: 'The record is the thread', state: 'done' },
+      ],
+      foot: ['The conversation outlives the inbox.'],
+    },
+  ],
+
+  'whatsapp': [
     {
       head: ['Connect', 'WhatsApp Business'],
       rows: [
