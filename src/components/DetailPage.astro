@@ -9,7 +9,6 @@
  * they read as one family; the copy is each page's own, in
  * lib/content/detail.ts.
  */
-import DemoCard from './DemoCard.astro';
 import PhotoHero from './PhotoHero.astro';
 import Points from './Points.astro';
 import CtaBand from './CtaBand.astro';
@@ -58,15 +57,6 @@ const cta =
 
   {/* The overview, under the hero on the same photograph: a lead beside the
       page's own screen, which works. */}
-  {/* The demo alone, centred in the band (founder's ask, Sep 2026: no
-      description beside it — the screen is the whole point, so give it the
-      width). The tier line moves under the hero buttons, where it belongs
-      with the rest of the page's own facts. */}
-  <div class="demo-band">
-    <div class="demo-glass rv">
-      <DemoCard page={page} kind={kind} />
-    </div>
-  </div>
 </PhotoHero>
 
 <Points title={`${page.name} overview`} points={page.what} />
