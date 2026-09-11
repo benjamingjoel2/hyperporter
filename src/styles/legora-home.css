@@ -190,7 +190,11 @@ section.lg-sec{padding-block:var(--sec-gap)}
    name, one line and an outlined link at the top, and a screen of the
    product rising from the bottom edge, cut off by the card. One card per
    side of the market. */
-.lg-sides{padding-block:var(--sec-gap)}
+/* Alternating grounds from the ladder down (founder's ask, Sep 2026):
+   ladder, tools rail and the closing band on the page's own off-white;
+   the two between them on the grey, so each reads as its own section
+   rather than one long white run. */
+.lg-sides{padding-block:var(--sec-gap);background:var(--steel)}
 /* The heading over the pair, centred, as the reference sets it. */
 .lg-sides-head{text-align:center;margin:0 auto clamp(36px,4vw,56px)}
 .lg-sides-head h2{font-size:clamp(34px,4.2vw,58px);letter-spacing:-.022em;margin:0 0 18px}
@@ -269,8 +273,9 @@ section.lg-cat{padding-block:var(--sec-gap);overflow:hidden}
    rather than two sections. Two full section gaps back to back left a
    screen of dead air between the arrows and the next heading, so the lead
    rail closes on a short gap and the one after it opens straight on. */
-section.lg-cat-lead{padding-bottom:clamp(34px,3.6vw,52px)}
-section.lg-cat + section.lg-cat{padding-top:0}
+/* The rails are two bands now, not one spread, so each keeps its own
+   vertical padding and the second takes the grey. */
+section.lg-cat-photo{background:var(--steel)}
 /* The last rail ends on two small arrows rather than a band of content, so
    a full section gap either side of it read as a hole before the closing
    statement. Both sides give way. */

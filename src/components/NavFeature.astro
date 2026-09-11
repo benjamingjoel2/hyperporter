@@ -45,7 +45,9 @@ const DOTS = [
       feature.card === 'reading' && (
         <>
           <span class="mc-kicker">From the blog</span>
-          <span class="mc-title">Nine stages: building a shared vocabulary for trip operations</span>
+          {/* The card shows the post it links to, so a menu whose feature
+              changes cannot leave a different headline in the artwork. */}
+          <span class="mc-title">{feature.title}</span>
           <span class="mc-line" style="width:88%"></span>
           <span class="mc-line" style="width:72%"></span>
           <span class="mc-line" style="width:80%"></span>
