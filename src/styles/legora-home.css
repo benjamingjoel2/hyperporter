@@ -369,8 +369,12 @@ section.lg-cat ~ section.lg-close{padding-top:clamp(44px,4.8vw,70px)}
 .lg-conn-shot .mk{border-radius:14px;aspect-ratio:3/2}
 .lg-conn-shot img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:14px}
 .lg-conn-shot .mk.dark{background:radial-gradient(120% 110% at 18% 18%,#1D3040,#070A0F 68%)}
-.lg-conn-cap{margin:18px 0 0;font-size:17px;line-height:1.5;color:var(--muted);max-width:52ch}
-.lg-conn-cap b{color:var(--paper);font-weight:400}
+.lg-conn-cap{margin:18px 0 0;font-size:15px;line-height:1.55;color:var(--muted);max-width:52ch}
+/* Founder's ask (Sep 2026): only the lead — "WhatsApp integration." and the
+   other two — is larger and bold; the sentence after it stays at 15px.
+   line-height:1 on the lead so the bigger inline text does not stretch the
+   paragraph's first line away from the rest. */
+.lg-conn-cap b{color:var(--paper);font-weight:600;font-size:17px;line-height:1}
 .lg-cat-conn .lg-read{margin-top:12px}
 @media (max-width:640px){.lg-conn-card{flex-basis:78vw}}
 
