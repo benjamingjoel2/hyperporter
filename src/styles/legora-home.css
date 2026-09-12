@@ -281,8 +281,12 @@ section.lg-cat-photo{background:var(--steel)}
    section gap, not two of them stacked. The rails are true siblings in the
    DOM (verified in the build), so + is safe here — unlike .lg-cat ~ .lg-close,
    where the modal sits between. */
-section.lg-cat-icon{padding-bottom:clamp(44px,4.8vw,70px)}
-section.lg-cat-icon + section.lg-cat-photo{padding-top:clamp(44px,4.8vw,70px)}
+/* Measured: a heading sits 44px above its own cards, so 70+70 between the
+   two rails read as a void rather than a break — 212px from the last tool
+   card down to "Every automation." Half that, and the arrows belong to the
+   rail above them instead of floating in the middle of nothing. */
+section.lg-cat-icon{padding-bottom:clamp(20px,2.2vw,32px)}
+section.lg-cat-icon + section.lg-cat-photo{padding-top:clamp(20px,2.2vw,32px)}
 /* The last rail ends on two small arrows rather than a band of content, so
    a full section gap either side of it read as a hole before the closing
    statement. Both sides give way. */
