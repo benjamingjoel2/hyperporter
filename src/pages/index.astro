@@ -351,15 +351,17 @@ const SIDES = [
       ))
     }
 
-    {/* Integrations, in the reference's carousel shape: the screen large,
-        the caption under it, the arrows bottom right. It carries .lg-cat so
-        the rail's own arrow wiring picks it up. */}
+    {/* Integrations (founder's ask, Sep 2026): three cards, all visible,
+        as a grid rather than a rail — and inside the .wrap, so the cards
+        line up with the heading above them and with the rest of the page.
+        It keeps .lg-cat, which is what tightens the gap before the closing
+        band; dropping [data-rail] is what leaves the arrow wiring alone. */}
     <section class="lg-cat lg-cat-conn" id="integrations">
-      <div class="wrap lg-conn-head">
-        <h2>Integrations.<br />The channels they already use.</h2>
-      </div>
-      <div class="lg-rail" data-rail>
-        <ul class="lg-rail-track" data-rail-track>
+      <div class="wrap">
+        <div class="lg-conn-head">
+          <h2>Integrations.<br />The channels they already use.</h2>
+        </div>
+        <ul class="lg-conn-grid">
           {
             CONNECT.map((c) => (
               <li class="lg-conn-card">
@@ -376,10 +378,6 @@ const SIDES = [
             ))
           }
         </ul>
-      </div>
-      <div class="wrap lg-rail-nav">
-        <button type="button" class="lg-arrow" data-rail-prev aria-label="Previous">&#8249;</button>
-        <button type="button" class="lg-arrow" data-rail-next aria-label="Next">&#8250;</button>
       </div>
     </section>
 
