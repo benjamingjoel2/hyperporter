@@ -370,8 +370,8 @@ section.lg-cat ~ section.lg-close{padding-top:clamp(44px,4.8vw,70px)}
 .lg-cat-conn{padding-block:var(--sec-gap)}
 .lg-conn-head{margin-bottom:clamp(30px,3.6vw,48px)}
 .lg-conn-head h2{margin:0;max-width:22ch}
-.lg-cat-conn .lg-rail-track{gap:clamp(18px,2vw,28px)}
-.lg-conn-card{flex:0 0 clamp(280px,34vw,440px)}
+.lg-conn-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(18px,2vw,28px);list-style:none;margin:0;padding:0}
 .lg-conn-shot{display:block;border-radius:14px;overflow:hidden}
 .lg-conn-shot img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:14px}
 .lg-conn-cap{margin:18px 0 0;font-size:15px;line-height:1.55;color:var(--muted);max-width:52ch}
@@ -380,8 +380,9 @@ section.lg-cat ~ section.lg-close{padding-top:clamp(44px,4.8vw,70px)}
    line-height:1 on the lead so the bigger inline text does not stretch the
    paragraph's first line away from the rest. */
 .lg-conn-cap b{color:var(--paper);font-weight:600;font-size:17px;line-height:1}
-.lg-cat-conn .lg-read{margin-top:12px}
-@media (max-width:640px){.lg-conn-card{flex-basis:78vw}}
+.lg-conn-card{display:flex;flex-direction:column}
+.lg-cat-conn .lg-read{margin-top:auto;padding-top:12px}
+@media (max-width:900px){.lg-conn-grid{grid-template-columns:1fr;gap:34px}}
 
 /* Alternating grounds put the carousel on the page's own ground between
    the automations rail and the closing band, so the band takes the grey. */
