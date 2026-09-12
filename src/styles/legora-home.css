@@ -174,7 +174,7 @@
 /* One rhythm for the whole page. `section.` beats `.wrap`, whose padding
    shorthand otherwise zeroes the block padding on these. */
 :root{--sec-gap:clamp(88px,10vw,160px)}
-section.lg-sec{padding-block:var(--sec-gap)}
+section.lg-sec{padding-block:var(--sec-gap);background:var(--steel)}
 .lg-sec-lead{max-width:62ch;margin-bottom:clamp(40px,5vw,66px)}
 .lg-sec-lead h2{margin-bottom:18px}
 /* The accordion (.lg-acc) lives in global.css: the tool, automation and
@@ -194,7 +194,7 @@ section.lg-sec{padding-block:var(--sec-gap)}
    ladder, tools rail and the closing band on the page's own off-white;
    the two between them on the grey, so each reads as its own section
    rather than one long white run. */
-.lg-sides{padding-block:var(--sec-gap);background:var(--steel)}
+.lg-sides{padding-block:var(--sec-gap);background:var(--void)}
 /* The heading over the pair, centred, as the reference sets it. */
 .lg-sides-head{text-align:center;margin:0 auto clamp(36px,4vw,56px)}
 .lg-sides-head h2{font-size:clamp(34px,4.2vw,58px);letter-spacing:-.022em;margin:0 0 18px}
@@ -275,7 +275,14 @@ section.lg-cat{padding-block:var(--sec-gap);overflow:hidden}
    rail closes on a short gap and the one after it opens straight on. */
 /* The rails are two bands now, not one spread, so each keeps its own
    vertical padding and the second takes the grey. */
+section.lg-cat-icon,
 section.lg-cat-photo{background:var(--steel)}
+/* One ground means one block, so the seam between the two rails is half a
+   section gap, not two of them stacked. The rails are true siblings in the
+   DOM (verified in the build), so + is safe here — unlike .lg-cat ~ .lg-close,
+   where the modal sits between. */
+section.lg-cat-icon{padding-bottom:clamp(44px,4.8vw,70px)}
+section.lg-cat-icon + section.lg-cat-photo{padding-top:clamp(44px,4.8vw,70px)}
 /* The last rail ends on two small arrows rather than a band of content, so
    a full section gap either side of it read as a hole before the closing
    statement. Both sides give way. */
@@ -366,9 +373,7 @@ section.lg-cat ~ section.lg-close{padding-top:clamp(44px,4.8vw,70px)}
 .lg-cat-conn .lg-rail-track{gap:clamp(18px,2vw,28px)}
 .lg-conn-card{flex:0 0 clamp(280px,34vw,440px)}
 .lg-conn-shot{display:block;border-radius:14px;overflow:hidden}
-.lg-conn-shot .mk{border-radius:14px;aspect-ratio:3/2}
 .lg-conn-shot img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:14px}
-.lg-conn-shot .mk.dark{background:radial-gradient(120% 110% at 18% 18%,#1D3040,#070A0F 68%)}
 .lg-conn-cap{margin:18px 0 0;font-size:15px;line-height:1.55;color:var(--muted);max-width:52ch}
 /* Founder's ask (Sep 2026): only the lead — "WhatsApp integration." and the
    other two — is larger and bold; the sentence after it stays at 15px.
