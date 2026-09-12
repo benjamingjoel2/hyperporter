@@ -87,8 +87,8 @@ const CONNECT = [
     href: '/integrations/email',
   },
   {
-    screen: 'horizon',
-    dark: true,
+    photo: '/photos/connect-horizon.jpg',
+    alt: 'The earth at night from orbit, city lights strung across the dark.',
     lead: 'Horizon.',
     rest: 'A vetted list of DMCs and tour operators to source from \u2014 see who covers a destination, and what they reply like, before you quote.',
     cta: 'Learn more about Horizon',
@@ -217,53 +217,55 @@ const SIDES = [
       </div>
     </section>
 
-    <section class="lg-sec wrap">
-      <div class="lg-sec-lead">
-        <h2>Business in the palm of your hand.</h2>
-        <p class="dek">Four toolkits. One platform. End-to-end.</p>
-      </div>
-      {/* The reference's layout for this: a hairline list of the layers on
-          the left, one open with its description and link, and the matching
-          product snippet large on the right. All four snippets are rendered
-          and stacked in one cell, so a switch is a cross-fade rather than a
-          swap, and with JS off the page still shows the first layer. */}
-      <div class="lg-acc">
-        <div class="lg-acc-list">
-          {
-            LAYERS.map((p, i) => (
-              <div class:list={['lg-acc-item', { on: i === 0 }]}>
-                <button
-                  type="button"
-                  class="lg-acc-btn"
-                  id={`layer-tab-${i}`}
-                  aria-expanded={i === 0 ? 'true' : 'false'}
-                  aria-controls={`layer-body-${i}`}
-                >
-                  {p.label}
-                </button>
-                <div class="lg-acc-body" id={`layer-body-${i}`} inert={i !== 0}>
-                  <div>
-                    <span class="lg-avail">{p.availability}</span>
-                    <p>{p.summary}</p>
-                    {p.href && (
-                      <a class="lg-read" href={p.href} aria-label={`Learn more about ${p.label}`}>
-                        <span aria-hidden="true">&#8627;</span> <span>Learn more</span>
-                      </a>
-                    )}
+    <section class="lg-sec">
+      <div class="wrap">
+        <div class="lg-sec-lead">
+          <h2>Business in the palm of your hand.</h2>
+          <p class="dek">Four toolkits. One platform. End-to-end.</p>
+        </div>
+        {/* The reference's layout for this: a hairline list of the layers on
+            the left, one open with its description and link, and the matching
+            product snippet large on the right. All four snippets are rendered
+            and stacked in one cell, so a switch is a cross-fade rather than a
+            swap, and with JS off the page still shows the first layer. */}
+        <div class="lg-acc">
+          <div class="lg-acc-list">
+            {
+              LAYERS.map((p, i) => (
+                <div class:list={['lg-acc-item', { on: i === 0 }]}>
+                  <button
+                    type="button"
+                    class="lg-acc-btn"
+                    id={`layer-tab-${i}`}
+                    aria-expanded={i === 0 ? 'true' : 'false'}
+                    aria-controls={`layer-body-${i}`}
+                  >
+                    {p.label}
+                  </button>
+                  <div class="lg-acc-body" id={`layer-body-${i}`} inert={i !== 0}>
+                    <div>
+                      <span class="lg-avail">{p.availability}</span>
+                      <p>{p.summary}</p>
+                      {p.href && (
+                        <a class="lg-read" href={p.href} aria-label={`Learn more about ${p.label}`}>
+                          <span aria-hidden="true">&#8627;</span> <span>Learn more</span>
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
-          }
-        </div>
-        <div class="lg-acc-shot lg-acc-ipad">
-          {
-            LAYERS.map((p, i) => (
-              <div id={`layer-shot-${i}`} class:list={{ on: i === 0 }} inert={i !== 0}>
-                <Mockup screen={CARD_SCREEN[p.slug]} ground="warm" app={p.label} />
-              </div>
-            ))
-          }
+              ))
+            }
+          </div>
+          <div class="lg-acc-shot lg-acc-ipad">
+            {
+              LAYERS.map((p, i) => (
+                <div id={`layer-shot-${i}`} class:list={{ on: i === 0 }} inert={i !== 0}>
+                  <Mockup screen={CARD_SCREEN[p.slug]} ground="warm" app={p.label} />
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -362,9 +364,7 @@ const SIDES = [
             CONNECT.map((c) => (
               <li class="lg-conn-card">
                 <span class="lg-conn-shot">
-                  {c.photo
-                    ? <img src={c.photo} alt={c.alt} width="1200" height="800" loading="lazy" decoding="async" />
-                    : <Mockup screen={c.screen!} dark={c.dark} />}
+                  <img src={c.photo} alt={c.alt} width="1200" height="800" loading="lazy" decoding="async" />
                 </span>
                 <p class="lg-conn-cap">
                   <b>{c.lead}</b> {c.rest}
@@ -393,9 +393,11 @@ const SIDES = [
       <a class="lg-read" data-modal-link href="/tools"><span aria-hidden="true">&#8627;</span> <span>Learn more</span></a>
     </dialog>
 
-    <section class="lg-close wrap">
-      <h2>Run your next trip on<br />infrastructure, not inboxes.</h2>
-      <a class="btn btn-lg" href="https://portal.hyperporter.com">Get started free <i aria-hidden="true">&rarr;</i></a>
+    <section class="lg-close">
+      <div class="wrap">
+        <h2>Run your next trip on<br />infrastructure, not inboxes.</h2>
+        <a class="btn btn-lg" href="https://portal.hyperporter.com">Get started free <i aria-hidden="true">&rarr;</i></a>
+      </div>
     </section>
   </div>
 
