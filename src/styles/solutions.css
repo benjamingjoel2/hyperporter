@@ -1,0 +1,23 @@
+/* The solutions hero (pages/customers/[slug].astro): light, headline left,
+   lede and button right, one wide photograph under both — the reference's
+   solutions shape.
+ *
+ * This lives in its own file on purpose. These rules sat in global.css next
+ * to the demo band and were deleted twice as collateral when that band was
+ * removed (69a2b19, then again in e872b10), each time leaving all ten
+ * /customers pages with a raw 1600px photograph overflowing the viewport —
+ * invisible on desktop, 1241px off-screen on a phone, and silent because
+ * body{overflow-x:clip} swallows the scrollbar. Keep them here.
+ */
+.sol-hero{padding-top:clamp(40px,5vw,72px)}
+.sol-hero-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(30px,5vw,80px);align-items:center}
+.sol-hero-grid h1{margin:0}
+.sol-hero-grid .lede{margin:0 0 26px}
+/* max-width is the belt to width:100%'s braces: the photographs are 1600px
+   wide and neither the page nor the UA constrains them on its own. */
+.sol-hero-photo{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:16/7;object-fit:cover;
+  border-radius:14px;margin-top:clamp(36px,4.5vw,64px);filter:brightness(.9) saturate(.9)}
+@media (max-width:900px){
+  .sol-hero-grid{grid-template-columns:1fr;gap:20px}
+  .sol-hero-photo{aspect-ratio:4/3}
+}

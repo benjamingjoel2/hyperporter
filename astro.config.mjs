@@ -35,7 +35,7 @@ const site = process.env.SITE_URL ?? 'https://hyperporter.com';
 // sitemap either: About until the "Name pending" bios are real, Terms and
 // Privacy until counsel has reviewed the drafts.
 // /preview/* is a throwaway design study, not a real page.
-const noindexPaths = new Set(['/about/', '/terms/', '/privacy/', '/404/', '/preview/oh/', '/preview/brandigo/']);
+const noindexPaths = new Set(['/about/', '/terms/', '/privacy/', '/404/', '/preview/oh/']);
 
 export default defineConfig({
   site,
@@ -49,6 +49,9 @@ export default defineConfig({
     '/os': '/portal',
     '/customers/agent-os': '/customers/agent-portal',
     '/customers/supplier-os': '/customers/supplier-portal',
+    // WhatsApp moved out of Tools when the Integrations menu was added
+    // (Sep 2026); the old tool URL follows it.
+    '/tools/whatsapp-integration': '/integrations/whatsapp',
   },
   integrations: [
     mdx(),

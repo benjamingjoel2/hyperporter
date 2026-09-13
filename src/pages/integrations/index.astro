@@ -1,0 +1,43 @@
+---
+/** Integrations index — the channels your travellers and suppliers already
+    use, connected onto the trip thread. */
+import Base from '../../layouts/Base.astro';
+import Mockup from '../../components/Mockup.astro';
+import PhotoHero from '../../components/PhotoHero.astro';
+import { INTEGRATIONS } from '../../lib/content/detail';
+---
+
+<Base
+  title="Integrations"
+  description="WhatsApp Business and email connected onto the same trip thread, so a message about a trip lands on that trip rather than in a mailbox somebody has to remember to check."
+  currentNav="integrations"
+>
+  <PhotoHero photo="whatsapp-integration">
+    <div class="sec wrap page-hero">
+      <div class="page-hero-copy">
+        <p class="eyebrow rv">Integrations</p>
+        <h1 class="rv">The channels they already use.</h1>
+        <p class="lede rv">
+          WhatsApp Business and email, connected onto the same trip thread. Your travellers and your
+          suppliers keep writing where they always did; you stop keeping the record in your head.
+        </p>
+      </div>
+      <Mockup screen="whatsapp" />
+    </div>
+  </PhotoHero>
+
+  <div class="sec-tight wrap">
+    <div class="rel-grid rv">
+      {
+        INTEGRATIONS.map((i) => (
+          <a class="rel" href={`/integrations/${i.slug}`}>
+            <span class="rel-k">{i.tier === i.layer ? i.layer : `${i.layer} · ${i.tier}`}</span>
+            <b>{i.name}</b>
+            <p>{i.title}</p>
+            <span class="plink">Open &rarr;</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Base>

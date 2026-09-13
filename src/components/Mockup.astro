@@ -11,9 +11,8 @@
  * The agency, the suppliers, the trips and the prices are invented. There is
  * no caption saying so — the founder asked for none — so keep them plausible
  * and keep them consistent with the copy around them.
- * The frame is `role="img"` with the snippet's description as its label; the
- * interface inside is hidden from assistive tech, because reading a fake
- * table aloud helps nobody.
+ * The screens work (lib/live.ts): buttons, rows, cards and chat boxes
+ * respond, so the frame is a labelled group and its controls are reachable.
  *
  * An unknown screen name throws rather than rendering an empty frame.
  */
@@ -24,10 +23,20 @@ interface Props {
   screen: string;
   /** 4:5 portrait for the homepage cards; the default is 4:3. */
   tall?: boolean;
+  /** Dark glass panel with light type, for the tool, automation and
+      solutions pages (founder's ask, Sep 2026). */
+  dark?: boolean;
+  /** Override the screen's own ground. The ladder and the step screens
+      all sit on the plain grey one (founder's ask, Sep 2026). */
+  ground?: string;
+  /** Override the app chip. Where a screen is shown under a name of its
+      own — the ladder's layers, a tool's page — the chip says that name
+      rather than the layer the screen was drawn for. */
+  app?: string;
   class?: string;
 }
 
-const { screen, tall = false, class: klass = '' } = Astro.props;
+const { screen, tall = false, dark = false, ground, app, class: klass = '' } = Astro.props;
 const Screen = SCREENS[screen];
 if (!Screen) {
   throw new Error(`Mockup: no screen named "${screen}". Add one to components/mockups/index.ts.`);
@@ -36,13 +45,17 @@ const meta = SCREEN_META[screen];
 ---
 
 <div class:list={['mockup', klass]}>
-  <div class:list={['mk', { tall }]} data-ground={meta.ground} role="img" aria-label={SCREEN_ALT[screen]}>
-    <div class="mk-stage" aria-hidden="true">
+  <div class:list={['mk', { tall, dark }]} data-ground={ground ?? meta.ground} role="group" aria-label={SCREEN_ALT[screen]}>
+    <div class="mk-stage">
       <Screen />
     </div>
     <span class="mk-app" aria-hidden="true">
       <svg viewBox="0 0 100 100"><circle class="ring" cx="50" cy="50" r="44" /><rect x="32.5" y="26" width="7.5" height="47" /><rect x="60" y="26" width="7.5" height="47" /><rect x="32.5" y="46.5" width="35" height="7.5" /></svg>
-      {meta.app}
+      {app ?? meta.app}
     </span>
   </div>
 </div>
+
+<script>
+  import '../lib/live';
+</script>

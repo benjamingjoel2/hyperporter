@@ -51,6 +51,11 @@
 .mk-back.rows{padding:1.6em 1.8em}
 .mk-back .row{display:flex;justify-content:space-between;gap:1em;padding:.7em 0;border-bottom:1px solid rgba(13,16,22,.08);color:rgba(13,16,22,.65)}
 .mk[data-ground="teal"] .mk-back{background:rgba(255,255,255,.28)}
+/* A photograph as the whole ground of the frame, with the panel floating
+   on it — the sheet's slot, but filling the frame edge to edge. */
+.mk-back-photo{inset:0;left:0;top:0;width:auto;height:auto;padding:0;border-radius:0;
+  background:var(--back-photo) var(--back-pos,center)/cover no-repeat;box-shadow:none;
+  -webkit-mask-image:none;mask-image:none}
 
 /* App chip, bottom-left: which layer this is. */
 .mk-app{position:absolute;left:5%;bottom:6%;z-index:2;display:inline-flex;align-items:center;gap:.5em;
@@ -181,3 +186,98 @@
 .mk.bare .mk-panel{position:relative;left:auto;right:auto;top:auto;bottom:auto;transform:none;width:100%;max-width:none;
   background:rgba(255,255,255,.96);box-shadow:0 0 0 1px rgba(255,255,255,.5) inset,0 1em 2.4em rgba(0,0,0,.35)}
 .mk.bare .mk-back,.mk.bare .mk-app{display:none}
+
+/* Dark: the panel as dark glass with light type — the tool, automation and
+   solutions pages (founder's ask, Sep 2026), and the bare screen in the
+   hero card, which sits in a dark card already. Tokens flip; the few
+   hard-coded tints below flip with them. Teal and amber are lifted the way
+   the site lifts them on dark grounds. */
+.mk.dark{--paper:#F2F3F1;--muted:rgba(255,255,255,.74);--dim:rgba(255,255,255,.52);
+  --line:rgba(255,255,255,.12);--line-2:rgba(255,255,255,.26);--ink:rgba(255,255,255,.07);--raise:rgba(255,255,255,.1);
+  --steel:rgba(255,255,255,.12);--signal:#4FB3BD;--signal-hi:#63C2CB;--signal-dim:rgba(79,179,189,.2);--amber:#E2A94E}
+.mk.dark .mk-panel{background:rgba(13,16,22,.8);box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 1.4em 3.2em rgba(0,0,0,.35)}
+.mk.dark[data-ground="teal"] .mk-panel{background:rgba(13,16,22,.84)}
+.mk.dark .mk-back{background:rgba(13,16,22,.45);color:var(--paper)}
+.mk.dark .mk-back i{background:rgba(255,255,255,.16)}
+.mk.dark .mk-back p,.mk.dark .mk-back .row{color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.1)}
+.mk.dark .mk-btn{color:#0D1016}
+.mk.dark .mk-btn.sig,.mk.dark .mk-btn.amb{color:#0D1016}
+.mk.dark .mk-btn.o{color:var(--paper)}
+.mk.dark .mk-tag.amb{background:rgba(226,169,78,.16)}
+.mk.dark .mk-tag.red{background:rgba(224,123,117,.14);color:#E07B75}
+.mk.dark .mk-ico.pdf{color:#E07B75}
+.mk.dark .mk-cite i{background:#E07B75}
+.mk.dark .mk-field div{background:rgba(255,255,255,.06)}
+.mk.dark .mk-search{background:rgba(255,255,255,.07)}
+.mk.dark .mk-stage .mk-msg p{background:rgba(255,255,255,.08)}
+.mk.dark .mk-stage .mk-msg.me p{background:#12606A;color:#fff}
+.mk.dark .mk-via{background:rgba(255,255,255,.08)}
+.mk.dark .mk-cite{background:rgba(255,255,255,.06)}
+.mk.dark .mk-kpi{background:rgba(255,255,255,.06)}
+.mk.dark .mk-meter{background:rgba(255,255,255,.12)}
+.mk.dark .mk-rail i{background:rgba(255,255,255,.14)}
+.mk.dark .mk-card{background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.mk.dark .mk-row.done b{text-decoration-color:rgba(255,255,255,.4)}
+.mk.dark .mk-app{background:rgba(13,16,22,.85);color:var(--paper)}
+.mk.dark .mk-app svg .ring{stroke:var(--paper)}
+.mk.dark .mk-app svg rect{fill:var(--paper)}
+
+/* ---- live -------------------------------------------------------------
+   The screens respond (lib/live.ts). Controls are real buttons and inputs;
+   these give them the panel's look, a pressed state, and the small motions
+   that make a change read as a change. */
+.mk button.mk-btn{font:inherit;border:0;cursor:pointer;transition:transform .15s ease,background .2s ease,color .2s ease,box-shadow .2s ease}
+.mk button.mk-btn:active{transform:scale(.97)}
+.mk button.mk-btn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.mk .mk-btn.done,.mk.dark .mk-btn.done,.mk.dark .mk-btn.sig.done,.mk.dark .mk-btn.amb.done{background:none;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line-2);cursor:default}
+.mk .mk-btn.done::before{content:"✓ ";color:var(--signal)}
+.mk .mk-btn.o.done::before{content:"✓ "}
+.mk [data-live="tick"],.mk [data-live="move"],.mk [data-live="ask"] .ph,.mk .mk-tog[data-live]{cursor:pointer}
+.mk [data-live="tick"]:hover b,.mk [data-live="move"]:hover b{color:var(--signal)}
+.mk [data-live="tick"]:focus-visible,.mk [data-live="move"]:focus-visible,.mk [data-live="ask"]:focus-visible{outline:2px solid var(--signal);outline-offset:2px;border-radius:.4em}
+.mk .mk-row.is-done > div > b{color:var(--muted)}
+.mk .mk-card[data-live="move"]{cursor:pointer;transition:transform .15s ease}
+.mk .mk-card[data-live="move"]:hover{transform:translateY(-1px);box-shadow:inset 0 0 0 1px var(--signal)}
+.mk .mk-card[data-live="move"]::after{content:"→";float:right;color:var(--dim);font-size:.8em;margin-top:.1em}
+.mk-col:last-child .mk-card[data-live="move"]::after{content:"✓";color:var(--signal)}
+.mk .mk-tog[data-live]{cursor:pointer;border:0;padding:0}
+.mk .mk-tog[data-live]:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+/* An editable field. */
+.mk .mk-field div[contenteditable]{cursor:text;transition:box-shadow .2s ease}
+.mk .mk-field div[contenteditable]:focus{outline:0;box-shadow:inset 0 0 0 1.5px var(--signal)}
+/* A chat composer: input plus send. */
+.mk-composer{display:flex;gap:.5em;align-items:center;padding-top:.6em;border-top:1px solid var(--line)}
+.mk-composer input{flex:1;min-width:0;font:inherit;font-size:.95em;color:var(--paper);background:rgba(13,16,22,.05);border:0;border-radius:2em;padding:.6em .95em;box-shadow:inset 0 0 0 1px var(--line-2)}
+.mk-composer input::placeholder{color:var(--dim)}
+.mk-composer input:focus{outline:0;box-shadow:inset 0 0 0 1.5px var(--signal)}
+.mk.dark .mk-composer input{background:rgba(255,255,255,.06)}
+.mk .mk-stage .mk-typing p{display:inline-flex;gap:.3em;padding:.7em .9em}
+.mk-typing i{width:.4em;height:.4em;border-radius:50%;background:var(--dim);animation:mk-blink 1s infinite}
+.mk-typing i:nth-child(2){animation-delay:.2s}.mk-typing i:nth-child(3){animation-delay:.4s}
+@keyframes mk-blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+/* The margin control. */
+.mk-stepper{display:inline-flex;align-items:center;gap:.4em}
+.mk-stepper button{width:1.7em;height:1.7em;border-radius:50%;border:0;background:var(--ink);color:var(--paper);font:inherit;cursor:pointer;display:grid;place-items:center;line-height:1}
+.mk-stepper button:hover{background:var(--signal);color:#fff}
+.mk-stepper b{font-weight:400;min-width:2.6em;text-align:center;font-variant-numeric:tabular-nums}
+/* Small motions. */
+.mk-in{animation:mk-rise .4s cubic-bezier(.2,.7,.2,1) both}
+@keyframes mk-rise{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.mk-shake{animation:mk-shake .35s ease}
+@keyframes mk-shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+/* The hint in the corner of a live card. */
+.mk-live{display:inline-flex;align-items:center;gap:.5em;font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.mk-live i{width:.6em;height:.6em;border-radius:50%;background:var(--signal);box-shadow:0 0 0 .25em var(--signal-dim)}
+@media (prefers-reduced-motion:reduce){.mk-in,.mk-shake,.mk-typing i{animation:none}}
+
+/* The traditional side: plain text, generous size, a measure that reads. */
+.mk-without{max-width:34em;display:flex;flex-direction:column;gap:.9em;padding:.5em 0}
+.mk-without .mk-lbl{color:var(--amber)}
+.mk .mk-stage .mk-without p{font-size:1.45em;line-height:1.45;color:var(--paper);letter-spacing:-.01em}
+
+/* Two sides of one record, each on its own card. */
+.mk-side{padding:.9em 1.1em .3em;border-radius:.7em;background:rgba(13,16,22,.04);box-shadow:inset 0 0 0 1px rgba(13,16,22,.07);display:flex;flex-direction:column}
+.mk-side > .mk-lbl{margin-bottom:.4em}
+.mk-side .mk-row:last-of-type{border-bottom:0}
+.mk.dark .mk-side{background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.09)}
+.mk-end{display:inline-flex;align-items:center;gap:.6em}
