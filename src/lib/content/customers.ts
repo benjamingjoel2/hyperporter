@@ -178,7 +178,7 @@ export const SEGMENTS: Segment[] = [
     ],
     pricingTitle: 'Pricing for travel agencies',
     tiers: [
-      { name: 'Showcase', kicker: 'Get every agent set up', amount: '$0', note: '20 trips/mo', line: 'Good for testing with 1–2 agents' },
+      { name: 'Showcase', kicker: 'Get every agent set up', amount: '€0', note: '20 trips/mo', line: 'Good for testing with 1–2 agents' },
       { name: 'Autopilot', kicker: 'Where most agencies land', amount: '€49 /mo', note: 'Unlimited bookings', line: 'Automation scales with team size' },
       { name: 'Intelligence', kicker: 'For established agencies', amount: 'Custom', note: 'Tailored per business', line: 'Atlas trained on years of agency contracts' },
     ],
@@ -217,7 +217,7 @@ export const SEGMENTS: Segment[] = [
     ],
     pricingTitle: 'Pricing for travel agents',
     tiers: [
-      { name: 'Showcase', kicker: 'Most agents start here', amount: '$0', note: '20 trips/mo', line: 'Enough for a growing solo book' },
+      { name: 'Showcase', kicker: 'Most agents start here', amount: '€0', note: '20 trips/mo', line: 'Enough for a growing solo book' },
       { name: 'Autopilot', kicker: 'When your book grows', amount: '€49 /mo', note: 'Unlimited bookings', line: 'Stop manually chasing every confirmation' },
       { name: 'Intelligence', kicker: 'For high-volume agents', amount: 'Custom', note: 'Tailored per business', line: 'AI-assisted quoting from your own rates' },
     ],
@@ -268,7 +268,7 @@ export const SEGMENTS: Segment[] = [
     ],
     pricingTitle: 'Pricing for independent advisors',
     tiers: [
-      { name: 'Showcase', kicker: 'Test the brand, free', amount: '$0', note: '20 trips/mo', line: 'Full branding toggle included' },
+      { name: 'Showcase', kicker: 'Test the brand, free', amount: '€0', note: '20 trips/mo', line: 'Full branding toggle included' },
       { name: 'Autopilot', kicker: 'Drop the badge, go solo-scale', amount: '€49 /mo', note: 'Unlimited bookings', line: 'Remove “Powered by Hyperporter”' },
       { name: 'Intelligence', kicker: 'Full white-label', amount: 'Custom', note: 'Tailored per business', line: 'Custom domain, fully your own' },
     ],
@@ -303,7 +303,7 @@ export const SEGMENTS: Segment[] = [
     ],
     pricingTitle: 'Pricing for creators',
     tiers: [
-      { name: 'Showcase', kicker: 'Where almost every creator stays', amount: '$0', note: '20 trips/mo, forever', line: 'No card, no upgrade pressure' },
+      { name: 'Showcase', kicker: 'Where almost every creator stays', amount: '€0', note: '20 trips/mo, forever', line: 'No card, no upgrade pressure' },
       { name: 'Autopilot', kicker: 'If volume ever outgrows Showcase', amount: '€49 /mo', note: 'Unlimited bookings', line: 'Automation for real volume' },
       { name: 'Intelligence', kicker: 'Rarely needed at creator scale', amount: 'Custom', note: 'Tailored per business', line: 'Full white-label, if you go full agency' },
     ],
@@ -346,7 +346,7 @@ export const SEGMENTS: Segment[] = [
     ],
     pricingTitle: 'Pricing for DMCs',
     tiers: [
-      { name: 'Showcase', kicker: 'Free, forever, no upgrade pressure', amount: '$0', note: 'Reply to requests as usual', line: 'CRM, quoting, listed on Horizon' },
+      { name: 'Showcase', kicker: 'Free, forever, no upgrade pressure', amount: '€0', note: 'Reply to requests as usual', line: 'CRM, quoting, listed on Horizon' },
       { name: 'Intelligence', kicker: 'When you want AI-assisted quoting', amount: 'Custom', note: 'Tailored to your operation', line: 'Atlas trained on your own rates' },
     ],
   },
@@ -388,7 +388,7 @@ export const SEGMENTS: Segment[] = [
     ],
     pricingTitle: 'Pricing for tour operators',
     tiers: [
-      { name: 'Showcase', kicker: 'Free, forever, no upgrade pressure', amount: '$0', note: 'Build and quote packages as usual', line: 'CRM, itinerary generator, listed on Horizon' },
+      { name: 'Showcase', kicker: 'Free, forever, no upgrade pressure', amount: '€0', note: 'Build and quote packages as usual', line: 'CRM, itinerary generator, listed on Horizon' },
       { name: 'Intelligence', kicker: 'When you want AI-assisted quoting', amount: 'Custom', note: 'Tailored to your operation', line: 'Atlas trained on your own package rates' },
     ],
   },

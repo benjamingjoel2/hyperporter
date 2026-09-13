@@ -33,7 +33,9 @@ export const NAV_ICONS: Record<string, string> = {
   'Itinerary generator': C(5, 6, 2) + C(19, 18, 2) + P('M7 6h6a4 4 0 010 8h-4a4 4 0 000 8h8') ,
   'Payments & Invoicing': R(3, 6, 18, 12) + P('M3 10h18') + P('M7 15h3'),
   'Support relay': P('M4 14v-2a8 8 0 0116 0v2') + R(3, 13, 4, 6, 1) + R(17, 13, 4, 6, 1) + P('M19 19a3 3 0 01-3 2h-3'),
-  'WhatsApp integration': P('M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3z') + P('M9 10h6') + P('M9 13.5h4'),
+  // Integrations
+  'WhatsApp': P('M12 3a9 9 0 00-7.8 13.5L3 21l4.6-1.2A9 9 0 1012 3z') + P('M9 10h6') + P('M9 13.5h4'),
+  'Email': P('M3 7a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z') + P('M3.4 6.5l8.6 6 8.6-6'),
   // Automations
   // The A⁺ mark on its own, full size.
   'Overview': P('M4 19.5l6.5-15 6.5 15') + P('M6.6 13.5h7.8') + P('M20 3v5') + P('M17.5 5.5h5'),

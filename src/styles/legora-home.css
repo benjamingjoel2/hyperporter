@@ -118,12 +118,16 @@
   --lg-num-h:clamp(52px,6.4vw,88px);
   --lg-num-gap:26px;
   --lg-lit:#3FA9B4}
-.lg-pipe-lead{max-width:34ch;margin-bottom:clamp(46px,5.4vw,78px)}
+/* Wide enough for the two-line heading to hold its own breaks. */
+.lg-pipe-lead{max-width:none;margin-bottom:clamp(46px,5.4vw,78px)}
+.lg-pipe-lead h2 br{display:inline}
 .lg-pipe-lead .eyebrow{color:#9AA1AA;margin-bottom:16px}
 .lg-pipe-lead h2{color:#fff;margin:0}
 
-.lg-pipe{position:relative}
-.lg-pipe-rail{position:absolute;left:0;right:0;top:5px;
+/* Rail and dots share one axis: --rail-y is where the line runs, and the
+   dot is placed so its own centre lands on exactly that line. */
+.lg-pipe{position:relative;--rail-y:5.5px;--dot:11px}
+.lg-pipe-rail{position:absolute;left:0;right:0;top:var(--rail-y);transform:translateY(-50%);
   height:1px;background:#232A32;overflow:hidden}
 .lg-pipe-rail span{position:absolute;top:-1px;left:0;width:20%;height:3px;border-radius:99px;
   background:linear-gradient(90deg,transparent,var(--lg-lit));
@@ -141,9 +145,10 @@
 .lg-pipe-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
   gap:clamp(18px,2.4vw,34px);list-style:none;margin:0;padding:0;position:relative}
 .lg-pnode{margin:0}
-.lg-pdot{display:block;width:11px;height:11px;border-radius:50%;
-  background:#0B0E12;border:1px solid var(--lg-lit);
-  margin:-5.5px 0 28px;position:relative;z-index:2}
+
+.lg-pdot{display:block;width:var(--dot);height:var(--dot);border-radius:50%;
+  background:#0B0E12;border:1px solid var(--lg-lit);box-sizing:border-box;
+  margin:calc(var(--rail-y) - var(--dot) / 2) 0 22px;position:relative;z-index:2}
 .lg-pnode h3{font-size:19px;letter-spacing:-.018em;color:#fff;margin:0 0 9px}
 .lg-pnode p{font-size:14.5px;line-height:1.6;color:#9AA1AA;margin:0;max-width:36ch}
 
@@ -155,7 +160,8 @@
      heading. Vertical, with the rail down the side and the light dropped:
      travelling down a phone-height rail it reads as a loading spinner. */
   .lg-pipe-sec{--lg-num-h:clamp(40px,11vw,56px);--lg-num-gap:0px}
-  .lg-pipe-rail{left:5px;right:auto;top:0;bottom:0;width:1px;height:auto}
+  /* Vertical on a phone: the rail runs down the dots' own centre line. */
+  .lg-pipe-rail{left:calc(var(--dot) / 2);right:auto;top:0;bottom:0;width:1px;height:auto;transform:translateX(-50%)}
   .lg-pipe-rail span{display:none}
   .lg-pipe-row{grid-template-columns:1fr;gap:0}
   .lg-pnode{display:grid;grid-template-columns:auto 1fr;gap:0 22px;padding-bottom:30px}
@@ -168,7 +174,7 @@
 /* One rhythm for the whole page. `section.` beats `.wrap`, whose padding
    shorthand otherwise zeroes the block padding on these. */
 :root{--sec-gap:clamp(88px,10vw,160px)}
-section.lg-sec{padding-block:var(--sec-gap)}
+section.lg-sec{padding-block:var(--sec-gap);background:var(--steel)}
 .lg-sec-lead{max-width:62ch;margin-bottom:clamp(40px,5vw,66px)}
 .lg-sec-lead h2{margin-bottom:18px}
 /* The accordion (.lg-acc) lives in global.css: the tool, automation and
@@ -184,7 +190,11 @@ section.lg-sec{padding-block:var(--sec-gap)}
    name, one line and an outlined link at the top, and a screen of the
    product rising from the bottom edge, cut off by the card. One card per
    side of the market. */
-.lg-sides{padding-block:var(--sec-gap)}
+/* Alternating grounds from the ladder down (founder's ask, Sep 2026):
+   ladder, tools rail and the closing band on the page's own off-white;
+   the two between them on the grey, so each reads as its own section
+   rather than one long white run. */
+.lg-sides{padding-block:var(--sec-gap);background:var(--void)}
 /* The heading over the pair, centred, as the reference sets it. */
 .lg-sides-head{text-align:center;margin:0 auto clamp(36px,4vw,56px)}
 .lg-sides-head h2{font-size:clamp(34px,4.2vw,58px);letter-spacing:-.022em;margin:0 0 18px}
@@ -251,4 +261,160 @@ section.lg-close{text-align:center;padding-block:var(--sec-gap)}
   .lg-hero-img{animation:none;transform:scale(1.06)}
   /* the blanket rule above doesn't cover scroll-behavior */
   .lg-dest-row{scroll-behavior:auto}
+}
+
+/* ---------------- everything in one place ---------------- */
+/* Every tool and every automation as a card on a scrolling rail, in the
+   reference's shape: eyebrow, name, one line, and the page's own screen
+   at the foot. The rail scrolls by touch, wheel or the two arrows, and
+   snaps to a card. */
+section.lg-cat{padding-block:var(--sec-gap);overflow:hidden}
+/* Tools then automations: one rail each, and the pair reads as one spread
+   rather than two sections. Two full section gaps back to back left a
+   screen of dead air between the arrows and the next heading, so the lead
+   rail closes on a short gap and the one after it opens straight on. */
+/* The rails are two bands now, not one spread, so each keeps its own
+   vertical padding and the second takes the grey. */
+section.lg-cat-icon,
+section.lg-cat-photo{background:var(--steel)}
+/* One ground means one block, so the seam between the two rails is half a
+   section gap, not two of them stacked. The rails are true siblings in the
+   DOM (verified in the build), so + is safe here — unlike .lg-cat ~ .lg-close,
+   where the modal sits between. */
+/* Measured: a heading sits 44px above its own cards, so 70+70 between the
+   two rails read as a void rather than a break — 212px from the last tool
+   card down to "Every automation." Half that, and the arrows belong to the
+   rail above them instead of floating in the middle of nothing. */
+section.lg-cat-icon{padding-bottom:clamp(20px,2.2vw,32px)}
+section.lg-cat-icon + section.lg-cat-photo{padding-top:clamp(20px,2.2vw,32px)}
+/* The last rail ends on two small arrows rather than a band of content, so
+   a full section gap either side of it read as a hole before the closing
+   statement. Both sides give way. */
+section.lg-cat-last{padding-bottom:clamp(40px,4.4vw,64px)}
+/* General sibling, not adjacent: the panel a card opens is a <dialog>
+   between the last rail and this band, and it counts as a sibling. */
+section.lg-cat ~ section.lg-close{padding-top:clamp(44px,4.8vw,70px)}
+.lg-cat-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+  margin-bottom:clamp(28px,3.4vw,44px)}
+.lg-cat-head h2{margin:0;max-width:18ch}
+.lg-cat-head p{margin:10px 0 0;max-width:46ch;color:var(--muted);font-size:16px;line-height:1.5}
+.lg-cat-links{display:flex;gap:26px;flex:none}
+
+.lg-rail{overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
+  scrollbar-width:none;-ms-overflow-style:none;
+  /* Cards start on the page's own measure and run off the right edge. */
+  padding-inline:max(var(--pad),calc((100vw - var(--max)) / 2));
+  padding-block:4px 8px;scroll-padding-inline-start:max(var(--pad),calc((100vw - var(--max)) / 2))}
+.lg-rail::-webkit-scrollbar{display:none}
+.lg-rail-track{display:flex;gap:18px;list-style:none;margin:0;padding:0}
+.lg-card{flex:0 0 clamp(252px,23vw,308px);scroll-snap-align:start}
+.lg-card > a{display:flex;flex-direction:column;height:100%;padding:24px;
+  border-radius:18px;background:var(--ink);text-decoration:none;
+  transition:background .3s ease,transform .3s ease;overflow:hidden}
+.lg-card > a:hover{background:var(--steel);transform:translateY(-2px)}
+.lg-card-kind{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:12px}
+.lg-card b{font-family:var(--display);font-weight:400;font-size:20px;letter-spacing:-.016em;
+  line-height:1.2;color:var(--paper);margin-bottom:9px}
+.lg-card-desc{font-size:14px;line-height:1.55;color:var(--muted);margin-bottom:22px}
+.lg-card-shot{display:block;margin-top:auto;margin-inline:-24px;margin-bottom:-24px;
+  border-radius:10px 10px 0 0;overflow:hidden;box-shadow:0 -1px 0 rgba(13,16,22,.06)}
+.lg-card-shot .mk{border-radius:10px 10px 0 0}
+
+/* The tool rail's card ends on the tool's own line icon rather than a
+   screen (founder's ask, Sep 2026): the screen was clipped by the card,
+   and it is better seen full size on the tool's own page. */
+.lg-cat-icon .lg-card > a{min-height:clamp(216px,19vw,246px)}
+.lg-cat-icon .lg-card-desc{margin-bottom:0}
+.lg-card-ico{display:block;margin-top:auto;padding-top:24px;color:var(--dim);
+  transition:color .3s ease}
+.lg-card-ico svg{display:block;width:26px;height:26px}
+.lg-card > a:hover .lg-card-ico{color:var(--paper)}
+
+.lg-rail-nav{display:flex;justify-content:flex-end;gap:10px;margin-top:clamp(22px,2.6vw,34px)}
+.lg-arrow{width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;
+  background:var(--ink);color:var(--paper);font-size:17px;line-height:1;
+  display:grid;place-items:center;transition:background .25s ease,opacity .25s ease}
+.lg-arrow:hover{background:var(--steel)}
+.lg-arrow:disabled{opacity:.32;cursor:default}
+.lg-arrow:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+
+/* The automation rail takes the reference's card instead: a tall portrait
+   with the page's own photograph full-bleed behind it, the name small at
+   the top, the card's claim large under it, and the + in the corner. The
+   photograph is graded down twice — once on the picture, once with a
+   scrim top and bottom — so white type reads wherever the subject falls. */
+.lg-cat-photo .lg-card{flex-basis:clamp(244px,22vw,296px)}
+.lg-cat-photo .lg-card > a{aspect-ratio:53/88;padding:26px 24px;background:#0B0E12;justify-content:flex-start}
+.lg-cat-photo .lg-card > a:hover{background:#0B0E12}
+.lg-card-bg{position:absolute;inset:0;background-size:cover;background-position:50% 42%;
+  filter:brightness(.78) saturate(.92);transition:transform .5s ease}
+.lg-cat-photo .lg-card > a:hover .lg-card-bg{transform:scale(1.03)}
+.lg-card-bg::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(6,10,13,.62),rgba(6,10,13,.24) 44%,rgba(6,10,13,.52))}
+.lg-cat-photo .lg-card-kind{position:relative;color:rgba(255,255,255,.78);margin-bottom:10px}
+.lg-cat-photo .lg-card b{position:relative;margin:0;color:#fff;font-size:clamp(20px,1.7vw,24px);
+  line-height:1.18;text-shadow:0 1px 14px rgba(6,10,13,.35)}
+/* Bottom-right on a photograph, where the reference puts it. */
+.lg-cat-photo .lg-card-more{top:auto;right:16px;bottom:16px;
+  background:rgba(255,255,255,.94);color:#0B0E12}
+
+@media (max-width:640px){
+  .lg-cat-head{flex-direction:column;align-items:flex-start;gap:14px}
+  .lg-cat-links{gap:20px}
+  .lg-card{flex-basis:78vw}
+}
+@media (prefers-reduced-motion:reduce){.lg-card > a:hover{transform:none}}
+
+/* ---------------- integrations carousel ---------------- */
+/* The reference's shape: the screen large in the card, the caption in
+   prose under it — a bold lead-in, then the rest in the secondary colour —
+   and a link below that. Wider cards than the tool rail, because the
+   screen is the point. */
+.lg-cat-conn{padding-block:var(--sec-gap)}
+.lg-conn-head{margin-bottom:clamp(30px,3.6vw,48px)}
+.lg-conn-head h2{margin:0;max-width:22ch}
+.lg-conn-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(18px,2vw,28px);list-style:none;margin:0;padding:0}
+.lg-conn-shot{display:block;border-radius:14px;overflow:hidden}
+.lg-conn-shot img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:14px}
+.lg-conn-cap{margin:18px 0 0;font-size:15px;line-height:1.55;color:var(--muted);max-width:52ch}
+/* Founder's ask (Sep 2026): only the lead — "WhatsApp integration." and the
+   other two — is larger and bold; the sentence after it stays at 15px.
+   line-height:1 on the lead so the bigger inline text does not stretch the
+   paragraph's first line away from the rest. */
+.lg-conn-cap b{color:var(--paper);font-weight:600;font-size:17px;line-height:1}
+.lg-conn-card{display:flex;flex-direction:column}
+.lg-cat-conn .lg-read{margin-top:auto;padding-top:12px}
+@media (max-width:900px){.lg-conn-grid{grid-template-columns:1fr;gap:34px}}
+
+/* Alternating grounds put the carousel on the page's own ground between
+   the automations rail and the closing band, so the band takes the grey. */
+section.lg-close{background:var(--steel)}
+
+/* The panel a card opens. Native <dialog>, so Esc and focus trapping come
+   free; Learn more inside it goes to the tool's own page. */
+.lg-card > a{position:relative}
+.lg-card-more{position:absolute;right:16px;top:16px;width:26px;height:26px;border-radius:50%;
+  background:var(--raise);color:var(--muted);display:grid;place-items:center;font-size:15px;line-height:1;
+  box-shadow:0 1px 2px rgba(13,16,22,.10);transition:background .25s ease,color .25s ease}
+.lg-card > a:hover .lg-card-more{background:var(--paper);color:var(--void)}
+
+.lg-modal{width:min(560px,calc(100vw - 40px));max-width:none;border:0;border-radius:20px;
+  padding:clamp(30px,4vw,44px);background:var(--raise);color:var(--paper);
+  box-shadow:0 40px 90px rgba(8,12,18,.28)}
+.lg-modal::backdrop{background:rgba(13,16,22,.42);backdrop-filter:blur(3px)}
+.lg-modal-kind{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 14px}
+.lg-modal h3{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.4vw,38px);
+  letter-spacing:-.022em;line-height:1.12;margin:0 0 18px;color:var(--paper)}
+.lg-modal-copy{font-size:16px;line-height:1.6;color:var(--muted);margin:0 0 26px}
+.lg-modal-x{position:absolute;top:18px;right:18px;width:32px;height:32px;border:0;border-radius:50%;
+  background:var(--ink);color:var(--muted);font-size:19px;line-height:1;cursor:pointer;
+  display:grid;place-items:center}
+.lg-modal-x:hover{background:var(--steel);color:var(--paper)}
+.lg-modal-x:focus-visible,.lg-modal a:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+@media (prefers-reduced-motion:no-preference){
+  .lg-modal[open]{animation:lg-modal-in .3s cubic-bezier(.2,.7,.2,1)}
+  @keyframes lg-modal-in{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
 }
