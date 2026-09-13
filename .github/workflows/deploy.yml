@@ -14,11 +14,16 @@
 # the current build and nothing else — otherwise the repository would grow by
 # a full copy of the site on every deploy.
 #
-# Once the deploy branch is published, the last two steps SSH to the server,
-# pull that branch, and confirm the live site serves this exact commit. They
-# run only when the DEPLOY_SSH_KEY secret exists, so the workflow still
-# builds and publishes on a fork or before the key is set up. See DEPLOY.md
-# for the one-time setup.
+# Once the deploy branch is published, the last steps SSH to the server, pull
+# that branch, and confirm the live site serves this exact commit.
+#
+# Those steps used to be gated on `if: env.DEPLOY_SSH_KEY != ''`, which meant
+# that with the secret unset they skipped and the run still went green. Four
+# runs reported success between 8 and 13 September 2026 while the live site
+# sat on its 5 September build and nobody had reason to look. A deploy
+# pipeline that passes without deploying is worse than one that fails, so a
+# missing secret is now an error. Forks, which have no secrets and no server,
+# stop after publishing instead. See DEPLOY.md for the one-time setup.
 name: Deploy
 
 on:
@@ -36,7 +41,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # Empty until the secret is set; the deploy steps key off it.
+  # Required on this repository; the guard step below fails without it.
   DEPLOY_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
   DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
   DEPLOY_HOST: ${{ vars.DEPLOY_HOST || 'hyperporter.com' }}
@@ -93,8 +98,28 @@ jobs:
             "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
             HEAD:deploy
 
+      - name: Require the deploy credentials
+        # Placed after the publish on purpose: the deploy branch is already
+        # updated by the time this runs, so failing here still leaves a build
+        # to pull by hand. It only stops the run claiming a success it has
+        # not earned.
+        if: github.repository == 'benjamingjoel2/hyperporter'
+        run: |
+          missing=
+          [ -n "$DEPLOY_KEY" ] || missing="$missing DEPLOY_SSH_KEY"
+          [ -n "$DEPLOY_KNOWN_HOSTS" ] || missing="$missing DEPLOY_KNOWN_HOSTS"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secret(s):$missing"
+            echo "The build is published to the deploy branch, but nothing pulled it, so"
+            echo "the live site is UNCHANGED. Add the secret(s) under Settings -> Secrets"
+            echo "and variables -> Actions (DEPLOY.md, 'First-time server setup' step 3),"
+            echo "then re-run this workflow. To deploy this build by hand meanwhile:"
+            echo "  ssh $DEPLOY_USER@$DEPLOY_HOST 'cd $DEPLOY_PATH && git fetch --depth 1 origin deploy && git reset --hard origin/deploy'"
+            exit 1
+          fi
+
       - name: Pull the deploy branch on the server
-        if: env.DEPLOY_KEY != ''
+        if: github.repository == 'benjamingjoel2/hyperporter'
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
@@ -106,7 +131,7 @@ jobs:
           rm -f ~/.ssh/deploy_key
 
       - name: Confirm the live site serves this build
-        if: env.DEPLOY_KEY != ''
+        if: github.repository == 'benjamingjoel2/hyperporter'
         run: |
           for i in 1 2 3 4 5 6; do
             live=$(curl -fsS --max-time 15 "https://$DEPLOY_HOST/build.txt" || true)

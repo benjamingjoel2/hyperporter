@@ -86,8 +86,8 @@ So deploying is: merge to `main`. The workflow's last step fetches
 just built, so a green run means the live site is serving that commit.
 
 The pull needs an SSH key the workflow can use. Until the secrets below exist
-the workflow still builds and publishes but skips the pull, and you deploy by
-hand:
+the workflow still builds and publishes, then **fails** rather than passing
+without deploying, and you deploy by hand:
 
 ```sh
 ssh root@hyperporter.com 'cd /opt/hyperporter/site && git fetch --depth 1 origin deploy && git reset --hard origin/deploy'
@@ -128,8 +128,15 @@ every deploy, and a fast-forward would fail.
    `/opt/hyperporter/site`. Override with repository *variables*
    `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_PATH` if they ever change.
 
-4. Re-run the Deploy workflow from the Actions tab. The last two steps now
+4. Re-run the Deploy workflow from the Actions tab. The deploy steps now
    run, and the run is green only when the live site serves the new build.
+
+**Until those two secrets exist, the Deploy workflow fails on purpose.** It
+still builds and publishes to the `deploy` branch first, so there is always
+something to pull by hand — it just refuses to report success for a deploy
+that did not happen. It used to skip those steps silently and pass, and four
+runs went green between 8 and 13 September 2026 while the live site stayed on
+its 5 September build.
 
 While you are in `sshd_config`: set `PasswordAuthentication no` and
 `PermitRootLogin prohibit-password`, then `systemctl reload sshd`. The root
