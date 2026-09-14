@@ -65,11 +65,11 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
     {
       head: ['Magic link', 'No password'],
       rows: [
-        { b: 'Traveller link', s: 'Itinerary, documents, payments', tag: 'Sent' },
-        { b: 'Supplier link', s: 'Their request and their quote only', tag: 'Sent' },
-        { b: 'Nothing to install', s: 'Opens in a browser', state: 'done' },
+        { b: 'Supplier link', s: 'The request and their own quote only', tag: 'Sent' },
+        { b: 'Your margin', s: 'Set by you, added before the traveller sees it', state: 'done' },
+        { b: 'Traveller link', s: 'Your branding · price including your margin', tag: 'Sent' },
       ],
-      foot: ['Each side sees their own view of the trip.'],
+      foot: ['Each side sees only their own view of the trip.'],
     },
     {
       head: ['After the trip', 'KE-2291'],
