@@ -57,10 +57,10 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
       head: ['Nairobi — 9 nights', 'KE-2291'],
       rows: [
         { b: 'Lena & Mark Ortiz', s: '2 travellers · 3 – 12 March', tag: 'Inquiry' },
-        { b: 'Rift Valley Ground Services', s: 'Supplier on the thread', state: 'done' },
-        { b: 'Notes, files, messages', s: 'All on this one record', state: 'done' },
+        { b: 'Rift Valley Ground Services', s: 'Quoted €4,180 · replied in 40 min', state: 'done' },
+        { b: 'Acacia Safari Logistics', s: 'Quoted €4,505 · replied in 2 h', state: 'done' },
       ],
-      foot: ['One thread per trip. Nothing in a second inbox.'],
+      foot: ['Every quote on one record, and your whole team can see it.'],
     },
     {
       head: ['Magic link', 'No password'],
