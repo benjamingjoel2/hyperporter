@@ -54,13 +54,12 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
       foot: ['Every channel lands in the same place.'],
     },
     {
-      head: ['Nairobi — 9 nights', 'KE-2291'],
-      rows: [
-        { b: 'Lena & Mark Ortiz', s: '2 travellers · 3 – 12 March', tag: 'Inquiry' },
-        { b: 'Rift Valley Ground Services', s: 'Quoted €4,180 · replied in 40 min', state: 'done' },
-        { b: 'Acacia Safari Logistics', s: 'Quoted €4,505 · replied in 2 h', state: 'done' },
+      head: ['Rift Valley Ground Services', 'KE-2291'],
+      msgs: [
+        { text: 'Nairobi, 3 – 12 March. 2 travellers, wildlife and walking, no long drives. Can you quote?', from: 'me' },
+        { text: 'Yes — €4,180 per person, full board. Park fees included. Holding until Friday.', from: 'them' },
       ],
-      foot: ['Every quote on one record, and your whole team can see it.'],
+      foot: ['Their reply lands on the trip, where your whole team can see it.'],
     },
     {
       head: ['Magic link', 'No password'],
