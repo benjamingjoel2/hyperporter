@@ -358,6 +358,13 @@ section.lg-cat ~ section.lg-close{padding-top:clamp(44px,4.8vw,70px)}
 /* Bottom-right on a photograph, where the reference puts it. */
 .lg-cat-photo .lg-card-more{top:auto;right:16px;bottom:16px;
   background:rgba(255,255,255,.94);color:#0B0E12}
+/* The same icon the tools rail carries, white and pinned bottom-left, on the
+   baseline of the + opposite it. Absolute rather than margin-top:auto: the
+   headline is top-aligned on these cards, so there is no flex gap to push
+   against. */
+.lg-cat-photo .lg-card-ico{position:absolute;left:24px;bottom:16px;
+  margin-top:0;padding-top:0;color:#fff;filter:drop-shadow(0 1px 10px rgba(6,10,13,.45))}
+.lg-cat-photo .lg-card > a:hover .lg-card-ico{color:#fff}
 
 @media (max-width:640px){
   .lg-cat-head{flex-direction:column;align-items:flex-start;gap:14px}
