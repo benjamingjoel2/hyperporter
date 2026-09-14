@@ -76,7 +76,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
       rows: [
         { b: 'Every message kept', s: 'Both sides, in order', state: 'done' },
         { b: 'Rates as quoted', s: 'What was agreed, and when', state: 'done' },
-        { b: 'Ready to repeat', s: 'Duplicate for the next enquiry', tag: 'Reuse' },
+        { b: 'Ready to repeat', s: 'Duplicate for the next inquiry', tag: 'Reuse' },
       ],
       foot: ['The record outlives the trip.'],
     },
