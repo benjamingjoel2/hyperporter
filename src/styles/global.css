@@ -188,7 +188,7 @@ body.drawer-open header.top .burger span{background:var(--paper)}
 .mark .glyph svg rect{fill:currentColor}
 .mark .glyph svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6;stroke-linecap:butt}
 .mark:hover .glyph{color:var(--signal);transform:rotate(90deg)}
-.mark .word{font-family:var(--display);font-weight:400;font-size:21px;letter-spacing:-.025em}
+.mark .word{font-family:var(--display);font-weight:400;font-size:21px;text-transform:uppercase;letter-spacing:.04em}
 .links{display:flex;gap:4px;align-items:center;justify-content:center;min-width:0}
 .links a{background:none;border:0;color:var(--paper);opacity:.85;padding:8px 11px;font-size:14px;letter-spacing:-.01em;border-radius:6px;position:relative;transition:opacity .2s,background .2s}
 .links a:hover{opacity:1}
@@ -938,7 +938,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
      room for a third track. */
   .bar{grid-template-columns:auto 1fr;height:64px}
   .mark{justify-self:start}
-  .mark .word{font-size:16px;letter-spacing:.12em}
+  .mark .word{font-size:16px;letter-spacing:.06em}
   .bar-acts{justify-self:end}
 }
 @media (max-width:680px){
