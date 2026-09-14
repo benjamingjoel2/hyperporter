@@ -41,7 +41,7 @@ const { head, rows = [], msgs = [], composer, foot } = screen;
 
   {msgs.map((m) => (
     <div class:list={['mk-msg', { me: m.from === 'me', typing: m.state === 'typing' }]}>
-      <span>{m.text}</span>
+      <p>{m.text}</p>
       {m.cite && <span class="mk-cite">{m.cite}</span>}
     </div>
   ))}
