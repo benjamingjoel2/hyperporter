@@ -77,7 +77,7 @@ export const TOOLS: DetailPage[] = [
     how: [
       { n: '01', name: 'A lead arrives', body: 'From your inquiry form or an email or a WhatsApp. It is captured in the CRM as a structured lead attached to a contact.' },
       { n: '02', name: 'Get Quotes from your Supplier(s)', body: 'The CRM holds the inquiry, the traveller details and every quote you receive. Visible to everyone in your team.' },
-      { n: '03', name: 'You send a magic link', body: 'The traveller sees the itinerary and the quote; the supplier sees the request and replies with a price. Both sides stay in sync automatically.' },
+      { n: '03', name: 'Send a Magic Link', body: 'To supplier(s), with the inquiry details, requesting a quote. Receive quote(s), define your margin and send the link to the traveller. They see a visually stunning itinerary with your branding. Price is displayed including your margin. Both sides see only what they are supposed to know.' },
       { n: '04', name: 'The record stays useful', body: 'After the trip, the thread archives itself and becomes the starting point for the next request from the same client.' },
     ],
     related: ['crm-workflow', 'inquiry-form', 'client-supplier-dashboard'],
