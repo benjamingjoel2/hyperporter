@@ -64,7 +64,7 @@ export const TOOLS: DetailPage[] = [
     tier: 'Showcase',
     tierNote: 'Included on every tier, for resellers and suppliers alike. Free, forever.',
     title: 'The platform underneath everything.',
-    lede: 'Portal is where your team, your trips and your contacts live: one CRM, one thread per trip, one link that faces the traveller on one side and the supplier on the other. Everything else Hyperporter does is built on it.',
+    lede: 'Portal is where your team, your trips and your contacts live: one CRM, one thread per trip, one link that faces the traveller on one side and the supplier on the other. Everything Hyperporter does is built on it.',
     overview: 'Portal is the platform every account starts on and never leaves: the CRM, the magic links, the inquiry form and the proposal generator. Autopilot, Intelligence and Horizon all sit on top of it. It is free on every tier, for both sides of the market.',
     screen: 'dashboard',
     whatTitle: 'What Portal gives you on day one',
@@ -75,7 +75,7 @@ export const TOOLS: DetailPage[] = [
     ],
     howTitle: 'How a trip runs through Portal',
     how: [
-      { n: '01', name: 'A lead arrives', body: 'From your public inquiry form, an email or a message. It lands in the CRM as a structured trip inquiry with a contact attached.' },
+      { n: '01', name: 'A lead arrives', body: 'From your inquiry form or an email or a WhatsApp. It is captured in the CRM as a structured lead attached to a contact.' },
       { n: '02', name: 'You open one thread', body: 'The trip record holds the brief, the travellers and every quote. You work from it, and so does anyone else on your team.' },
       { n: '03', name: 'You send a magic link', body: 'The traveller sees the itinerary and the quote; the supplier sees the request and replies with a price. Both sides stay in sync automatically.' },
       { n: '04', name: 'The record stays useful', body: 'After the trip, the thread archives itself and becomes the starting point for the next request from the same client.' },
