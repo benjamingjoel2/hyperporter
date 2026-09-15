@@ -199,42 +199,43 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
 
   'quotation-board': [
     {
-      head: ['Nairobi — 9 nights', '4 parts'],
+      head: ['Nairobi — flexible, March', '3 offers in'],
       rows: [
-        { b: 'Game drives · Mara North', s: '3 nights', tag: 'To quote' },
-        { b: 'Lodging · Rift Valley', s: '4 nights', tag: 'To quote' },
-        { b: 'Transfers', s: 'Airport and inter-camp', tag: 'To quote' },
+        { b: 'Rift Valley Ground Services', s: '8 days · classic route · own document attached', state: 'done' },
+        { b: 'Rift Valley Ground Services', s: '5 days · shorter alternative', state: 'done' },
+        { b: 'Baobab Eco Safaris', s: '7 days · walking, not game drives', state: 'done' },
       ],
-      foot: ['The trip, broken into the parts suppliers price.'],
+      foot: ['One supplier can send more than one. Each is a whole trip.'],
     },
     {
-      head: ['Quotes in', '3 of 4'],
+      head: ['Baobab Eco · 7 days', 'Draft'],
       rows: [
-        { b: 'Rift Valley Ground Services', s: '€4,180 pp · full board', state: 'done' },
-        { b: 'Karen Overland Co.', s: '€3,940 pp · room only', state: 'done' },
-        { b: 'Mara North Collective', s: 'Asked yesterday', state: 'wait' },
+        { b: 'Day-by-day itinerary', s: 'Hotels, room types, nights', state: 'done' },
+        { b: 'Included / not included', s: 'Park fees in · flights out', state: 'done' },
+        { b: 'Cost €3,880 · margin 18% · €4,578', s: 'Margin is yours, per offer', tag: 'By hand', amber: true },
       ],
-      foot: ['Side by side, on the trip’s own thread.'],
+      foot: ['Your note on this offer never leaves your side.', 'Release to traveller', true],
     },
     {
-      head: ['Your margin', 'Yours to set'],
+      head: ['What the traveller sees', '3 released'],
       rows: [
-        { b: 'Rift Valley Ground Services', s: 'Cost €4,180 pp', tag: 'Chosen', amber: true },
-        { b: 'Margin', s: '18% · you set it', tag: 'By hand', amber: true },
-        { b: 'Client price', s: '€4,932 pp', state: 'done' },
+        { b: 'Classic route · 8 days', s: '€4,932 pp', state: 'done' },
+        { b: 'Walking safari · 7 days', s: '€4,578 pp · the only one built around walking', state: 'done' },
+        { b: 'Shorter route · 5 days', s: '€3,410 pp', state: 'done' },
       ],
-      foot: ['The supplier still receives their full quoted rate.'],
+      foot: ['Selling price only. Never the cost, never your margin.'],
     },
     {
-      head: ['Proposal v3', 'Ready'],
+      head: ['Walking safari · 7 days', 'Chosen'],
       rows: [
-        { b: 'Built from the chosen quotes', s: 'Nothing retyped', state: 'done' },
-        { b: 'Your branding', s: 'No Hyperporter badge', state: 'done' },
-        { b: 'Share as a link', s: 'Or PDF, or a message', tag: 'Ready' },
+        { b: 'Confirmation requested', s: 'Sent to Baobab Eco', tag: 'Waiting', amber: true },
+        { b: 'Classic route · 8 days', s: 'Still available as a backup', state: 'done' },
+        { b: 'Shorter route · 5 days', s: 'Still available as a backup', state: 'done' },
       ],
-      foot: ['Chosen quotes become the proposal.', 'Share', false],
+      foot: ['The others are declined only once this one is booked.'],
     },
   ],
+
 
   'proposal-share': [
     {
