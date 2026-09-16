@@ -1,21 +1,42 @@
 ---
-/** Client & Supplier Dashboard — one record, two links, two cards. */
+/** One record, two links — what the traveller opens and what the supplier
+    opens, side by side, from the same trip. Neither sees the other's
+    number. */
+import App from './App.astro';
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b>Nairobi — 9 nights</b><small>One record, two sides</small></div>
-  <div class="mk-row2">
-    <div class="mk-side">
-      <span class="mk-lbl">Traveller</span>
-      <div class="mk-row plain" data-live="tick" data-on="Accepted" data-off="Sent" data-off-amber="false"><div><b>Itinerary v3</b><small>9 nights</small></div><span class="mk-chk"></span></div>
-      <div class="mk-row plain"><div><b>Total</b><small>2 travellers</small></div><span class="r">€4,932</span></div>
-      <div class="mk-row plain" data-live="tick" data-on="Paid" data-off="Due 12 Jan" data-off-amber="true"><div><b>Deposit</b><small>On the link</small></div><span class="mk-end"><span class="mk-tag amb">Due 12 Jan</span><span class="mk-chk wait"></span></span></div>
+<App
+  title="Lena & Mark Ortiz"
+  meta="KE-2291 · one record, two links"
+  who="LO"
+  tabs={['Overview', 'Links', 'Quotation board', 'Pricing']}
+  tab="Links"
+  note="Both are rendered from this record the moment they are opened."
+>
+  <div class="mk-two">
+    <div class="mk-pane">
+      <h6>The traveller opens</h6>
+      <div class="ln"><span>Itinerary v3 · 9 nights</span><span>Live</span></div>
+      <div class="ln"><span>Price per person</span><span>€4,932</span></div>
+      <div class="ln"><span>Deposit due 12 Jan</span><span>€1,480</span></div>
+      <div class="ln"><span>Branding</span><span>Meridian Travel Co.</span></div>
+      <div class="ln"><span>Your cost, your margin</span><span>Never shown</span></div>
     </div>
-    <div class="mk-side">
-      <span class="mk-lbl">Supplier</span>
-      <div class="mk-row plain"><div><b>Request</b><small>3 – 12 March · 2 pax</small></div><span class="mk-chk"></span></div>
-      <div class="mk-row plain"><div><b>Your quote</b><small>Paid in full</small></div><span class="r">€4,180</span></div>
-      <div class="mk-row plain" data-live="tick" data-on="Confirmed" data-off="Re-check sent" data-off-amber="false"><div><b>Confirmation</b><small>Re-check sent</small></div><span class="mk-chk wait"></span></div>
+    <div class="mk-pane">
+      <h6>The supplier opens</h6>
+      <div class="ln"><span>Request · 3 – 12 March, 2 pax</span><span>Sent</span></div>
+      <div class="ln"><span>Their quoted rate</span><span>€4,180</span></div>
+      <div class="ln"><span>They receive</span><span>In full</span></div>
+      <div class="ln"><span>Re-confirmation</span><span>Answered 10:19</span></div>
+      <div class="ln"><span>What you sell at</span><span>Never shown</span></div>
     </div>
   </div>
-  <span class="mk-fine">Click a line to mark it. No login either side.</span>
-</div>
+  <table class="mk-tbl" style="margin-top:.55em">
+    <colgroup><col style="width:24%" /><col style="width:44%" /><col style="width:32%" /></colgroup>
+    <thead><tr><th>Change</th><th>What happened</th><th>Both sides</th></tr></thead>
+    <tbody>
+      <tr><td>Rate revised</td><td>Rift Valley GS · €4,180 → €4,240</td><td><span class="mk-st go">Traveller sees €5,003</span></td></tr>
+      <tr><td>No resend</td><td>Same two links, new numbers</td><td><span class="mk-st go">Already current</span></td></tr>
+      <tr><td>Deposit</td><td>Instructions on her link</td><td><span class="mk-st amb">You mark it received</span></td></tr>
+    </tbody>
+  </table>
+</App>

@@ -1,12 +1,33 @@
 ---
-/** The channels an account connects: the WhatsApp Business API and email
-    on the same thread, with the magic links that need no connecting.
-    Only what the site actually claims — see content/pricing.ts. */
+/** Settings ▸ Channels — what an account has connected, where each channel
+    lands, and the tier it comes with. The wording follows content/pricing.ts:
+    WhatsApp is the paid add-on, email comes from Autopilot up, and the links
+    need nothing connecting at all. */
+import App from './App.astro';
+
+const CH: [string, string, string, string, string][] = [
+  ['WhatsApp Business', '+254 ··· 8810', '€19/mo add-on', 'go', 'Connected'],
+  ['Email', 'hello@meridiantravel.co', 'Autopilot up', 'go', 'Connected'],
+  ['Inquiry form', 'meridiantravel.co/enquire', 'Showcase', 'go', 'Live'],
+  ['Traveller links', 'Nothing to connect', 'Showcase', 'go', 'Always on'],
+];
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b>Connected channels</b><small>Meridian Travel Co.</small></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>WhatsApp Business</b><small>+254 ··· 8810 · onto the trip thread</small></div><span class="mk-tag">Add-on</span></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Email</b><small>hello@meridiantravel.co · replies land on the thread</small></div><span class="mk-tag">From Autopilot</span></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Magic links</b><small>Traveller and supplier · nothing to connect</small></div><span class="mk-fine">Always on</span></div>
-  <span class="mk-fine">Your travellers and suppliers keep the channel they already use.</span>
-</div>
+<App
+  title="Channels"
+  meta="Meridian Travel Co."
+  who="LO"
+  tabs={['Account', 'Team', 'Branding', 'Channels', 'Billing']}
+  tab="Channels"
+  note="Everything connected lands on the trip thread. They keep the channel they use."
+>
+  <button slot="bar" type="button" class="mk-uibtn" data-live="set" data-done="Connected">Connect a channel</button>
+  <table class="mk-tbl">
+    <colgroup><col style="width:27%" /><col style="width:31%" /><col style="width:22%" /><col style="width:20%" /></colgroup>
+    <thead><tr><th>Channel</th><th>Connected as</th><th>Comes with</th><th>Status</th></tr></thead>
+    <tbody>
+      {CH.map(([n, as, tier, tone, st]) => (
+        <tr><td>{n}</td><td>{as}</td><td>{tier}</td><td><span class:list={['mk-st', tone]}>{st}</span></td></tr>
+      ))}
+    </tbody>
+  </table>
+</App>

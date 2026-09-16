@@ -1,9 +1,22 @@
 ---
-/** Sign-up — a magic link, no password to set. */
+/** Signing in — a magic link, no password to set and none to lose. Nobody
+    is signed in yet, so there is no navigation on this one either. */
+import App from './App.astro';
 ---
-<div class="mk-panel">
-  <div><span class="mk-lbl">Sign in</span><p class="mk-title">Check your email</p></div>
-  <p class="mk-p">We sent a sign-in link to <b style="font-weight:400;color:var(--paper)">lena@meridiantravel.co</b>. It works once and expires in 15 minutes.</p>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Link sent · 09:31</b><small>No password to set. No password to lose.</small></div><span class="mk-btn o">Resend</span></div>
-  <span class="mk-fine">Showcase · free · 20 trips a month · Horizon included</span>
-</div>
+<App page title="Hyperporter" meta="Sign in" note="No password to set. No password to lose.">
+  <p class="mk-lbl">Sign in</p>
+  <p class="mk-hero">Check your email</p>
+  <p class="mk-p" style="font-size:.86em">We sent a sign-in link to <b style="font-weight:400;color:var(--paper)">lena@meridiantravel.co</b>. It works once and expires in 15 minutes.</p>
+  <table class="mk-tbl" style="margin-top:.6em">
+    <colgroup><col style="width:44%" /><col style="width:32%" /><col style="width:24%" /></colgroup>
+    <thead><tr><th>Step</th><th>Detail</th><th>State</th></tr></thead>
+    <tbody>
+      <tr><td>Link sent</td><td>09:31 · valid until 09:46</td><td><span class="mk-st go">Sent</span></td></tr>
+      <tr><td>Plan on sign-up</td><td>Showcase · free</td><td><span class="mk-st go">Free</span></td></tr>
+    </tbody>
+  </table>
+  <div class="mk-foot">
+    <span class="mk-fine">Nothing arrived?</span>
+    <button type="button" class="mk-uibtn o" data-live="set" data-done="Sent again">Resend</button>
+  </div>
+</App>

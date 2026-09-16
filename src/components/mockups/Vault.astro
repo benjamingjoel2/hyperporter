@@ -1,20 +1,40 @@
 ---
-/** Document Vault — your contracts, read on upload. */
-const D = [
-  ['Rift Valley GS — rates 2026.pdf', 'Kenya · 48 rates', 'Indexed'],
-  ['Atlas Maroc 2026.pdf', 'Morocco · 112 rates', 'Indexed'],
-  ['Andes Trail — Sacred Valley.xlsx', 'Peru · 36 rates', 'Indexing'],
+/** The Vault — this account's own contracts and rate sheets, read on upload
+    so every figure knows the page it came from. Upload adds a row. */
+import App from './App.astro';
+
+const D: [string, string, string, string, string, string][] = [
+  ['Rift Valley GS — rates 2026.pdf', 'Rift Valley GS', 'Kenya · 48 rates', '2 Jan', 'go', 'Indexed'],
+  ['Atlas Maroc 2026.pdf', 'Atlas Maroc', 'Morocco · 112 rates', '2 Jan', 'go', 'Indexed'],
+  ['Andes Trail — Sacred Valley.xlsx', 'Andes Trail', 'Peru · 36 rates', 'Today', 'amb', 'Indexing'],
+  ['Karen Overland — transfers.pdf', 'Karen Overland', 'Kenya · 19 rates', '9 Dec', 'red', 'Expired'],
 ];
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b>Vault</b><small>61 documents</small></div>
-  <div data-list>
-    {D.map(([d, m, st]) => (
-      <div class="mk-row"><span class:list={['mk-ico', { pdf: d.endsWith('.pdf') }]}>{d.endsWith('.pdf') ? 'PDF' : 'XLS'}</span><div><b>{d}</b><small>{m}</small></div><span class:list={['mk-tag', { amb: st === 'Indexing' }]}>{st}</span></div>
-    ))}
-  </div>
+<App
+  title="Vault"
+  meta="61 documents"
+  who="LO"
+  pills={['All suppliers', '2026']}
+  note="Your data only. Indexed to this account, never to anyone else’s."
+>
+  <button
+    slot="bar"
+    type="button"
+    class="mk-uibtn sig"
+    data-live="add"
+    data-then-to="Indexed"
+    data-head-to="62 documents"
+  >Upload</button>
+  <table class="mk-tbl">
+    <colgroup><col style="width:34%" /><col style="width:20%" /><col style="width:20%" /><col style="width:12%" /><col style="width:14%" /></colgroup>
+    <thead><tr><th>Document</th><th>Supplier</th><th>Covers</th><th>Uploaded</th><th>Status</th></tr></thead>
+    <tbody data-list>
+      {D.map(([d, sup, covers, up, tone, st]) => (
+        <tr><td>{d}</td><td>{sup}</td><td>{covers}</td><td>{up}</td><td><span class:list={['mk-st', tone]}>{st}</span></td></tr>
+      ))}
+    </tbody>
+  </table>
   <template>
-    <div class="mk-row"><span class="mk-ico pdf">PDF</span><div><b>Kilimanjaro Trails 2026.pdf</b><small>Tanzania · reading…</small></div><span class="mk-tag amb">Indexing</span></div>
+    <tr><td>Kilimanjaro Trails 2026.pdf</td><td>Kilimanjaro Trails</td><td>Tanzania · reading…</td><td>Today</td><td><span class="mk-st amb">Indexing</span></td></tr>
   </template>
-  <div class="mk-foot"><span class="mk-fine">Your data only. Never shared.</span><button type="button" class="mk-btn sig" data-live="add" data-then-to="Indexed" data-head-to="62 documents">Upload</button></div>
-</div>
+</App>

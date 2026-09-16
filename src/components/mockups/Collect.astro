@@ -1,11 +1,28 @@
 ---
-/** Automated Collection — what each side owes before departure. */
+/** Automated collection — what each side still owes before departure, and
+    who is being chased for it. */
+import App from './App.astro';
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b>Before departure · Nairobi</b><small>12 days to go</small></div>
-  <div class="mk-meter"><i style="width:60%"></i></div>
-  <div class="mk-row" data-live="tick" data-on="In" data-off="Asked" data-off-amber="false"><span class="mk-chk"></span><div><b>Passport details</b><small>From the traveller</small></div><span class="mk-tag">In</span></div>
-  <div class="mk-row" data-live="tick" data-on="In" data-off="Asked" data-off-amber="false"><span class="mk-chk"></span><div><b>Vouchers · Rift Valley</b><small>From the supplier</small></div><span class="mk-tag">In</span></div>
-  <div class="mk-row" data-live="tick" data-on="In" data-off="Asked" data-off-amber="false"><span class="mk-chk wait"></span><div><b>Arrival flight number</b><small>Due in 4 days</small></div><span class="mk-tag grey">Asked</span></div>
-  <div class="mk-row"><span class="mk-chk hold"></span><div><b>Driver contact · Acacia</b><small>Late · flagged to you</small></div><button type="button" class="mk-btn amb" data-live="set" data-done="Chased" data-small="Third reminder · just now">Chase</button></div>
-</div>
+<App
+  title="Lena & Mark Ortiz"
+  meta="KE-2291 · Ready · 12 days out"
+  who="LO"
+  tabs={['Overview', 'Documents', 'Pricing', 'Autopilot']}
+  tab="Documents"
+  note="Chased on a schedule. What is late is flagged to you, not chased forever."
+>
+  <span slot="bar" class="mk-pill">6 of 10 in</span>
+  <table class="mk-tbl">
+    <colgroup><col style="width:28%" /><col style="width:22%" /><col style="width:14%" /><col style="width:16%" /><col style="width:20%" /></colgroup>
+    <thead><tr><th>What</th><th>From</th><th>Due</th><th>Asked</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Passport details · 2</td><td>Lena &amp; Mark Ortiz</td><td>20 Feb</td><td>3 times</td><td><span class="mk-st go">In</span></td></tr>
+      <tr><td>Vouchers · game drives</td><td>Rift Valley GS</td><td>20 Feb</td><td>Once</td><td><span class="mk-st go">In</span></td></tr>
+      <tr><td>Arrival flight number</td><td>Lena &amp; Mark Ortiz</td><td>24 Feb</td><td>Once</td><td><span class="mk-st">Asked</span></td></tr>
+      <tr data-live="tick" data-on="In" data-off="Late · flagged to you" data-off-amber="true" class="is-late">
+        <td>Driver contact</td><td>Acacia Safari Logistics</td><td>18 Feb</td><td>3 times</td>
+        <td><span class="mk-st amb">Late · flagged to you</span></td>
+      </tr>
+    </tbody>
+  </table>
+</App>

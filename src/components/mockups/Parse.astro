@@ -1,14 +1,32 @@
 ---
-/** Automated Inquiry — a message becomes a brief. */
+/** Automated inquiry — the message as it arrived, and the brief read out of
+    it. What it does not know it asks for rather than assuming. */
+import App from './App.astro';
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b>New inquiry</b><small>Email · 09:14</small></div>
-  <div class="mk-msg sys"><p>"Two of us, Kenya, early March, 9 nights, Mara. Mid-range."</p></div>
-  <div class="mk-row2">
-    <div class="mk-field"><label>Where</label><div contenteditable="true" spellcheck="false">Kenya · Mara</div></div>
-    <div class="mk-field"><label>When</label><div contenteditable="true" spellcheck="false">3 – 12 March</div></div>
-    <div class="mk-field"><label>Who</label><div contenteditable="true" spellcheck="false">2 adults</div></div>
-    <div class="mk-field" data-live="ask" data-answer="€4,000 – 4,500 pp" data-then=".js-confirm" data-then-small="Lena said yes · Planning"><label>Budget</label><div class="ph focus">Asked · click for the reply</div></div>
+<App
+  title="Lena Ortiz"
+  meta="KE-2291 · Inquiry"
+  who="LO"
+  tabs={['Overview', 'Brief', 'Thread', 'Quotation board']}
+  tab="Brief"
+  note="Read from her own words at 09:14. Nothing here was typed by an agent."
+>
+  <div class="mk-msg sys" style="margin-bottom:.55em"><span class="mk-via">Email · 09:14</span><p>“Two of us, Kenya, early March, 9 nights, Mara. Mid-range.”</p></div>
+  <div class="mk-form">
+    <div class="f"><label>Where</label><div class="val" contenteditable="true" spellcheck="false">Kenya · Mara North</div></div>
+    <div class="f"><label>When</label><div class="val" contenteditable="true" spellcheck="false">3 – 12 March</div></div>
+    <div class="f"><label>Who</label><div class="val" contenteditable="true" spellcheck="false">2 adults</div></div>
+    <div class="f" data-live="ask" data-answer="€4,000 – 4,500 pp" data-then=".js-confirm" data-then-small="Lena confirmed · moved to Planning" data-then-tag="Confirmed">
+      <label>Budget</label><div class="val ph focus">Asked — click for her reply</div>
+    </div>
   </div>
-  <div class="mk-row plain js-confirm" style="border-bottom:0"><div><b>Confirm with the traveller</b><small>Sent to Lena</small></div><span class="mk-chk wait"></span></div>
-</div>
+  <table class="mk-tbl" style="margin-top:.55em">
+    <colgroup><col style="width:34%" /><col style="width:40%" /><col style="width:26%" /></colgroup>
+    <thead><tr><th>Step</th><th>Detail</th><th>State</th></tr></thead>
+    <tbody>
+      <tr><td>Contact opened</td><td>Lena Ortiz · new</td><td><span class="mk-st go">Done</span></td></tr>
+      <tr><td>Trip opened</td><td>KE-2291 · at Inquiry</td><td><span class="mk-st go">Done</span></td></tr>
+      <tr class="js-confirm"><td>Confirm the brief</td><td><span class="mk-sub">Sent to Lena in her own thread</span></td><td><span class="mk-st">Waiting</span></td></tr>
+    </tbody>
+  </table>
+</App>

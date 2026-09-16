@@ -1,15 +1,36 @@
 ---
-/** Customers — both sides of the market in one list. */
-const R = [
-  ['Priya Nair', 'Traveller · Marrakesh, Booking', 'PN', false],
-  ['Rift Valley Ground Services', 'DMC · Kenya · 11 trips together', 'RV', true],
-  ['The Halvorsen family', 'Traveller · Cusco, Planning', 'H', false],
-  ['Andes Trail Operators', 'Tour operator · Peru · 4 trips', 'AT', true],
+/** Contacts — both sides of the market in one list, each with the trips you
+    have actually run together. */
+import App from './App.astro';
+
+const R: [string, string, string, string, string, string][] = [
+  ['Priya Nair', 'PN', 'Traveller', 'Marrakesh · Booking', '2', 'Today'],
+  ['Rift Valley Ground Services', 'RV', 'Supplier · DMC', 'Nairobi, Kenya', '11', 'Today'],
+  ['Lena & Mark Ortiz', 'LO', 'Traveller', 'Kenya · Quotation', '3', 'Yesterday'],
+  ['Atlas Maroc', 'AM', 'Supplier · DMC', 'Marrakesh, Morocco', '7', 'Yesterday'],
 ];
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b>People</b><small>168 travellers · 44 suppliers</small></div>
-  {R.map(([n, m, ini, sup]) => (
-    <div class="mk-row"><span class:list={['mk-av', { ghost: sup }]}>{ini}</span><div><b>{n}</b><small>{m}</small></div><span class:list={['mk-tag', { grey: sup }]}>{sup ? 'Supplier' : 'Traveller'}</span></div>
-  ))}
-</div>
+<App
+  title="Contacts"
+  meta="168 travellers · 44 suppliers"
+  who="LO"
+  pills={['Everyone']}
+  note="A traveller and a supplier are both contacts. The record knows which."
+>
+  <button slot="bar" type="button" class="mk-uibtn" data-live="set" data-done="Added">Add contact</button>
+  <table class="mk-tbl">
+    <colgroup><col style="width:31%" /><col style="width:21%" /><col style="width:24%" /><col style="width:11%" /><col style="width:13%" /></colgroup>
+    <thead><tr><th>Name</th><th>Kind</th><th>Where they are</th><th>Trips</th><th>Last</th></tr></thead>
+    <tbody>
+      {R.map(([n, ini, kind, where, trips, last]) => (
+        <tr>
+          <td><span class="who"><i>{ini}</i>{n}</span></td>
+          <td>{kind}</td>
+          <td>{where}</td>
+          <td class="num">{trips}</td>
+          <td>{last}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</App>
