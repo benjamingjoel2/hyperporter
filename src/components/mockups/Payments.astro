@@ -4,20 +4,12 @@
 import App from './App.astro';
 ---
 <App
-  active="Trips"
   title="Priya Nair"
   meta="MA-0937 · Booking"
   who="LO"
   tabs={['Overview', 'Pricing', 'Autopilot', 'Documents']}
   tab="Autopilot"
-  note="The requests go out on their own. Nothing marks itself paid."
 >
-  <div class="mk-metrics">
-    <div class="mk-metric"><span>Requested</span><b>€880</b></div>
-    <div class="mk-metric"><span>Received</span><b>€0</b></div>
-    <div class="mk-metric"><span>Due</span><b>14 Jan</b></div>
-    <div class="mk-metric"><span>Reminders sent</span><b>1</b></div>
-  </div>
   <table class="mk-tbl">
     <colgroup><col style="width:27%" /><col style="width:34%" /><col style="width:14%" /><col style="width:25%" /></colgroup>
     <thead><tr><th>Step</th><th>Fires</th><th>Last run</th><th>Status</th></tr></thead>

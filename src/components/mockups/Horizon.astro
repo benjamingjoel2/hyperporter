@@ -6,15 +6,13 @@
 import App from './App.astro';
 
 const S: [string, string, string, string, string][] = [
-  ['Rift Valley Ground Services', 'RV', 'Nairobi', 'DMC · safari', '40 min'],
-  ['Acacia Safari Logistics', 'AS', 'Nairobi', 'DMC · transfers', '2 h'],
+  ['Rift Valley Ground Services', 'RV', 'Nairobi', 'DMC', '40 min'],
+  ['Acacia Safari Logistics', 'AS', 'Nairobi', 'DMC', '2 h'],
   ['Lamu Dhow Collective', 'LD', 'Lamu', 'Tour operator', '4 h'],
   ['Mara North Collective', 'MN', 'Mara North', 'Lodging', '1 h'],
-  ['Karen Overland Co.', 'KO', 'Nairobi', 'Transfers only', '6 h'],
 ];
 ---
 <App
-  active="Horizon"
   title="Horizon"
   meta="130+ countries"
   who="LO"
@@ -23,8 +21,8 @@ const S: [string, string, string, string, string][] = [
 >
   <div class="mk-search"><i />Kenya<span>12 vetted suppliers</span></div>
   <table class="mk-tbl">
-    <colgroup><col style="width:32%" /><col style="width:16%" /><col style="width:19%" /><col style="width:11%" /><col style="width:22%" /></colgroup>
-    <thead><tr><th>Supplier</th><th>Where</th><th>What they do</th><th>Replies in</th><th /></tr></thead>
+    <colgroup><col style="width:35%" /><col style="width:15%" /><col style="width:16%" /><col style="width:11%" /><col style="width:23%" /></colgroup>
+    <thead><tr><th>Supplier</th><th>Where</th><th>Type</th><th>Replies in</th><th /></tr></thead>
     <tbody>
       {S.map(([n, ini, where, what, reply], i) => (
         <tr>

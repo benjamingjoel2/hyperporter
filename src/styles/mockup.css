@@ -26,7 +26,8 @@
   background:var(--photo) center/cover;filter:blur(3px) saturate(.8);opacity:.9}
 .mk[data-ground="photo"]::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.18)}
 
-.mk-stage{position:absolute;inset:0;font-size:clamp(10px,2.6cqw,14px);line-height:1.35;z-index:1}
+.mk-stage{position:absolute;inset:0;font-size:clamp(10px,2.6cqw,14px);line-height:1.35;z-index:1;
+  display:flex;align-items:center;justify-content:center;padding:5% 5.5% 14%}
 .mk.tall .mk-stage{font-size:clamp(10px,3.3cqw,14px)}
 
 /* The panel: frosted, lifted, one idea. */
@@ -70,6 +71,7 @@
   .mk-foot .mk-fine{display:none}
   /* A phone-width frame has no room beside the panel for the chip. */
   .mk-app{display:none}
+  .mk-stage{padding:4%}
 }
 
 /* Panel anatomy. */
@@ -182,7 +184,7 @@
    full width of whatever holds it — for the hero card on a tool page, which
    is already a dark panel of its own. */
 .mk.bare{aspect-ratio:auto;background:none;border-radius:0;overflow:visible;isolation:auto}
-.mk.bare .mk-stage{position:relative;inset:auto;font-size:clamp(10px,2.7cqw,13.5px)}
+.mk.bare .mk-stage{position:relative;inset:auto;padding:0;display:block;font-size:clamp(10px,2.7cqw,13.5px)}
 .mk.bare .mk-panel{position:relative;left:auto;right:auto;top:auto;bottom:auto;transform:none;width:100%;max-width:none;
   background:rgba(255,255,255,.96);box-shadow:0 0 0 1px rgba(255,255,255,.5) inset,0 1em 2.4em rgba(0,0,0,.35)}
 .mk.bare .mk-back,.mk.bare .mk-app{display:none}
@@ -289,52 +291,40 @@
    rows to look like real work. These rules draw that, at the same em scale
    as everything else so it still scales like a photograph of itself. */
 
-.mk-ui{position:absolute;left:5.5%;right:5.5%;top:50%;transform:translateY(-50%);
-  max-height:84%;display:grid;grid-template-columns:8.6em 1fr;font-size:.9em;
+.mk-ui{position:relative;width:100%;max-height:100%;
+  display:flex;flex-direction:column;font-size:1em;
   background:#FCFCFB;border-radius:.7em;overflow:hidden;
   box-shadow:0 0 0 1px rgba(13,16,22,.10),0 2.2em 4.4em rgba(8,12,18,.24)}
-.mk-ui.nonav{grid-template-columns:1fr}
-
-/* left rail */
-.mk-rail2{background:#F3F3F1;border-right:1px solid var(--line);padding:.75em .55em;min-height:100%;
-  display:flex;flex-direction:column;gap:.1em;min-width:0}
-.mk-rail2 .brand{display:flex;align-items:center;gap:.4em;padding:.15em .35em .7em;
-  font-weight:500;font-size:.84em;letter-spacing:-.015em;white-space:nowrap;overflow:hidden}
-.mk-rail2 .brand span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mk-rail2 .brand i{width:1.05em;height:1.05em;border-radius:50%;border:.13em solid var(--paper);
-  display:inline-block;flex:0 0 auto}
-.mk-rail2 a{display:flex;align-items:center;gap:.42em;padding:.32em .4em;border-radius:.34em;
-  color:var(--muted);font-size:.86em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mk-rail2 a i{width:.72em;height:.72em;border-radius:.16em;background:currentColor;opacity:.42;flex:0 0 auto}
-.mk-rail2 a.on{background:var(--paper);color:#fff}
-.mk-rail2 a.on i{opacity:1}
-.mk-rail2 .sp{margin-top:auto}
 
 /* main column */
 .mk-main{display:flex;flex-direction:column;min-width:0;min-height:0}
-.mk-bar{display:flex;align-items:center;gap:.6em;padding:.62em .85em;border-bottom:1px solid var(--line);overflow:hidden}
-.mk-bar b{font-size:.98em;letter-spacing:-.01em;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mk-bar small{color:var(--dim);font-size:.8em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mk-bar{display:flex;align-items:center;gap:.55em;padding:.7em .95em;border-bottom:1px solid var(--line);overflow:hidden}
+.mk-brand{display:inline-flex;align-items:center;gap:.35em;padding-right:.6em;margin-right:.1em;
+  border-right:1px solid var(--line);color:var(--muted);font-size:.8em;white-space:nowrap;flex:0 0 auto}
+.mk-brand i{width:.85em;height:.85em;border-radius:50%;border:.12em solid currentColor;flex:0 0 auto}
+.mk-bar b{font-size:1.02em;letter-spacing:-.01em;flex:0 0 auto;white-space:nowrap}
+.mk-bar small{color:var(--dim);font-size:.8em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0}
 .mk-bar .sp{margin-left:auto;display:flex;align-items:center;gap:.4em;flex:0 0 auto}
 .mk-pill{border:1px solid var(--line);border-radius:999px;padding:.2em .6em;font-size:.74em;color:var(--muted);white-space:nowrap}
 .mk-bar .av{width:1.5em;height:1.5em;flex:0 0 auto;overflow:hidden;border-radius:50%;background:var(--signal);color:#fff;
   font-size:.7em;display:grid;place-items:center;letter-spacing:.02em}
 
 /* tabs */
-.mk-tabs{display:flex;gap:.9em;padding:0 .85em;border-bottom:1px solid var(--line)}
-.mk-tabs span{padding:.45em 0;font-size:.82em;color:var(--dim);border-bottom:.13em solid transparent;white-space:nowrap}
+.mk-tabs{display:flex;gap:1em;padding:0 .95em;border-bottom:1px solid var(--line)}
+.mk-tabs span{padding:.5em 0;font-size:.85em;color:var(--dim);border-bottom:.13em solid transparent;white-space:nowrap}
 .mk-tabs span.on{color:var(--paper);border-bottom-color:var(--paper)}
 
 /* a real table */
-.mk-body{padding:.55em .85em .8em;overflow:hidden;min-height:0}
+.mk-body{padding:.65em .95em .9em;overflow:hidden;min-height:0}
 .mk-body > .mk-fine{padding-top:.7em;color:var(--dim)}
-.mk-tbl{width:100%;border-collapse:collapse;font-size:.8em;table-layout:fixed}
-.mk-tbl th{text-align:left;font-weight:400;color:var(--dim);font-size:.86em;letter-spacing:.04em;
-  text-transform:uppercase;padding:.3em .9em .34em 0;border-bottom:1px solid var(--line);white-space:nowrap}
+.mk-tbl{width:100%;border-collapse:collapse;font-size:.88em;table-layout:fixed}
+.mk-tbl th{text-align:left;font-weight:400;color:var(--dim);font-size:.82em;letter-spacing:.05em;
+  text-transform:uppercase;padding:.3em .9em .4em 0;border-bottom:1px solid var(--line);white-space:nowrap}
 .mk-tbl th:last-child,.mk-tbl td:last-child{padding-right:0}
-.mk-tbl td{padding:.4em .9em .4em 0;border-bottom:1px solid rgba(13,16,22,.055);
+.mk-tbl td{padding:.48em .9em .48em 0;border-bottom:1px solid rgba(13,16,22,.055);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mk-tbl tr:last-child td{border-bottom:0}
+.mk-tbl.tight td{padding-top:.28em;padding-bottom:.28em}
 /* A name with its avatar. Block rather than flex, so a long name gets a
    real ellipsis instead of running into the next column. */
 .mk-tbl .who{display:block;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -348,8 +338,8 @@
 .mk-st.red{color:#A8506B}.mk-st.red::before{opacity:1}
 
 /* the full pipeline, all of it */
-.mk-kan{display:flex;gap:.4em;overflow:hidden;align-items:flex-start}
-.mk-kan .kcol{flex:0 0 6.5em;min-width:0}
+.mk-kan{display:flex;gap:.5em;overflow:hidden;align-items:flex-start}
+.mk-kan .kcol{flex:0 0 8.2em;min-width:0}
 .mk-kan .kh{display:flex;align-items:baseline;gap:.35em;padding:0 .12em .38em;
   font-size:.76em;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
 .mk-kan .kh b{font-weight:400;color:var(--paper)}
@@ -363,13 +353,20 @@
 
 /* A narrow frame gets a denser table rather than a truncated one. */
 @container (max-width: 560px){
-  .mk-tbl{font-size:.74em}
+  .mk-tbl{font-size:.82em}
   .mk-tbl th,.mk-tbl td{padding-right:.6em}
   .mk-metric b{font-size:1em}
 }
 @container (max-width: 380px){
-  .mk-ui{inset:4%;grid-template-columns:7.2em 1fr}
-  .mk-kan .kcol{flex-basis:6.6em}
+  .mk-ui{left:4%;right:4%}
+  .mk-kan{gap:.35em}
+  .mk-kan .kcol{flex-basis:7em}
+  .mk-kan .kc{padding:.32em .4em;margin-bottom:.26em}
+  .mk-tbl.tight td{padding-top:.2em;padding-bottom:.2em}
+  /* At this size the citation already says where the answer came from. */
+  .mk-chat .mk-fine{display:none}
+  .mk-chat{gap:.35em}
+  .mk .mk-stage .mk-chat .mk-msg p{padding:.5em .75em}
 }
 
 /* ---- more of the application ---------------------------------------------
@@ -440,8 +437,7 @@
   font-size:.78em;color:var(--dim);margin-top:.5em}
 
 /* bare mode puts the application in flow instead of floating it */
-.mk.bare .mk-ui{position:relative;left:auto;right:auto;top:auto;transform:none;max-height:none;
-  box-shadow:0 0 0 1px rgba(13,16,22,.10),0 1em 2.4em rgba(0,0,0,.28)}
+.mk.bare .mk-ui{max-height:none;box-shadow:0 0 0 1px rgba(13,16,22,.10),0 1em 2.4em rgba(0,0,0,.28)}
 
 /* live hooks on the application's own parts */
 .mk .mk-kan .kc[data-live="move"]{cursor:pointer;transition:transform .15s ease,box-shadow .2s ease}

@@ -8,12 +8,9 @@ const R: [string, string, string, string, string, string][] = [
   ['Rift Valley Ground Services', 'RV', 'Supplier · DMC', 'Nairobi, Kenya', '11', 'Today'],
   ['Lena & Mark Ortiz', 'LO', 'Traveller', 'Kenya · Quotation', '3', 'Yesterday'],
   ['Atlas Maroc', 'AM', 'Supplier · DMC', 'Marrakesh, Morocco', '7', 'Yesterday'],
-  ['The Halvorsen family', 'TH', 'Traveller', 'Cusco · Planning', '1', 'Tue'],
-  ['Andes Trail Operators', 'AT', 'Supplier · operator', 'Cusco, Peru', '4', 'Mon'],
 ];
 ---
 <App
-  active="Contacts"
   title="Contacts"
   meta="168 travellers · 44 suppliers"
   who="LO"
@@ -22,7 +19,7 @@ const R: [string, string, string, string, string, string][] = [
 >
   <button slot="bar" type="button" class="mk-uibtn" data-live="set" data-done="Added">Add contact</button>
   <table class="mk-tbl">
-    <colgroup><col style="width:33%" /><col style="width:20%" /><col style="width:23%" /><col style="width:11%" /><col style="width:13%" /></colgroup>
+    <colgroup><col style="width:31%" /><col style="width:21%" /><col style="width:24%" /><col style="width:11%" /><col style="width:13%" /></colgroup>
     <thead><tr><th>Name</th><th>Kind</th><th>Where they are</th><th>Trips</th><th>Last</th></tr></thead>
     <tbody>
       {R.map(([n, ini, kind, where, trips, last]) => (

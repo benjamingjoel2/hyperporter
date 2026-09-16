@@ -1,24 +1,23 @@
 ---
 /**
- * The application around a screen: the left-hand navigation, the toolbar,
- * the tabs, and the body the screen fills.
+ * The application around a screen: the toolbar, the tabs, and the body the
+ * screen fills.
  *
  * A floating card with three rows in it is not a CRM, however true its
- * words — the founder's note, Sep 2026. Every screen that is something you
- * are logged into is drawn inside this, so it has the chrome real software
- * has. The screens that are *not* — a magic link a traveller opens, the
- * inquiry form, the sign-in page — pass `page`, which drops the navigation
- * and puts the agency's own name where the navigation was, because the
- * person looking at it is not logged into anything.
+ * words — the founder's note, Sep 2026. Every screen is drawn inside this,
+ * so it has the chrome real software has.
+ *
+ * There is no left-hand navigation: at the size a screen is seen on this
+ * site a sidebar is a column of unreadable words eating a sixth of the
+ * width (founder's instruction, Sep 2026). Whose application it is — the
+ * agency's, a supplier's — is a small mark at the head of the toolbar
+ * instead. `page` drops even that, for the screens nobody signs into.
  */
-import { NAV } from './nav';
 
 interface Props {
-  /** The left-hand navigation. `false` for a page nobody signs into. */
-  nav?: string[] | false;
-  active?: string;
+  /** Whose application this is, at the head of the toolbar. */
   brand?: string;
-  /** A page rather than the application: brand bar, no rail. */
+  /** A page rather than the application: no brand mark, no tabs. */
   page?: boolean;
   title: string;
   meta?: string;
@@ -34,21 +33,15 @@ interface Props {
 }
 
 const {
-  nav = NAV, active, brand = 'Hyperporter', page = false,
+  brand = 'Hyperporter', page = false,
   title, meta, pills = [], who, tabs, tab, note, talk = false, class: klass = '',
 } = Astro.props;
-const rail = page ? false : nav;
 ---
 
-<div class:list={['mk-ui', klass, { nonav: !rail, page }]}>
-  {rail && (
-    <div class="mk-rail2">
-      <span class="brand"><i /><span>{brand}</span></span>
-      {rail.map((n) => <a class:list={{ on: n === active }}><i />{n}</a>)}
-    </div>
-  )}
+<div class:list={['mk-ui', klass, { page }]}>
   <div class="mk-main">
     <div class="mk-bar">
+      {!page && <span class="mk-brand"><i />{brand}</span>}
       <b>{title}</b>
       {meta && <small>{meta}</small>}
       <span class="sp">
