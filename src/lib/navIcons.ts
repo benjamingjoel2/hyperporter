@@ -54,6 +54,7 @@ export const NAV_ICONS: Record<string, string> = {
   'Tour operators': C(12, 12, 9) + P('M15.5 8.5l-2 5-5 2 2-5z'),
   // Resources
   'Blog': P('M3 5a2 2 0 012-2h4a3 3 0 013 3v15a2 2 0 00-2-2H3z') + P('M21 5a2 2 0 00-2-2h-4a3 3 0 00-3 3v15a2 2 0 012-2h7z'),
+  'Pricing': P('M20.6 13.4 12 22 2 12V2h10l8.6 8.6a2 2 0 010 2.8z') + C(7.5, 7.5, 1.2),
   'Destinations': C(12, 12, 9) + P('M3 12h18') + P('M12 3c3 3 3 15 0 18') + P('M12 3c-3 3-3 15 0 18'),
   'About': C(12, 12, 9) + P('M12 11v5') + P('M12 8h.01'),
   'Security': P('M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z') + P('M9 12l2 2 4-4'),
