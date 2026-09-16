@@ -27,12 +27,52 @@ export interface StepRow {
 
 export interface StepMsg {
   text: string;
+  /** The channel it arrived on, shown as a chip above the bubble. */
+  via?: string;
   from?: 'me' | 'them';
   cite?: string;
   state?: 'typing';
 }
 
+/** A screen is composed of blocks, so each step can be the interface it
+    describes rather than the same three-row list every time. */
+export type StepBlock =
+  | { k: 'lbl'; lbl: string; title: string }
+  | { k: 'search'; q: string; meta?: string }
+  | { k: 'kpis'; kpis: [string, string][] }
+  | { k: 'fields'; pair?: boolean; fields: [string, string, boolean?][] }
+  | { k: 'cols'; cols: { name: string; cards: [string, string][] }[] }
+  | { k: 'cards'; cards: { title: string; meta: string; price?: string; tag?: string; amber?: boolean; on?: boolean }[] }
+  | { k: 'files'; files: [string, string, string?][] }
+  | { k: 'people'; people: [string, string, string, string?][] }
+  | { k: 'doc'; title: string; lines: string[] }
+  | { k: 'sum'; label: string; value: string }
+  | { k: 'note'; text: string };
+
+/** Real application chrome: a sidebar you navigate with, a toolbar, tabs,
+    and a dense table or the full pipeline board. A screen that claims to be
+    a CRM has to look like one. */
+export interface StepShell {
+  /** Whose application this is, at the head of the toolbar; false for none. */
+  brand?: string | false;
+  title: string;
+  meta?: string;
+  pills?: string[];
+  who?: string;
+  tabs?: string[];
+  tab?: string;
+  /** Cell forms: 'text' | '#go:Label' for a status dot | [name, initials]. */
+  table?: { cols: string[]; rows: (string | [string, string])[][]; avatars?: boolean; num?: number[]; w?: string[] };
+  kanban?: { name: string; n: string; cards: [string, string, boolean?][] }[];
+  note?: string;
+}
+
 export interface StepScreen {
+  shell?: StepShell;
+  /** The faded sheet behind the panel; `lines` are width classes s | m | l. */
+  back?: { title: string; lines: string[] };
+  blocks?: StepBlock[];
+  wide?: boolean;
   head?: [string, string];
   rows?: StepRow[];
   msgs?: StepMsg[];
@@ -44,814 +84,774 @@ export interface StepScreen {
 export const STEP_SCREENS: Record<string, StepScreen[]> = {
   // ---------------------------------------------------------------- tools
   portal: [
-    {
-      head: ['Inbox', '3 new'],
-      rows: [
-        { b: 'Lena Ortiz', s: 'Inquiry form · Nairobi, 9 nights', state: 'now' },
-        { b: 'Tom Achebe', s: 'Email · forwarded from hello@', state: 'wait' },
-        { b: 'Mira Sato', s: 'WhatsApp · +81 ··· 4417', state: 'wait' },
-      ],
-      foot: ['Every channel lands in the same place.'],
-    },
-    {
-      head: ['Rift Valley Ground Services', 'KE-2291'],
-      msgs: [
-        { text: 'Nairobi, 3 – 12 March. 2 travellers, wildlife and walking, no long drives. Can you quote?', from: 'me' },
-        { text: 'Yes — €4,180 per person, full board. Park fees included. Holding until Friday.', from: 'them' },
-      ],
-      foot: ['Their reply lands on the trip, where your whole team can see it.'],
-    },
-    {
-      head: ['Magic link', 'No password'],
-      rows: [
-        { b: 'Supplier link', s: 'The request and their own quote only', tag: 'Sent' },
-        { b: 'Your margin', s: 'Set by you, added before the traveller sees it', state: 'done' },
-        { b: 'Traveller link', s: 'Your branding · price including your margin', tag: 'Sent' },
-      ],
-      foot: ['Each side sees only their own view of the trip.'],
-    },
-    {
-      head: ['After the trip', 'KE-2291'],
-      rows: [
-        { b: 'Every message kept', s: 'Both sides, in order', state: 'done' },
-        { b: 'Rates as quoted', s: 'What was agreed, and when', state: 'done' },
-        { b: 'Ready to repeat', s: 'Duplicate for the next inquiry', tag: 'Reuse' },
-      ],
-      foot: ['The record outlives the trip.'],
-    },
+    { shell: { title: 'Inbox', meta: '3 new', who: 'LO',
+      pills: ['Unassigned'],
+      table: { cols: ['From', 'What they wrote', 'Channel', 'When'], avatars: true,
+        w: ['22%', '44%', '17%', '17%'],
+        rows: [
+          [['Lena Ortiz', 'LO'], '“Kenya in March, 9 nights, two of us…”', 'Inquiry form', '09:02'],
+          [['Tom Achebe', 'TA'], '“Is the Mara good in March? Budget ~€4k pp.”', 'Email', '08:41'],
+          [['Mira Sato', 'MS'], '“Hi! Planning a safari — where do we start?”', 'WhatsApp', 'Yesterday'],
+          [['R. Fontaine', 'RF'], '“Peru in June, family of four.”', 'Inquiry form', 'Yesterday'],
+        ] },
+      note: 'However they reach you, it starts here — matched to a contact or opening one.' } },
+
+    { shell: { title: 'Lena & Mark Ortiz', meta: 'KE-2291 · Quotation', who: 'LO',
+      tabs: ['Overview', 'Quotation board', 'Pricing', 'Magic link', 'Autopilot'], tab: 'Quotation board',
+      table: { cols: ['Supplier', 'Offer', 'Cost pp', 'Sells at', 'Document', 'Status'],
+        avatars: true, w: ['28%', '18%', '12%', '13%', '15%', '14%'],
+        rows: [
+          [['Rift Valley Ground Services', 'RV'], 'Classic · 8 days', '€4,180', '€4,932', 'PDF · 240 KB', '#go:In'],
+          [['Rift Valley Ground Services', 'RV'], 'Shorter · 5 days', '€2,890', '€3,410', 'PDF · 198 KB', '#go:In'],
+          [['Baobab Eco Safaris', 'BE'], 'Walking · 7 days', '€3,880', '€4,578', 'PDF · 310 KB', '#go:In'],
+          [['Acacia Safari Logistics', 'AS'], 'Classic · 8 days', '—', '—', '—', '#amb:Reminded'],
+        ] },
+      note: 'Every quote you receive, on the trip, visible to everyone on your team.' } },
+
+    { blocks: [
+        { k: 'lbl', lbl: 'One trip · two links', title: 'What each side opens' },
+        { k: 'cards', cards: [
+          { title: 'Traveller', meta: 'Meridian Travel Co. · 9 nights, Kenya', price: '€4,932 pp', tag: 'Your branding' },
+          { title: 'Supplier', meta: 'The request and their own quote', price: '€4,180 pp', tag: 'Their rate' },
+        ] },
+        { k: 'sum', label: 'Your margin, added between the two', value: '18%' },
+        { k: 'note', text: 'Neither side sees the other’s number.' },
+      ] },
+
+    { shell: { title: 'Trips · closed', meta: 'KE-2291 archived', who: 'LO',
+      pills: ['Completed'],
+      table: { cols: ['Kept on the record', 'Detail', 'Count'], num: [2], w: ['34%', '46%', '20%'],
+        rows: [
+          ['Messages', 'Both sides, in order, every channel', '48'],
+          ['Documents', 'Supplier quotes, vouchers, invoices', '6'],
+          ['Rates as quoted', 'What was agreed, and when', '5 lines'],
+          ['Suppliers used', 'Rift Valley GS, Mara North, Karen Overland', '3'],
+        ] },
+      note: 'Duplicate it and the next inquiry from Lena starts from all of this.' } },
   ],
+
+
 
   'atlas-ai': [
-    {
-      head: ['Vault', '61 documents'],
-      rows: [
-        { b: 'Rift Valley GS — rates 2026.pdf', s: 'Kenya · 48 rates', tag: 'Indexed', icon: 'PDF' },
-        { b: 'Atlas Maroc 2026.pdf', s: 'Morocco · 112 rates', tag: 'Indexed', icon: 'PDF' },
-        { b: 'Andes Trail — Sacred Valley.xlsx', s: 'Peru · 36 rates', tag: 'Indexing', amber: true, icon: 'XLS' },
-      ],
-      foot: ['Rates and validity read out of each one.'],
-    },
-    {
-      head: ['Atlas', 'On the trip thread'],
-      msgs: [{ text: 'Rift Valley, Mara North game drives, March — park fee included?', from: 'me' }],
+    { head: ['Vault', '61 documents'],
+      blocks: [
+        { k: 'files', files: [
+          ['Rift Valley GS — rates 2026.pdf', 'Kenya · 48 rates · valid to 31 Mar', 'Indexed'],
+          ['Atlas Maroc 2026.pdf', 'Morocco · 112 rates', 'Indexed'],
+          ['Andes Trail — Sacred Valley.xlsx', 'Peru · 36 rates', 'Indexing'],
+        ] },
+        { k: 'note', text: 'Read, its rates and validity extracted, made queryable.' },
+      ] },
+    { head: ['Nairobi — 9 nights', 'KE-2291'],
+      msgs: [{ text: 'Mara North game drives in March — is the park fee included in their rate?', from: 'me' }],
       composer: ['Ask about your contracts…', 'Ask'],
-      foot: ['Asked where the work already is.'],
-    },
-    {
-      head: ['Atlas', 'Answering'],
+      blocks: [{ k: 'note', text: 'Asked on the trip, where the work already is.' }] },
+    { head: ['Atlas', 'Answering'],
       msgs: [
-        { text: 'Rift Valley, Mara North game drives, March — park fee included?', from: 'me' },
-        {
-          text: 'USD 95 pp per day through 31 March. Park fees not included: USD 116 per adult per night.',
-          cite: 'Rift Valley GS — rates 2026.pdf · p.2, p.5',
-        },
+        { text: 'Mara North game drives in March — is the park fee included?', from: 'me' },
+        { text: 'No. USD 95 pp per day through 31 March covers the drive. Park fees are USD 116 per adult per night, billed separately.',
+          cite: 'Rift Valley GS — rates 2026.pdf · p.2, p.5' },
       ],
-      foot: ['From your Vault only. Every line points at its page.'],
-    },
-    {
-      head: ['Yours to place', 'Nothing sent yet'],
-      rows: [
-        { b: 'Add to the quote', s: 'You choose the line and the margin', tag: 'Your call', amber: true },
-        { b: 'Copy it', s: 'Paste into the message yourself', tag: 'Your call', amber: true },
-        { b: 'Leave it', s: 'Atlas does not act on its own', state: 'hold' },
+      blocks: [{ k: 'note', text: 'If the Vault has nothing on it, Atlas says so rather than guessing.' }] },
+    { head: ['Draft quote', 'Not sent'],
+      blocks: [
+        { k: 'doc', title: 'Atlas drafted', lines: ['Game drives · USD 95 pp/day', 'Park fees · USD 116 pp/night', 'Valid through 31 March'] },
+        { k: 'note', text: 'Atlas drafts and suggests. Sending it is yours.' },
       ],
-      foot: ['Atlas answers. You decide.', 'Add to quote', true],
-    },
+      foot: ['Review before it goes.', 'Send quote', true] },
   ],
+
 
   'crm-workflow': [
-    {
-      head: ['Board', 'Stage 1 – 2'],
-      rows: [
-        { b: 'Inquiry', s: 'Nairobi · Ortiz · just in', state: 'now' },
-        { b: 'Qualification', s: 'Dates, party size, budget', state: 'wait' },
-        { b: 'Planning', s: 'Waiting on the brief', state: 'wait' },
+    { shell: { title: 'Trips', meta: '14 open', who: 'LO',
+      pills: ['All agents', 'This quarter'],
+      kanban: [
+        { name: 'Inquiry', n: '3', cards: [['Mira Sato', 'Japan · Oct'], ['R. Fontaine', 'Peru · Jun'], ['H. Okonkwo', 'Egypt · Feb']] },
+        { name: 'Planning', n: '4', cards: [['Lena & Mark Ortiz', 'Kenya · Mar · v2 live'], ['The Achebe family', 'Peru · Jun'], ['D. Mwangi', 'Tanzania · Sep']] },
+        { name: 'Quotation', n: '3', cards: [['J. Mendes', 'Chile · Nov · 2 offers'], ['S. Ferreira', 'Morocco · Apr']] },
+        { name: 'Confirmation', n: '2', cards: [['P. Nair', 'Vietnam · Jan · re-checking', true], ['A. Silva', 'Portugal · May']] },
+        { name: 'Booking', n: '1', cards: [['T. Achebe', 'Peru · deposit due', true]] },
+        { name: 'Ready', n: '1', cards: [['K. Adeyemi', 'Kenya · 6 days out']] },
       ],
-      foot: ['A trip enters at Inquiry and moves one stage at a time.'],
-    },
-    {
-      head: ['Board', 'Stage 3 – 5'],
-      rows: [
-        { b: 'Quotation', s: 'Cusco · 3 suppliers asked', state: 'now' },
-        { b: 'Proposal', s: 'v3 sent · opened twice', state: 'done' },
-        { b: 'Confirmation', s: 'Re-check before it is booked', state: 'wait' },
-      ],
-      foot: ['The stage is the status. Nobody updates a column by hand.'],
-    },
-    {
-      head: ['Board', 'Stage 6 – 7'],
-      rows: [
-        { b: 'Booking', s: 'Deposit received · marked by you', tag: 'By hand', amber: true },
-        { b: 'Documents', s: 'Passports in · vouchers out', state: 'now' },
-        { b: 'Ready', s: 'Everything the traveller needs', state: 'wait' },
-      ],
-      foot: ['Money moving is always a person’s to confirm.'],
-    },
-    {
-      head: ['Board', 'Stage 8 – 9'],
-      rows: [
-        { b: 'Traveling', s: 'Live · relay on', state: 'now' },
-        { b: 'Post-Trip', s: 'Feedback requested', state: 'wait' },
-        { b: 'Completed', s: 'Record kept, ready to repeat', state: 'done' },
-      ],
-      foot: ['Nine stages, start to finish.'],
-    },
+      note: 'One board for the whole agency. Colour is only ever a thread that needs a person.' } },
+
+    { shell: { title: 'Lena & Mark Ortiz', meta: 'KE-2291 · Quotation', who: 'LO',
+      tabs: ['Overview', 'Quotation board', 'Pricing', 'Magic link', 'Autopilot'], tab: 'Quotation board',
+      table: { cols: ['Supplier', 'Offer', 'Cost pp', 'Margin', 'Sells at', 'Status'],
+        avatars: true, num: [2, 4], w: ['31%', '18%', '12%', '9%', '14%', '16%'],
+        rows: [
+          [['Rift Valley Ground Services', 'RV'], 'Classic · 8 days', '€4,180', '18%', '€4,932', '#go:Released'],
+          [['Baobab Eco Safaris', 'BE'], 'Walking · 7 days', '€3,880', '18%', '€4,578', '#go:Released'],
+          [['Acacia Safari Logistics', 'AS'], 'Classic · 8 days', '€4,505', '—', '—', '#amb:Draft'],
+          [['Karen Overland Co.', 'KO'], 'Transfers only', '—', '—', '—', '#red:Declined'],
+        ] },
+      note: 'Cost and margin are on your side of the table. The traveller sees the last column only.' } },
+
+    { shell: { title: 'Lena & Mark Ortiz', meta: 'KE-2291 · Booking', who: 'LO',
+      tabs: ['Overview', 'Quotation board', 'Pricing', 'Magic link', 'Autopilot'], tab: 'Pricing',
+      table: { cols: ['Item', 'Due', 'Amount', 'Method', 'Status'], num: [2], w: ['30%', '13%', '15%', '15%', '27%'],
+        rows: [
+          ['Deposit · 30%', '14 Feb', '€1,480', 'Transfer', '#amb:You mark received'],
+          ['Balance · 70%', '1 Mar', '€3,452', 'Transfer', '#:Not due'],
+          ['Rift Valley GS payout', '5 Mar', '€4,180', 'Transfer', '#:Scheduled'],
+          ['Vouchers · 2 of 3 in', '20 Feb', '—', 'Upload', '#amb:Chasing'],
+        ] },
+      note: 'Below Intelligence nothing marks itself paid — the amber rows are yours.' } },
+
+    { shell: { title: 'Trips · closed', meta: '9 this quarter', who: 'LO',
+      pills: ['Completed', 'Lost', 'Cancelled'],
+      table: { cols: ['Traveller', 'Trip', 'Closed', 'Value', 'Outcome'], avatars: true, num: [3], w: ['27%', '24%', '13%', '13%', '23%'],
+        rows: [
+          [['Lena & Mark Ortiz', 'LO'], 'Kenya · 9 nights', '12 Mar', '€9,864', '#go:Completed'],
+          [['K. Adeyemi', 'KA'], 'Kenya · 6 nights', '2 Mar', '€6,120', '#go:Completed'],
+          [['S. Ferreira', 'SF'], 'Morocco · 5 nights', '28 Feb', '—', '#red:Lost · price'],
+          [['H. Okonkwo', 'HO'], 'Egypt · 8 nights', '19 Feb', '—', '#red:Lost · no reply'],
+        ] },
+      note: 'Lost carries the stage it stopped at, which is where the funnel actually leaks.' } },
   ],
+
+
 
   'inquiry-form': [
-    {
-      head: ['Your form', 'meridiantravel.co/enquire'],
-      rows: [
-        { b: 'Your own link', s: 'Site, bio, email signature', tag: 'Live' },
-        { b: 'Your brand on it', s: 'Logo, colours, wording', state: 'done' },
-        { b: 'No setup', s: 'Nothing to install anywhere', state: 'done' },
+    { wide: false,
+      blocks: [
+        { k: 'lbl', lbl: 'Your form', title: 'meridiantravel.co/enquire' },
       ],
-      foot: ['One link, wherever people find you.'],
-    },
-    {
-      head: ['Enquiry', 'In progress'],
       rows: [
-        { b: 'Where and when', s: 'Kenya · 3 – 12 March', state: 'done' },
-        { b: 'Who is travelling', s: '2 adults', state: 'done' },
-        { b: 'Budget', s: 'Being filled in…', state: 'now' },
+        { b: 'In your Instagram bio', s: 'Tap-through, no app', state: 'done' },
+        { b: 'In your email signature', s: 'Every thread you send', state: 'done' },
+        { b: 'On your site', s: 'Or wherever they find you', state: 'done' },
       ],
-      foot: ['The questions you would have asked anyway.'],
-    },
-    {
-      head: ['Nairobi — 9 nights', 'KE-2291 · new'],
+      foot: ['One URL. Put it where they already are.', 'Copy link', false] },
+    { back: { title: 'Meridian Travel Co.', lines: ['l', 'm', 'l', 's'] },
+      blocks: [
+        { k: 'lbl', lbl: 'New inquiry', title: 'Tell us about the trip' },
+        { k: 'fields', pair: true, fields: [['Where', 'Kenya, the Mara'], ['When', 'Early March']] },
+        { k: 'fields', fields: [['Budget, per person', '€4,000 – 4,500', true]] },
+        { k: 'note', text: 'On your page, on any device, with your branding on the confirmation.' },
+      ],
+      foot: ['Short and guided.', 'Send', false] },
+    { head: ['Trips', '8 open'],
+      blocks: [
+        { k: 'cols', cols: [
+          { name: 'Inquiry', cards: [['Lena Ortiz · Kenya', 'New · just now'], ['Tom Achebe · Peru', '2 days ago']] },
+          { name: 'Planning', cards: [['Mira Sato · Japan', 'Itinerary v2']] },
+        ] },
+        { k: 'note', text: 'A new contact and a new trip, with the brief ready to work from.' },
+      ] },
+    { head: ['Autopilot', 'From here'],
       rows: [
-        { b: 'Lena & Mark Ortiz', s: 'Contact created', state: 'done' },
-        { b: 'Trip record', s: 'Dates and party size filled in', state: 'done' },
-        { b: 'At Inquiry', s: 'Stage 1 of 9', tag: 'Inquiry' },
+        { b: 'Brief checked back', s: 'With the traveller, automatically', state: 'done' },
+        { b: 'First itinerary proposed', s: 'Nobody typed it', state: 'done' },
+        { b: 'Waiting on their answer', s: 'Nudged at day 4', state: 'wait' },
       ],
-      foot: ['No retyping. The submission is the record.'],
-    },
-    {
-      head: ['Automation', 'Inquiry'],
-      rows: [
-        { b: 'Brief built', s: 'From what they gave you', state: 'done' },
-        { b: 'Gaps asked about', s: 'Only what is missing', state: 'now' },
-        { b: 'Confirmed with them', s: 'Before it moves to Planning', state: 'wait' },
-      ],
-      foot: ['On Autopilot. Escalates to you when it needs a person.'],
-    },
+      blocks: [{ k: 'note', text: 'It advances only once they confirm the brief in their own words.' }] },
   ],
 
+
   'quotation-board': [
-    {
-      head: ['Nairobi — flexible, March', '3 offers in'],
-      rows: [
-        { b: 'Rift Valley Ground Services', s: '8 days · classic route · own document attached', state: 'done' },
-        { b: 'Rift Valley Ground Services', s: '5 days · shorter alternative', state: 'done' },
-        { b: 'Baobab Eco Safaris', s: '7 days · walking, not game drives', state: 'done' },
-      ],
-      foot: ['One supplier can send more than one. Each is a whole trip.'],
-    },
-    {
-      head: ['Baobab Eco · 7 days', 'Draft'],
-      rows: [
-        { b: 'Day-by-day itinerary', s: 'Hotels, room types, nights', state: 'done' },
-        { b: 'Included / not included', s: 'Park fees in · flights out', state: 'done' },
-        { b: 'Cost €3,880 · margin 18% · €4,578', s: 'Margin is yours, per offer', tag: 'By hand', amber: true },
-      ],
-      foot: ['Your note on this offer never leaves your side.', 'Release to traveller', true],
-    },
-    {
-      head: ['What the traveller sees', '3 released'],
-      rows: [
-        { b: 'Classic route · 8 days', s: '€4,932 pp', state: 'done' },
-        { b: 'Walking safari · 7 days', s: '€4,578 pp · the only one built around walking', state: 'done' },
-        { b: 'Shorter route · 5 days', s: '€3,410 pp', state: 'done' },
-      ],
-      foot: ['Selling price only. Never the cost, never your margin.'],
-    },
-    {
-      head: ['Walking safari · 7 days', 'Chosen'],
-      rows: [
-        { b: 'Confirmation requested', s: 'Sent to Baobab Eco', tag: 'Waiting', amber: true },
-        { b: 'Classic route · 8 days', s: 'Still available as a backup', state: 'done' },
-        { b: 'Shorter route · 5 days', s: 'Still available as a backup', state: 'done' },
-      ],
-      foot: ['The others are declined only once this one is booked.'],
-    },
+    { shell: { title: 'Lena & Mark Ortiz', meta: 'KE-2291 · flexible, March', who: 'LO',
+      tabs: ['Overview', 'Quotation board', 'Pricing', 'Magic link'], tab: 'Quotation board',
+      table: { cols: ['Offer', 'Supplier', 'Shape', 'Their document', 'Received'],
+        w: ['20%', '26%', '20%', '19%', '15%'],
+        rows: [
+          ['Offer 1', 'Rift Valley Ground Services', 'Classic · 8 days', 'PDF · 240 KB', '09:41'],
+          ['Offer 2', 'Rift Valley Ground Services', 'Shorter · 5 days', 'PDF · 198 KB', '09:41'],
+          ['Offer 3', 'Baobab Eco Safaris', 'Walking · 7 days', 'PDF · 310 KB', '11:02'],
+        ] },
+      note: 'One supplier can send more than one. Each offer is a whole trip, not a price.' } },
+    { shell: { title: 'Offer 3 · Baobab Eco Safaris', meta: 'Draft — not released', who: 'LO',
+      tabs: ['Itinerary', 'Hotels', 'Inclusions', 'Terms', 'Pricing'], tab: 'Pricing',
+      table: { cols: ['Line', 'Cost pp', 'Margin', 'Sells at', 'Visible to client'], num: [1, 3],
+        w: ['30%', '15%', '13%', '15%', '27%'],
+        rows: [
+          ['Walking safari · 7 days', '€3,880', '18%', '€4,578', '#go:Selling price only'],
+          ['Your note on this offer', '—', '—', '—', '#red:Never'],
+          ['Their original document', '—', '—', '—', '#red:Never'],
+        ] },
+      note: 'Margin is editable per offer. Cost and margin never cross to their side.' } },
+    { shell: { title: 'Meridian Travel Co.', meta: 'Your proposals · Kenya, March',
+      table: { cols: ['Proposal', 'Shape', 'Price pp', 'Why this one'],
+        w: ['22%', '22%', '15%', '41%'],
+        rows: [
+          ['Classic', '8 days · game drives', '€4,932', 'The widest wildlife coverage'],
+          ['Walking', '7 days · on foot', '€4,578', 'The only one built around walking'],
+          ['Shorter', '5 days · same supplier', '€3,410', 'If the dates have to tighten'],
+        ] },
+      note: 'The traveller’s own view. Selling price only — never the cost, never your margin.' } },
+    { shell: { title: 'Walking · 7 days', meta: 'Chosen by the traveller', who: 'LO',
+      table: { cols: ['Offer', 'Supplier', 'Price pp', 'State'],
+        w: ['24%', '30%', '16%', '30%'],
+        rows: [
+          ['Walking · 7 days', 'Baobab Eco Safaris', '€4,578', '#amb:Confirmation requested'],
+          ['Classic · 8 days', 'Rift Valley GS', '€4,932', '#go:Still available'],
+          ['Shorter · 5 days', 'Rift Valley GS', '€3,410', '#go:Still available'],
+        ] },
+      note: 'The others are declined only once this one is actually booked.' } },
   ],
+
+
 
 
   'proposal-share': [
-    {
-      head: ['Proposal', 'From the record'],
-      rows: [
-        { b: 'Days and nights', s: 'As laid out on the trip', state: 'done' },
-        { b: 'Prices', s: 'The quotes you chose', state: 'done' },
-        { b: 'Inclusions', s: 'Straight from the contracts', state: 'done' },
+    { head: ['KE-2291', 'One action'],
+      blocks: [
+        { k: 'doc', title: 'Built from the record', lines: ['The offer the traveller chose', 'The day-by-day, as quoted', 'Your terms and payment schedule'] },
+        { k: 'note', text: 'Nothing retyped. It is the record, laid out.' },
       ],
-      foot: ['Generated, not rewritten.'],
-    },
-    {
-      head: ['Send it as', '3 ways'],
+      foot: ['Generate the proposal.', 'Generate', false] },
+    { head: ['Send it', 'However they read'],
+      blocks: [
+        { k: 'cards', cards: [
+          { title: 'Link', meta: 'Opens in a browser', tag: 'Stays current' },
+          { title: 'PDF', meta: 'For an inbox that wants one', tag: 'Snapshot' },
+          { title: 'Text', meta: 'The link, on WhatsApp', tag: 'Fastest' },
+        ] },
+        { k: 'note', text: 'A link updates when the price does. A PDF does not.' },
+      ] },
+    { head: ['Proposal v3', 'Opened twice'],
+      blocks: [
+        { k: 'kpis', kpis: [['Opened', '2 times'], ['Last seen', '2 h ago'] ] },
+        { k: 'note', text: 'So a follow-up is timed rather than guessed.' },
+      ] },
+    { head: ['Accepted', 'On their link'],
       rows: [
-        { b: 'A link', s: 'Always the current version', tag: 'Live' },
-        { b: 'A PDF', s: 'For people who want a file', tag: 'Export' },
-        { b: 'A message', s: 'WhatsApp or email', tag: 'Send' },
-      ],
-      foot: ['One proposal. Whichever way they prefer.'],
-    },
-    {
-      head: ['Proposal v3', 'Opened twice'],
-      rows: [
-        { b: 'First opened', s: 'Tuesday, 14:02', state: 'done' },
-        { b: 'Opened again', s: '2 h ago · on the day 4 page', state: 'done' },
-        { b: 'Not yet answered', s: 'No accept, no questions', state: 'wait' },
-      ],
-      foot: ['You know it landed before you chase it.'],
-    },
-    {
-      head: ['On the page', 'Their side'],
-      rows: [
-        { b: 'Accept', s: 'Signed on the page itself', tag: 'Accepted' },
-        { b: 'Ask a question', s: 'Lands on the trip thread', state: 'done' },
-        { b: 'Moves to Confirmation', s: 'Stage 5 of 9', state: 'now' },
-      ],
-      foot: ['Accepted is not confirmed. The re-check comes next.'],
-    },
+        { b: 'Lena Ortiz accepted', s: 'On the traveller link · 09:12', state: 'done' },
+        { b: 'Trip moved to Confirmation', s: 'Automatic', state: 'done' },
+        { b: 'Rift Valley GS asked to re-confirm', s: 'Before money moves', state: 'now' },
+      ] },
   ],
+
 
   'client-supplier-dashboard': [
-    {
-      head: ['Nairobi — 9 nights', 'One record'],
+    { blocks: [
+        { k: 'lbl', lbl: 'One record · two links', title: 'What each side opens' },
+        { k: 'cards', cards: [
+          { title: 'Traveller', meta: 'Itinerary, documents, payments', price: '€4,932 pp', tag: 'Your branding' },
+          { title: 'Supplier', meta: 'The request and their own quote', price: '€4,180 pp', tag: 'Their rate' },
+        ] },
+        { k: 'note', text: 'Rendered from the record at the moment it is opened.' },
+      ] },
+    { head: ['The record changed', 'Both views follow'],
       rows: [
-        { b: 'Traveller link', s: 'Itinerary, documents, payments', tag: 'Open' },
-        { b: 'Supplier link', s: 'Their request and their quote', tag: 'Open' },
-        { b: 'Neither sees the other', s: 'No budget, no margin', state: 'done' },
+        { b: 'Rift Valley GS revised the rate', s: '€4,180 → €4,240', state: 'now' },
+        { b: 'Traveller link', s: 'Now shows €5,003 pp', state: 'done' },
+        { b: 'No resend, no new PDF', s: 'Same link, new number', state: 'done' },
+      ] },
+    { head: ['Nairobi — 9 nights', 'Addressed to you'],
+      msgs: [
+        { via: 'Lena Ortiz · traveller dashboard', text: 'Could we add a night in Nairobi at the start?', from: 'them' },
+        { text: 'Checking with the camp now — back to you today.', from: 'me' },
       ],
-      foot: ['Two doors into the same trip.'],
-    },
-    {
-      head: ['Day 4 changed', 'Both sides'],
+      blocks: [{ k: 'note', text: 'Either side asks. It lands on the trip thread, never on the other side.' }] },
+    { head: ['Deposit · €1,480', 'KE-2291'],
       rows: [
-        { b: 'Supplier moved the camp', s: 'Mara North → Naboisho', state: 'now' },
-        { b: 'Traveller’s itinerary', s: 'Updated on their link', state: 'done' },
-        { b: 'You were told', s: 'Before they asked', state: 'done' },
+        { b: 'Instructions on their link', s: 'Amount, due date, how to pay', state: 'done' },
+        { b: 'Money received', s: 'A deliberate action on yours', tag: 'Needs you', amber: true },
       ],
-      foot: ['One change, everywhere it matters.'],
-    },
-    {
-      head: ['Questions', 'On the thread'],
-      rows: [
-        { b: '“Is the park fee included?”', s: 'Traveller · 2 h ago', state: 'now' },
-        { b: '“Can we hold 3 nights?”', s: 'Supplier · yesterday', state: 'done' },
-        { b: 'Both on the trip record', s: 'Not in your personal inbox', state: 'done' },
-      ],
-      foot: ['You are not the record any more.'],
-    },
-    {
-      head: ['Deposit', 'Awaiting you'],
-      rows: [
-        { b: 'Request sent', s: '€1,480 · on the traveller’s link', state: 'done' },
-        { b: 'Bank shows a transfer', s: 'You check it', tag: 'By hand', amber: true },
-        { b: 'Mark as received', s: 'Only a person does this', tag: 'By hand', amber: true },
-      ],
-      foot: ['Money received is marked by a person, never guessed.', 'Mark received', true],
-    },
+      blocks: [{ k: 'note', text: 'Below Intelligence, nothing marks itself paid.' }] },
   ],
+
 
   'three-way-inbox': [
-    {
-      head: ['Thread', 'Nairobi — 9 nights'],
+    { shell: { title: 'Lena & Mark Ortiz', meta: 'KE-2291 · one thread', who: 'LO',
+      tabs: ['Overview', 'Thread', 'Quotation board', 'Pricing'], tab: 'Thread',
+      table: { cols: ['Side', 'Who', 'Message', 'Channel'], avatars: false,
+        w: ['14%', '22%', '46%', '18%'],
+        rows: [
+          ['#go:Traveller', 'Lena Ortiz', '“Can we push the start by two days?”', 'Email'],
+          ['#amb:Supplier', 'Rift Valley GS', '“Camp has space from the 5th.”', 'Email'],
+          ['#amb:Supplier', 'Peter Kimani', '“Confirmed for the 5th, same driver.”', 'WhatsApp'],
+          ['#go:Traveller', 'Lena Ortiz', '“Perfect — thank you!”', 'Email'],
+        ] },
+      note: 'Two conversations, one thread, each marked by side.' } },
+    { head: ['Reply in place', 'Goes back the same way'],
+      msgs: [{ text: 'The 5th works — holding it now.', from: 'me' }],
       rows: [
-        { b: 'Traveller · WhatsApp', s: '“What time is the pickup?”', state: 'now' },
-        { b: 'Supplier · email', s: 'Voucher attached', state: 'done' },
-        { b: 'You', s: 'Both, in one place', state: 'done' },
+        { b: 'To Lena', s: 'Email · her own thread', state: 'done' },
+        { b: 'To the driver', s: 'WhatsApp · +254 ··· 8810', state: 'done' },
       ],
-      foot: ['Three parties, one conversation.'],
-    },
-    {
-      head: ['Reply', 'In place'],
-      msgs: [
-        { text: 'What time is the pickup?', from: 'them' },
-        { text: '06:15 from the lodge — driver is Peter, plate KDJ 441H.', from: 'me' },
-      ],
-      foot: ['They get it on WhatsApp. You never left the trip.'],
-    },
-    {
-      head: ['On the thread', 'Automatic'],
-      rows: [
-        { b: 'Voucher sent to traveller', s: 'Automation · 09:02', state: 'done' },
-        { b: 'Supplier re-confirmed', s: 'Automation · yesterday', state: 'done' },
-        { b: 'Shown, not hidden', s: 'You can see what ran', state: 'done' },
-      ],
-      foot: ['Every automatic step is written into the same thread.'],
-    },
-    {
-      head: ['Needs you', '1 flagged'],
-      rows: [
-        { b: 'Camp cannot hold day 4', s: 'Supplier · 20 min ago', tag: 'Urgent', amber: true },
-        { b: 'Traveller not told yet', s: 'Held until you decide', tag: 'Held', amber: true },
-        { b: 'Everything else', s: 'Handled without you', state: 'done' },
-      ],
-      foot: ['Urgent breaks through. The rest does not.', 'Open', true],
-    },
+      blocks: [{ k: 'note', text: 'They never see each other’s channel, or each other.' }] },
+    { shell: { title: 'KE-2291', meta: 'Full history', who: 'LO',
+      tabs: ['Overview', 'Thread', 'Quotation board', 'Pricing'], tab: 'Thread',
+      table: { cols: ['Time', 'Event', 'By', 'Kind'], w: ['14%', '46%', '22%', '18%'],
+        rows: [
+          ['09:02', 'Quote request sent to 3 suppliers', 'Autopilot', '#:Automatic'],
+          ['09:41', 'Rift Valley GS replied · €4,180', 'Supplier', '#go:Message'],
+          ['12:00', 'Reminder sent to Acacia', 'Autopilot', '#:Automatic'],
+          ['12:41', 'Margin set to 18%', 'Lena Ortiz', '#:By a person'],
+          ['13:05', 'Proposal shared with traveller', 'Lena Ortiz', '#:By a person'],
+        ] },
+      note: 'Automatic steps appear as steps, so the history is complete.' } },
+    { shell: { title: 'Needs a person', meta: '2 flagged', who: 'LO',
+      table: { cols: ['Trip', 'What happened', 'Raised', 'Action'], w: ['22%', '40%', '16%', '22%'],
+        rows: [
+          ['KE-2291', 'Driver not at the gate · flight in 2 h', '05:52', '#amb:Decide'],
+          ['VN-0184', 'Rate changed after acceptance', 'Yesterday', '#amb:Approve'],
+          ['PE-1180', 'Everything else relayed without you', '—', '#go:No action'],
+        ] },
+      note: 'Organised by what to do next, not buried in the sequence.' } },
   ],
+
+
 
   'document-vault': [
-    {
-      head: ['Upload', 'Drag them in'],
-      rows: [
-        { b: 'Rift Valley GS — rates 2026.pdf', s: '2.4 MB', tag: 'Uploading', amber: true, icon: 'PDF' },
-        { b: 'Atlas Maroc 2026.pdf', s: '1.1 MB', tag: 'Queued', icon: 'PDF' },
-        { b: 'Andes Trail.xlsx', s: '840 KB', tag: 'Queued', icon: 'XLS' },
-      ],
-      foot: ['Contracts, rate sheets, tariffs — as they came.'],
-    },
-    {
-      head: ['Extract', 'Being read'],
-      rows: [
-        { b: 'Rates', s: '48 found · per person, per night', state: 'done' },
-        { b: 'Validity', s: 'Through 31 March 2026', state: 'done' },
-        { b: 'Inclusions', s: 'Park fees listed separately', state: 'now' },
-      ],
-      foot: ['Read out of the document, not retyped.'],
-    },
-    {
-      head: ['Index', '61 documents'],
-      rows: [
-        { b: 'Kenya', s: '4 suppliers · 190 rates', state: 'done' },
-        { b: 'Morocco', s: '2 suppliers · 112 rates', state: 'done' },
-        { b: 'Peru', s: '1 supplier · 36 rates', state: 'done' },
-      ],
-      foot: ['Queryable. Yours only, never shared.'],
-    },
-    {
-      head: ['Answer', 'From the Vault'],
+    { shell: { title: 'Vault', meta: '61 documents', who: 'LO',
+      pills: ['All suppliers', '2026'],
+      table: { cols: ['Document', 'Supplier', 'Covers', 'Uploaded', 'Status'],
+        w: ['32%', '24%', '16%', '14%', '14%'],
+        rows: [
+          ['Rift Valley GS — rates 2026.pdf', 'Rift Valley GS', '48 rates', '2 Jan', '#go:Indexed'],
+          ['Atlas Maroc 2026.pdf', 'Atlas Maroc', '112 rates', '2 Jan', '#go:Indexed'],
+          ['Andes Trail — Sacred Valley.xlsx', 'Andes Trail', '36 rates', 'Today', '#amb:Indexing'],
+          ['Mara North — contract 2026.pdf', 'Mara North', 'Terms only', '14 Dec', '#go:Indexed'],
+          ['Karen Overland — transfers.pdf', 'Karen Overland', '19 rates', '9 Dec', '#red:Expired'],
+        ] },
+      note: 'Supplier and year are picked up from the document. You confirm them.' } },
+    { shell: { title: 'Rift Valley GS — rates 2026.pdf', meta: '48 rates extracted', who: 'LO',
+      tabs: ['Extracted', 'Source pages', 'Access log'], tab: 'Extracted',
+      table: { cols: ['Line', 'Rate', 'Unit', 'Valid to', 'Page'], num: [1],
+        w: ['32%', '14%', '20%', '16%', '18%'],
+        rows: [
+          ['Game drives · Mara North', 'USD 95', 'per person per day', '31 Mar', 'p.2'],
+          ['Park fees · Mara North', 'USD 116', 'per adult per night', '31 Dec', 'p.5'],
+          ['Full board supplement', 'USD 48', 'per person per day', '31 Mar', 'p.2'],
+          ['Child rate · under 12', '−35%', 'of the adult rate', '31 Mar', 'p.6'],
+        ] },
+      note: 'Every figure shown against the page it came from, for you to check.' } },
+    { shell: { title: 'Vault', meta: 'Searched', who: 'LO',
+      pills: ['park fee, Mara North, March'],
+      table: { cols: ['Match', 'Document', 'Where', 'Confidence'],
+        w: ['30%', '34%', '16%', '20%'],
+        rows: [
+          ['USD 116 per adult per night', 'Rift Valley GS — rates 2026.pdf', 'p.5', '#go:Exact'],
+          ['Park fees not included in drive', 'Rift Valley GS — rates 2026.pdf', 'p.2', '#go:Exact'],
+          ['No park fees on file', 'Atlas Maroc 2026.pdf', '—', '#:Nothing'],
+        ] },
+      note: 'Queryable, and every extracted figure knows its page.' } },
+    { head: ['Atlas', 'Reading your Vault'],
       msgs: [
-        { text: 'Mara North, March — park fee included?', from: 'me' },
-        {
-          text: 'USD 95 pp per day. Park fees not included: USD 116 per adult per night.',
-          cite: 'Rift Valley GS — rates 2026.pdf · p.2',
-        },
+        { text: 'Park fee for Mara North in March?', from: 'me' },
+        { text: 'USD 116 per adult per night, billed separately from the drive itself.',
+          cite: 'Rift Valley GS — rates 2026.pdf · p.5' },
       ],
-      foot: ['The page it came from, every time.'],
-    },
+      blocks: [{ k: 'note', text: 'Every access is written to the audit log.' }] },
   ],
+
+
 
   'itinerary-generator': [
-    {
-      head: ['The brief', 'KE-2291'],
-      rows: [
-        { b: '2 travellers · 9 nights', s: '3 – 12 March', state: 'done' },
-        { b: 'Wildlife, walking, no long drives', s: 'From the enquiry', state: 'done' },
-        { b: 'Mid-range, full board', s: 'Budget given', state: 'done' },
-      ],
-      foot: ['What they asked for, as they said it.'],
-    },
-    {
-      head: ['Your suppliers', 'From the Vault'],
-      rows: [
-        { b: 'Rift Valley Ground Services', s: 'Under contract · 48 rates', tag: 'Yours' },
-        { b: 'Karen Overland Co.', s: 'Under contract · 22 rates', tag: 'Yours' },
-        { b: 'Nobody else', s: 'Only who you actually work with', state: 'done' },
-      ],
-      foot: ['Built from your contracts, not a stock library.'],
-    },
-    {
-      head: ['Nine days', 'Laid out'],
-      rows: [
-        { b: 'Day 1 – 2 · Nairobi', s: 'Arrival, city, transfer', state: 'done' },
-        { b: 'Day 3 – 6 · Mara North', s: 'Game drives, walking', state: 'done' },
-        { b: 'Day 7 – 9 · Rift Valley', s: 'Lakes, departure', state: 'done' },
-      ],
-      foot: ['Each line priced from the rate it came from.'],
-    },
-    {
-      head: ['Yours to edit', 'Nothing sent'],
-      rows: [
-        { b: 'Move a day', s: 'Reorder, swap, remove', tag: 'Your call', amber: true },
-        { b: 'Change a supplier', s: 'Re-prices from their sheet', tag: 'Your call', amber: true },
-        { b: 'Then share it', s: 'Link, PDF or message', state: 'hold' },
-      ],
-      foot: ['A draft handed to you, not sent for you.', 'Open draft', true],
-    },
+    { shell: { title: 'Mira Sato', meta: 'KE-2292 · Planning', who: 'LO',
+      tabs: ['Overview', 'Itinerary', 'Quotation board'], tab: 'Overview',
+      table: { cols: ['Field', 'From the inquiry', 'State'], w: ['24%', '50%', '26%'],
+        rows: [
+          ['Where', 'Kenya · the Mara', '#go:Given'],
+          ['When', 'March · 9 nights', '#go:Given'],
+          ['Who', '2 adults', '#go:Given'],
+          ['Budget', '€4,000 per person', '#go:Given'],
+          ['Pace', '—', '#amb:Asked, not assumed'],
+        ] } } },
+    { shell: { title: 'Matching', meta: 'From your Vault', who: 'LO',
+      table: { cols: ['Part', 'Supplier', 'Rate', 'Valid to', 'Use'],
+        w: ['22%', '28%', '15%', '15%', '20%'],
+        rows: [
+          ['Game drives', 'Rift Valley Ground Services', 'USD 95 pp/day', '31 Mar', '#go:Matched'],
+          ['Lodging', 'Mara North Collective', 'USD 240 pp/night', '30 Apr', '#go:Matched'],
+          ['Transfers', 'Karen Overland Co.', 'USD 180 pp', 'Expired', '#red:Skipped'],
+        ] },
+      note: 'Only a supplier with a rate valid for those dates is used.' } },
+    { shell: { title: 'Itinerary · draft', meta: 'KE-2292 · 9 nights', who: 'LO',
+      tabs: ['Overview', 'Itinerary', 'Quotation board'], tab: 'Itinerary',
+      table: { cols: ['Day', 'Where', 'What', 'Priced from'], w: ['12%', '22%', '36%', '30%'],
+        rows: [
+          ['1 – 2', 'Nairobi', 'Arrival, overnight, transfer out', 'Karen Overland · p.3'],
+          ['3 – 5', 'Mara North', 'Game drives, full board', 'Rift Valley · p.2'],
+          ['6 – 7', 'Mara North', 'Walking, conservancy fees', 'Rift Valley · p.5'],
+          ['8 – 9', 'Rift Valley', 'Lakes, return transfer', 'Mara North · p.1'],
+        ] },
+      note: 'Every line cited to the contract it was priced from.' } },
+    { shell: { title: 'Mira Sato', meta: 'KE-2292 · Planning', who: 'LO',
+      tabs: ['Overview', 'Itinerary', 'Quotation board'], tab: 'Itinerary',
+      table: { cols: ['State', 'Detail', 'Who'], w: ['26%', '46%', '28%'],
+        rows: [
+          ['#go:Draft attached', 'On the trip, at Planning', 'Generated'],
+          ['#go:Yours to edit', 'Change any line before it goes', 'You'],
+          ['#amb:Not sent', 'Sending it as the proposal is your action', 'You'],
+        ] } } },
   ],
+
+
 
   'payments-invoicing': [
-    {
-      head: ['Traveller link', 'Nairobi — 9 nights'],
+    { shell: { title: 'Lena & Mark Ortiz', meta: 'KE-2291 · Pricing', who: 'LO',
+      tabs: ['Overview', 'Quotation board', 'Pricing', 'Magic link'], tab: 'Pricing',
+      table: { cols: ['Item', 'Due', 'Amount', 'Shown to traveller', 'Status'], num: [2],
+        w: ['28%', '13%', '15%', '22%', '22%'],
+        rows: [
+          ['Deposit · 30%', '14 Feb', '€1,480', 'On their link', '#go:Sent'],
+          ['Balance · 70%', '1 Mar', '€3,452', 'On their link', '#:Not due'],
+          ['Bank details', '—', '—', 'On their link', '#go:Shown'],
+          ['Reference KE-2291', '—', '—', 'On their link', '#go:Shown'],
+        ] },
+      note: 'Amount, due date and how to pay — on every tier, including Showcase.' } },
+    { shell: { title: 'Autopilot', meta: 'KE-2291', who: 'LO',
+      tabs: ['Overview', 'Quotation board', 'Pricing', 'Autopilot'], tab: 'Autopilot',
+      table: { cols: ['Step', 'Fires', 'Last run', 'Status'],
+        w: ['32%', '26%', '20%', '22%'],
+        rows: [
+          ['Deposit request', 'On acceptance', '14 Feb 09:31', '#go:Sent'],
+          ['Balance request', '14 days out', '—', '#:Scheduled'],
+          ['Unpaid reminder', '7 days after due', '—', '#:Scheduled'],
+          ['Mark received', 'Never — a person does this', '—', '#amb:Yours'],
+        ] },
+      note: 'The requests go out on their own. Nothing marks itself paid.' } },
+    { head: ['Deposit · €1,480', 'KE-2291'],
       rows: [
-        { b: 'Deposit · €1,480', s: 'Due on booking', tag: 'Due' },
-        { b: 'Balance · €8,384', s: 'Due 14 days before travel', tag: 'Scheduled' },
-        { b: 'How to pay', s: 'Bank details on the page', state: 'done' },
+        { b: 'Request sent', s: 'Automatic · 09:31', state: 'done' },
+        { b: 'Money received', s: 'A person marks this', tag: 'Needs you', amber: true },
+        { b: 'Then: Booking, supplier told', s: 'Follows your mark', state: 'wait' },
       ],
-      foot: ['On the same link as their itinerary.'],
-    },
-    {
-      head: ['Requests', 'On schedule'],
-      rows: [
-        { b: 'Deposit request', s: 'Sent on acceptance', state: 'done' },
-        { b: 'Reminder', s: 'If unpaid after 3 days', state: 'now' },
-        { b: 'Balance request', s: 'Goes out at day −14', state: 'wait' },
-      ],
-      foot: ['The asking runs on its own.'],
-    },
-    {
-      head: ['Received?', 'Awaiting you'],
-      rows: [
-        { b: 'Transfer shows in your bank', s: 'You check it', tag: 'By hand', amber: true },
-        { b: 'Mark as received', s: 'Only a person does this', tag: 'By hand', amber: true },
-        { b: 'Never assumed', s: 'Hyperporter does not guess', state: 'hold' },
-      ],
-      foot: ['Marking money received stays yours.', 'Mark received', true],
-    },
-    {
-      head: ['Invoice', 'Tied to the booking'],
-      rows: [
-        { b: 'Generated from the record', s: 'Every line has a source', state: 'done' },
-        { b: 'Sent to the traveller', s: 'On their link', state: 'done' },
-        { b: 'In-platform processing', s: 'On Intelligence', tag: 'Intelligence' },
-      ],
-      foot: ['Taking payment inside Hyperporter is an Intelligence feature.'],
-    },
+      foot: ['When it lands:', 'Mark received', true] },
+    { shell: { title: 'Gateway processing', meta: 'Intelligence', who: 'LO',
+      table: { cols: ['Movement', 'Party', 'Amount', 'Cleared', 'Stage'], num: [2],
+        w: ['26%', '24%', '15%', '15%', '20%'],
+        rows: [
+          ['Deposit in', 'Lena & Mark Ortiz', '€1,480', '14 Feb', '#go:→ Booking'],
+          ['Balance in', 'Lena & Mark Ortiz', '€3,452', '1 Mar', '#go:→ Ready'],
+          ['Payout', 'Rift Valley GS', '€4,180', '5 Mar', '#go:Full rate'],
+        ] },
+      note: 'The supplier receives their full quoted rate. The only tier where the stage moves without a person.' } },
   ],
+
+
 
   'support-relay': [
-    {
-      head: ['03:40 local', 'Nairobi — 9 nights'],
-      msgs: [{ text: 'Driver is not at the gate. We have a 06:15 flight.', from: 'them' }],
-      foot: ['They write to the trip, not to your personal phone.'],
-    },
-    {
-      head: ['Relay', 'Routing'],
+    { wide: false,
+      head: ['WhatsApp', '+254 ··· 8810'],
+      msgs: [{ via: 'Lena Ortiz · traveller', text: 'The driver isn’t at the gate and we have a 06:15 flight.', from: 'them' }],
+      blocks: [{ k: 'note', text: 'To the trip’s relay number, in their own words.' }] },
+    { head: ['Relay', 'Both directions'],
+      blocks: [
+        { k: 'people', people: [
+          ['LO', 'Lena Ortiz', 'Traveller · sees a Hyperporter number', 'Masked'],
+          ['PK', 'Peter Kimani', 'Driver today · sees a Hyperporter number', 'Masked'],
+        ] },
+        { k: 'note', text: 'Neither side ever sees the other’s real number or name.' },
+      ] },
+    { head: ['Handled without you', 'Logged anyway'],
       rows: [
-        { b: 'Traveller', s: 'Writes in English, on WhatsApp', state: 'done' },
-        { b: 'Ground team', s: 'Reached on their own number', state: 'now' },
-        { b: 'You', s: 'Copied, not woken', state: 'wait' },
-      ],
-      foot: ['Between two people who never swap numbers.'],
-    },
-    {
-      head: ['Handled', 'Without you'],
+        { b: 'Pickup time asked', s: 'Answered · 06:02', state: 'done' },
+        { b: 'Meeting point sent', s: 'Answered · 06:04', state: 'done' },
+        { b: 'Both on the thread', s: 'You did not need to be there', state: 'done' },
+      ] },
+    { head: ['Broke through', 'On your phone'],
       rows: [
-        { b: 'Pickup time confirmed', s: 'Answered from the voucher', state: 'done' },
-        { b: 'Voucher re-sent', s: 'Traveller had lost it', state: 'done' },
-        { b: 'Logged on the thread', s: 'You can read it later', state: 'done' },
+        { b: 'Driver not at the gate', s: 'Flight in 2 h · flagged urgent', tag: 'Decide', amber: true },
+        { b: 'Full context attached', s: 'Trip, day, both numbers', state: 'done' },
       ],
-      foot: ['Routine questions do not need a person.'],
-    },
-    {
-      head: ['Escalated', 'To you'],
-      rows: [
-        { b: 'No driver at the gate', s: 'Flight in 2 h 35', tag: 'Urgent', amber: true },
-        { b: 'Ground team not answering', s: 'Two attempts', tag: 'Urgent', amber: true },
-        { b: 'You are called', s: 'This one is worth waking for', tag: 'Now', amber: true },
-      ],
-      foot: ['Escalation is a designed step, not a failure.', 'Take it', true],
-    },
+      blocks: [{ k: 'note', text: 'Complaint language, a deviation, or “I need a human” stops the relay.' }] },
   ],
+
 
   email: [
-    {
-      head: ['Your address', 'hello@meridiantravel.co'],
-      rows: [
-        { b: 'Forwarded on Showcase', s: 'One rule in your mail provider', state: 'done' },
-        { b: 'Connected from Autopilot up', s: 'The mailbox itself', state: 'done' },
-        { b: 'Still your domain', s: 'No Hyperporter address anywhere', state: 'done' },
-      ],
-      foot: ['The address your clients already write to.'],
-    },
-    {
-      head: ['Who is this?', 'Matching'],
-      rows: [
-        { b: 'lena.ortiz@\u2026', s: 'Matched · Lena Ortiz, KE-2291', state: 'done' },
-        { b: 'ops@riftvalleygs.co.ke', s: 'Matched · Rift Valley Ground Services', state: 'done' },
-        { b: 'j.whitfield@\u2026', s: 'New · becomes an inquiry', state: 'now' },
-      ],
-      foot: ['An unknown sender starts a trip rather than being dropped.'],
-    },
-    {
-      head: ['Thread', 'Nairobi \u2014 9 nights'],
+    { head: ['Your address', 'Still yours'],
+      blocks: [
+        { k: 'fields', fields: [['Forward or connect', 'hello@meridiantravel.co', true]] },
+        { k: 'note', text: 'Forward it on Showcase, or connect the mailbox from Autopilot up.' },
+      ] },
+    { head: ['Matched', 'To a trip'],
+      blocks: [
+        { k: 'people', people: [
+          ['TA', 'Tom Achebe', 'tom@ ··· → Peru, June', 'Open trip'],
+          ['··', 'Unknown sender', 'New address → new inquiry', 'New'],
+        ] },
+        { k: 'note', text: 'An unknown sender becomes an inquiry instead of being dropped.' },
+      ] },
+    { head: ['3-way inbox', 'One trip'],
       msgs: [
-        { text: 'Could we push the Mara nights back by one day?', from: 'them' },
-        { text: 'Checking with the camp now \u2014 I will come back to you today.', from: 'me' },
+        { via: 'Tom Achebe · email', text: 'Can you send the revised itinerary?', from: 'them' },
+        { via: 'Andes Trail · WhatsApp', text: 'Sacred Valley confirmed for the 12th.', from: 'them' },
       ],
-      foot: ['Answered on the trip. Sent from your own address.'],
-    },
-    {
-      head: ['After the trip', 'KE-2291'],
-      rows: [
-        { b: 'Every message kept', s: 'Traveller, supplier, in order', state: 'done' },
-        { b: 'Beside the quotes', s: 'What was agreed, and when', state: 'done' },
-        { b: 'Nothing to forward', s: 'The record is the thread', state: 'done' },
-      ],
-      foot: ['The conversation outlives the inbox.'],
-    },
+      blocks: [{ k: 'note', text: 'Email and WhatsApp about the same trip, side by side.' }] },
+    { head: ['After it is over', 'PE-1180'],
+      blocks: [
+        { k: 'kpis', kpis: [['Messages kept', '61'], ['Forwarded chains', '0']] },
+        { k: 'note', text: 'What was agreed, and when — without anyone forwarding a thread.' },
+      ] },
   ],
 
-  'whatsapp': [
-    {
-      head: ['Connect', 'WhatsApp Business'],
+
+  whatsapp: [
+    { head: ['Connect WhatsApp Business', 'Once, with us'],
+      blocks: [{ k: 'fields', fields: [['Your business number', '+254 ··· 8810', true]] }],
       rows: [
-        { b: '+254 ··· 8810', s: 'Your business number', tag: 'Connected' },
-        { b: 'Official API', s: 'Not a phone in a drawer', state: 'done' },
-        { b: 'Your name on it', s: 'Meridian Travel Co.', state: 'done' },
+        { b: 'Business API provisioned', s: 'For your account', state: 'done' },
+        { b: 'Display name verified', s: 'Meridian Travel Co.', state: 'done' },
       ],
-      foot: ['The number your clients already message.'],
     },
-    {
-      head: ['Who is this?', 'Matching'],
-      rows: [
-        { b: '+81 ··· 4417', s: 'Matched · Mira Sato, TK-1184', state: 'done' },
-        { b: '+254 ··· 6620', s: 'Matched · Rift Valley GS', state: 'done' },
-        { b: '+44 ··· 9031', s: 'New · creates a contact', state: 'now' },
-      ],
-      foot: ['The message finds its trip on its own.'],
-    },
-    {
-      head: ['Thread', 'Nairobi — 9 nights'],
+    { head: ['Matched', 'To a trip'],
+      blocks: [
+        { k: 'people', people: [
+          ['MS', 'Mira Sato', '+81 ··· 4417 → Japan, October', 'Open trip'],
+          ['··', 'Unknown sender', '+254 ··· 2210 → new inquiry', 'New'],
+        ] },
+        { k: 'note', text: 'An unknown number becomes an inquiry instead of being dropped.' },
+      ] },
+    { head: ['3-way inbox', 'Read and reply'],
       msgs: [
-        { text: 'Any chance of a later checkout on day 6?', from: 'them' },
-        { text: 'Asking the camp now — back to you within the hour.', from: 'me' },
+        { via: 'Mira Sato · WhatsApp', text: 'What time is the pickup?', from: 'them' },
+        { text: '06:15 from the lodge — driver is Peter, plate KDJ 441H.', from: 'me' },
       ],
-      foot: ['Answered from the trip. Delivered on WhatsApp.'],
-    },
-    {
-      head: ['Add the relay', 'While travelling'],
+      blocks: [{ k: 'note', text: 'Templates cover the messages WhatsApp requires them for.' }] },
+    { head: ['Support relay', 'Same connection'],
       rows: [
-        { b: 'Traveller ↔ ground team', s: 'Neither gets the other’s number', state: 'done' },
-        { b: 'Routine handled', s: 'Pickups, vouchers, times', state: 'done' },
-        { b: 'Urgent reaches you', s: 'Only when it should', tag: 'Escalate', amber: true },
+        { b: 'Runs during Traveling', s: 'If you switch it on', state: 'wait' },
+        { b: 'Metered per active trip', s: 'Not bundled', state: 'done' },
       ],
-      foot: ['The same number, working while you sleep.'],
-    },
+      blocks: [{ k: 'note', text: 'Without it the thread still moves; you coordinate directly.' }] },
   ],
+
 
   // ----------------------------------------------------------- automations
   inquiry: [
+    /* The raw message, exactly as it arrives — unstructured, on a channel. */
     {
-      head: ['A message lands', 'Any channel'],
-      rows: [
-        { b: 'Inquiry form', s: 'meridiantravel.co/enquire', state: 'done' },
-        { b: 'Email', s: 'Forwarded from hello@', state: 'done' },
-        { b: 'WhatsApp', s: '+254 ··· 8810', state: 'done' },
-      ],
-      foot: ['However they reach you, it starts here.'],
-    },
-    {
-      head: ['Brief', 'Being built'],
-      rows: [
-        { b: 'Kenya · 3 – 12 March', s: 'Read from the message', state: 'done' },
-        { b: '2 adults', s: 'Read from the message', state: 'done' },
-        { b: 'Budget', s: 'Not given', state: 'wait' },
-      ],
-      foot: ['Parsed into a structured brief, not a paragraph.'],
-    },
-    {
-      head: ['Asked about', 'Only the gaps'],
+      wide: false,
+      head: ['WhatsApp', '+81 ··· 4417'],
       msgs: [
-        { text: 'Two more things and I can get you options: rough budget per person, and are the dates fixed?', from: 'me' },
-        { text: 'About €5k each, and yes — fixed.', from: 'them' },
+        { via: 'Mira Sato · WhatsApp', text: 'Hi! Me and my husband want to do Kenya sometime in March, maybe 9 or 10 days. We love wildlife but not hours in a jeep. Around 4k each?', from: 'them' },
       ],
-      foot: ['It asks for what is missing. Nothing else.'],
+      blocks: [{ k: 'note', text: 'One paragraph, no structure, on whatever channel they use.' }],
     },
+    /* The same message, parsed into the fields of a brief. */
     {
-      head: ['Confirmed', 'Moving to Planning'],
-      rows: [
-        { b: 'Brief confirmed with the traveller', s: 'In their own words', state: 'done' },
-        { b: 'Trip record created', s: 'KE-2291', state: 'done' },
-        { b: 'Stage 2 of 9', s: 'Planning', tag: 'Planning' },
+      blocks: [
+        { k: 'lbl', lbl: 'Parsed from that message', title: 'The brief' },
+        { k: 'fields', pair: true, fields: [['Where', 'Kenya · the Mara'], ['When', 'March · 9 – 10 nights']] },
+        { k: 'fields', pair: true, fields: [['Travellers', '2 adults'], ['Budget, per person', '€4,000']] },
+        { k: 'fields', fields: [['Wants', 'Wildlife, walking — no long drives', true]] },
+        { k: 'note', text: 'Every field taken from what they actually wrote.' },
       ],
-      foot: ['Confirmed with them before it moves on.'],
+    },
+    /* The gap, asked as one question rather than a form to fill in. */
+    {
+      wide: false,
+      head: ['One question back', 'Not a form'],
+      msgs: [
+        { text: 'Two things before I price it: are the dates fixed, and is a fly-in camp in budget?', from: 'me' },
+        { text: 'Dates flexible by a few days. Fly-in is fine if it saves driving.', from: 'them' },
+      ],
+      blocks: [{ k: 'note', text: 'Only what is genuinely missing, batched into one message.' }],
+    },
+    /* The confirmed brief — and the line that says a person still decides. */
+    {
+      head: ['Brief · KE-2292', 'Confirmed by the traveller'],
+      blocks: [
+        { k: 'doc', title: 'Kenya · 9 nights · 2 adults', lines: [
+          'Dates flexible, early March',
+          'Wildlife and walking, no long drives',
+          'Fly-in acceptable · €4,000 per person',
+        ] },
+        { k: 'note', text: 'Nothing advances until they confirm it in their own words.' },
+      ],
+      foot: ['Ready to quote', 'Open the board', false],
     },
   ],
+
 
   quotation: [
-    {
-      head: ['Split', 'Nairobi — 9 nights'],
+    { head: ['Itinerary → requests', 'KE-2291'],
       rows: [
-        { b: 'Game drives · Mara North', s: '3 nights', tag: 'Part 1' },
-        { b: 'Lodging · Rift Valley', s: '4 nights', tag: 'Part 2' },
-        { b: 'Transfers', s: 'Airport and inter-camp', tag: 'Part 3' },
+        { b: 'Game drives · Mara North', s: '3 nights · 2 travellers', tag: 'Request' },
+        { b: 'Lodging · Rift Valley', s: '4 nights · full board', tag: 'Request' },
+        { b: 'Transfers', s: 'Airport and inter-camp', tag: 'Request' },
       ],
-      foot: ['Broken into what suppliers actually price.'],
-    },
-    {
-      head: ['Requests out', 'All at once'],
+      blocks: [{ k: 'note', text: 'Each line becomes a request with dates, travellers and what is needed.' }] },
+    { head: ['Sent at once', 'Reply by Thu'],
+      blocks: [
+        { k: 'people', people: [
+          ['RV', 'Rift Valley Ground Services', 'Qualified · game drives, lodging', 'Sent 09:02'],
+          ['AS', 'Acacia Safari Logistics', 'Qualified · game drives', 'Sent 09:02'],
+          ['KO', 'Karen Overland Co.', 'Qualified · transfers only', 'Sent 09:02'],
+        ] },
+        { k: 'note', text: 'A transport-only operator never receives a request including lodging.' },
+      ] },
+    { head: ['Replies', '2 of 3'],
       rows: [
-        { b: 'Rift Valley Ground Services', s: 'Asked · 09:02', state: 'done' },
-        { b: 'Karen Overland Co.', s: 'Asked · 09:02', state: 'done' },
-        { b: 'Mara North Collective', s: 'Asked · 09:02', state: 'done' },
+        { b: 'Rift Valley Ground Services', s: 'Replied 09:41', tag: '€4,180' },
+        { b: 'Acacia Safari Logistics', s: 'Reminder sent 12:00', state: 'wait' },
+        { b: 'Karen Overland Co.', s: 'Declined · re-routed to a backup', state: 'now' },
+      ] },
+    { head: ['The board', 'Your margin on top'],
+      blocks: [
+        { k: 'cards', cards: [
+          { title: 'Rift Valley', meta: 'Full board, park fees in', price: '€4,180', on: true },
+          { title: 'Acacia', meta: 'Room only', price: '€3,940' },
+        ] },
+        { k: 'sum', label: 'Your margin 18%', value: '€4,932 pp' },
       ],
-      foot: ['Every qualified supplier asked in the same minute.'],
-    },
-    {
-      head: ['Replies', 'Gathered'],
-      rows: [
-        { b: 'Rift Valley Ground Services', s: '€4,180 pp · full board', state: 'done' },
-        { b: 'Karen Overland Co.', s: 'Declined · no availability', state: 'hold' },
-        { b: 'Mara North Collective', s: 'Reminded · no reply yet', state: 'wait' },
-      ],
-      foot: ['A decline re-routes. A silence gets a nudge.'],
-    },
-    {
-      head: ['Your call', 'Nothing chosen yet'],
-      rows: [
-        { b: 'Compare side by side', s: 'Cost, inclusions, terms', state: 'done' },
-        { b: 'Choose one', s: 'You decide, every time', tag: 'Your call', amber: true },
-        { b: 'Set the margin', s: 'Supplier still gets their full rate', tag: 'Your call', amber: true },
-      ],
-      foot: ['The engine asks. The choosing is yours.', 'Choose', true],
-    },
+      foot: ['You pick per part.', 'Build the proposal', true] },
   ],
+
 
   'follow-up': [
-    {
-      head: ['Trigger', 'Quiet for 4 days'],
+    { head: ['Triggers', 'Per trip'],
       rows: [
-        { b: 'Proposal v3 sent', s: 'Tuesday · opened twice', state: 'done' },
-        { b: 'No reply since', s: '4 days', tag: 'Quiet' },
-        { b: 'Follow-up due', s: 'Rule: nudge at day 4', state: 'now' },
+        { b: 'Proposal opened, not answered', s: '4 days', tag: 'Due' },
+        { b: 'Days to departure', s: '14 and 3', state: 'wait' },
+        { b: 'Days since return', s: '2', state: 'wait' },
       ],
-      foot: ['It notices the silence you would have missed.'],
-    },
-    {
-      head: ['Draft', 'From the trip'],
+      blocks: [{ k: 'note', text: 'Time-based, on the trip’s own dates.' }] },
+    { head: ['Drafted', 'Not sent yet'],
+      blocks: [
+        { k: 'doc', title: 'From your template', lines: [
+          'Hi Lena — just checking the Mara itinerary landed.',
+          'Happy to move the dates if early March is tight.',
+        ] },
+        { k: 'note', text: 'The trip’s details filled in, on the channel she actually uses.' },
+      ] },
+    { head: ['Sent', 'On the thread'],
+      rows: [
+        { b: 'Nudge sent', s: 'WhatsApp · 10:00, automatic', state: 'done' },
+        { b: 'Shown as a step', s: 'So the history is complete', state: 'done' },
+      ] },
+    { head: ['She replied', 'Back on the thread'],
       msgs: [
-        {
-          text: 'Hi Lena — just checking the Mara North option still suits. Happy to swap day 4 if the camp is not right.',
-          from: 'me',
-          state: 'typing',
-        },
+        { via: 'Lena Ortiz · WhatsApp', text: 'Sorry — yes! Can we look at the 5th instead?', from: 'them' },
       ],
-      foot: ['Written from this trip, not a template blast.'],
-    },
-    {
-      head: ['Sent', 'And written down'],
-      rows: [
-        { b: 'Sent on WhatsApp', s: 'Where she has been replying', state: 'done' },
-        { b: 'Logged on the thread', s: 'You can see exactly what went', state: 'done' },
-        { b: 'No second nudge', s: 'Unless the rule says so', state: 'hold' },
-      ],
-      foot: ['Nothing goes out that you cannot read back.'],
-    },
-    {
-      head: ['She replied', 'Back to you'],
-      rows: [
-        { b: '“Day 4 swap sounds good”', s: '11 min ago', state: 'now' },
-        { b: 'Follow-up stopped', s: 'No more nudges', state: 'done' },
-        { b: 'Thread reopened', s: 'Yours to answer', tag: 'Your call', amber: true },
-      ],
-      foot: ['A reply ends the chasing and hands it back.', 'Open thread', true],
-    },
+      blocks: [{ k: 'note', text: 'A date change needs a decision, so it is flagged rather than answered.' }],
+      foot: ['Needs a person.', 'Open the trip', true] },
   ],
+
 
   confirmation: [
-    {
-      head: ['Accepted', 'Proposal v3'],
+    { head: ['Accepted', 'On their link'],
       rows: [
-        { b: 'Accepted on the page', s: 'Tuesday, 16:40', state: 'done' },
-        { b: 'Not yet confirmed', s: 'Nothing is held', tag: 'Not held' },
-        { b: 'Re-check starts', s: 'Stage 5 of 9', state: 'now' },
+        { b: 'Lena Ortiz accepted', s: 'Traveller link · 09:12', state: 'done' },
+        { b: 'Trip moved to Confirmation', s: 'Automatic', state: 'done' },
       ],
-      foot: ['Accepted is not confirmed. This is the gap that closes it.'],
-    },
-    {
-      head: ['Re-confirm', 'Every supplier'],
+      blocks: [{ k: 'note', text: 'Before money moves, everything is re-checked.' }] },
+    { head: ['Re-confirm', 'Each supplier'],
+      msgs: [
+        { text: 'Confirming 3 – 12 March, 2 travellers, as quoted at €4,180 pp. Still available?', from: 'me' },
+        { text: 'Confirmed for the 3rd. Same rate.', from: 'them' },
+      ],
+      blocks: [{ k: 'note', text: 'Asked on their own side, against the exact accepted itinerary.' }] },
+    { head: ['Not as quoted', 'Two paths'],
       rows: [
-        { b: 'Rift Valley Ground Services', s: 'Dates and rate re-checked', state: 'done' },
-        { b: 'Mara North Collective', s: 'Asked · awaiting', state: 'wait' },
-        { b: 'Transfers', s: 'Re-checked', state: 'done' },
+        { b: 'Minor: rate moved €60', s: 'Put to the traveller · round 1 of 2', tag: 'Minor', amber: true },
+        { b: 'Major: camp unavailable', s: 'Backup from the board, scoped', tag: 'Major', amber: true },
       ],
-      foot: ['Asked again at the moment of yes.'],
-    },
-    {
-      head: ['A difference', 'Needs you'],
+      blocks: [{ k: 'note', text: 'Two rounds, then it stops and asks you.' }] },
+    { head: ['Confirmed', 'KE-2291'],
       rows: [
-        { b: 'Camp moved day 4', s: 'Mara North → Naboisho', tag: 'Changed', amber: true },
-        { b: 'Rate is €90 pp higher', s: 'Yours to accept or refuse', tag: 'Your call', amber: true },
-        { b: 'Traveller not told yet', s: 'Held until you decide', tag: 'Held', amber: true },
-      ],
-      foot: ['A difference always stops for a person.', 'Decide', true],
-    },
-    {
-      head: ['Confirmed', 'Both sides'],
-      rows: [
-        { b: 'Suppliers holding', s: 'In writing, on the thread', state: 'done' },
-        { b: 'Traveller told', s: 'Itinerary updated on their link', state: 'done' },
-        { b: 'Stage 6 of 9', s: 'Booking', tag: 'Booking' },
-      ],
-      foot: ['Everyone agreeing to the same trip, in writing.'],
-    },
+        { b: 'All lines confirmed', s: 'Every supplier, in writing', state: 'done' },
+        { b: 'Moved to Booking', s: 'Payment requests begin', state: 'done' },
+      ] },
   ],
+
 
   collection: [
-    {
-      head: ['The list', 'Nairobi — 9 nights'],
+    { head: ['The list', 'From the confirmed trip'],
+      blocks: [
+        { k: 'cols', cols: [
+          { name: 'Traveller owes', cards: [['Passport scans', '2 travellers'], ['Dietary notes', 'Both']] },
+          { name: 'Supplier owes', cards: [['Vouchers', 'Rift Valley GS'], ['Ground contact', 'Driver + emergency']] },
+        ] },
+        { k: 'note', text: 'Built from what was actually confirmed, not a generic checklist.' },
+      ] },
+    { head: ['Asked', 'Due 14 Feb'],
       rows: [
-        { b: 'Passport · Lena Ortiz', s: 'Traveller', tag: 'Needed' },
-        { b: 'Passport · Mark Ortiz', s: 'Traveller', tag: 'Needed' },
-        { b: 'Vouchers', s: 'Rift Valley Ground Services', tag: 'Needed' },
+        { b: 'Lena & Mark Ortiz', s: 'Asked on their link · due 14 days out', state: 'now' },
+        { b: 'Rift Valley Ground Services', s: 'Asked on their link · due 14 days out', state: 'now' },
       ],
-      foot: ['Built from what this trip actually requires.'],
-    },
-    {
-      head: ['Requests', 'Out'],
+      blocks: [{ k: 'note', text: 'Each due date is set back from departure, not from today.' }] },
+    { head: ['Coming in', '3 of 5'],
+      blocks: [
+        { k: 'files', files: [
+          ['Ortiz — passports.pdf', 'Uploaded by the traveller', 'Complete'],
+          ['Rift Valley — voucher KE-2291.pdf', 'Uploaded by the supplier', 'Complete'],
+          ['Ground contact form', 'Filled on their link', 'Complete'],
+        ] },
+      ] },
+    { head: ['Still missing', '6 days out'],
       rows: [
-        { b: 'Travellers asked', s: 'On their link · WhatsApp', state: 'done' },
-        { b: 'Supplier asked', s: 'On their link · email', state: 'done' },
-        { b: 'You asked nobody', s: 'It went out on its own', state: 'done' },
+        { b: 'Dietary notes', s: 'Reminded twice', state: 'wait' },
+        { b: 'Emergency contact', s: 'Reminded twice', tag: 'Flagged', amber: true },
       ],
-      foot: ['Each side asked where they already are.'],
-    },
-    {
-      head: ['Coming in', '2 of 3'],
-      rows: [
-        { b: 'Passport · Lena Ortiz', s: 'Received · read', state: 'done' },
-        { b: 'Vouchers', s: 'Received · filed', state: 'done' },
-        { b: 'Passport · Mark Ortiz', s: 'Still missing', state: 'wait' },
-      ],
-      foot: ['Ticked off as they arrive.'],
-    },
-    {
-      head: ['Chasing', '1 late'],
-      rows: [
-        { b: 'Mark Ortiz', s: 'Reminded twice', tag: 'Late' },
-        { b: 'Travel in 9 days', s: 'Rule: escalate at day 10', state: 'now' },
-        { b: 'Flagged to you', s: 'Chasing a person needs a person', tag: 'Your call', amber: true },
-      ],
-      foot: ['Chased on its own until it needs you.', 'Open', true],
-    },
+      blocks: [{ k: 'note', text: 'What is still missing near departure is flagged to you, not chased forever.' }] },
   ],
 
+
   payment: [
-    {
-      head: ['Confirmed', 'Nairobi — 9 nights'],
+    { head: ['Deposit · €1,480', 'From the accepted proposal'],
+      blocks: [
+        { k: 'kpis', kpis: [['Deposit', '€1,480'], ['Balance', '€3,452']] },
+        { k: 'note', text: 'Generated from what they actually accepted, and sent.' },
+      ] },
+    { head: ['Money received', 'KE-2291'],
       rows: [
-        { b: 'Suppliers holding', s: 'In writing', state: 'done' },
-        { b: 'Deposit due', s: '€1,480 · 15%', tag: 'Due' },
-        { b: 'Request sent', s: 'On the traveller’s link', state: 'done' },
+        { b: 'Request sent', s: 'Automatic · 09:31', state: 'done' },
+        { b: 'You mark it received', s: 'A deliberate action', tag: 'Needs you', amber: true },
+        { b: 'Then: Booking, suppliers told', s: 'Follows your mark', state: 'wait' },
       ],
-      foot: ['The asking starts when the trip is really held.'],
-    },
-    {
-      head: ['Received?', 'Yours to say'],
+      foot: ['Nothing marks itself paid.', 'Mark received', true] },
+    { head: ['Balance', 'Due 1 Mar'],
       rows: [
-        { b: 'Transfer shows in your bank', s: 'You check it', tag: 'By hand', amber: true },
-        { b: 'Mark as received', s: 'Only a person does this', tag: 'By hand', amber: true },
-        { b: 'Never assumed', s: 'No bank is being read', state: 'hold' },
-      ],
-      foot: ['This is the step that is deliberately not automatic.', 'Mark received', true],
-    },
-    {
-      head: ['Balance', 'On schedule'],
+        { b: 'Requested', s: 'Automatic · 14 days out', state: 'done' },
+        { b: 'Reminder', s: 'Automatic · 7 days out', state: 'wait' },
+        { b: 'You mark it received', s: 'Again, yours', tag: 'Needs you', amber: true },
+      ] },
+    { head: ['Gateway processing', 'Intelligence'],
       rows: [
-        { b: 'Due at day −14', s: '26 February', state: 'now' },
-        { b: 'Request goes out', s: 'On its own', state: 'wait' },
-        { b: 'Reminder if unpaid', s: 'After 3 days', state: 'wait' },
+        { b: 'Payment taken', s: 'Hyperporter processes it', state: 'done' },
+        { b: 'Supplier paid in full', s: 'Their quoted rate, untouched', state: 'done' },
+        { b: 'Stage moves', s: 'As each side clears', state: 'done' },
       ],
-      foot: ['Asking is automatic. Confirming is not.'],
-    },
-    {
-      head: ['In-platform', 'Intelligence'],
-      rows: [
-        { b: 'Pay on the link itself', s: 'Card or transfer', tag: 'Intelligence' },
-        { b: 'Marked automatically', s: 'Because the platform took it', tag: 'Intelligence' },
-        { b: 'On Autopilot', s: 'You still mark it by hand', tag: 'By hand', amber: true },
-      ],
-      foot: ['Processing inside Hyperporter is an Intelligence feature.'],
-    },
+      blocks: [{ k: 'note', text: 'The one tier where the stage moves without a person marking it.' }] },
   ],
+
   /* Customers pages (founder's ask, Sep 2026). These carried one screen for
      the whole accordion, so three of every four steps sat beside a picture of
      something else. One screen per step, same as the tool and automation
      pages. */
   'agent-portal': [
-    { head: ['Your inquiry form', 'meridiantravel.co/enquire'],
-      rows: [
-        { b: 'LinkedIn · profile link', s: '4 submissions this week', state: 'done' },
-        { b: 'Email signature', s: '2 submissions', state: 'done' },
-        { b: 'Instagram bio', s: '7 submissions', state: 'done' },
-      ],
-      foot: ['Every one lands in the CRM as a structured lead.'] },
+    { head: ['Your form', 'Where they already find you'],
+      blocks: [
+        { k: 'people', people: [
+          ['in', 'LinkedIn', 'On your profile', '4 this week'],
+          ['@', 'Email signature', 'On every thread you send', '2 this week'],
+          ['ig', 'Instagram bio', 'One tap, no app', '7 this week'],
+        ] },
+        { k: 'note', text: 'Every submission lands in the CRM as a structured lead.' },
+      ] },
     { head: ['Horizon · Kenya', '12 vetted suppliers'],
-      rows: [
-        { b: 'Rift Valley Ground Services', s: 'Nairobi · DMC · replies in 40 min', tag: 'Quote requested' },
-        { b: 'Acacia Safari Logistics', s: 'Nairobi · DMC · replies in 2 h', tag: 'Request quote' },
-        { b: 'Lamu Dhow Collective', s: 'Lamu · tour operator · coast', tag: 'Request quote' },
-      ],
-      foot: ['Horizon adds 10% on the quote. The supplier receives their full quoted rate.'] },
+      blocks: [
+        { k: 'search', q: 'Kenya · game drives · March', meta: '12 results' },
+        { k: 'cards', cards: [
+          { title: 'Nairobi DMC', meta: 'Replies in 40 min · identity shown on inquiry', tag: 'Request quote' },
+          { title: 'Coast operator', meta: 'Replies in 2 h · identity shown on inquiry', tag: 'Request quote' },
+        ] },
+        { k: 'note', text: 'Horizon adds 10%. The supplier receives their full quoted rate.' },
+      ] },
     { head: ['Autopilot', 'Running'],
       rows: [
         { b: 'Reprice loop', s: 'Round 1 of 2 · supplier revised', state: 'now' },
         { b: 'Confirmation chasing', s: 'Both sides answered', state: 'done' },
-        { b: 'Status update sent', s: 'Traveller, this morning', state: 'done' },
+        { b: 'Round 2 hit the cap', s: 'Stopped and asked you', tag: 'Decide', amber: true },
       ],
-      foot: ['Two rounds, then it asks you.', 'Needs you', true] },
-    { head: ['Meridian Travel Co.', 'Your branding'],
-      rows: [
-        { b: 'Your logo on every link', s: 'Traveller and supplier views', state: 'done' },
-        { b: 'meridiantravel.co', s: 'Your own domain', state: 'done' },
-        { b: 'Powered by Hyperporter', s: 'Removed', state: 'done' },
-      ],
-      foot: ['The proposal looks like your agency, not a template.'] },
+      blocks: [{ k: 'note', text: 'Two rounds, then a person. Unbounded back-and-forth is a stalled negotiation.' }] },
+    { blocks: [
+        { k: 'lbl', lbl: 'Meridian Travel Co.', title: 'What the traveller opens' },
+        { k: 'cards', cards: [
+          { title: 'Your logo', meta: 'On both links', tag: 'Yours' },
+          { title: 'meridiantravel.co', meta: 'Your own domain', tag: 'Yours' },
+          { title: 'Powered by Hyperporter', meta: 'Removed', tag: 'Gone' },
+        ] },
+        { k: 'note', text: 'A proposal that looks like your agency, not a template.' },
+      ] },
   ],
+
   'supplier-portal': [
     { head: ['Requests · 2 new', 'Free on Showcase'],
       rows: [
@@ -859,142 +859,151 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
         { b: 'Mara North · 4 nights', s: 'From Atlas Voyages', state: 'wait' },
         { b: 'Your own quote format', s: 'No change to how you work', state: 'done' },
       ],
-      foot: ['Organise inbound requests at no cost, on any tier.'] },
+      blocks: [{ k: 'note', text: 'Organise inbound requests at no cost, ever.' }] },
     { head: ['Your own inbox', 'From Intelligence'],
       msgs: [
-        { text: 'Can you hold 4 nights in Laikipia, early March?', from: 'them' },
+        { via: 'Meridian Travel Co. · WhatsApp', text: 'Can you hold 4 nights in Laikipia, early March?', from: 'them' },
         { text: 'Yes — holding until Friday. Sending the rate now.', from: 'me' },
       ],
-      foot: ['The same WhatsApp thread and address you already use.'] },
-    { head: ['Atlas', 'From your rate sheet'],
+      blocks: [{ k: 'note', text: 'The same inbox and thread you already check. No new app.' }] },
+    { head: ['Atlas', 'From your own rates'],
       msgs: [
-        { text: 'Laikipia, 3 nights, family of 5 — what do we quote?',
-          from: 'me' },
-        { text: 'USD 2,480 per person, full board, from your 2026 sheet. Child rate applies to one.',
+        { text: 'Laikipia, 3 nights, family of 5 — what do we quote?', from: 'me' },
+        { text: 'USD 2,480 per person, full board. Child rate applies to one of the five.',
           cite: 'Your contracted rates 2026.pdf · p.4' },
       ],
-      foot: ['Drafted from your own contracts. Never anyone else’s.'] },
+      blocks: [{ k: 'note', text: 'Your contracts only. Never anyone else’s.' }] },
     { head: ['Horizon', 'Listed'],
-      rows: [
-        { b: 'Kilimanjaro Wild Trails', s: 'Tanzania · northern circuit', state: 'done' },
-        { b: 'Found by agencies searching', s: 'No cost to appear', state: 'done' },
-        { b: 'Your identity', s: 'Confidential until an inquiry reaches you', state: 'done' },
-      ],
-      foot: ['A bonus, not the pitch.'] },
+      blocks: [
+        { k: 'kpis', kpis: [['Cost to appear', '€0'], ['Fee to reply', '€0']] },
+        { k: 'note', text: 'Your identity stays confidential until an inquiry reaches you.' },
+      ] },
   ],
+
   'travel-agencies': [
-    { head: ['Team', 'One CRM · one brand'],
-      rows: [
-        { b: 'Lena Ortiz', s: 'Owner · 6 open trips', state: 'done' },
-        { b: 'Daniel Achebe', s: 'Agent · 4 open trips', state: 'done' },
-        { b: 'Priya Nair', s: 'Agent · 3 open trips', state: 'done' },
-      ],
-      foot: ['Every agent, every trip, one stage engine.'] },
-    { head: ['Meridian Travel Co.', 'One brand'],
-      rows: [
-        { b: 'Your logo', s: 'On every link, from every agent', state: 'done' },
-        { b: 'Your domain', s: 'meridiantravel.co', state: 'done' },
-        { b: 'Powered by Hyperporter', s: 'Removed', state: 'done' },
-      ],
-      foot: ['One brand across the whole team, not one per agent.'] },
+    { head: ['Team', 'One stage engine'],
+      blocks: [
+        { k: 'people', people: [
+          ['LO', 'Lena Ortiz', 'Owner', '6 open'],
+          ['DA', 'Daniel Achebe', 'Agent', '4 open'],
+          ['PN', 'Priya Nair', 'Agent', '3 open'],
+        ] },
+        { k: 'note', text: 'Every agent, every trip, one board.' },
+      ] },
+    { blocks: [
+        { k: 'lbl', lbl: 'Meridian Travel Co.', title: 'One brand, every agent' },
+        { k: 'cards', cards: [
+          { title: 'Your logo', meta: 'On every link, whoever sent it', tag: 'Yours' },
+          { title: 'meridiantravel.co', meta: 'Your own domain', tag: 'Yours' },
+        ] },
+        { k: 'note', text: 'One brand across the whole team, not one per agent.' },
+      ] },
     { head: ['Horizon', '130+ countries'],
-      rows: [
-        { b: 'Kenya · 12 suppliers', s: 'Shared across the whole team', state: 'done' },
-        { b: 'Peru · 9 suppliers', s: 'Shared across the whole team', state: 'done' },
-        { b: 'Japan · 7 suppliers', s: 'Shared across the whole team', state: 'done' },
-      ],
-      foot: ['One sourcing network, not one per agent.'] },
-    { head: ['Autopilot', 'At volume'],
-      rows: [
-        { b: 'Quote requests sent', s: '14 this week, automatically', state: 'done' },
-        { b: 'Follow-ups sent', s: '9 this week', state: 'done' },
-        { b: 'Escalated to a person', s: '2 · a reprice and a date change', tag: 'Needs you', amber: true },
-      ],
-      foot: ['The chasing goes. The judgement stays with you.'] },
+      blocks: [
+        { k: 'search', q: 'Peru · Sacred Valley · June', meta: '9 suppliers' },
+        { k: 'note', text: 'One sourcing network shared across the team, not one per agent.' },
+      ] },
+    { head: ['Autopilot', 'This week'],
+      blocks: [
+        { k: 'kpis', kpis: [['Sent automatically', '23'], ['Needed a person', '2']] },
+        { k: 'note', text: 'The chasing goes. The judgement stays with you.' },
+      ] },
   ],
+
   'travel-agents': [
     { head: ['Your book', '13 open trips'],
-      rows: [
-        { b: 'Lena & Mark Ortiz', s: 'Kenya · March · Quotation', state: 'now' },
-        { b: 'The Achebe family', s: 'Peru · June · Planning', state: 'wait' },
-        { b: 'Mira Sato', s: 'Japan · October · Inquiry', state: 'wait' },
-      ],
-      foot: ['Your whole client book, one stage engine.'] },
-    { head: ['Magic link', 'No password'],
-      rows: [
-        { b: 'Traveller link', s: 'Itinerary, documents, payments', tag: 'Sent' },
-        { b: 'Supplier link', s: 'The request and their own quote', tag: 'Sent' },
-        { b: 'Nothing to install', s: 'Opens in a browser', state: 'done' },
-      ],
-      foot: ['Sent to travellers or suppliers, from the trip.'] },
-    { head: ['Payment instructions', 'Every tier'],
-      rows: [
-        { b: 'Deposit · €1,480', s: 'Bank details on the traveller’s link', state: 'done' },
-        { b: 'Balance · due 14 Feb', s: 'On the same link', state: 'done' },
-        { b: 'Marking it received', s: 'Always yours to do', tag: 'By hand', amber: true },
-      ],
-      foot: ['Structured payment info on every link, on any tier.'] },
-    { head: ['Your inquiry form', 'Share anywhere'],
-      rows: [
-        { b: 'A link you can post', s: 'Bio, signature, a message', state: 'done' },
-        { b: 'Where · when · budget', s: 'Asked before it reaches you', state: 'done' },
-        { b: 'Lands in your CRM', s: 'As a structured lead', state: 'done' },
-      ],
-      foot: ['Every submission arrives ready to work.'] },
+      blocks: [
+        { k: 'cols', cols: [
+          { name: 'Quotation', cards: [['Lena & Mark Ortiz', 'Kenya · March']] },
+          { name: 'Planning', cards: [['The Achebe family', 'Peru · June']] },
+          { name: 'Inquiry', cards: [['Mira Sato', 'Japan · October']] },
+        ] },
+      ] },
+    { blocks: [
+        { k: 'lbl', lbl: 'One trip · two links', title: 'What each side opens' },
+        { k: 'cards', cards: [
+          { title: 'Traveller', meta: 'Itinerary, documents, payments', tag: 'Sent' },
+          { title: 'Supplier', meta: 'The request and their own quote', tag: 'Sent' },
+        ] },
+        { k: 'note', text: 'No password, nothing to install.' },
+      ] },
+    { head: ['Deposit · €1,480', 'On every tier'],
+      blocks: [
+        { k: 'doc', title: 'On the traveller’s link', lines: ['Amount and due date', 'Bank details and reference', 'Balance €3,452 due 1 Mar'] },
+        { k: 'note', text: 'Marking it received is always yours to do.' },
+      ] },
+    { head: ['Your form', 'Share anywhere'],
+      blocks: [
+        { k: 'fields', pair: true, fields: [['Where', 'Kenya, the Mara'], ['When', 'Early March']] },
+        { k: 'note', text: 'Asked before it reaches you. Lands in your CRM as a structured lead.' },
+      ] },
   ],
+
   'independent-advisors': [
-    { head: ['Your branding', 'From day one'],
-      rows: [
-        { b: 'Your logo', s: 'On every client-facing link', state: 'done' },
-        { b: 'Your name', s: 'On the proposal and the itinerary', state: 'done' },
-        { b: 'Showcase', s: 'Included on the free tier', state: 'done' },
+    { blocks: [
+        { k: 'lbl', lbl: 'From day one', title: 'On every client-facing link' },
+        { k: 'cards', cards: [
+          { title: 'Your logo', meta: 'Traveller and supplier views', tag: 'Showcase' },
+          { title: 'Your name', meta: 'On the proposal and itinerary', tag: 'Showcase' },
+        ] },
+        { k: 'note', text: 'Included on the free tier. Your identity, not ours.' },
+      ] },
+    { head: ['Proposal', 'Your letterhead'],
+      blocks: [
+        { k: 'doc', title: 'Kenya · 9 nights · 2 adults', lines: [
+          'Day 1 – 3 · Nairobi to the Mara',
+          'Day 4 – 7 · Mara North, full board',
+          'Day 8 – 9 · Rift Valley, return',
+        ] },
+        { k: 'note', text: 'A document that looks like your business, not a template.' },
       ],
-      foot: ['Your identity, not ours.'] },
-    { head: ['Proposal', 'Ready'],
-      rows: [
-        { b: 'Day-by-day itinerary', s: 'Built from the chosen offer', state: 'done' },
-        { b: 'Your letterhead', s: 'Not a template', state: 'done' },
-        { b: 'Link, PDF or message', s: 'However they read it', tag: 'Share' },
-      ],
-      foot: ['A document that looks like your business.'] },
+      foot: ['Link, PDF or a message.', 'Share', false] },
     { head: ['Horizon', 'No supplier list needed'],
-      rows: [
-        { b: 'Peru · 9 vetted suppliers', s: 'Quote without a relationship there', tag: 'Request quote' },
-        { b: 'Japan · 7 vetted suppliers', s: 'Quote without a relationship there', tag: 'Request quote' },
-        { b: 'The supplier’s rate', s: 'Paid to them in full', state: 'done' },
-      ],
-      foot: ['Full sourcing access with no team behind you.'] },
+      blocks: [
+        { k: 'search', q: 'Japan · October · 7 nights', meta: '7 suppliers' },
+        { k: 'cards', cards: [
+          { title: 'Kansai operator', meta: 'Identity shown once you inquire', tag: 'Request quote' },
+          { title: 'Tokyo DMC', meta: 'Identity shown once you inquire', tag: 'Request quote' },
+        ] },
+        { k: 'note', text: 'Quote a country you have no relationship in. They still receive their full rate.' },
+      ] },
     { head: ['Powered by Hyperporter', 'Removed'],
-      rows: [
-        { b: 'Traveller link', s: 'No badge', state: 'done' },
-        { b: 'Proposal document', s: 'No badge', state: 'done' },
-        { b: 'Supplier link', s: 'No badge', state: 'done' },
-      ],
-      foot: ['Usually the first upgrade, and the reason why.'] },
+      blocks: [
+        { k: 'cards', cards: [
+          { title: 'Traveller link', meta: 'No badge', tag: 'Clean' },
+          { title: 'Proposal', meta: 'No badge', tag: 'Clean' },
+          { title: 'Supplier link', meta: 'No badge', tag: 'Clean' },
+        ] },
+        { k: 'note', text: 'Usually the first upgrade, and the reason why.' },
+      ] },
   ],
+
   creators: [
-    { head: ['Meridian Travel Co.', 'NEW INQUIRY'],
-      rows: [
-        { b: 'Where', s: 'Kenya, the Mara', state: 'done' },
-        { b: 'When', s: 'Early March', state: 'done' },
-        { b: 'Budget', s: 'From €4,000 per person', state: 'done' },
-      ],
-      foot: ['One link — bio, TikTok, a community post.'] },
-    { head: ['Your name on it', 'Free tier'],
-      rows: [
-        { b: 'Your logo', s: 'On every proposal they see', state: 'done' },
-        { b: 'Your handle', s: 'On the inquiry form itself', state: 'done' },
-        { b: 'Showcase', s: 'No upgrade needed for this', state: 'done' },
-      ],
-      foot: ['It looks like you, from the first link.'] },
+    { back: { title: 'Meridian Travel Co.', lines: ['l', 'm', 's'] },
+      blocks: [
+        { k: 'lbl', lbl: 'New inquiry', title: 'Tell us about the trip' },
+        { k: 'fields', pair: true, fields: [['Where', 'Kenya, the Mara'], ['When', 'Early March']] },
+        { k: 'fields', fields: [['Budget, per person', 'From €4,000', true]] },
+        { k: 'note', text: 'One link — bio, TikTok, a community post.' },
+      ] },
+    { blocks: [
+        { k: 'lbl', lbl: 'Free tier', title: 'Your name on it' },
+        { k: 'cards', cards: [
+          { title: 'Your handle', meta: 'On the form itself', tag: 'Showcase' },
+          { title: 'Your logo', meta: 'On every proposal they see', tag: 'Showcase' },
+        ] },
+        { k: 'note', text: 'It looks like you, from the first link.' },
+      ] },
     { head: ['Inquiries', '9 this month'],
-      rows: [
-        { b: 'Mira Sato', s: 'From the bio link · Inquiry', state: 'now' },
-        { b: 'Tom Achebe', s: 'From a TikTok comment · Planning', state: 'wait' },
-        { b: 'Nothing in your DMs', s: 'All of it on the record', state: 'done' },
-      ],
-      foot: ['Every inquiry tracked, none lost in a message list.'] },
+      blocks: [
+        { k: 'people', people: [
+          ['MS', 'Mira Sato', 'From the bio link', 'Inquiry'],
+          ['TA', 'Tom Achebe', 'From a TikTok comment', 'Planning'],
+        ] },
+        { k: 'kpis', kpis: [['Tracked', '9'], ['Lost in DMs', '0']] },
+      ] },
   ],
+
   dmcs: [
     { head: ['Requests · 2 new', 'Free'],
       rows: [
@@ -1002,57 +1011,57 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
         { b: 'Mara North · 4 nights', s: 'From Atlas Voyages', state: 'wait' },
         { b: 'One place for all of it', s: 'However it arrived', state: 'done' },
       ],
-      foot: ['Organise every inbound request at no cost.'] },
+      blocks: [{ k: 'note', text: 'Organise every inbound request at no cost.' }] },
     { head: ['Horizon', 'Listed'],
-      rows: [
-        { b: 'Rift Valley Ground Services', s: 'Kenya · Mara, Rift Valley', state: 'done' },
-        { b: 'Found by agencies searching', s: 'No cost to appear', state: 'done' },
-        { b: 'Your identity', s: 'Confidential until an inquiry reaches you', state: 'done' },
-      ],
-      foot: ['Discoverable as the network grows.'] },
+      blocks: [
+        { k: 'kpis', kpis: [['Cost to appear', '€0'], ['Fee to reply', '€0']] },
+        { k: 'note', text: 'Your identity stays confidential until an inquiry reaches you.' },
+      ] },
     { head: ['Your own inbox', 'From Intelligence'],
       msgs: [
-        { text: 'Any availability for 4 nights in Laikipia, early March?', from: 'them' },
+        { via: 'Meridian Travel Co. · WhatsApp', text: 'Any availability for 4 nights in Laikipia, early March?', from: 'them' },
         { text: 'Yes — holding until Friday.', from: 'me' },
       ],
-      foot: ['Reply from the WhatsApp and address you already use.'] },
-    { head: ['Atlas', 'From your rates'],
+      blocks: [{ k: 'note', text: 'Parsed straight into the CRM. No new app to check.' }] },
+    { head: ['Atlas', 'From your own rates'],
       msgs: [
         { text: 'Laikipia, 3 nights, family of 5 — draft a quote.', from: 'me' },
         { text: 'USD 2,480 per person, full board. Child rate applies to one.',
           cite: 'Your contracted rates 2026.pdf · p.4' },
       ],
-      foot: ['Drafted from your real contracted rates.'] },
+      blocks: [{ k: 'note', text: 'Your real contracted rates, on your terms.' }] },
   ],
+
   'tour-operators': [
     { head: ['Requests & quotes', 'One place'],
-      rows: [
-        { b: 'Northern circuit · 8 days', s: 'From Meridian Travel Co.', tag: 'Quote by Thu' },
-        { b: 'Coast extension · 4 days', s: 'From Atlas Voyages', state: 'wait' },
-        { b: 'Sent last week', s: '6 quotes, all tracked', state: 'done' },
-      ],
-      foot: ['Every request and quote, tracked in one place.'] },
-    { head: ['Package · 8 days', 'Your branding'],
-      rows: [
-        { b: 'Day-by-day, all eight days', s: 'Built once, reused', state: 'done' },
-        { b: 'Hotels and inclusions', s: 'Structured, not retyped', state: 'done' },
-        { b: 'Your letterhead', s: 'No Hyperporter badge', state: 'done' },
-      ],
-      foot: ['A branded, multi-day package document.'] },
+      blocks: [
+        { k: 'cols', cols: [
+          { name: 'To quote', cards: [['Northern circuit · 8 days', 'Meridian Travel Co.']] },
+          { name: 'Quoted', cards: [['Coast extension · 4 days', 'Atlas Voyages'], ['Crater · 3 days', 'Sent Monday']] },
+        ] },
+      ] },
+    { head: ['Northern circuit', 'Your letterhead'],
+      blocks: [
+        { k: 'doc', title: '8 days · 2 travellers', lines: [
+          'Day 1 – 2 · Arusha, Tarangire',
+          'Day 3 – 5 · Serengeti, central',
+          'Day 6 – 8 · Ngorongoro, return',
+        ] },
+        { k: 'note', text: 'Built once, reused. No Hyperporter badge.' },
+      ] },
     { head: ['Horizon', 'Listed'],
-      rows: [
-        { b: 'Kilimanjaro Wild Trails', s: 'Tanzania · northern circuit', state: 'done' },
-        { b: 'Found by agencies searching', s: 'No cost to appear', state: 'done' },
-        { b: 'Your identity', s: 'Confidential until an inquiry reaches you', state: 'done' },
-      ],
-      foot: ['Discoverable by agencies, at no cost.'] },
-    { head: ['Atlas', 'From your rates'],
+      blocks: [
+        { k: 'kpis', kpis: [['Cost to appear', '€0'], ['Fee to reply', '€0']] },
+        { k: 'note', text: 'Your identity stays confidential until an inquiry reaches you.' },
+      ] },
+    { head: ['Atlas', 'From your own rates'],
       msgs: [
-        { text: 'Draft the northern circuit package, 8 days, two travellers.', from: 'me' },
-        { text: 'USD 3,940 per person. Built from your 2026 sheet — park fees included, flights not.',
+        { text: 'Draft the northern circuit, 8 days, two travellers.', from: 'me' },
+        { text: 'USD 3,940 per person. Park fees included, international flights not.',
           cite: 'Your contracted rates 2026.pdf · p.2, p.7' },
       ],
-      foot: ['Packages drafted from your own real rates.'] },
+      blocks: [{ k: 'note', text: 'Packages drafted from your own real rates.' }] },
   ],
+
 
 };

@@ -1,13 +1,38 @@
 ---
-/** Automated Quotation — every supplier asked at once. */
+/** Automated quotation — every supplier asked at once, replies landing on
+    the board, and your margin applied where you set it. */
+import App from './App.astro';
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b>Quote requests · Nairobi</b><small>3 suppliers · 09:02</small></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Rift Valley Ground Services</b><small>Replied 09:41</small></div><span class="r">€4,180</span></div>
-  <div class="mk-row"><span class="mk-chk now"></span><div><b>Acacia Safari Logistics</b><small>Reminder sent 12:00</small></div><button type="button" class="mk-btn o" data-live="set" data-done="Reminded" data-small="Second reminder · just now">Remind</button></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Karen Overland → Mara Plains</b><small>Declined · re-routed</small></div><span class="r">€4,505</span></div>
-  <div class="js-board" hidden>
-    <div class="mk-sum" data-margin data-pct="18" data-base="4180"><span class="mk-p">Your <span class="mk-stepper"><button type="button" data-live="margin" data-step="-1" aria-label="Lower the margin">−</button><b data-margin-out>18%</b><button type="button" data-live="margin" data-step="1" aria-label="Raise the margin">+</button></span> margin</span><b data-margin-sum>€4,932</b></div>
+<App
+  title="Lena & Mark Ortiz"
+  meta="KE-2291 · Quotation"
+  who="LO"
+  tabs={['Overview', 'Quotation board', 'Pricing', 'Autopilot']}
+  tab="Quotation board"
+  note="Asked in parallel at 09:02. Replies land here; the choice is yours."
+>
+  <table class="mk-tbl">
+    <colgroup><col style="width:32%" /><col style="width:20%" /><col style="width:14%" /><col style="width:16%" /><col style="width:18%" /></colgroup>
+    <thead><tr><th>Supplier</th><th>Offer</th><th>Cost pp</th><th>Replied</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><span class="who"><i>RV</i>Rift Valley Ground Services</span></td><td>Classic · 8 days</td><td class="num">€4,180</td><td>09:41</td><td><span class="mk-st go">In</span></td></tr>
+      <tr><td><span class="who"><i>BE</i>Baobab Eco Safaris</span></td><td>Walking · 7 days</td><td class="num">€3,880</td><td>11:02</td><td><span class="mk-st go">In</span></td></tr>
+      <tr><td><span class="who"><i>AS</i>Acacia Safari Logistics</span></td><td>Classic · 8 days</td><td class="num">—</td><td>—</td><td><span class="mk-st amb">Reminded 12:00</span></td></tr>
+      <tr><td><span class="who"><i>KO</i>Karen Overland Co.</span></td><td>Transfers only</td><td class="num">—</td><td>10:15</td><td><span class="mk-st red">Declined</span></td></tr>
+    </tbody>
+  </table>
+  <div class="mk-foot js-board" hidden data-margin data-pct="18" data-base="4180">
+    <span class="mk-fine">Your
+      <span class="mk-stepper">
+        <button type="button" data-live="margin" data-step="-1" aria-label="Lower the margin">−</button>
+        <b data-margin-out>18%</b>
+        <button type="button" data-live="margin" data-step="1" aria-label="Raise the margin">+</button>
+      </span> margin on Rift Valley
+    </span>
+    <span class="mk-mono" style="font-size:1.25em" data-margin-sum>€4,932</span>
   </div>
-  <div class="mk-foot"><span class="mk-fine">Replies land on the board. You choose.</span><button type="button" class="mk-btn o" data-live="set" data-done="Board open" data-reveal=".js-board" data-fine="Set your margin, then approve.">Open board</button></div>
-</div>
+  <div class="mk-foot">
+    <span class="mk-fine">Set a margin per offer, then release.</span>
+    <button type="button" class="mk-uibtn o" data-live="set" data-done="Board open" data-reveal=".js-board">Set margin</button>
+  </div>
+</App>

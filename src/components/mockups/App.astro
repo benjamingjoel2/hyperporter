@@ -1,0 +1,61 @@
+---
+/**
+ * The application around a screen: the toolbar, the tabs, and the body the
+ * screen fills.
+ *
+ * A floating card with three rows in it is not a CRM, however true its
+ * words — the founder's note, Sep 2026. Every screen is drawn inside this,
+ * so it has the chrome real software has.
+ *
+ * There is no left-hand navigation: at the size a screen is seen on this
+ * site a sidebar is a column of unreadable words eating a sixth of the
+ * width (founder's instruction, Sep 2026). Whose application it is — the
+ * agency's, a supplier's — is a small mark at the head of the toolbar
+ * instead. `page` drops even that, for the screens nobody signs into.
+ */
+
+interface Props {
+  /** Whose application this is, at the head of the toolbar. */
+  brand?: string;
+  /** A page rather than the application: no brand mark, no tabs. */
+  page?: boolean;
+  title: string;
+  meta?: string;
+  pills?: string[];
+  who?: string;
+  tabs?: string[];
+  tab?: string;
+  /** The line under the body, in the app's own voice. */
+  note?: string;
+  /** The body is a column with the composer pinned at its foot. */
+  talk?: boolean;
+  class?: string;
+}
+
+const {
+  brand = 'Hyperporter', page = false,
+  title, meta, pills = [], who, tabs, tab, note, talk = false, class: klass = '',
+} = Astro.props;
+---
+
+<div class:list={['mk-ui', klass, { page }]}>
+  <div class="mk-main">
+    <div class="mk-bar">
+      {!page && <span class="mk-brand"><i />{brand}</span>}
+      <b>{title}</b>
+      {meta && <small>{meta}</small>}
+      <span class="sp">
+        {pills.map((p) => <span class="mk-pill">{p}</span>)}
+        <slot name="bar" />
+        {who && <span class="av">{who}</span>}
+      </span>
+    </div>
+    {tabs && (
+      <div class="mk-tabs">{tabs.map((t) => <span class:list={{ on: t === tab }}>{t}</span>)}</div>
+    )}
+    <div class:list={['mk-body', { talk }]}>
+      <slot />
+      {note && <p class="mk-fine" style="margin:.6em 0 0">{note}</p>}
+    </div>
+  </div>
+</div>

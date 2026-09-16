@@ -1,14 +1,31 @@
 ---
-/** Inquiry Form — editable fields; Send lands it in the CRM. */
+/** The inquiry form as the traveller meets it: the agency's own page, on
+    the agency's own address. Nobody signs into this, so there is no
+    navigation on it. */
+import App from './App.astro';
 ---
-<div class="mk-back"><b>Meridian Travel Co.</b><i class="l"></i><i class="m"></i><i class="l"></i><i class="s"></i><i class="m"></i><i class="l"></i></div>
-<div class="mk-panel right">
-  <div><span class="mk-lbl">New inquiry</span><p class="mk-title">Tell us about the trip</p></div>
-  <div class="mk-row2">
-    <div class="mk-field"><label>Where</label><div contenteditable="true" spellcheck="false">Kenya, the Mara</div></div>
-    <div class="mk-field"><label>When</label><div contenteditable="true" spellcheck="false">Early March</div></div>
+<App
+  page
+  title="Meridian Travel Co."
+  meta="meridiantravel.co/enquire"
+  note="Short and guided. It lands as a structured brief, not an email."
+>
+  <span slot="bar" class="mk-pill">Secure</span>
+  <p class="mk-lbl">New inquiry</p>
+  <p class="mk-hero">Tell us about the trip</p>
+  <div class="mk-form">
+    <div class="f"><label>Where</label><div class="val" contenteditable="true" spellcheck="false">Kenya, the Mara</div></div>
+    <div class="f"><label>When</label><div class="val" contenteditable="true" spellcheck="false">Early March</div></div>
+    <div class="f"><label>Travellers</label><div class="val" contenteditable="true" spellcheck="false">2 adults</div></div>
+    <div class="f"><label>Budget, per person</label><div class="val focus" contenteditable="true" spellcheck="false">€4,000 – 4,500</div></div>
   </div>
-  <div class="mk-field"><label>Budget, per person</label><div contenteditable="true" spellcheck="false" class="focus">€4,000 – 4,500</div></div>
-  <div class="mk-row js-landed" hidden><span class="mk-chk"></span><div><b>In the CRM · KE-2292</b><small>New contact, brief attached</small></div><span class="mk-tag">Landed</span></div>
-  <div class="mk-foot"><span class="mk-fine">Edit, then send.</span><button type="button" class="mk-btn sig" data-live="set" data-done="Sent" data-reveal=".js-landed" data-fine="Landed as a brief.">Send</button></div>
-</div>
+  <div class="mk-foot">
+    <span class="mk-fine">We reply within a day.</span>
+    <button type="button" class="mk-uibtn sig" data-live="set" data-done="Sent" data-reveal=".js-landed">Send</button>
+  </div>
+  <div class="mk-pane js-landed" hidden style="margin-top:.55em">
+    <h6>Thank you</h6>
+    <div class="ln"><span>We have your brief — reference KE-2292.</span><span>Just now</span></div>
+    <div class="ln"><span>Lena will come back to you with a first plan.</span><span>Within a day</span></div>
+  </div>
+</App>

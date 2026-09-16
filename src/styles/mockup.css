@@ -26,7 +26,8 @@
   background:var(--photo) center/cover;filter:blur(3px) saturate(.8);opacity:.9}
 .mk[data-ground="photo"]::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.18)}
 
-.mk-stage{position:absolute;inset:0;font-size:clamp(10px,2.6cqw,14px);line-height:1.35;z-index:1}
+.mk-stage{position:absolute;inset:0;font-size:clamp(10px,2.6cqw,14px);line-height:1.35;z-index:1;
+  display:flex;align-items:center;justify-content:center;padding:5% 5.5% 14%}
 .mk.tall .mk-stage{font-size:clamp(10px,3.3cqw,14px)}
 
 /* The panel: frosted, lifted, one idea. */
@@ -70,6 +71,7 @@
   .mk-foot .mk-fine{display:none}
   /* A phone-width frame has no room beside the panel for the chip. */
   .mk-app{display:none}
+  .mk-stage{padding:4%}
 }
 
 /* Panel anatomy. */
@@ -182,7 +184,7 @@
    full width of whatever holds it — for the hero card on a tool page, which
    is already a dark panel of its own. */
 .mk.bare{aspect-ratio:auto;background:none;border-radius:0;overflow:visible;isolation:auto}
-.mk.bare .mk-stage{position:relative;inset:auto;font-size:clamp(10px,2.7cqw,13.5px)}
+.mk.bare .mk-stage{position:relative;inset:auto;padding:0;display:block;font-size:clamp(10px,2.7cqw,13.5px)}
 .mk.bare .mk-panel{position:relative;left:auto;right:auto;top:auto;bottom:auto;transform:none;width:100%;max-width:none;
   background:rgba(255,255,255,.96);box-shadow:0 0 0 1px rgba(255,255,255,.5) inset,0 1em 2.4em rgba(0,0,0,.35)}
 .mk.bare .mk-back,.mk.bare .mk-app{display:none}
@@ -281,3 +283,169 @@
 .mk-side .mk-row:last-of-type{border-bottom:0}
 .mk.dark .mk-side{background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.09)}
 .mk-end{display:inline-flex;align-items:center;gap:.6em}
+
+/* ---- the application itself ----------------------------------------------
+   A floating panel with two tiles in it is not a CRM, however accurate its
+   words. A product screenshot has chrome — a sidebar you navigate with, a
+   toolbar, tabs, and a dense table or board with column headers and enough
+   rows to look like real work. These rules draw that, at the same em scale
+   as everything else so it still scales like a photograph of itself. */
+
+.mk-ui{position:relative;width:100%;max-height:100%;
+  display:flex;flex-direction:column;font-size:1em;
+  background:#FCFCFB;border-radius:.7em;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(13,16,22,.10),0 2.2em 4.4em rgba(8,12,18,.24)}
+
+/* main column */
+.mk-main{display:flex;flex-direction:column;min-width:0;min-height:0}
+.mk-bar{display:flex;align-items:center;gap:.55em;padding:.7em .95em;border-bottom:1px solid var(--line);overflow:hidden}
+.mk-brand{display:inline-flex;align-items:center;gap:.35em;padding-right:.6em;margin-right:.1em;
+  border-right:1px solid var(--line);color:var(--muted);font-size:.8em;white-space:nowrap;flex:0 0 auto}
+.mk-brand i{width:.85em;height:.85em;border-radius:50%;border:.12em solid currentColor;flex:0 0 auto}
+.mk-bar b{font-size:1.02em;letter-spacing:-.01em;flex:0 0 auto;white-space:nowrap}
+.mk-bar small{color:var(--dim);font-size:.8em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0}
+.mk-bar .sp{margin-left:auto;display:flex;align-items:center;gap:.4em;flex:0 0 auto}
+.mk-pill{border:1px solid var(--line);border-radius:999px;padding:.2em .6em;font-size:.74em;color:var(--muted);white-space:nowrap}
+.mk-bar .av{width:1.5em;height:1.5em;flex:0 0 auto;overflow:hidden;border-radius:50%;background:var(--signal);color:#fff;
+  font-size:.7em;display:grid;place-items:center;letter-spacing:.02em}
+
+/* tabs */
+.mk-tabs{display:flex;gap:1em;padding:0 .95em;border-bottom:1px solid var(--line)}
+.mk-tabs span{padding:.5em 0;font-size:.85em;color:var(--dim);border-bottom:.13em solid transparent;white-space:nowrap}
+.mk-tabs span.on{color:var(--paper);border-bottom-color:var(--paper)}
+
+/* a real table */
+.mk-body{padding:.65em .95em .9em;overflow:hidden;min-height:0}
+.mk-body > .mk-fine{padding-top:.7em;color:var(--dim)}
+.mk-tbl{width:100%;border-collapse:collapse;font-size:.88em;table-layout:fixed}
+.mk-tbl th{text-align:left;font-weight:400;color:var(--dim);font-size:.82em;letter-spacing:.05em;
+  text-transform:uppercase;padding:.3em .9em .4em 0;border-bottom:1px solid var(--line);white-space:nowrap}
+.mk-tbl th:last-child,.mk-tbl td:last-child{padding-right:0}
+.mk-tbl td{padding:.48em .9em .48em 0;border-bottom:1px solid rgba(13,16,22,.055);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-tbl tr:last-child td{border-bottom:0}
+.mk-tbl.tight td{padding-top:.28em;padding-bottom:.28em}
+/* A name with its avatar. Block rather than flex, so a long name gets a
+   real ellipsis instead of running into the next column. */
+.mk-tbl .who{display:block;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-tbl .who i{width:1.85em;height:1.85em;border-radius:50%;background:#E3E6E4;color:var(--muted);
+  font-size:.7em;display:inline-grid;place-items:center;vertical-align:-.45em;margin-right:.45em}
+.mk-tbl .num{font-variant-numeric:tabular-nums;text-align:right}
+.mk-st{display:inline-flex;align-items:center;gap:.3em;font-size:.94em;color:var(--muted);white-space:nowrap}
+.mk-st::before{content:"";width:.42em;height:.42em;border-radius:50%;background:currentColor;opacity:.45}
+.mk-st.go{color:#0C6B6F}.mk-st.go::before{opacity:1}
+.mk-st.amb{color:var(--amber)}.mk-st.amb::before{opacity:1}
+.mk-st.red{color:#A8506B}.mk-st.red::before{opacity:1}
+
+/* the full pipeline, all of it */
+.mk-kan{display:flex;gap:.5em;overflow:hidden;align-items:flex-start}
+.mk-kan .kcol{flex:0 0 8.2em;min-width:0}
+.mk-kan .kh{display:flex;align-items:baseline;gap:.35em;padding:0 .12em .38em;
+  font-size:.76em;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+.mk-kan .kh b{font-weight:400;color:var(--paper)}
+.mk-kan .kc{background:#fff;border:1px solid var(--line);border-radius:.4em;padding:.4em .45em;
+  margin-bottom:.32em;box-shadow:0 .1em .3em rgba(13,16,22,.04)}
+.mk-kan .kc b{display:block;font-size:.8em;font-weight:400;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-kan .kc small{display:block;color:var(--dim);font-size:.72em;margin-top:.12em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-kan .kc.amb{box-shadow:0 .1em .3em rgba(13,16,22,.04),inset .17em 0 0 var(--amber)}
+
+/* A narrow frame gets a denser table rather than a truncated one. */
+@container (max-width: 560px){
+  .mk-tbl{font-size:.82em}
+  .mk-tbl th,.mk-tbl td{padding-right:.6em}
+  .mk-metric b{font-size:1em}
+}
+@container (max-width: 380px){
+  .mk-ui{left:4%;right:4%}
+  .mk-kan{gap:.35em}
+  .mk-kan .kcol{flex-basis:7em}
+  .mk-kan .kc{padding:.32em .4em;margin-bottom:.26em}
+  .mk-tbl.tight td{padding-top:.2em;padding-bottom:.2em}
+  /* At this size the citation already says where the answer came from. */
+  .mk-chat .mk-fine{display:none}
+  .mk-chat{gap:.35em}
+  .mk .mk-stage .mk-chat .mk-msg p{padding:.5em .75em}
+}
+
+/* ---- more of the application ---------------------------------------------
+   The pieces a real screen needs beyond a table: a toolbar button, a form
+   laid out in a panel, a conversation in the body, two panes side by side,
+   a metric strip, and the bare page a traveller or a supplier opens from a
+   link — which has a brand bar where the app has navigation, because they
+   are not logged into anything. */
+
+.mk-uibtn{border:0;font:inherit;font-size:.76em;line-height:1.3;padding:.32em .7em;border-radius:.4em;
+  background:var(--paper);color:#fff;white-space:nowrap;cursor:pointer}
+.mk-uibtn.o{background:none;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line-2)}
+.mk-uibtn.amb{background:var(--amber);color:#fff}
+.mk-uibtn.sig{background:var(--signal);color:#fff}
+.mk-uibtn.done{background:none;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line-2);cursor:default}
+.mk-uibtn.done::before{content:"✓ ";color:var(--signal)}
+.mk-uibtn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.mk-tbl td .mk-uibtn{font-size:.9em}
+
+/* a form in the body */
+.mk-form{display:grid;grid-template-columns:1fr 1fr;gap:.45em .6em}
+.mk-form .f{display:flex;flex-direction:column;gap:.18em;min-width:0}
+.mk-form .f.wide{grid-column:1/-1}
+.mk-form label{font-size:.68em;letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+.mk-form .val{border:1px solid var(--line-2);border-radius:.34em;padding:.34em .5em;font-size:.82em;
+  background:#fff;min-height:1.9em;display:flex;align-items:center;justify-content:space-between;gap:.4em}
+.mk-form .val.focus{border-color:var(--signal);box-shadow:0 0 0 .1em var(--signal-dim)}
+.mk-form .val.ph{color:var(--dim)}
+.mk-form .val[contenteditable]:focus{outline:0;border-color:var(--signal)}
+
+/* a conversation in the body */
+.mk-chat{display:flex;flex-direction:column;gap:.45em;min-height:0}
+.mk-chat .mk-msg{font-size:.86em}
+.mk-chat .mk-composer{padding-top:.5em;margin-top:auto}
+.mk-body.talk{display:flex;flex-direction:column;gap:.5em}
+
+/* two panes */
+.mk-two{display:grid;grid-template-columns:1fr 1fr;gap:.55em;align-items:start}
+.mk-pane{border:1px solid var(--line);border-radius:.45em;overflow:hidden;background:#fff;min-width:0}
+.mk-pane > h6{margin:0;padding:.34em .55em;background:#F3F3F1;border-bottom:1px solid var(--line);
+  font-weight:400;font-size:.7em;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.mk-pane .ln{display:flex;justify-content:space-between;gap:.5em;padding:.33em .55em;font-size:.8em;
+  border-bottom:1px solid rgba(13,16,22,.05);min-width:0}
+.mk-pane .ln:last-child{border-bottom:0}
+.mk-pane .ln > :first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-pane .ln > :last-child{color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* a metric strip above a table */
+.mk-metrics{display:flex;gap:.45em;margin-bottom:.5em}
+.mk-metric{flex:1;border:1px solid var(--line);border-radius:.4em;padding:.33em .5em;background:#fff;min-width:0}
+.mk-metric span{display:block;font-size:.68em;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-metric b{display:block;font-weight:400;font-size:1.1em;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.mk-metric b em{font-style:normal;font-size:.6em;color:var(--signal);margin-left:.25em}
+
+/* a column of bars, for a send report */
+.mk-plot{display:flex;align-items:flex-end;gap:.25em;height:3.4em;padding-bottom:.2em;border-bottom:1px solid var(--line)}
+.mk-plot i{flex:1;background:#DCE3E2;border-radius:.1em .1em 0 0}
+.mk-plot i.hi{background:var(--signal)}
+
+/* the bare page: no navigation, a brand bar instead */
+.mk-ui.page .mk-bar{background:#fff}
+.mk-ui.page .mk-bar b{font-size:1.02em}
+.mk-ui.page .mk-body{padding:.75em .95em .9em}
+.mk-hero{font-size:1.5em;letter-spacing:-.02em;line-height:1.15;margin:.1em 0 .45em}
+
+/* an upload / drop target */
+.mk-drop{border:1px dashed var(--line-2);border-radius:.45em;padding:.5em;text-align:center;
+  font-size:.78em;color:var(--dim);margin-top:.5em}
+
+/* bare mode puts the application in flow instead of floating it */
+.mk.bare .mk-ui{max-height:none;box-shadow:0 0 0 1px rgba(13,16,22,.10),0 1em 2.4em rgba(0,0,0,.28)}
+
+/* live hooks on the application's own parts */
+.mk .mk-kan .kc[data-live="move"]{cursor:pointer;transition:transform .15s ease,box-shadow .2s ease}
+.mk .mk-kan .kc[data-live="move"]:hover{transform:translateY(-1px);box-shadow:0 .1em .3em rgba(13,16,22,.04),inset 0 0 0 1px var(--signal)}
+.mk .mk-tbl tr[data-live="tick"]{cursor:pointer}
+.mk .mk-tbl tr[data-live="tick"]:hover td:first-child{color:var(--signal)}
+.mk .mk-tbl tr[data-live="tick"]:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
+.mk-sub{color:var(--dim)}
+.mk-body > .mk-search{font-size:.82em;padding:.42em .65em;border-radius:.4em;margin-bottom:.5em}
+.mk-body > .mk-search span:first-of-type{color:var(--paper)}
+.mk-body > .mk-msg.sys{font-size:.86em}

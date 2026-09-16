@@ -1,15 +1,39 @@
 ---
-/** Itinerary Generator — a draft from your Vault. Swap any line. */
-const DAYS: [string, string, string, string, string, string, string][] = [
-  ['Day 1', 'Nairobi · Hemingways', '€310 pp', 'Rift Valley 2026 · p.4', 'Nairobi · Giraffe Manor', '€540 pp', 'Rift Valley 2026 · p.6'],
-  ['Day 2–5', 'Mara North · Offbeat Mara', '€410 pp', 'Offbeat contract · p.2', 'Mara North · Kicheche Mara', '€455 pp', 'Kicheche 2026 · p.1'],
-  ['Day 6–8', 'Naboisho · walking safaris', '€385 pp', 'Rift Valley 2026 · p.7', 'Naboisho · Encounter Mara', '€395 pp', 'Rift Valley 2026 · p.8'],
+/** Itinerary generator — a draft built only from rates in this account's
+    Vault, every line citing the contract it was priced from. Swap a line to
+    see the alternative the Vault also holds. */
+import App from './App.astro';
+
+const DAYS: [string, string, string, string, string, string, string, string][] = [
+  ['1', 'Nairobi', 'Hemingways · arrival night', '€310 pp', 'Rift Valley 2026 · p.4', 'Giraffe Manor · arrival night', '€540 pp', 'Rift Valley 2026 · p.6'],
+  ['2 – 5', 'Mara North', 'Offbeat Mara · full board', '€410 pp', 'Offbeat contract · p.2', 'Kicheche Mara · full board', '€455 pp', 'Kicheche 2026 · p.1'],
+  ['6 – 8', 'Naboisho', 'Walking safaris, conservancy fees', '€385 pp', 'Rift Valley 2026 · p.7', 'Encounter Mara · walking', '€395 pp', 'Rift Valley 2026 · p.8'],
+  ['9', 'Nairobi', 'Return transfer, day room', '€120 pp', 'Karen Overland · p.3', 'Private car, day room', '€165 pp', 'Karen Overland · p.5'],
 ];
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b><svg class="mk-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M12 3c.6 5 4 8.4 9 9-5 .6-8.4 4-9 9-.6-5-4-8.4-9-9 5-.6 8.4-4 9-9z"/></svg>Draft · Kenya, 9 nights</b><small>From your Vault</small></div>
-  {DAYS.map(([d, what, rate, cite, altWhat, altRate, altCite]) => (
-    <div class="mk-row" data-alt-what={altWhat} data-alt-rate={altRate} data-alt-cite={altCite}><span class="mk-ico">{d.replace('Day ', '')}</span><div><b>{what}</b><small><span class="mk-cite"><i></i>{cite}</span></small></div><span class="r">{rate}</span><button type="button" class="mk-btn o" data-live="swap" data-label="Swap" data-back="Swap back">Swap</button></div>
-  ))}
-  <div class="mk-foot"><span class="mk-fine">Swap any line, then send.</span><button type="button" class="mk-btn" data-live="set" data-done="Sent" data-fine="On their link now.">Send as proposal</button></div>
-</div>
+<App
+  title="Itinerary · draft"
+  meta="KE-2292 · Kenya, 9 nights"
+  who="LO"
+  tabs={['Overview', 'Itinerary', 'Quotation board', 'Pricing']}
+  tab="Itinerary"
+  note="Generated from your Vault. Yours to edit; sending it is your step."
+>
+  <button slot="bar" type="button" class="mk-uibtn amb" data-live="set" data-done="Sent">Send as proposal</button>
+  <table class="mk-tbl">
+    <colgroup><col style="width:9%" /><col style="width:16%" /><col style="width:27%" /><col style="width:24%" /><col style="width:12%" /><col style="width:12%" /></colgroup>
+    <thead><tr><th>Day</th><th>Where</th><th>What</th><th>Priced from</th><th>Rate</th><th /></tr></thead>
+    <tbody>
+      {DAYS.map(([d, where, what, rate, cite, altWhat, altRate, altCite]) => (
+        <tr data-alt-what={altWhat} data-alt-rate={altRate} data-alt-cite={altCite}>
+          <td class="num">{d}</td>
+          <td>{where}</td>
+          <td class="what">{what}</td>
+          <td class="cite">{cite}</td>
+          <td class="num rate">{rate}</td>
+          <td><button type="button" class="mk-uibtn o" data-live="swap" data-label="Swap" data-back="Swap back">Swap</button></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</App>

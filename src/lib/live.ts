@@ -50,9 +50,15 @@ const setChk = (row: Element | null, done: boolean, amber = false): void => {
 };
 
 const setTag = (row: Element | null, text: string | undefined, amber: boolean): void => {
-  const tag = row?.querySelector<HTMLElement>('.mk-tag');
+  const tag = row?.querySelector<HTMLElement>('.mk-tag, .mk-st');
   if (!tag || text === undefined) return;
   tag.textContent = text;
+  if (tag.classList.contains('mk-st')) {
+    // A status cell in a table carries its state as a tone, not a pill.
+    tag.classList.remove('go', 'amb', 'red');
+    tag.classList.add(amber ? 'amb' : 'go');
+    return;
+  }
   tag.classList.toggle('amb', amber);
   tag.classList.remove('grey');
 };
@@ -64,8 +70,11 @@ const rise = (el: HTMLElement): void => {
 
 const tick = (row: HTMLElement): void => {
   const chk = row.querySelector<HTMLElement>('.mk-chk');
-  if (!chk) return;
-  const wasDone = !chk.classList.contains('wait') && !chk.classList.contains('hold') && !chk.classList.contains('now');
+  // A table row has no tick mark; its own class carries the state.
+  if (!chk && !row.querySelector('.mk-st')) return;
+  const wasDone = chk
+    ? !chk.classList.contains('wait') && !chk.classList.contains('hold') && !chk.classList.contains('now')
+    : row.classList.contains('is-done');
   const done = !wasDone;
   setChk(row, done, row.dataset.amber === 'true');
   setTag(row, done ? row.dataset.on : row.dataset.off, done ? row.dataset.amber === 'true' : row.dataset.offAmber !== 'false');
@@ -75,14 +84,14 @@ const tick = (row: HTMLElement): void => {
 const set = (btn: HTMLElement): void => {
   if (btn.classList.contains('done')) return;
   const screen = screenOf(btn);
-  const row = btn.dataset.row && screen ? screen.querySelector<HTMLElement>(btn.dataset.row) : btn.closest<HTMLElement>('.mk-row');
+  const row = btn.dataset.row && screen ? screen.querySelector<HTMLElement>(btn.dataset.row) : btn.closest<HTMLElement>('.mk-row, tr');
   btn.classList.add('done');
   if (btn.dataset.done) btn.textContent = btn.dataset.done;
   if (row) {
     setChk(row, true, btn.dataset.amber === 'true');
     setTag(row, btn.dataset.tag, btn.dataset.amber === 'true');
     if (btn.dataset.small) {
-      const small = row.querySelector<HTMLElement>('div > small');
+      const small = row.querySelector<HTMLElement>('div > small, .mk-sub');
       if (small) small.textContent = btn.dataset.small;
     }
   }
@@ -96,15 +105,15 @@ const set = (btn: HTMLElement): void => {
     screen.querySelectorAll<HTMLElement>('.mk-head .mk-dot').forEach((d) => d.classList.remove(btn.dataset.clear!));
   }
   if (btn.dataset.fine && screen) {
-    const fine = screen.querySelector<HTMLElement>('.mk-foot .mk-fine, .mk-panel > .mk-fine');
+    const fine = screen.querySelector<HTMLElement>('.mk-foot .mk-fine, .mk-panel > .mk-fine, .mk-body > .mk-fine');
     if (fine) fine.textContent = btn.dataset.fine;
   }
 };
 
 const move = (card: HTMLElement): void => {
-  const col = card.closest<HTMLElement>('.mk-col');
+  const col = card.closest<HTMLElement>('.mk-col, .kcol');
   const next = col?.nextElementSibling as HTMLElement | null;
-  if (!col || !next || !next.classList.contains('mk-col')) {
+  if (!col || !next || !(next.classList.contains('mk-col') || next.classList.contains('kcol'))) {
     card.classList.add('mk-shake');
     card.addEventListener('animationend', () => card.classList.remove('mk-shake'), { once: true });
     return;
@@ -138,11 +147,11 @@ const margin = (btn: HTMLElement): void => {
 };
 
 const swap = (btn: HTMLElement): void => {
-  const row = btn.closest<HTMLElement>('.mk-row');
+  const row = btn.closest<HTMLElement>('.mk-row, tr');
   if (!row) return;
-  const b = row.querySelector<HTMLElement>('div > b');
-  const r = row.querySelector<HTMLElement>('.r');
-  const cite = row.querySelector<HTMLElement>('.mk-cite');
+  const b = row.querySelector<HTMLElement>('div > b, .what');
+  const r = row.querySelector<HTMLElement>('.r, .rate');
+  const cite = row.querySelector<HTMLElement>('.mk-cite, .cite');
   const flip = (el: HTMLElement | null, key: string): void => {
     if (!el) return;
     const alt = row.dataset[key];
@@ -169,7 +178,8 @@ const ask = (field: HTMLElement): void => {
     const row = screen.querySelector<HTMLElement>(field.dataset.then);
     if (row) {
       setChk(row, true);
-      const small = row.querySelector<HTMLElement>('div > small');
+      setTag(row, field.dataset.thenTag, false);
+      const small = row.querySelector<HTMLElement>('div > small, .mk-sub');
       if (small && field.dataset.thenSmall) small.textContent = field.dataset.thenSmall;
     }
   }
@@ -217,15 +227,20 @@ const add = (btn: HTMLElement): void => {
   if (!row) return;
   const count = Number(btn.dataset.n ?? 0) + 1;
   btn.dataset.n = String(count);
-  const b = row.querySelector<HTMLElement>('div > b');
+  const b = row.querySelector<HTMLElement>('div > b, td:first-child');
   if (b && count > 1) b.textContent = `${b.textContent} (${count})`;
   list.appendChild(row);
   rise(row);
-  const tag = row.querySelector<HTMLElement>('.mk-tag');
+  const tag = row.querySelector<HTMLElement>('.mk-tag, .mk-st');
   if (tag && btn.dataset.thenTo) {
-    window.setTimeout(() => { tag.textContent = btn.dataset.thenTo!; tag.classList.remove('amb'); rise(tag); }, 1600);
+    window.setTimeout(() => {
+      tag.textContent = btn.dataset.thenTo!;
+      tag.classList.remove('amb');
+      if (tag.classList.contains('mk-st')) tag.classList.add('go');
+      rise(tag);
+    }, 1600);
   }
-  const head = screen?.querySelector<HTMLElement>('.mk-head small');
+  const head = screen?.querySelector<HTMLElement>('.mk-head small, .mk-bar small');
   if (head && btn.dataset.headTo) head.textContent = btn.dataset.headTo;
 };
 

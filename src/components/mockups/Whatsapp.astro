@@ -1,14 +1,26 @@
 ---
-/** WhatsApp Integration — a Business number on the thread. */
+/** WhatsApp — a Business number wired onto the trip thread, so a message
+    that arrives there opens a contact and a trip like any other. */
+import App from './App.astro';
+
 const REPLIES = ['Early March works. Two adults, mid-range.', 'Flexible by a day either side.', 'Thank you! Can’t wait.'];
 ---
-<div class="mk-panel wide" data-thread>
-  <div class="mk-head"><b><span class="mk-dot"></span>WhatsApp Business</b><small>Connected</small></div>
-  <div class="mk-msg"><span class="mk-via">Lena · WhatsApp</span><p>Hi! Two of us, Kenya in March, 9 nights. Mara for sure.</p></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>New contact, new inquiry</b><small>Lena Ortiz · KE-2291</small></div></div>
-  <div class="mk-msg me"><span class="mk-via">You</span><p>Happy to. First plan today.</p></div>
-  <form class="mk-composer" data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="Lena · WhatsApp" data-me-via="You">
-    <input type="text" placeholder="Reply…" aria-label="Reply" autocomplete="off" />
-    <button type="submit" class="mk-btn sig">Send</button>
-  </form>
-</div>
+<App
+  title="Lena Ortiz"
+  meta="KE-2291 · new inquiry"
+  who="LO"
+  tabs={['Overview', 'Thread', 'Quotation board', 'Pricing']}
+  tab="Thread"
+  talk
+>
+  <span slot="bar" class="mk-pill">WhatsApp · +254 ··· 8810</span>
+  <div class="mk-chat" data-thread>
+    <div class="mk-msg"><span class="mk-via">Lena Ortiz · WhatsApp</span><p>Hi! Two of us, Kenya in March, 9 nights. Mara for sure.</p></div>
+    <div class="mk-msg sys"><p>New contact and new trip opened · KE-2291 · Inquiry</p></div>
+    <div class="mk-msg me"><span class="mk-via">You · WhatsApp</span><p>Happy to. First plan today.</p></div>
+    <form class="mk-composer" data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="Lena Ortiz · WhatsApp" data-me-via="You · WhatsApp">
+      <input type="text" placeholder="Reply on WhatsApp…" aria-label="Reply" autocomplete="off" />
+      <button type="submit" class="mk-btn sig">Send</button>
+    </form>
+  </div>
+</App>

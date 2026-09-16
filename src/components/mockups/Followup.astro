@@ -1,15 +1,39 @@
 ---
-/** Automated Follow-up — the messages you would have sent. */
-const REPLIES = ['A week later is perfect. Thank you!'];
+/** Automated follow-up — the messages that go out on their own, and the one
+    reply that stops the sequence because it is a change. */
+import App from './App.astro';
 ---
-<div class="mk-panel wide" data-thread>
-  <div class="mk-head"><b>Follow-ups</b><small>3 this week</small></div>
-  <div class="mk-row"><span class="mk-chk now"></span><div><b>Proposal nudge · Lena &amp; Mark</b><small>Sends tomorrow 09:00</small></div><button type="button" class="mk-btn o" data-live="set" data-done="Sent" data-small="Sent just now">Send now</button></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Voucher reminder · Atlas Maroc</b><small>Sent · voucher in</small></div><span class="mk-tag">Done</span></div>
-  <div class="mk-row"><span class="mk-chk now"></span><div><b>Feedback request · Sofia</b><small>Sends Friday</small></div><button type="button" class="mk-btn o" data-live="set" data-done="Sent" data-small="Sent just now">Send now</button></div>
-  <div class="mk-row plain" style="border-top:1px solid var(--line);border-bottom:0;padding-top:.8em"><div><b>"Could we push it a week?"</b><small>A change · yours</small></div><button type="button" class="mk-btn amb" data-live="set" data-done="Yours" data-reveal=".js-reply" data-small="Reply below">Reply</button></div>
-  <form class="mk-composer js-reply" hidden data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="Lena" data-me-via="You">
-    <input type="text" placeholder="Answer Lena…" aria-label="Reply to Lena" autocomplete="off" />
-    <button type="submit" class="mk-btn sig">Send</button>
-  </form>
-</div>
+<App
+  title="Follow-ups"
+  meta="3 scheduled this week"
+  who="LO"
+  tabs={['Scheduled', 'Sent', 'Stopped', 'Rules']}
+  tab="Scheduled"
+  note="A reply stops the sequence. Nothing keeps nudging somebody who answered."
+>
+  <table class="mk-tbl">
+    <colgroup><col style="width:26%" /><col style="width:26%" /><col style="width:16%" /><col style="width:16%" /><col style="width:16%" /></colgroup>
+    <thead><tr><th>Follow-up</th><th>Trip</th><th>Sends</th><th>Status</th><th /></tr></thead>
+    <tbody>
+      <tr>
+        <td>Proposal nudge</td><td>KE-2291 · Lena &amp; Mark</td><td>Tomorrow 09:00</td>
+        <td><span class="mk-st">Scheduled</span></td>
+        <td><button type="button" class="mk-uibtn o" data-live="set" data-done="Sent" data-tag="Sent">Send now</button></td>
+      </tr>
+      <tr>
+        <td>Voucher reminder</td><td>MA-0937 · Atlas Maroc</td><td>Sent 08:00</td>
+        <td><span class="mk-st go">Voucher in</span></td><td />
+      </tr>
+      <tr>
+        <td>Feedback request</td><td>JP-0338 · Sofia Brandt</td><td>Friday 10:00</td>
+        <td><span class="mk-st">Scheduled</span></td>
+        <td><button type="button" class="mk-uibtn o" data-live="set" data-done="Sent" data-tag="Sent">Send now</button></td>
+      </tr>
+      <tr>
+        <td>Deposit reminder</td><td>PE-1180 · T. Achebe</td><td>Stopped</td>
+        <td><span class="mk-st amb">“Could we push it a week?”</span></td>
+        <td><button type="button" class="mk-uibtn amb" data-live="set" data-done="Yours" data-tag="With you">Answer</button></td>
+      </tr>
+    </tbody>
+  </table>
+</App>

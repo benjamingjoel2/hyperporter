@@ -1,15 +1,29 @@
 ---
-/** Branding — what the traveller sees carries the agency's name, not ours. */
+/** Settings ▸ Branding — what the traveller sees carries the agency's name.
+    The tier each switch needs is on the row, so nothing here overstates
+    what a free account gets. */
+import App from './App.astro';
 ---
-<div class="mk-back">
-  <b>Meridian Travel Co.</b>
-  <p>Lena, here is the first version of the Mara in March. Comment anywhere, approve when it is right.</p>
-  <i class="m"></i><i class="l"></i><i class="s"></i>
-</div>
-<div class="mk-panel right">
-  <div class="mk-head"><b>Branding</b><small>Settings</small></div>
-  <div class="mk-row"><span class="mk-ico" style="background:var(--paper);color:#fff">M</span><div><b>meridian-mark.svg</b><small>Proposals, links, emails, the form</small></div><span class="mk-btn o">Replace</span></div>
-  <div class="mk-row plain"><div><b>Remove “Powered by Hyperporter”</b><small>Autopilot up</small></div><span class="mk-tog"></span></div>
-  <div class="mk-row plain"><div><b>Domain masking</b><small>plan.meridiantravel.co · €19/mo</small></div><span class="mk-tog"></span></div>
-  <div class="mk-row plain"><div><b>Custom domain</b><small>Intelligence</small></div><span class="mk-tog off"></span></div>
-</div>
+<App
+  title="Branding"
+  meta="Meridian Travel Co."
+  who="LO"
+  tabs={['Account', 'Team', 'Branding', 'Channels', 'Billing']}
+  tab="Branding"
+  note="Applies to proposals, links, emails and the inquiry form at once."
+>
+  <button slot="bar" type="button" class="mk-uibtn" data-live="set" data-done="Saved">Save</button>
+  <div class="mk-form">
+    <div class="f"><label>Logo</label><div class="val">meridian-mark.svg<span class="mk-sub">240 × 60</span></div></div>
+    <div class="f"><label>Reply-to address</label><div class="val focus" contenteditable="true" spellcheck="false">hello@meridiantravel.co</div></div>
+  </div>
+  <table class="mk-tbl" style="margin-top:.55em">
+    <colgroup><col style="width:44%" /><col style="width:32%" /><col style="width:24%" /></colgroup>
+    <thead><tr><th>Setting</th><th>Comes with</th><th>State</th></tr></thead>
+    <tbody>
+      <tr><td>Remove the Hyperporter badge</td><td>Autopilot up</td><td><span class="mk-st go">On</span></td></tr>
+      <tr><td>Domain masking on your links</td><td>€19/mo add-on</td><td><span class="mk-st go">On</span></td></tr>
+      <tr><td>Your own domain on the links</td><td>Intelligence</td><td><span class="mk-st">Off</span></td></tr>
+    </tbody>
+  </table>
+</App>

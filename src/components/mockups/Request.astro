@@ -1,15 +1,41 @@
 ---
-/** Supplier Portal — a structured request arriving, with a deadline. */
+/** The supplier's side of a request: what the agency actually asked for,
+    structured, with a deadline and one button. */
+import App from './App.astro';
 ---
-<div class="mk-back rows">
-  <b>Requests · 2 new</b>
-  <div class="row"><span>Laikipia · 3 nights · family of 5</span><span>Quote by Fri</span></div>
-  <div class="row"><span>Amboseli · 2 nights · 2 travellers</span><span>Quoted</span></div>
-  <div class="row"><span>Mara North · 6 nights</span><span>Booked</span></div>
-</div>
-<div class="mk-panel right">
-  <div><span class="mk-lbl">New request · Meridian Travel Co.</span><p class="mk-title">Mara North — 4 nights</p></div>
-  <div class="mk-row plain"><div><b>2 travellers · 3 – 7 March</b><small>Shared game drives, one camp, full board</small></div></div>
-  <div class="mk-row plain"><div><b>Reply on</b><small>Portal · email · WhatsApp — wherever you already work</small></div></div>
-  <div class="mk-foot"><span class="mk-tag amb">Quote by Thursday</span><span class="mk-btn sig">Quote</span></div>
-</div>
+<App
+  brand="Rift Valley"
+  title="Mara North — 4 nights"
+  meta="Meridian Travel Co. · RQ-1184"
+  who="PK"
+  tabs={['The request', 'Your quote', 'Messages']}
+  tab="The request"
+  note="Reply here, by email or on WhatsApp — wherever you already work."
+>
+  <button slot="bar" type="button" class="mk-uibtn sig" data-live="set" data-done="Quoting">Quote</button>
+  <div class="mk-two">
+    <div class="mk-pane">
+      <h6>What they asked for</h6>
+      <div class="ln"><span>Travellers</span><span>2 adults</span></div>
+      <div class="ln"><span>Dates</span><span>3 – 7 March</span></div>
+      <div class="ln"><span>Board</span><span>Full board</span></div>
+      <div class="ln"><span>Drives</span><span>Shared, one camp</span></div>
+    </div>
+    <div class="mk-pane">
+      <h6>Terms</h6>
+      <div class="ln"><span>Quote by</span><span>Thu 6 Feb</span></div>
+      <div class="ln"><span>You receive</span><span>Your full quoted rate</span></div>
+      <div class="ln"><span>Agency margin</span><span>Not shown to you</span></div>
+      <div class="ln"><span>Cancellation</span><span>Your own terms</span></div>
+    </div>
+  </div>
+  <table class="mk-tbl" style="margin-top:.55em">
+    <colgroup><col style="width:22%" /><col style="width:48%" /><col style="width:30%" /></colgroup>
+    <thead><tr><th>When</th><th>Activity</th><th>By</th></tr></thead>
+    <tbody>
+      <tr><td>09:02</td><td>Request arrived, structured</td><td>Meridian Travel Co.</td></tr>
+      <tr><td>09:05</td><td>Opened on your phone</td><td>Peter Kimani</td></tr>
+      <tr><td>Thu</td><td>Reminder if no quote yet</td><td>Automatic</td></tr>
+    </tbody>
+  </table>
+</App>

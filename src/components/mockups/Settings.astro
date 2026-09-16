@@ -1,12 +1,32 @@
 ---
-/** Solutions — features by category, each with the tier it comes with. */
+/** Solutions — the features in one category, each with the tier it comes
+    with, read straight out of content/solutions so the screen cannot claim
+    something the pricing page does not. */
+import App from './App.astro';
 import { CATEGORIES } from '../../lib/content/solutions';
+
 const ops = CATEGORIES.find((c) => c.slug === 'operations')!;
 const on = (t: string) => t === 'Showcase' || t.startsWith('Autopilot');
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b>Operations</b><small>{ops.features.length} features</small></div>
-  {ops.features.map((f) => (
-    <div class="mk-row"><span class:list={['mk-tog', { off: !on(f.tier) }]}></span><div><b>{f.name}</b></div><span class:list={['mk-tag', { grey: !on(f.tier) }]}>{f.tier}</span></div>
-  ))}
-</div>
+<App
+  title="Operations"
+  meta={`${ops.features.length} features`}
+  who="LO"
+  tabs={['Inquiry', 'Operations', 'Branding', 'Communication', 'Payments']}
+  tab="Operations"
+  note="What an account has is what its tier carries. Nothing is half-on."
+>
+  <table class="mk-tbl">
+    <colgroup><col style="width:54%" /><col style="width:24%" /><col style="width:22%" /></colgroup>
+    <thead><tr><th>Feature</th><th>Comes with</th><th>State</th></tr></thead>
+    <tbody>
+      {ops.features.map((f) => (
+        <tr>
+          <td>{f.name}</td>
+          <td>{f.tier}</td>
+          <td>{on(f.tier) ? <span class="mk-st go">On</span> : <span class="mk-st">Not on this tier</span>}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</App>

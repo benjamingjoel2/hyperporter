@@ -1,10 +1,28 @@
 ---
-/** Automated Confirmation — every supplier asked again. */
+/** Automated confirmation — every supplier asked again the moment the
+    traveller accepts, and the one answer that has to go back to her. */
+import App from './App.astro';
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b>Re-confirming · Nairobi</b><small>Accepted 10:12</small></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Rift Valley Ground Services</b><small>Confirmed 10:19</small></div><span class="mk-tag">Confirmed</span></div>
-  <div class="mk-row" data-live="tick" data-on="Confirmed" data-off="With traveller" data-off-amber="true"><span class="mk-chk hold"></span><div><b>Offbeat Mara camp</b><small>Tent → suite · asked Lena</small></div><span class="mk-tag amb">With traveller</span></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Karen Overland → Mara Plains</b><small>Backup, same price</small></div><span class="mk-tag">Confirmed</span></div>
-  <span class="mk-fine">Click the open line when Lena answers.</span>
-</div>
+<App
+  title="Lena & Mark Ortiz"
+  meta="KE-2291 · Confirmation"
+  who="LO"
+  tabs={['Overview', 'Quotation board', 'Confirmation', 'Pricing']}
+  tab="Confirmation"
+  note="Re-verification is instant and automatic. Only a real exception reaches you."
+>
+  <span slot="bar" class="mk-pill">Accepted 10:12</span>
+  <table class="mk-tbl">
+    <colgroup><col style="width:30%" /><col style="width:24%" /><col style="width:14%" /><col style="width:32%" /></colgroup>
+    <thead><tr><th>Supplier</th><th>Asked again</th><th>Answered</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><span class="who"><i>RV</i>Rift Valley Ground Services</span></td><td>10:12 · automatic</td><td>10:19</td><td><span class="mk-st go">Confirmed, same price</span></td></tr>
+      <tr data-live="tick" data-on="Lena said yes · confirmed" data-off="Tent → suite · with the traveller" data-off-amber="true">
+        <td><span class="who"><i>OM</i>Offbeat Mara camp</span></td><td>10:12 · automatic</td><td>10:31</td>
+        <td><span class="mk-st amb">Tent → suite · with the traveller</span></td>
+      </tr>
+      <tr><td><span class="who"><i>MP</i>Mara Plains Collective</span></td><td>10:12 · automatic</td><td>10:22</td><td><span class="mk-st go">Confirmed, backup held</span></td></tr>
+      <tr><td><span class="who"><i>KO</i>Karen Overland Co.</span></td><td>10:12 · automatic</td><td>10:40</td><td><span class="mk-st go">Confirmed, transfers</span></td></tr>
+    </tbody>
+  </table>
+</App>
