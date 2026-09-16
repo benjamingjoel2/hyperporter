@@ -38,6 +38,8 @@ export interface MegaFeature {
   badge?: string;
   desc: string;
   href: string;
+  /** The label above the headline on a 'reading' card. Defaults to 'Reading'. */
+  kicker?: string;
 }
 
 export interface NavItem {
@@ -160,9 +162,10 @@ export const NAV: NavItem[] = [
     ],
     feature: {
       card: 'reading',
-      title: 'Why your clients will love the Hyperporter interface',
-      desc: 'Travellers do not want an app. They want to know what was booked, what it cost and what happens next — without asking you.',
-      href: '/blog/why-your-clients-will-love-the-hyperporter-interface',
+      kicker: 'Start here',
+      title: 'Which side of the market are you on?',
+      desc: 'Resellers source suppliers and run the full ladder. Suppliers are the ones being sourced. Same product, different half.',
+      href: '/customers',
     },
   },
 
@@ -171,13 +174,13 @@ export const NAV: NavItem[] = [
   {
     id: 'resources',
     label: 'Resources',
-    href: '/blog',
+    href: '/destinations',
     groups: [
       {
         heading: 'Learn',
         items: [
-          { label: 'Blog', desc: 'Notes on running trips without the inbox.', href: '/blog' },
           { label: 'Destinations', desc: 'Every country the network reaches, with a page for each.', href: '/destinations' },
+          { label: 'Pricing', desc: 'Two ladders, one switch, and what each tier actually carries.', href: '/pricing' },
         ],
       },
       {
@@ -190,9 +193,10 @@ export const NAV: NavItem[] = [
     ],
     feature: {
       card: 'reading',
-      title: 'Nine stages: a shared vocabulary for trip operations',
-      desc: 'Why every trip goes through the same nine steps, and what naming them changes.',
-      href: '/blog/nine-stages-building-a-shared-vocabulary-for-trip-operations',
+      kicker: 'The network',
+      title: 'Every country Horizon reaches',
+      desc: 'Vetted DMCs and suppliers across 130+ countries, with a page for each destination.',
+      href: '/destinations',
     },
   },
 ];

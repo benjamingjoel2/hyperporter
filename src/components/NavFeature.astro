@@ -44,8 +44,8 @@ const DOTS = [
     {
       feature.card === 'reading' && (
         <>
-          <span class="mc-kicker">From the blog</span>
-          {/* The card shows the post it links to, so a menu whose feature
+          <span class="mc-kicker">{feature.kicker ?? 'Reading'}</span>
+          {/* The card shows the page it links to, so a menu whose feature
               changes cannot leave a different headline in the artwork. */}
           <span class="mc-title">{feature.title}</span>
           <span class="mc-line" style="width:88%"></span>

@@ -90,7 +90,11 @@ Built from the founder's content file — 26 views, ~4,900 words.
 - `/solutions` + `/solutions/[slug]` — six categories, tier shown per feature
 - `/customers` + `/customers/[slug]` — the two overviews (agent-os, supplier-os)
   and six segments, all on one route
-- `/pricing` (two ladders, one switch) · `/security` · `/blog` (as Resources)
+- `/pricing` (two ladders, one switch) · `/security`
+- **The blog is held back until v2** (founder, Sep 2026). The pages live at
+  `src/pages/_blog/` — the underscore keeps Astro from building them — and the
+  seven articles stay in `src/content/blog`. Resources now opens on
+  Destinations. See `src/pages/_blog/README.md` for what to put back.
 - `/destinations` and the 137 country pages are unchanged and still noindex
 - `/how` is gone; its nine stages live on `/autopilot`. The route 301s there.
 
