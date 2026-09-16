@@ -1,10 +1,33 @@
 ---
-/** Pricing — the plan an agency is on, and what it carries. */
+/** Settings ▸ Plan — what this account is on and what that carries. The
+    tiers and the prices are the ones on /pricing. */
+import App from './App.astro';
 ---
-<div class="mk-panel">
-  <div class="mk-head"><b>Autopilot</b><span class="mk-tag">Active</span></div>
-  <div style="display:flex;align-items:baseline;gap:.4em"><span class="mk-title mk-mono" style="font-size:2em">€49</span><span class="mk-fine">per month · unlimited bookings</span></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Portal — CRM, magic links, proposals</b><small>Free on every tier</small></div></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Horizon and nine-stage automation</b><small>Horizon free on every tier</small></div></div>
-  <div class="mk-row"><span class="mk-chk wait"></span><div><b>Intelligence — Atlas and Vault</b><small>Custom pricing</small></div><span class="mk-btn o">Talk to us</span></div>
-</div>
+<App
+  active="Settings"
+  title="Plan & billing"
+  meta="Meridian Travel Co."
+  who="LO"
+  tabs={['Account', 'Team', 'Branding', 'Plan & billing']}
+  tab="Plan & billing"
+  note="Portal and Horizon are on every tier, including the free one."
+>
+  <span slot="bar" class="mk-pill">Autopilot · €49/mo</span>
+  <div class="mk-metrics">
+    <div class="mk-metric"><span>Plan</span><b>Autopilot</b></div>
+    <div class="mk-metric"><span>Per month</span><b>€49</b></div>
+    <div class="mk-metric"><span>Trips this month</span><b>23</b></div>
+    <div class="mk-metric"><span>Agents</span><b>4</b></div>
+  </div>
+  <table class="mk-tbl">
+    <colgroup><col style="width:24%" /><col style="width:46%" /><col style="width:30%" /></colgroup>
+    <thead><tr><th>Layer</th><th>What it carries</th><th>On this plan</th></tr></thead>
+    <tbody>
+      <tr><td>Portal</td><td>CRM, links, inquiry form, proposals</td><td><span class="mk-st go">Free on every tier</span></td></tr>
+      <tr><td>Horizon</td><td>Vetted suppliers, 130+ countries</td><td><span class="mk-st go">Free on every tier</span></td></tr>
+      <tr><td>Autopilot</td><td>Nine stages, escalation designed in</td><td><span class="mk-st go">Included</span></td></tr>
+      <tr><td>WhatsApp Business</td><td>Your number on the trip thread</td><td><span class="mk-st go">Add-on · €19/mo</span></td></tr>
+      <tr><td>Intelligence</td><td>Atlas and the Vault, your data only</td><td><span class="mk-st">Custom · talk to us</span></td></tr>
+    </tbody>
+  </table>
+</App>

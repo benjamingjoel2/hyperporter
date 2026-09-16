@@ -1,15 +1,42 @@
 ---
-/** Horizon — the vetted list, searched by destination. */
-const S = [
-  ['Rift Valley Ground Services', 'Nairobi · DMC · replies in 40 min', 'RV'],
-  ['Acacia Safari Logistics', 'Nairobi · DMC · replies in 2 h', 'AS'],
-  ['Lamu Dhow Collective', 'Lamu · tour operator · coast', 'LD'],
+/** Horizon inside the Portal — the agency searching the vetted list by
+    destination and asking for a quote. Horizon is the network, not software
+    a supplier signs into: this is the agency's side of it, which is the only
+    side there is a screen for. */
+import App from './App.astro';
+
+const S: [string, string, string, string, string][] = [
+  ['Rift Valley Ground Services', 'RV', 'Nairobi', 'DMC · safari', '40 min'],
+  ['Acacia Safari Logistics', 'AS', 'Nairobi', 'DMC · transfers', '2 h'],
+  ['Lamu Dhow Collective', 'LD', 'Lamu', 'Tour operator', '4 h'],
+  ['Mara North Collective', 'MN', 'Mara North', 'Lodging', '1 h'],
+  ['Karen Overland Co.', 'KO', 'Nairobi', 'Transfers only', '6 h'],
 ];
 ---
-<div class="mk-panel wide">
-  <div class="mk-search"><i></i>Kenya<span>12 vetted suppliers</span></div>
-  {S.map(([n, m, ini], i) => (
-    <div class="mk-row"><span class="mk-av ghost">{ini}</span><div><b>{n}</b><small>{m}</small></div>{i === 0 ? <span class="mk-tag">Quote requested</span> : <span class="mk-btn o">Request quote</span>}</div>
-  ))}
-  <span class="mk-fine">Horizon adds 10% on the quote. The supplier receives their full quoted rate.</span>
-</div>
+<App
+  active="Horizon"
+  title="Horizon"
+  meta="130+ countries"
+  who="LO"
+  pills={['Kenya', 'Vetted only']}
+  note="Horizon adds 10% on the quote. The supplier receives their full quoted rate."
+>
+  <div class="mk-search"><i />Kenya<span>12 vetted suppliers</span></div>
+  <table class="mk-tbl">
+    <colgroup><col style="width:32%" /><col style="width:16%" /><col style="width:19%" /><col style="width:11%" /><col style="width:22%" /></colgroup>
+    <thead><tr><th>Supplier</th><th>Where</th><th>What they do</th><th>Replies in</th><th /></tr></thead>
+    <tbody>
+      {S.map(([n, ini, where, what, reply], i) => (
+        <tr>
+          <td><span class="who"><i>{ini}</i>{n}</span></td>
+          <td>{where}</td>
+          <td>{what}</td>
+          <td class="num">{reply}</td>
+          <td>{i === 0
+            ? <span class="mk-st go">Quote requested</span>
+            : <button type="button" class="mk-uibtn o" data-live="set" data-done="Requested">Request quote</button>}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</App>

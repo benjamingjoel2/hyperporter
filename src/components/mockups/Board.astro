@@ -1,22 +1,35 @@
 ---
-/** CRM Workflow — the board. Click a card to move it on. */
-const COLS: [string, [string, string][]][] = [
-  ['Quotation', [['Nairobi · 9 nights', '2 quotes in'], ['Tbilisi · 7 nights', 'Waiting on 1']]],
-  ['Confirmation', [['Cusco · 6 nights', 'Re-checking']]],
-  ['Booking', [['Marrakesh · 4 nights', 'Deposit requested'], ['Hanoi · 11 nights', 'Balance due 20 Feb']]],
+/** The pipeline board — the whole agency's trips by stage. Click a card to
+    move it on. Amber marks only a card that is waiting on a person. */
+import App from './App.astro';
+
+const COLS: { name: string; n: string; cards: [string, string, boolean?][] }[] = [
+  { name: 'Inquiry', n: '3', cards: [['Mira Sato', 'Japan · Oct'], ['R. Fontaine', 'Peru · Jun'], ['H. Okonkwo', 'Egypt · Feb']] },
+  { name: 'Planning', n: '4', cards: [['Lena & Mark Ortiz', 'Kenya · Mar · v2 live'], ['The Achebe family', 'Peru · Jun'], ['D. Mwangi', 'Tanzania · Sep']] },
+  { name: 'Quotation', n: '3', cards: [['J. Mendes', 'Chile · Nov · 2 offers'], ['S. Ferreira', 'Morocco · Apr']] },
+  { name: 'Confirmation', n: '2', cards: [['P. Nair', 'Vietnam · Jan · re-checking', true], ['A. Silva', 'Portugal · May']] },
+  { name: 'Booking', n: '1', cards: [['T. Achebe', 'Peru · deposit due', true]] },
+  { name: 'Ready', n: '1', cards: [['K. Adeyemi', 'Kenya · 6 days out']] },
 ];
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b>Trips</b><small>7 open</small></div>
-  <div class="mk-cols">
-    {COLS.map(([name, cards]) => (
-      <div class="mk-col">
-        <small>{name}</small>
-        {cards.map(([t, s]) => (
-          <div class="mk-card" data-live="move" data-moved="Moved just now"><b>{t}</b><small>{s}</small></div>
+<App
+  active="Trips"
+  title="Trips"
+  meta="14 open"
+  who="LO"
+  pills={['All agents', 'This quarter']}
+  note="One board for the whole agency. Click a card to move it on."
+>
+  <div class="mk-kan">
+    {COLS.map((c) => (
+      <div class="kcol">
+        <div class="kh"><b>{c.name}</b>{c.n}</div>
+        {c.cards.map((cd) => (
+          <div class:list={['kc', { amb: cd[2] }]} data-live="move" data-moved="Moved just now">
+            <b>{cd[0]}</b><small>{cd[1]}</small>
+          </div>
         ))}
       </div>
     ))}
   </div>
-  <span class="mk-fine">Click a card to move it on.</span>
-</div>
+</App>

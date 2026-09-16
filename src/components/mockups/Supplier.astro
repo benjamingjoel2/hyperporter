@@ -1,12 +1,31 @@
 ---
-/** The supplier's side, for the homepage pair: the same request as the
-    Supplier Portal screen, over a photograph rather than the faded request
-    list (founder's ask, Sep 2026). */
+/** The supplier's side, for the homepage pair: a request that arrived from
+    an agency, in the supplier's own view, over a photograph. A supplier
+    signs into their requests — never into Horizon. */
+import App from './App.astro';
+import { SUPPLIER_NAV } from './nav';
 ---
 <div class="mk-back mk-back-photo" style="--back-photo:url('/photos/supplier-card.jpg');--back-pos:center 64%" aria-hidden="true"></div>
-<div class="mk-panel right">
-  <div><span class="mk-lbl">New request · Meridian Travel Co.</span><p class="mk-title">Mara North — 4 nights</p></div>
-  <div class="mk-row plain"><div><b>2 travellers · 3 – 7 March</b><small>Shared game drives, one camp, full board</small></div></div>
-  <div class="mk-row plain"><div><b>Reply on</b><small>Portal · email · WhatsApp — wherever you already work</small></div></div>
-  <div class="mk-foot"><span class="mk-tag amb">Quote by Thursday</span><span class="mk-btn sig">Quote</span></div>
-</div>
+<App
+  nav={SUPPLIER_NAV}
+  active="Requests"
+  brand="Rift Valley"
+  title="Requests"
+  meta="2 new"
+  who="PK"
+  pills={['This week']}
+  note="Structured, not a forwarded email. Reply here, by email or on WhatsApp."
+>
+  <button slot="bar" type="button" class="mk-uibtn sig" data-live="set" data-done="Quoted">Send quote</button>
+  <table class="mk-tbl">
+    <colgroup><col style="width:29%" /><col style="width:25%" /><col style="width:8%" /><col style="width:15%" /><col style="width:23%" /></colgroup>
+    <thead><tr><th>From</th><th>Trip</th><th>Pax</th><th>Quote by</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><span class="who"><i>MT</i>Meridian Travel Co.</span></td><td>Mara North · 4 nights</td><td class="num">2</td><td>Thu 6 Feb</td><td><span class="mk-st amb">Open</span></td></tr>
+      <tr><td><span class="who"><i>MT</i>Meridian Travel Co.</span></td><td>Laikipia · 3 nights</td><td class="num">5</td><td>Fri 7 Feb</td><td><span class="mk-st amb">Open</span></td></tr>
+      <tr><td><span class="who"><i>AW</i>Ashford &amp; Wren</span></td><td>Amboseli · 2 nights</td><td class="num">2</td><td>Sent</td><td><span class="mk-st go">Quoted · USD 1,940</span></td></tr>
+      <tr><td><span class="who"><i>MT</i>Meridian Travel Co.</span></td><td>Mara North · 6 nights</td><td class="num">4</td><td>—</td><td><span class="mk-st go">Booked</span></td></tr>
+      <tr><td><span class="who"><i>NV</i>Northvale Travel</span></td><td>Samburu · 3 nights</td><td class="num">2</td><td>—</td><td><span class="mk-st red">Not available</span></td></tr>
+    </tbody>
+  </table>
+</App>

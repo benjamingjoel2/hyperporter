@@ -1,27 +1,62 @@
 ---
-/** Autopilot — the nine stages of one trip, ticked off as they happen. */
+/** Autopilot on one trip — the nine stages as the trip record's own tab,
+    with what each one did, when, and which of them a person has to do.
+    Names and the Automatic / Human split come from lib/stages so the screen
+    cannot drift from the copy. */
+import App from './App.astro';
 import { STAGES } from '../../lib/stages';
+
+/** What each stage did on this trip, and when. */
+const DID: [string, string][] = [
+  ['Brief built, confirmed with Lena', 'Mon 09:02'],
+  ['Itinerary v2 proposed and live', 'Mon 14:20'],
+  ['3 asked · 2 replied · 18% margin', 'Tue 09:41'],
+  ['Re-verifying with Rift Valley', 'now'],
+  ['Deposit €1,480 · you mark it', '—'],
+  ['Vouchers and pickup details chased', '—'],
+  ['Relayed; urgent flags reach you', '—'],
+  ['Feedback collected, thread open', '—'],
+  ['Archived for the next inquiry', '—'],
+];
 const CURRENT = 4;
 ---
-<div class="mk-back rows">
-  <b>Nairobi — 9 nights</b>
-  <div class="row"><span>Brief confirmed</span><span>Mon</span></div>
-  <div class="row"><span>Itinerary v2 live</span><span>Tue</span></div>
-  <div class="row"><span>3 quotes requested</span><span>Tue</span></div>
-  <div class="row"><span>Rift Valley · €4,180</span><span>Wed</span></div>
-  <div class="row"><span>Re-verifying availability</span><span>now</span></div>
-</div>
-<div class="mk-panel right">
-  <div class="mk-head"><b>Autopilot</b><small>{CURRENT - 1} of {STAGES.length} done</small></div>
-  {STAGES.map((s, i) => {
-    const n = i + 1;
-    const human = s.cls !== 'Automatic';
-    return (
-      <div class:list={['mk-row', { done: n < CURRENT, dimmed: n > CURRENT + 3 }]}>
-        <span class:list={['mk-chk', { now: n === CURRENT, wait: n > CURRENT, amb: human && n < CURRENT }]}></span>
-        <div><b>{s.name}</b>{n === CURRENT && <small>Re-verifying with the supplier</small>}</div>
-        {human ? <span class="mk-tag amb">Needs a person</span> : <span class="mk-fine">Automatic</span>}
-      </div>
-    );
-  })}
-</div>
+<App
+  active="Trips"
+  title="Lena & Mark Ortiz"
+  meta="KE-2291 · Nairobi, 9 nights"
+  who="LO"
+  tabs={['Overview', 'Thread', 'Quotation board', 'Pricing', 'Autopilot']}
+  tab="Autopilot"
+  note="Escalation is designed in. The amber stages never run without you."
+>
+  <span slot="bar" class="mk-pill">3 of 9 done</span>
+  <table class="mk-tbl">
+    <colgroup><col style="width:5%" /><col style="width:18%" /><col style="width:42%" /><col style="width:15%" /><col style="width:20%" /></colgroup>
+    <thead><tr><th>#</th><th>Stage</th><th>What it did</th><th>When</th><th>Runs</th></tr></thead>
+    <tbody>
+      {STAGES.map((s, i) => {
+        const n = i + 1;
+        const human = s.cls !== 'Automatic';
+        const done = n < CURRENT;
+        const now = n === CURRENT;
+        return (
+          <tr>
+            <td class="num">{s.n}</td>
+            <td>{s.name}</td>
+            <td>{DID[i][0]}</td>
+            <td>{DID[i][1]}</td>
+            <td>
+              {human
+                ? <span class="mk-st amb">Needs a person</span>
+                : done
+                  ? <span class="mk-st go">Done</span>
+                  : now
+                    ? <span class="mk-st go">Running</span>
+                    : <span class="mk-st">Scheduled</span>}
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</App>

@@ -1,10 +1,43 @@
 ---
-/** Portal — one account's plan. The Autopilot switch is real. */
+/** Portal — the first screen after signing in: what the agency has open,
+    and the short list of things the software will not decide on its own. */
+import App from './App.astro';
+
+const NEEDS: [string, string, string, string, string][] = [
+  ['KE-2291', 'Deposit €1,480 · mark when it lands', 'Lena & Mark Ortiz', 'amb', 'Mark received'],
+  ['VN-0184', 'Rate changed after acceptance', 'P. Nair', 'amb', 'Approve'],
+  ['MA-0937', 'Driver contact missing · 4 days out', 'Priya Nair', 'amb', 'Chase'],
+  ['PE-1180', 'Everything else relayed without you', '—', 'go', ''],
+];
 ---
-<div class="mk-panel">
-  <div class="mk-head"><b>Meridian Travel Co.</b><small>Autopilot plan</small></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Portal</b><small>CRM, links, inquiry form, proposals</small></div><span class="mk-fine">Included</span></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Autopilot</b><small>Nine stages, people where it matters</small></div><button type="button" class="mk-tog" role="switch" aria-checked="true" aria-label="Autopilot" data-live="toggle" data-on-text="Nine stages, people where it matters" data-off-text="Off — every stage by hand" data-off-amber="true"></button></div>
-  <div class="mk-row"><span class="mk-chk wait"></span><div><b>Intelligence</b><small>Atlas and Vault, your data only</small></div><button type="button" class="mk-btn o" data-live="set" data-done="Requested" data-small="We’ll be in touch">Request</button></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Horizon</b><small>Vetted suppliers, 130+ countries</small></div><span class="mk-fine">Included</span></div>
-</div>
+<App
+  active="Home"
+  title="Home"
+  meta="Meridian Travel Co."
+  who="LO"
+  pills={['This week']}
+  note="Everything that can run on its own already has. This is the rest."
+>
+  <div class="mk-metrics">
+    <div class="mk-metric"><span>Open trips</span><b>14</b></div>
+    <div class="mk-metric"><span>Awaiting quotes</span><b>5</b></div>
+    <div class="mk-metric"><span>Needs a person</span><b>3</b></div>
+    <div class="mk-metric"><span>In the pipeline</span><b>€148,900</b></div>
+  </div>
+  <table class="mk-tbl">
+    <colgroup><col style="width:13%" /><col style="width:43%" /><col style="width:22%" /><col style="width:22%" /></colgroup>
+    <thead><tr><th>Trip</th><th>What is waiting</th><th>Traveller</th><th>Action</th></tr></thead>
+    <tbody>
+      {NEEDS.map(([ref, what, who, tone, action]) => (
+        <tr>
+          <td class="num">{ref}</td>
+          <td>{what}</td>
+          <td>{who}</td>
+          <td>{action
+            ? <button type="button" class="mk-uibtn amb" data-live="set" data-done="Done">{action}</button>
+            : <span class:list={['mk-st', tone]}>No action</span>}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</App>

@@ -1,16 +1,42 @@
 ---
-/** Proposal Share — one proposal, three ways out. */
+/** Sharing a proposal — the same proposal, three ways out, and what has
+    happened to it since. A link stays current; a PDF is a snapshot. */
+import App from './App.astro';
 ---
-<div class="mk-back">
-  <b>The Mara in March</b>
-  <p>Day 1 — Nairobi. Hemingways, one night.</p>
-  <p>Day 2–5 — Mara North. Offbeat Mara, full board.</p>
-  <i class="l"></i><i class="m"></i><i class="l"></i>
-</div>
-<div class="mk-panel right">
-  <div class="mk-head"><b>Share proposal</b><small>v3 · Lena &amp; Mark</small></div>
-  <div class="mk-row"><span class="mk-ico">LNK</span><div><b>Magic link</b><small>Always current</small></div><button type="button" class="mk-btn o" data-live="set" data-done="Copied">Copy</button></div>
-  <div class="mk-row"><span class="mk-ico pdf">PDF</span><div><b>PDF</b><small>Your brand on it</small></div><button type="button" class="mk-btn o" data-live="set" data-done="Exported" data-small="v3.pdf · 1.2 MB">Export</button></div>
-  <div class="mk-row"><span class="mk-ico">SMS</span><div><b>Text message</b><small>To +49 ··· 4471</small></div><button type="button" class="mk-btn o" data-live="set" data-done="Sent" data-small="Delivered just now">Send</button></div>
-  <div class="mk-row plain"><div><b>Opened twice</b><small>Last 2 h ago</small></div><span class="mk-chk"></span></div>
-</div>
+<App
+  active="Trips"
+  title="The Mara in March · v3"
+  meta="KE-2291 · Lena & Mark Ortiz"
+  who="LO"
+  tabs={['Proposal', 'Share', 'Versions', 'Activity']}
+  tab="Share"
+  note="The link updates when the price does. The PDF does not."
+>
+  <table class="mk-tbl">
+    <colgroup><col style="width:22%" /><col style="width:30%" /><col style="width:24%" /><col style="width:24%" /></colgroup>
+    <thead><tr><th>Way out</th><th>What they get</th><th>Goes to</th><th /></tr></thead>
+    <tbody>
+      <tr>
+        <td>Magic link</td><td>hyp.link/meridian/ke-2291</td><td>Any browser</td>
+        <td><button type="button" class="mk-uibtn o" data-live="set" data-done="Copied">Copy</button></td>
+      </tr>
+      <tr>
+        <td>PDF</td><td>v3 · your brand on it · 1.2 MB</td><td>An inbox that wants one</td>
+        <td><button type="button" class="mk-uibtn o" data-live="set" data-done="Exported">Export</button></td>
+      </tr>
+      <tr>
+        <td>Text message</td><td>The link, nothing else</td><td>+49 ··· 4471</td>
+        <td><button type="button" class="mk-uibtn o" data-live="set" data-done="Sent">Send</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="mk-tbl" style="margin-top:.55em">
+    <colgroup><col style="width:22%" /><col style="width:52%" /><col style="width:26%" /></colgroup>
+    <thead><tr><th>When</th><th>Activity on the link</th><th>State</th></tr></thead>
+    <tbody>
+      <tr><td>2 h ago</td><td>Opened · 6 min · day 2 – 5 read twice</td><td><span class="mk-st go">Opened</span></td></tr>
+      <tr><td>Yesterday</td><td>Opened · 2 min</td><td><span class="mk-st go">Opened</span></td></tr>
+      <tr><td>—</td><td>Accepted</td><td><span class="mk-st">Not yet</span></td></tr>
+    </tbody>
+  </table>
+</App>

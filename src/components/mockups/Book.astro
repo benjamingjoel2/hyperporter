@@ -1,15 +1,42 @@
 ---
-/** Travel agents — one person's book of clients. */
-const C: [string, string, string, boolean][] = [
-  ['Ortiz family', '3 trips · Nairobi, March', 'Quotation', false],
-  ['Priya Nair', '2 trips · Marrakesh, February', 'Booking', true],
-  ['Whitfields', '1 trip · Hanoi, May', 'Ready', false],
-  ['Brandt', '4 trips · Kyoto, now', 'Traveling', true],
+/** Travel agents — one advisor's own book of clients inside the agency's
+    CRM: their trips, their repeat business, their next action. */
+import App from './App.astro';
+
+const C: [string, string, string, string, string, string, string][] = [
+  ['Ortiz family', 'OF', 'Kenya · March', '3', 'go|Quotation', '€9,864', '2 h ago'],
+  ['Priya Nair', 'PN', 'Marrakesh · February', '2', 'amb|Deposit due', '€4,400', '4 h ago'],
+  ['The Whitfields', 'TW', 'Hanoi · May', '1', '|Planning', '€11,200', 'Yesterday'],
+  ['Brandt', 'BR', 'Kyoto · now', '4', 'go|Traveling', '€6,470', 'Today'],
+  ['Halvorsen', 'HA', 'Cusco · August', '1', '|Inquiry', '—', 'Mon'],
+  ['Adeyemi', 'AD', 'Kenya · 6 days out', '2', 'go|Ready', '€6,120', 'Mon'],
 ];
 ---
-<div class="mk-panel">
-  <div class="mk-head"><b>My book</b><small>41 clients · 6 trips open</small></div>
-  {C.map(([n, m, st, amb]) => (
-    <div class="mk-row"><span class="mk-av ghost">{n.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}</span><div><b>{n}</b><small>{m}</small></div><span class:list={['mk-tag', { amb }]}>{st}</span></div>
-  ))}
-</div>
+<App
+  active="Contacts"
+  title="My book"
+  meta="41 clients · 6 trips open"
+  who="DA"
+  pills={['Daniel Achebe']}
+  note="Your own clients, inside the agency’s CRM rather than beside it."
+>
+  <table class="mk-tbl">
+    <colgroup><col style="width:24%" /><col style="width:21%" /><col style="width:9%" /><col style="width:19%" /><col style="width:14%" /><col style="width:13%" /></colgroup>
+    <thead><tr><th>Client</th><th>Next trip</th><th>Trips</th><th>Stage</th><th>Value</th><th>Updated</th></tr></thead>
+    <tbody>
+      {C.map(([n, ini, trip, trips, stage, val, upd]) => {
+        const [tone, name] = stage.split('|');
+        return (
+          <tr>
+            <td><span class="who"><i>{ini}</i>{n}</span></td>
+            <td>{trip}</td>
+            <td class="num">{trips}</td>
+            <td><span class:list={['mk-st', tone]}>{name}</span></td>
+            <td class="num">{val}</td>
+            <td>{upd}</td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</App>
