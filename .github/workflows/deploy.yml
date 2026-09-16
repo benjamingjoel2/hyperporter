@@ -37,12 +37,17 @@
 # pipeline that passes without deploying is worse than one that fails, so a
 # missing secret is now an error. Forks, which have no secrets and no server,
 # stop after publishing instead. See DEPLOY.md for the one-time setup.
+#
+# Going live is a decision, not a side effect of pushing (founder, Sep 2026).
+# A push to main builds the site and runs every check, and stops there. The
+# publish — and therefore the live site — happens only when someone runs this
+# workflow deliberately, from the Actions tab or with `gh workflow run deploy`.
 name: Deploy
 
 on:
   push:
     branches: [main]
-  # so a deploy can be re-run from the Actions tab without pushing anything
+  # This is what puts a build live. Run it when the site should change.
   workflow_dispatch:
 
 # needed to push the built files back to the repository
@@ -96,12 +101,25 @@ jobs:
           echo "$count HTML pages built"
           [ "$count" -ge 150 ] || { echo "only $count pages — expected 150+"; exit 1; }
 
+      - name: Say what this run will and will not do
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = workflow_dispatch ]; then
+            echo "Deliberate run: this build will be published and will go live."
+          else
+            echo "Push to main: built and checked only. Nothing goes live."
+            echo "To put this commit live, run this workflow from the Actions tab."
+          fi
+
       - name: Stamp the build
         # The live check below reads this back over HTTPS, so a deploy only
         # passes when the server is serving this commit and not the last one.
         run: echo "$GITHUB_SHA" > dist/build.txt
 
       - name: Publish to the deploy branch
+        # Only on a deliberate run. A push to main gets this far — built and
+        # checked — and goes no further, so main can move without the live
+        # site moving with it.
+        if: github.event_name == 'workflow_dispatch'
         run: |
           cd dist
           git init -q
@@ -119,6 +137,7 @@ jobs:
         # to pull by hand. It only stops the run claiming a success it has
         # not earned.
         if: github.repository == 'benjamingjoel2/hyperporter' && vars.DEPLOY_MODE != 'pull'
+          && github.event_name == 'workflow_dispatch'
         run: |
           missing=
           [ -n "$DEPLOY_KEY" ] || missing="$missing DEPLOY_SSH_KEY"
@@ -135,6 +154,7 @@ jobs:
 
       - name: Pull the deploy branch on the server
         if: github.repository == 'benjamingjoel2/hyperporter' && vars.DEPLOY_MODE != 'pull'
+          && github.event_name == 'workflow_dispatch'
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
@@ -146,7 +166,7 @@ jobs:
           rm -f ~/.ssh/deploy_key
 
       - name: Confirm the live site serves this build
-        if: github.repository == 'benjamingjoel2/hyperporter'
+        if: github.repository == 'benjamingjoel2/hyperporter' && github.event_name == 'workflow_dispatch'
         run: |
           # In pull mode the server checks once a minute, so give it three.
           tries=6; wait=5

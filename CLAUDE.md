@@ -244,6 +244,12 @@ of clicking.
 So: preview link first, merge second, deploy third. Never reverse that order,
 and never ask for a merge without a link to look at.
 
+**Deploying is never automatic** (founder, Sep 2026). A push to `main` builds
+and checks the site and stops there. The live site changes only when the
+founder says so and the Deploy workflow is run deliberately — Actions →
+Deploy → Run workflow. The server picks the new build up within a minute of
+that (`scripts/enable-auto-deploy.sh`). Do not run it unasked.
+
     npm run build && python3 scripts/build-preview.py preview-site.html
 
 That bundles all 181 routes into one self-contained file — every route

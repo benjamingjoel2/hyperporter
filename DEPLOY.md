@@ -75,13 +75,20 @@ with a temporary self-signed cert, then replaces it with the real one.
 
 ## Deploying a change
 
-**The server does not build the site.** GitHub Actions builds it on every push
-to `main`, publishes the finished files to the `deploy` branch, then SSHes to
+**Going live is a decision, not a side effect of pushing** (founder, Sep 2026).
+A push to `main` builds the site and runs every check, and stops there —
+nothing is published and the live site does not move. The build goes live only
+when the Deploy workflow is run deliberately: Actions → Deploy → **Run
+workflow**, or `gh workflow run deploy`.
+
+**The server does not build the site.** GitHub Actions builds it, publishes the
+finished files to the `deploy` branch, then SSHes to
 the server and pulls that branch. The server holds a checkout of it at
 `/opt/hyperporter/site`, bind-mounted into nginx, so there is nothing to
 restart and no downtime.
 
-So deploying is: merge to `main`. The workflow's last step fetches
+So deploying is: merge to `main`, then run the workflow when the change should
+actually be live. The workflow's last step fetches
 `https://hyperporter.com/build.txt` and fails unless it contains the commit
 just built, so a green run means the live site is serving that commit.
 
