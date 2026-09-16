@@ -29,6 +29,11 @@
   .brand{display:flex;align-items:baseline;gap:8px;flex:0 0 auto}
   .brand b{font-size:12.5px;font-weight:600;letter-spacing:.01em}
   .brand span{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+  /* Which build this file was made from. Always visible, so a screenshot of
+     the preview says for itself whether it is the current one. */
+  .stamp{flex:0 0 auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:10px;letter-spacing:.04em;color:var(--dim);white-space:nowrap;
+    padding:2px 6px;border:1px solid var(--line);border-radius:4px}
 
   .grp{display:flex;align-items:center;gap:1px;flex:0 0 auto}
   button,select{font-family:inherit;color:var(--ink);background:transparent;
@@ -80,6 +85,7 @@
 
 <div class="cockpit">
   <div class="brand"><b>Hyperporter</b><span>Preview</span></div>
+  <code class="stamp" title="Which build this file was made from">__STAMP__</code>
 
   <div class="grp">
     <button id="back" title="Back  [" aria-label="Back">&#8249;</button>
