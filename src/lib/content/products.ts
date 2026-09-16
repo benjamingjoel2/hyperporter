@@ -90,11 +90,13 @@ export const PRODUCTS: Product[] = [
     cases: [
       {
         kind: 'Case — Travel agency',
+
         title: 'Coordinating a trip without a shared inbox.',
         body: "An agent runs everything through the CRM — inquiry in, magic link out to both the traveller and the DMC, proposal generated straight from the same data. No spreadsheet, no copy-pasting between three apps. Once volume picks up, the manual back-and-forth is the bottleneck — that's what Autopilot automates. And if the agency doesn't have a supplier list yet, Horizon gives them one, free, on Showcase.",
       },
       {
         kind: 'Case — Supplier / DMC',
+
         title: 'Replying to requests without changing how you work.',
         body: 'A DMC gets a magic link, quotes directly through the same CRM, no new inbox to check. Free, on Showcase, whether or not Horizon has sent them any volume yet.',
       },
@@ -127,6 +129,7 @@ export const PRODUCTS: Product[] = [
     cases: [
       {
         kind: 'Case — Travel agency',
+
         title: 'Same agency, three weeks later.',
         body: "An agency running 20 trips a month on Portal alone hits a ceiling — every reprice, every confirmation chase, every status update is a human doing it manually. Autopilot doesn't change what they offer travellers, it changes how much of it one person can run at once.",
       },
@@ -187,11 +190,13 @@ export const PRODUCTS: Product[] = [
     cases: [
       {
         kind: 'Case — Travel agency',
+
         title: 'Quoting from your own negotiated rates, not a guess.',
         body: "An agency with years of DMC contracts stops re-reading PDFs for every quote — Atlas drafts from the actual contracted rate, remembers the agency's preferred suppliers, and proposes itineraries structured like the ones that already worked.",
       },
       {
         kind: 'Case — Supplier / DMC',
+
         title: 'AI-assisted quoting, from rates only you have.',
         body: "A DMC's own rate sheets and seasonal pricing become the source Atlas quotes from — not a generic estimate, and not visible to any other DMC on the network.",
       },

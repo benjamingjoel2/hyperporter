@@ -15,7 +15,11 @@ export interface SegmentFeature {
   body: string;
 }
 
+import type { PointIcon } from '../pointIcons';
+
 export interface Reason {
+  /** Declared, never guessed — see lib/pointIcons.ts. */
+  icon: PointIcon;
   title: string;
   body: string;
 }
@@ -146,16 +150,16 @@ export const SEGMENTS: Segment[] = [
     lede: 'Every agent on the same stage engine, the same Horizon list, the same client-facing brand — not a spreadsheet each agent manages alone.',
     reasons: [
       {
-        title: 'One CRM, every agent',
-        body: 'Every inquiry, every agent, tracked through the same stage engine — nothing lives in a personal inbox.',
+        icon: 'board',
+        title: 'One CRM, every agent',        body: 'Every inquiry, every agent, tracked through the same stage engine — nothing lives in a personal inbox.',
       },
       {
-        title: 'One brand, every touchpoint',
-        body: 'Logo, domain, and every client-facing link consistent, no matter which agent sent it.',
+        icon: 'brand',
+        title: 'One brand, every touchpoint',        body: 'Logo, domain, and every client-facing link consistent, no matter which agent sent it.',
       },
       {
-        title: 'Shared Horizon access',
-        body: 'The whole team sources from the same vetted supplier list — no agent working off an outdated contact sheet.',
+        icon: 'globe',
+        title: 'Shared Horizon access',        body: 'The whole team sources from the same vetted supplier list — no agent working off an outdated contact sheet.',
       },
     ],
     features: [
@@ -193,16 +197,16 @@ export const SEGMENTS: Segment[] = [
     lede: 'Every client, every trip, tracked in one place — magic links instead of email chains, payment instructions instead of chasing.',
     reasons: [
       {
-        title: 'One CRM for your book',
-        body: 'Every client tracked through the same stage engine, not scattered across inboxes.',
+        icon: 'board',
+        title: 'One CRM for your book',        body: 'Every client tracked through the same stage engine, not scattered across inboxes.',
       },
       {
-        title: 'Magic links, not email chains',
-        body: 'One link per trip, customer-facing and supplier-facing, always in sync.',
+        icon: 'link',
+        title: 'Magic links, not email chains',        body: 'One link per trip, customer-facing and supplier-facing, always in sync.',
       },
       {
-        title: 'Get paid without chasing',
-        body: 'Structured payment instructions on every magic link, all tiers.',
+        icon: 'rate',
+        title: 'Get paid without chasing',        body: 'Structured payment instructions on every magic link, all tiers.',
       },
     ],
     features: [
@@ -232,16 +236,16 @@ export const SEGMENTS: Segment[] = [
     lede: "Your own brand on every client touchpoint, a supplier network you didn't have to build yourself, and nothing that requires a team to run.",
     reasons: [
       {
-        title: 'Your own brand, not a template',
-        body: 'Logo, name, and eventually your own domain — never looks like a shared tool.',
+        icon: 'brand',
+        title: 'Your own brand, not a template',        body: 'Logo, name, and eventually your own domain — never looks like a shared tool.',
       },
       {
-        title: 'A supplier network without a team',
-        body: 'Source across 130+ countries without ever having built those relationships yourself.',
+        icon: 'globe',
+        title: 'A supplier network without a team',        body: 'Source across 130+ countries without ever having built those relationships yourself.',
       },
       {
-        title: 'Solo-scale automation',
-        body: 'Autopilot does the coordination work a small team would otherwise handle.',
+        icon: 'bolt',
+        title: 'Solo-scale automation',        body: 'Autopilot does the coordination work a small team would otherwise handle.',
       },
     ],
     features: [
@@ -283,13 +287,13 @@ export const SEGMENTS: Segment[] = [
     lede: 'One link in your bio instead of a flooded DM inbox — every submission becomes a real, trackable trip inquiry.',
     reasons: [
       {
-        title: 'One link, not a DM inbox',
-        body: 'Drop it in your bio, your caption, your link-in-bio page — every submission lands in a real CRM.',
+        icon: 'link',
+        title: 'One link, not a DM inbox',        body: 'Drop it in your bio, your caption, your link-in-bio page — every submission lands in a real CRM.',
       },
-      { title: 'Looks like your brand', body: 'Your logo and name on every proposal your followers see.' },
+      { icon: 'brand', title: 'Looks like your brand', body: 'Your logo and name on every proposal your followers see.' },
       {
-        title: 'Free, with real room to grow',
-        body: 'Most creators never need to leave Showcase — 20 trips/mo goes a long way.',
+        icon: 'layers',
+        title: 'Free, with real room to grow',        body: 'Most creators never need to leave Showcase — 20 trips/mo goes a long way.',
       },
     ],
     features: [
@@ -318,16 +322,16 @@ export const SEGMENTS: Segment[] = [
     lede: "A free CRM for the requests you're already getting — not a pitch about discovery, since that takes volume we don't have yet.",
     reasons: [
       {
-        title: 'Free CRM, no cost ever',
-        body: 'Organise inbound requests and quote directly through your own workflow.',
+        icon: 'board',
+        title: 'Free CRM, no cost ever',        body: 'Organise inbound requests and quote directly through your own workflow.',
       },
       {
-        title: 'Listed on Horizon',
-        body: 'A bonus, not the pitch — discoverable by agencies as the network grows, at no cost to appear.',
+        icon: 'globe',
+        title: 'Listed on Horizon',        body: 'A bonus, not the pitch — discoverable by agencies as the network grows, at no cost to appear.',
       },
       {
-        title: 'Intelligence, when ready',
-        body: 'Atlas-assisted quoting from your own contracted rates, on your terms.',
+        icon: 'spark',
+        title: 'Intelligence, when ready',        body: 'Atlas-assisted quoting from your own contracted rates, on your terms.',
       },
     ],
     features: [
@@ -360,16 +364,16 @@ export const SEGMENTS: Segment[] = [
     lede: 'The same free CRM as any supplier, with the itinerary tooling built for packaged, multi-day trips.',
     reasons: [
       {
-        title: 'Free CRM, no cost ever',
-        body: 'Organise inbound requests and quote directly through your own workflow.',
+        icon: 'board',
+        title: 'Free CRM, no cost ever',        body: 'Organise inbound requests and quote directly through your own workflow.',
       },
       {
-        title: 'Built for packaged trips',
-        body: 'The itinerary/proposal generator handles multi-day packages, not just single bookings.',
+        icon: 'layers',
+        title: 'Built for packaged trips',        body: 'The itinerary/proposal generator handles multi-day packages, not just single bookings.',
       },
       {
-        title: 'Listed on Horizon',
-        body: 'Discoverable by agencies sourcing packaged tours, at no cost.',
+        icon: 'globe',
+        title: 'Listed on Horizon',        body: 'Discoverable by agencies sourcing packaged tours, at no cost.',
       },
     ],
     features: [
