@@ -1,13 +1,17 @@
 ---
 /**
- * One screen for one step of a page's "How it works" (founder's ask, Sep
- * 2026: the screen has to change as you click down the list, and each one
- * has to show what its step says).
+ * One screen for one step of a page's "How it works".
  *
- * The screens are data, not components — a page has four of them, and
- * hand-building 76 files would guarantee they drift from the copy beside
- * them. content/steps.ts describes each one in the primitives the mock-up
- * kit already has, and this renders it.
+ * This used to render a fixed shape — a head, a list of three rows, a foot —
+ * so every step on the site came out as the same widget with different words
+ * in it: a magic link, an archived trip, an arriving message and a pipeline
+ * all drawn as the same three-row list. A screen is now composed of blocks,
+ * so a form looks like a form, a document like a document, and a pipeline
+ * like a pipeline.
+ *
+ * The blocks are the primitives mockup.css already carried for the
+ * hand-built screens in components/mockups — fields, cards, columns, KPIs,
+ * file rows, search, avatars, the faded sheet behind.
  *
  * The site's rules hold here as everywhere: amber only on a step a person
  * takes, suppliers never shown inside Horizon, Atlas answering from the
@@ -18,53 +22,149 @@ import type { StepScreen } from '../lib/content/steps';
 
 interface Props {
   screen: StepScreen;
-  /** The page's own ground and app chip, so the four steps sit on the
-      same surface its other screens do. */
   ground: string;
   app: string;
   alt: string;
 }
 const { screen, ground, app, alt } = Astro.props;
-const { head, rows = [], msgs = [], composer, foot } = screen;
+const { back, head, blocks = [], rows = [], msgs = [], composer, foot } = screen;
 ---
 
 <div class="mockup">
   <div class="mk" data-ground={ground} role="group" aria-label={alt}>
     <div class="mk-stage">
-      <div class="mk-panel wide">
-  {head && (
-    <div class="mk-head">
-      <b>{head[0]}</b>
-      <small>{head[1]}</small>
-    </div>
-  )}
+      {/* A faded sheet behind the panel, for depth — the reference composes
+          its product shots this way. */}
+      {back && (
+        <div class="mk-back">
+          <b>{back.title}</b>
+          {back.lines.map((w) => <i class={w} />)}
+        </div>
+      )}
 
-  {msgs.map((m) => (
-    <div class:list={['mk-msg', { me: m.from === 'me', typing: m.state === 'typing' }]}>
-      <p>{m.text}</p>
-      {m.cite && <span class="mk-cite">{m.cite}</span>}
-    </div>
-  ))}
+      <div class:list={['mk-panel', screen.wide === false ? '' : 'wide']}>
+        {head && (
+          <div class="mk-head">
+            <b>{head[0]}</b>
+            <small>{head[1]}</small>
+          </div>
+        )}
 
-  {rows.map((r) => (
-    <div class:list={['mk-row', { plain: !r.icon }]}>
-      {r.icon && <span class:list={['mk-ico', { pdf: r.icon === 'PDF' }]}>{r.icon}</span>}
-      <div>
-        <b>{r.b}</b>
-        {r.s && <small>{r.s}</small>}
-      </div>
-      {r.tag && <span class:list={['mk-tag', { amb: r.amber }]}>{r.tag}</span>}
-      {r.state && <span class:list={['mk-chk', r.state]} />}
-      {r.fine && <span class="mk-fine">{r.fine}</span>}
-    </div>
-  ))}
+        {blocks.map((b) => {
+          if (b.k === 'lbl') return <div><span class="mk-lbl">{b.lbl}</span><p class="mk-title">{b.title}</p></div>;
 
-  {composer && (
-    <div class="mk-composer">
-      <span class="mk-field">{composer[0]}</span>
-      <span class="mk-btn sig">{composer[1]}</span>
-    </div>
-  )}
+          if (b.k === 'search') return <div class="mk-search"><span>{b.q}</span><small>{b.meta}</small></div>;
+
+          if (b.k === 'kpis') return (
+            <div class="mk-kpis">
+              {b.kpis.map(([l, v]) => <div class="mk-kpi"><span>{l}</span><b>{v}</b></div>)}
+            </div>
+          );
+
+          if (b.k === 'fields') return (
+            <div class:list={{ 'mk-row2': b.fields.length > 1 && b.pair }}>
+              {b.fields.map((f) => (
+                <div class="mk-field">
+                  <label>{f[0]}</label>
+                  <div class:list={{ focus: f[2] }}>{f[1]}</div>
+                </div>
+              ))}
+            </div>
+          );
+
+          if (b.k === 'cols') return (
+            <div class="mk-cols">
+              {b.cols.map((c) => (
+                <div class="mk-col">
+                  <small>{c.name}</small>
+                  {c.cards.map((cd) => <div class="mk-card"><b>{cd[0]}</b><small>{cd[1]}</small></div>)}
+                </div>
+              ))}
+            </div>
+          );
+
+          if (b.k === 'cards') return (
+            <div class="mk-cols">
+              {b.cards.map((c) => (
+                <div class="mk-col">
+                  <div class:list={['mk-card', { on: c.on }]}>
+                    <b>{c.title}</b>
+                    <small>{c.meta}</small>
+                    {c.price && <span class="mk-mono">{c.price}</span>}
+                    {c.tag && <span class:list={['mk-tag', { amb: c.amber }]}>{c.tag}</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+
+          if (b.k === 'files') return (
+            <div>
+              {b.files.map((f) => (
+                <div class="mk-row">
+                  <span class:list={['mk-ico', { pdf: f[0].endsWith('.pdf') }]}>{f[0].endsWith('.pdf') ? 'PDF' : 'XLS'}</span>
+                  <div><b>{f[0]}</b><small>{f[1]}</small></div>
+                  {f[2] && <span class="mk-tag">{f[2]}</span>}
+                </div>
+              ))}
+            </div>
+          );
+
+          if (b.k === 'people') return (
+            <div>
+              {b.people.map((p) => (
+                <div class="mk-row">
+                  <span class="mk-av">{p[0]}</span>
+                  <div><b>{p[1]}</b><small>{p[2]}</small></div>
+                  {p[3] && <span class="mk-via">{p[3]}</span>}
+                </div>
+              ))}
+            </div>
+          );
+
+          if (b.k === 'doc') return (
+            <div class="mk-side">
+              <b>{b.title}</b>
+              {b.lines.map((l) => <p>{l}</p>)}
+            </div>
+          );
+
+          if (b.k === 'sum') return (
+            <div class="mk-sum"><span class="mk-p">{b.label}</span><b>{b.value}</b></div>
+          );
+
+          if (b.k === 'note') return <p class="mk-fine">{b.text}</p>;
+
+          return null;
+        })}
+
+        {msgs.map((m) => (
+          <div class:list={['mk-msg', { me: m.from === 'me', typing: m.state === 'typing' }]}>
+            {m.via && <span class="mk-via">{m.via}</span>}
+            <p>{m.text}</p>
+            {m.cite && <span class="mk-cite">{m.cite}</span>}
+          </div>
+        ))}
+
+        {rows.map((r) => (
+          <div class:list={['mk-row', { plain: !r.icon }]}>
+            {r.icon && <span class:list={['mk-ico', { pdf: r.icon === 'PDF' }]}>{r.icon}</span>}
+            <div>
+              <b>{r.b}</b>
+              {r.s && <small>{r.s}</small>}
+            </div>
+            {r.tag && <span class:list={['mk-tag', { amb: r.amber }]}>{r.tag}</span>}
+            {r.state && <span class:list={['mk-chk', r.state]} />}
+            {r.fine && <span class="mk-fine">{r.fine}</span>}
+          </div>
+        ))}
+
+        {composer && (
+          <div class="mk-composer">
+            <span class="mk-field">{composer[0]}</span>
+            <span class="mk-btn sig">{composer[1]}</span>
+          </div>
+        )}
 
         {foot && (
           <div class="mk-foot">
