@@ -324,6 +324,7 @@ const SIDES = [
                         <span class="lg-card-bg" style={`background-image:url(${c.photo})`} />
                         <span class="lg-card-kind">{c.label}</span>
                         <b>{c.headline}</b>
+                        <span class="lg-card-ico" set:html={navIcon(c.label)} />
                       </>
                     ) : (
                       /* The tool's own line icon, in the bottom corner
