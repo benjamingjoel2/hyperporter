@@ -85,9 +85,11 @@ So deploying is: merge to `main`. The workflow's last step fetches
 `https://hyperporter.com/build.txt` and fails unless it contains the commit
 just built, so a green run means the live site is serving that commit.
 
-The pull needs an SSH key the workflow can use. Until the secrets below exist
-the workflow still builds and publishes, then **fails** rather than passing
-without deploying, and you deploy by hand:
+There are two ways to have that pull happen on its own — the server polling
+GitHub (simplest, no keys, below) or this workflow SSHing in (the section
+after it). Until one of them is set up, the workflow still builds and
+publishes, then **fails** rather than passing without deploying, and you
+deploy by hand:
 
 ```sh
 ssh root@hyperporter.com 'cd /opt/hyperporter/site && git fetch --depth 1 origin deploy && git reset --hard origin/deploy'
@@ -96,6 +98,37 @@ ssh root@hyperporter.com 'cd /opt/hyperporter/site && git fetch --depth 1 origin
 `reset --hard` rather than `pull` because CI force-pushes a single fresh commit
 each time — otherwise the repository would grow by a whole copy of the site on
 every deploy, and a fast-forward would fail.
+
+### The simplest setup: let the server pull for itself
+
+Run this once on the server, as root:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/benjamingjoel2/hyperporter/main/scripts/enable-auto-deploy.sh | sh
+```
+
+It pulls the current build immediately, then installs a job that checks
+GitHub once a minute and pulls again whenever CI publishes a new one. After
+that, merging to `main` puts the change live within a minute, by itself.
+
+Then set the repository variable `DEPLOY_MODE` to `pull` (Settings → Secrets
+and variables → Actions → Variables). That tells the workflow not to expect
+SSH credentials; it publishes the build and then waits for the live site to
+come up on it, so a green run still means the site is actually serving that
+commit.
+
+Nothing reaches into the server in this mode. The server asks GitHub for a
+branch that is public anyway, over HTTPS. There is no key to generate, store,
+rotate or leak — which is the whole reason to prefer it.
+
+To check on it later, on the server:
+
+```sh
+systemctl list-timers hyperporter-pull     # is it scheduled?
+/usr/local/bin/hyperporter-pull            # pull right now
+```
+
+To turn it off: `systemctl disable --now hyperporter-pull.timer`.
 
 ### One-time setup for the automatic pull
 

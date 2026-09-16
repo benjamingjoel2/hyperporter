@@ -17,6 +17,19 @@
 # Once the deploy branch is published, the last steps SSH to the server, pull
 # that branch, and confirm the live site serves this exact commit.
 #
+# There are two ways the server can end up with that build, and the repository
+# variable DEPLOY_MODE picks between them:
+#
+#   push (the default) — this workflow SSHes in and pulls. Needs the two
+#     secrets in DEPLOY.md.
+#   pull — the server checks GitHub itself once a minute
+#     (scripts/enable-auto-deploy.sh). No secrets, no key, nothing reaching
+#     into the server from outside. The SSH steps are skipped and the run
+#     waits for the live site to come up on the new build instead.
+#
+# Either way the run is green only once https://hyperporter.com/build.txt
+# returns the commit that was just built.
+#
 # Those steps used to be gated on `if: env.DEPLOY_SSH_KEY != ''`, which meant
 # that with the secret unset they skipped and the run still went green. Four
 # runs reported success between 8 and 13 September 2026 while the live site
@@ -47,6 +60,8 @@ env:
   DEPLOY_HOST: ${{ vars.DEPLOY_HOST || 'hyperporter.com' }}
   DEPLOY_USER: ${{ vars.DEPLOY_USER || 'root' }}
   DEPLOY_PATH: ${{ vars.DEPLOY_PATH || '/opt/hyperporter/site' }}
+  # 'push' (this workflow SSHes in) or 'pull' (the server polls for itself).
+  DEPLOY_MODE: ${{ vars.DEPLOY_MODE || 'push' }}
 
 jobs:
   build-and-publish:
@@ -103,7 +118,7 @@ jobs:
         # updated by the time this runs, so failing here still leaves a build
         # to pull by hand. It only stops the run claiming a success it has
         # not earned.
-        if: github.repository == 'benjamingjoel2/hyperporter'
+        if: github.repository == 'benjamingjoel2/hyperporter' && vars.DEPLOY_MODE != 'pull'
         run: |
           missing=
           [ -n "$DEPLOY_KEY" ] || missing="$missing DEPLOY_SSH_KEY"
@@ -119,7 +134,7 @@ jobs:
           fi
 
       - name: Pull the deploy branch on the server
-        if: github.repository == 'benjamingjoel2/hyperporter'
+        if: github.repository == 'benjamingjoel2/hyperporter' && vars.DEPLOY_MODE != 'pull'
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
@@ -133,10 +148,19 @@ jobs:
       - name: Confirm the live site serves this build
         if: github.repository == 'benjamingjoel2/hyperporter'
         run: |
-          for i in 1 2 3 4 5 6; do
+          # In pull mode the server checks once a minute, so give it three.
+          tries=6; wait=5
+          if [ "$DEPLOY_MODE" = pull ]; then tries=36; wait=5; fi
+          i=0
+          while [ "$i" -lt "$tries" ]; do
             live=$(curl -fsS --max-time 15 "https://$DEPLOY_HOST/build.txt" || true)
             if [ "$live" = "$GITHUB_SHA" ]; then echo "live site serves $live"; exit 0; fi
-            sleep 5
+            i=$((i + 1)); sleep "$wait"
           done
-          echo "live site serves '$live', expected $GITHUB_SHA"
+          echo "::error::The live site serves '$live', not $GITHUB_SHA."
+          if [ "$DEPLOY_MODE" = pull ]; then
+            echo "The server pulls for itself in this mode. Check the job on the box:"
+            echo "  systemctl status hyperporter-pull.timer"
+            echo "  /usr/local/bin/hyperporter-pull && echo pulled"
+          fi
           exit 1
