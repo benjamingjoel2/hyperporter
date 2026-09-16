@@ -4,23 +4,33 @@
  * the reference's "how teams stay ahead" section. Used on the tool,
  * automation and solutions pages.
  */
-import { guessIcon, pointIcon } from '../lib/pointIcons';
+import { pointIcon, isPointIcon } from '../lib/pointIcons';
+import type { PointIcon } from '../lib/pointIcons';
 
 interface Props {
   title: string;
-  points: { title: string; body: string }[];
+  points: { icon: PointIcon; title: string; body: string }[];
 }
 
 const { title, points } = Astro.props;
+
+/* The icon is declared with the point. A missing or unknown one stops the
+   build rather than rendering an empty box or an arbitrary shape, which is
+   how "Numbers stay private" ended up under a currency mark. */
+for (const p of points) {
+  if (!p.icon || !isPointIcon(p.icon)) {
+    throw new Error(`Point "${p.title}" has no valid icon (got ${JSON.stringify(p.icon)}).`);
+  }
+}
 ---
 
 <section class="sec wrap pts-sec">
   <h2 class="rv">{title}</h2>
   <div class="pts rv">
     {
-      points.map((p, i) => (
+      points.map((p) => (
         <div class="pt">
-          <span class="pt-ico-wrap" set:html={pointIcon(guessIcon(p.title, i))} />
+          <span class="pt-ico-wrap" set:html={pointIcon(p.icon)} />
           <b>{p.title}</b>
           <p>{p.body}</p>
         </div>

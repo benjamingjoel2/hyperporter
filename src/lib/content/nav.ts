@@ -91,15 +91,15 @@ export const NAV: NavItem[] = [
           { label: 'Overview', desc: 'The full scope of Automation, end to end.', href: '/autopilot' },
           { label: 'Automated Inquiry', desc: 'Parses an incoming message into a structured lead automatically.', href: '/automations/inquiry' },
           { label: 'Automated Quotation', desc: 'Sends the inquiry to your supplier list, manages every reply.', href: '/automations/quotation' },
-          { label: 'Automated Follow-up', desc: 'Reminds clients, sends nudges, wins back leads gone quiet.', href: '/automations/follow-up' },
+          { label: 'Automated Confirmation', desc: 'Confirms dates, intent, and availability with both sides.', href: '/automations/confirmation' },
         ],
       },
       {
         heading: '',
         items: [
-          { label: 'Automated Confirmation', desc: 'Confirms dates, intent, and availability with both sides.', href: '/automations/confirmation' },
           { label: 'Automated Collection', desc: 'Gathers traveller documents and supplier booking confirmations.', href: '/automations/collection' },
           { label: 'Automated Payment', desc: 'Sends deposit and balance requests on schedule — marking money received stays yours.', href: '/automations/payment' },
+          { label: 'Automated Follow-up', desc: 'Reminds clients, sends nudges, wins back leads gone quiet.', href: '/automations/follow-up' },
         ],
       },
     ],

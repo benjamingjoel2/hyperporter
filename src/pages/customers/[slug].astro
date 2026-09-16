@@ -2,7 +2,7 @@
 /**
  * Customer pages, in the founder's sequence for Solutions (Sep 2026, after
  * the reference's solutions pages): a light hero — eyebrow and headline
- * left, lede and button right, one wide photograph under both; three
+ * left, lede and button right; three
  * points with icons; "how they use it" as the reference's accordion on a
  * dark ground, the screen beside; and the closing statement band.
  *
@@ -17,10 +17,10 @@
 import Base from '../../layouts/Base.astro';
 import { OVERVIEWS, SEGMENTS } from '../../lib/content/customers';
 import type { Overview, Segment } from '../../lib/content/customers';
-import Mockup from '../../components/Mockup.astro';
+import StepScreen from '../../components/StepScreen.astro';
+import { STEP_SCREENS } from '../../lib/content/steps';
 import Points from '../../components/Points.astro';
 import CtaBand from '../../components/CtaBand.astro';
-import { photoFor } from '../../lib/photos';
 import '../../styles/solutions.css';
 
 // The screen each segment opens on: the part of the product that segment
@@ -55,14 +55,15 @@ const features = page.features;
 const asWho = (name: string): string => (/^[A-Z]{2}/.test(name) ? name : name.toLowerCase());
 const who = segment ? asWho(segment.name) : overview!.side === 'reseller' ? 'resellers' : 'suppliers';
 const howTitle = overview ? overview.sectionTitle : `How ${who} use Hyperporter`;
-// The page's own photograph, or a near one: agents share the advisors'
-// picture, the two overviews borrow their side's lead segment.
-const PHOTO_ALIAS: Record<string, string[]> = {
-  'travel-agents': ['independent-advisors'],
-  'agent-portal': ['travel-agencies'],
-  'supplier-portal': ['dmcs'],
-};
-const photo = photoFor(page.slug, ...(PHOTO_ALIAS[page.slug] ?? []));
+
+/* One screen per step. These pages used to show a single screen beside the
+   whole accordion, so three of every four steps sat next to a picture of
+   something else. */
+const steps = STEP_SCREENS[page.slug];
+if (!steps) throw new Error(`No step screens for "${page.slug}" (content/steps.ts).`);
+if (steps.length !== features.length) {
+  throw new Error(`"${page.slug}": ${features.length} steps but ${steps.length} screens.`);
+}
 ---
 
 <Base
@@ -86,7 +87,6 @@ const photo = photoFor(page.slug, ...(PHOTO_ALIAS[page.slug] ?? []));
         </div>
       </div>
     </div>
-    <img class="sol-hero-photo rv" src={photo.src} alt={`${page.name} at work.`} />
   </section>
 
   {segment && <Points title={`How ${who} stay ahead`} points={segment.reasons} />}
@@ -121,9 +121,11 @@ const photo = photoFor(page.slug, ...(PHOTO_ALIAS[page.slug] ?? []));
           }
         </div>
         <div class="lg-acc-shot">
-          <div class="on">
-            <Mockup screen={SCREEN[page.slug]} />
-          </div>
+          {steps.map((sc, i) => (
+            <div class:list={{ on: i === 0 }} inert={i !== 0}>
+              <StepScreen screen={sc} ground="warm" app={page.name} alt={`${page.name}: ${features[i].name}`} />
+            </div>
+          ))}
         </div>
       </div>
     </div>

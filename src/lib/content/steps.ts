@@ -54,29 +54,28 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
       foot: ['Every channel lands in the same place.'],
     },
     {
-      head: ['Nairobi — 9 nights', 'KE-2291'],
-      rows: [
-        { b: 'Lena & Mark Ortiz', s: '2 travellers · 3 – 12 March', tag: 'Inquiry' },
-        { b: 'Rift Valley Ground Services', s: 'Supplier on the thread', state: 'done' },
-        { b: 'Notes, files, messages', s: 'All on this one record', state: 'done' },
+      head: ['Rift Valley Ground Services', 'KE-2291'],
+      msgs: [
+        { text: 'Nairobi, 3 – 12 March. 2 travellers, wildlife and walking, no long drives. Can you quote?', from: 'me' },
+        { text: 'Yes — €4,180 per person, full board. Park fees included. Holding until Friday.', from: 'them' },
       ],
-      foot: ['One thread per trip. Nothing in a second inbox.'],
+      foot: ['Their reply lands on the trip, where your whole team can see it.'],
     },
     {
       head: ['Magic link', 'No password'],
       rows: [
-        { b: 'Traveller link', s: 'Itinerary, documents, payments', tag: 'Sent' },
-        { b: 'Supplier link', s: 'Their request and their quote only', tag: 'Sent' },
-        { b: 'Nothing to install', s: 'Opens in a browser', state: 'done' },
+        { b: 'Supplier link', s: 'The request and their own quote only', tag: 'Sent' },
+        { b: 'Your margin', s: 'Set by you, added before the traveller sees it', state: 'done' },
+        { b: 'Traveller link', s: 'Your branding · price including your margin', tag: 'Sent' },
       ],
-      foot: ['Each side sees their own view of the trip.'],
+      foot: ['Each side sees only their own view of the trip.'],
     },
     {
       head: ['After the trip', 'KE-2291'],
       rows: [
         { b: 'Every message kept', s: 'Both sides, in order', state: 'done' },
         { b: 'Rates as quoted', s: 'What was agreed, and when', state: 'done' },
-        { b: 'Ready to repeat', s: 'Duplicate for the next enquiry', tag: 'Reuse' },
+        { b: 'Ready to repeat', s: 'Duplicate for the next inquiry', tag: 'Reuse' },
       ],
       foot: ['The record outlives the trip.'],
     },
@@ -200,42 +199,43 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
 
   'quotation-board': [
     {
-      head: ['Nairobi — 9 nights', '4 parts'],
+      head: ['Nairobi — flexible, March', '3 offers in'],
       rows: [
-        { b: 'Game drives · Mara North', s: '3 nights', tag: 'To quote' },
-        { b: 'Lodging · Rift Valley', s: '4 nights', tag: 'To quote' },
-        { b: 'Transfers', s: 'Airport and inter-camp', tag: 'To quote' },
+        { b: 'Rift Valley Ground Services', s: '8 days · classic route · own document attached', state: 'done' },
+        { b: 'Rift Valley Ground Services', s: '5 days · shorter alternative', state: 'done' },
+        { b: 'Baobab Eco Safaris', s: '7 days · walking, not game drives', state: 'done' },
       ],
-      foot: ['The trip, broken into the parts suppliers price.'],
+      foot: ['One supplier can send more than one. Each is a whole trip.'],
     },
     {
-      head: ['Quotes in', '3 of 4'],
+      head: ['Baobab Eco · 7 days', 'Draft'],
       rows: [
-        { b: 'Rift Valley Ground Services', s: '€4,180 pp · full board', state: 'done' },
-        { b: 'Karen Overland Co.', s: '€3,940 pp · room only', state: 'done' },
-        { b: 'Mara North Collective', s: 'Asked yesterday', state: 'wait' },
+        { b: 'Day-by-day itinerary', s: 'Hotels, room types, nights', state: 'done' },
+        { b: 'Included / not included', s: 'Park fees in · flights out', state: 'done' },
+        { b: 'Cost €3,880 · margin 18% · €4,578', s: 'Margin is yours, per offer', tag: 'By hand', amber: true },
       ],
-      foot: ['Side by side, on the trip’s own thread.'],
+      foot: ['Your note on this offer never leaves your side.', 'Release to traveller', true],
     },
     {
-      head: ['Your margin', 'Yours to set'],
+      head: ['What the traveller sees', '3 released'],
       rows: [
-        { b: 'Rift Valley Ground Services', s: 'Cost €4,180 pp', tag: 'Chosen', amber: true },
-        { b: 'Margin', s: '18% · you set it', tag: 'By hand', amber: true },
-        { b: 'Client price', s: '€4,932 pp', state: 'done' },
+        { b: 'Classic route · 8 days', s: '€4,932 pp', state: 'done' },
+        { b: 'Walking safari · 7 days', s: '€4,578 pp · the only one built around walking', state: 'done' },
+        { b: 'Shorter route · 5 days', s: '€3,410 pp', state: 'done' },
       ],
-      foot: ['The supplier still receives their full quoted rate.'],
+      foot: ['Selling price only. Never the cost, never your margin.'],
     },
     {
-      head: ['Proposal v3', 'Ready'],
+      head: ['Walking safari · 7 days', 'Chosen'],
       rows: [
-        { b: 'Built from the chosen quotes', s: 'Nothing retyped', state: 'done' },
-        { b: 'Your branding', s: 'No Hyperporter badge', state: 'done' },
-        { b: 'Share as a link', s: 'Or PDF, or a message', tag: 'Ready' },
+        { b: 'Confirmation requested', s: 'Sent to Baobab Eco', tag: 'Waiting', amber: true },
+        { b: 'Classic route · 8 days', s: 'Still available as a backup', state: 'done' },
+        { b: 'Shorter route · 5 days', s: 'Still available as a backup', state: 'done' },
       ],
-      foot: ['Chosen quotes become the proposal.', 'Share', false],
+      foot: ['The others are declined only once this one is booked.'],
     },
   ],
+
 
   'proposal-share': [
     {
@@ -818,4 +818,241 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
       foot: ['Processing inside Hyperporter is an Intelligence feature.'],
     },
   ],
+  /* Customers pages (founder's ask, Sep 2026). These carried one screen for
+     the whole accordion, so three of every four steps sat beside a picture of
+     something else. One screen per step, same as the tool and automation
+     pages. */
+  'agent-portal': [
+    { head: ['Your inquiry form', 'meridiantravel.co/enquire'],
+      rows: [
+        { b: 'LinkedIn · profile link', s: '4 submissions this week', state: 'done' },
+        { b: 'Email signature', s: '2 submissions', state: 'done' },
+        { b: 'Instagram bio', s: '7 submissions', state: 'done' },
+      ],
+      foot: ['Every one lands in the CRM as a structured lead.'] },
+    { head: ['Horizon · Kenya', '12 vetted suppliers'],
+      rows: [
+        { b: 'Rift Valley Ground Services', s: 'Nairobi · DMC · replies in 40 min', tag: 'Quote requested' },
+        { b: 'Acacia Safari Logistics', s: 'Nairobi · DMC · replies in 2 h', tag: 'Request quote' },
+        { b: 'Lamu Dhow Collective', s: 'Lamu · tour operator · coast', tag: 'Request quote' },
+      ],
+      foot: ['Horizon adds 10% on the quote. The supplier receives their full quoted rate.'] },
+    { head: ['Autopilot', 'Running'],
+      rows: [
+        { b: 'Reprice loop', s: 'Round 1 of 2 · supplier revised', state: 'now' },
+        { b: 'Confirmation chasing', s: 'Both sides answered', state: 'done' },
+        { b: 'Status update sent', s: 'Traveller, this morning', state: 'done' },
+      ],
+      foot: ['Two rounds, then it asks you.', 'Needs you', true] },
+    { head: ['Meridian Travel Co.', 'Your branding'],
+      rows: [
+        { b: 'Your logo on every link', s: 'Traveller and supplier views', state: 'done' },
+        { b: 'meridiantravel.co', s: 'Your own domain', state: 'done' },
+        { b: 'Powered by Hyperporter', s: 'Removed', state: 'done' },
+      ],
+      foot: ['The proposal looks like your agency, not a template.'] },
+  ],
+  'supplier-portal': [
+    { head: ['Requests · 2 new', 'Free on Showcase'],
+      rows: [
+        { b: 'Laikipia · 3 nights · family of 5', s: 'From Meridian Travel Co.', tag: 'Quote by Thu' },
+        { b: 'Mara North · 4 nights', s: 'From Atlas Voyages', state: 'wait' },
+        { b: 'Your own quote format', s: 'No change to how you work', state: 'done' },
+      ],
+      foot: ['Organise inbound requests at no cost, on any tier.'] },
+    { head: ['Your own inbox', 'From Intelligence'],
+      msgs: [
+        { text: 'Can you hold 4 nights in Laikipia, early March?', from: 'them' },
+        { text: 'Yes — holding until Friday. Sending the rate now.', from: 'me' },
+      ],
+      foot: ['The same WhatsApp thread and address you already use.'] },
+    { head: ['Atlas', 'From your rate sheet'],
+      msgs: [
+        { text: 'Laikipia, 3 nights, family of 5 — what do we quote?',
+          from: 'me' },
+        { text: 'USD 2,480 per person, full board, from your 2026 sheet. Child rate applies to one.',
+          cite: 'Your contracted rates 2026.pdf · p.4' },
+      ],
+      foot: ['Drafted from your own contracts. Never anyone else’s.'] },
+    { head: ['Horizon', 'Listed'],
+      rows: [
+        { b: 'Kilimanjaro Wild Trails', s: 'Tanzania · northern circuit', state: 'done' },
+        { b: 'Found by agencies searching', s: 'No cost to appear', state: 'done' },
+        { b: 'Your identity', s: 'Confidential until an inquiry reaches you', state: 'done' },
+      ],
+      foot: ['A bonus, not the pitch.'] },
+  ],
+  'travel-agencies': [
+    { head: ['Team', 'One CRM · one brand'],
+      rows: [
+        { b: 'Lena Ortiz', s: 'Owner · 6 open trips', state: 'done' },
+        { b: 'Daniel Achebe', s: 'Agent · 4 open trips', state: 'done' },
+        { b: 'Priya Nair', s: 'Agent · 3 open trips', state: 'done' },
+      ],
+      foot: ['Every agent, every trip, one stage engine.'] },
+    { head: ['Meridian Travel Co.', 'One brand'],
+      rows: [
+        { b: 'Your logo', s: 'On every link, from every agent', state: 'done' },
+        { b: 'Your domain', s: 'meridiantravel.co', state: 'done' },
+        { b: 'Powered by Hyperporter', s: 'Removed', state: 'done' },
+      ],
+      foot: ['One brand across the whole team, not one per agent.'] },
+    { head: ['Horizon', '130+ countries'],
+      rows: [
+        { b: 'Kenya · 12 suppliers', s: 'Shared across the whole team', state: 'done' },
+        { b: 'Peru · 9 suppliers', s: 'Shared across the whole team', state: 'done' },
+        { b: 'Japan · 7 suppliers', s: 'Shared across the whole team', state: 'done' },
+      ],
+      foot: ['One sourcing network, not one per agent.'] },
+    { head: ['Autopilot', 'At volume'],
+      rows: [
+        { b: 'Quote requests sent', s: '14 this week, automatically', state: 'done' },
+        { b: 'Follow-ups sent', s: '9 this week', state: 'done' },
+        { b: 'Escalated to a person', s: '2 · a reprice and a date change', tag: 'Needs you', amber: true },
+      ],
+      foot: ['The chasing goes. The judgement stays with you.'] },
+  ],
+  'travel-agents': [
+    { head: ['Your book', '13 open trips'],
+      rows: [
+        { b: 'Lena & Mark Ortiz', s: 'Kenya · March · Quotation', state: 'now' },
+        { b: 'The Achebe family', s: 'Peru · June · Planning', state: 'wait' },
+        { b: 'Mira Sato', s: 'Japan · October · Inquiry', state: 'wait' },
+      ],
+      foot: ['Your whole client book, one stage engine.'] },
+    { head: ['Magic link', 'No password'],
+      rows: [
+        { b: 'Traveller link', s: 'Itinerary, documents, payments', tag: 'Sent' },
+        { b: 'Supplier link', s: 'The request and their own quote', tag: 'Sent' },
+        { b: 'Nothing to install', s: 'Opens in a browser', state: 'done' },
+      ],
+      foot: ['Sent to travellers or suppliers, from the trip.'] },
+    { head: ['Payment instructions', 'Every tier'],
+      rows: [
+        { b: 'Deposit · €1,480', s: 'Bank details on the traveller’s link', state: 'done' },
+        { b: 'Balance · due 14 Feb', s: 'On the same link', state: 'done' },
+        { b: 'Marking it received', s: 'Always yours to do', tag: 'By hand', amber: true },
+      ],
+      foot: ['Structured payment info on every link, on any tier.'] },
+    { head: ['Your inquiry form', 'Share anywhere'],
+      rows: [
+        { b: 'A link you can post', s: 'Bio, signature, a message', state: 'done' },
+        { b: 'Where · when · budget', s: 'Asked before it reaches you', state: 'done' },
+        { b: 'Lands in your CRM', s: 'As a structured lead', state: 'done' },
+      ],
+      foot: ['Every submission arrives ready to work.'] },
+  ],
+  'independent-advisors': [
+    { head: ['Your branding', 'From day one'],
+      rows: [
+        { b: 'Your logo', s: 'On every client-facing link', state: 'done' },
+        { b: 'Your name', s: 'On the proposal and the itinerary', state: 'done' },
+        { b: 'Showcase', s: 'Included on the free tier', state: 'done' },
+      ],
+      foot: ['Your identity, not ours.'] },
+    { head: ['Proposal', 'Ready'],
+      rows: [
+        { b: 'Day-by-day itinerary', s: 'Built from the chosen offer', state: 'done' },
+        { b: 'Your letterhead', s: 'Not a template', state: 'done' },
+        { b: 'Link, PDF or message', s: 'However they read it', tag: 'Share' },
+      ],
+      foot: ['A document that looks like your business.'] },
+    { head: ['Horizon', 'No supplier list needed'],
+      rows: [
+        { b: 'Peru · 9 vetted suppliers', s: 'Quote without a relationship there', tag: 'Request quote' },
+        { b: 'Japan · 7 vetted suppliers', s: 'Quote without a relationship there', tag: 'Request quote' },
+        { b: 'The supplier’s rate', s: 'Paid to them in full', state: 'done' },
+      ],
+      foot: ['Full sourcing access with no team behind you.'] },
+    { head: ['Powered by Hyperporter', 'Removed'],
+      rows: [
+        { b: 'Traveller link', s: 'No badge', state: 'done' },
+        { b: 'Proposal document', s: 'No badge', state: 'done' },
+        { b: 'Supplier link', s: 'No badge', state: 'done' },
+      ],
+      foot: ['Usually the first upgrade, and the reason why.'] },
+  ],
+  creators: [
+    { head: ['Meridian Travel Co.', 'NEW INQUIRY'],
+      rows: [
+        { b: 'Where', s: 'Kenya, the Mara', state: 'done' },
+        { b: 'When', s: 'Early March', state: 'done' },
+        { b: 'Budget', s: 'From €4,000 per person', state: 'done' },
+      ],
+      foot: ['One link — bio, TikTok, a community post.'] },
+    { head: ['Your name on it', 'Free tier'],
+      rows: [
+        { b: 'Your logo', s: 'On every proposal they see', state: 'done' },
+        { b: 'Your handle', s: 'On the inquiry form itself', state: 'done' },
+        { b: 'Showcase', s: 'No upgrade needed for this', state: 'done' },
+      ],
+      foot: ['It looks like you, from the first link.'] },
+    { head: ['Inquiries', '9 this month'],
+      rows: [
+        { b: 'Mira Sato', s: 'From the bio link · Inquiry', state: 'now' },
+        { b: 'Tom Achebe', s: 'From a TikTok comment · Planning', state: 'wait' },
+        { b: 'Nothing in your DMs', s: 'All of it on the record', state: 'done' },
+      ],
+      foot: ['Every inquiry tracked, none lost in a message list.'] },
+  ],
+  dmcs: [
+    { head: ['Requests · 2 new', 'Free'],
+      rows: [
+        { b: 'Laikipia · 3 nights · family of 5', s: 'From Meridian Travel Co.', tag: 'Quote by Thu' },
+        { b: 'Mara North · 4 nights', s: 'From Atlas Voyages', state: 'wait' },
+        { b: 'One place for all of it', s: 'However it arrived', state: 'done' },
+      ],
+      foot: ['Organise every inbound request at no cost.'] },
+    { head: ['Horizon', 'Listed'],
+      rows: [
+        { b: 'Rift Valley Ground Services', s: 'Kenya · Mara, Rift Valley', state: 'done' },
+        { b: 'Found by agencies searching', s: 'No cost to appear', state: 'done' },
+        { b: 'Your identity', s: 'Confidential until an inquiry reaches you', state: 'done' },
+      ],
+      foot: ['Discoverable as the network grows.'] },
+    { head: ['Your own inbox', 'From Intelligence'],
+      msgs: [
+        { text: 'Any availability for 4 nights in Laikipia, early March?', from: 'them' },
+        { text: 'Yes — holding until Friday.', from: 'me' },
+      ],
+      foot: ['Reply from the WhatsApp and address you already use.'] },
+    { head: ['Atlas', 'From your rates'],
+      msgs: [
+        { text: 'Laikipia, 3 nights, family of 5 — draft a quote.', from: 'me' },
+        { text: 'USD 2,480 per person, full board. Child rate applies to one.',
+          cite: 'Your contracted rates 2026.pdf · p.4' },
+      ],
+      foot: ['Drafted from your real contracted rates.'] },
+  ],
+  'tour-operators': [
+    { head: ['Requests & quotes', 'One place'],
+      rows: [
+        { b: 'Northern circuit · 8 days', s: 'From Meridian Travel Co.', tag: 'Quote by Thu' },
+        { b: 'Coast extension · 4 days', s: 'From Atlas Voyages', state: 'wait' },
+        { b: 'Sent last week', s: '6 quotes, all tracked', state: 'done' },
+      ],
+      foot: ['Every request and quote, tracked in one place.'] },
+    { head: ['Package · 8 days', 'Your branding'],
+      rows: [
+        { b: 'Day-by-day, all eight days', s: 'Built once, reused', state: 'done' },
+        { b: 'Hotels and inclusions', s: 'Structured, not retyped', state: 'done' },
+        { b: 'Your letterhead', s: 'No Hyperporter badge', state: 'done' },
+      ],
+      foot: ['A branded, multi-day package document.'] },
+    { head: ['Horizon', 'Listed'],
+      rows: [
+        { b: 'Kilimanjaro Wild Trails', s: 'Tanzania · northern circuit', state: 'done' },
+        { b: 'Found by agencies searching', s: 'No cost to appear', state: 'done' },
+        { b: 'Your identity', s: 'Confidential until an inquiry reaches you', state: 'done' },
+      ],
+      foot: ['Discoverable by agencies, at no cost.'] },
+    { head: ['Atlas', 'From your rates'],
+      msgs: [
+        { text: 'Draft the northern circuit package, 8 days, two travellers.', from: 'me' },
+        { text: 'USD 3,940 per person. Built from your 2026 sheet — park fees included, flights not.',
+          cite: 'Your contracted rates 2026.pdf · p.2, p.7' },
+      ],
+      foot: ['Packages drafted from your own real rates.'] },
+  ],
+
 };
