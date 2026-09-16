@@ -1,14 +1,27 @@
 ---
-/** Three-way Inbox — traveller, supplier and you on one thread. */
+/** Three-way inbox — the traveller and the supplier on one trip thread,
+    each on the channel they already use, neither seeing the other. */
+import App from './App.astro';
+
 const REPLIES = ['Amazing. Can pickup be 9 instead of 8?', 'Perfect. See you in Marrakesh!'];
 ---
-<div class="mk-panel wide" data-thread>
-  <div class="mk-head"><b>Marrakesh — 4 nights</b><small>Priya Nair</small></div>
-  <div class="mk-msg"><span class="mk-via">Priya · WhatsApp</span><p>Second night in a riad with a rooftop?</p></div>
-  <div class="mk-msg"><span class="mk-via">Atlas Maroc · email</span><p>Confirmed. Terrace suite, same rate.</p></div>
-  <div class="mk-msg me"><span class="mk-via">You</span><p>Rooftop it is. Updated on your link.</p></div>
-  <form class="mk-composer" data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="Priya · WhatsApp" data-me-via="You">
-    <input type="text" placeholder="Reply…" aria-label="Reply" autocomplete="off" />
-    <button type="submit" class="mk-btn sig">Send</button>
-  </form>
-</div>
+<App
+  active="Trips"
+  title="Priya Nair"
+  meta="MA-0937 · Marrakesh, 4 nights"
+  who="LO"
+  tabs={['Overview', 'Thread', 'Quotation board', 'Pricing']}
+  tab="Thread"
+  talk
+>
+  <span slot="bar" class="mk-pill">2 sides · 1 thread</span>
+  <div class="mk-chat" data-thread>
+    <div class="mk-msg"><span class="mk-via">Priya Nair · traveller · WhatsApp</span><p>Second night in a riad with a rooftop?</p></div>
+    <div class="mk-msg"><span class="mk-via">Atlas Maroc · supplier · email</span><p>Confirmed. Terrace suite, same rate.</p></div>
+    <div class="mk-msg me"><span class="mk-via">You · to Priya</span><p>Rooftop it is. Updated on your link.</p></div>
+    <form class="mk-composer" data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="Priya Nair · traveller · WhatsApp" data-me-via="You · to Priya">
+      <input type="text" placeholder="Reply to Priya…" aria-label="Reply" autocomplete="off" />
+      <button type="submit" class="mk-btn sig">Send</button>
+    </form>
+  </div>
+</App>

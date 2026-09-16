@@ -1,11 +1,41 @@
 ---
-/** Travel agencies — four agents, one CRM, one brand. */
-const T = [['Lena Ortiz', 'Owner · 6 open trips', 'LO'], ['Daniel Achebe', 'Agent · 4 open trips', 'DA'], ['Mira Sato', 'Agent · 5 open trips', 'MS']];
+/** Settings ▸ Team — every agent on the same CRM, and any of them able to
+    pick up any thread. */
+import App from './App.astro';
+
+const T: [string, string, string, string, string, string][] = [
+  ['Lena Ortiz', 'LO', 'Owner', '6', 'Today 09:31', 'go|Active'],
+  ['Daniel Achebe', 'DA', 'Agent', '4', 'Today 08:40', 'go|Active'],
+  ['Mira Sato', 'MS', 'Agent', '5', 'Yesterday', 'go|Active'],
+  ['Tom Whitfield', 'TW', 'Agent · read only', '0', '12 Jan', '|Invited'],
+];
 ---
-<div class="mk-panel">
-  <div class="mk-head"><b>Team</b><small>One CRM · one brand</small></div>
-  {T.map(([n, m, ini]) => (
-    <div class="mk-row"><span class="mk-av">{ini}</span><div><b>{n}</b><small>{m}</small></div><span class="mk-tog"></span></div>
-  ))}
-  <div class="mk-foot"><span class="mk-fine">Any agent can pick up any thread.</span><span class="mk-btn o">Invite agent</span></div>
-</div>
+<App
+  active="Settings"
+  title="Team"
+  meta="4 of 10 seats"
+  who="LO"
+  tabs={['Account', 'Team', 'Branding', 'Plan & billing']}
+  tab="Team"
+  note="One CRM, one brand. Any agent can pick up any thread."
+>
+  <button slot="bar" type="button" class="mk-uibtn" data-live="set" data-done="Invited">Invite agent</button>
+  <table class="mk-tbl">
+    <colgroup><col style="width:28%" /><col style="width:22%" /><col style="width:14%" /><col style="width:20%" /><col style="width:16%" /></colgroup>
+    <thead><tr><th>Agent</th><th>Role</th><th>Open trips</th><th>Last seen</th><th>Status</th></tr></thead>
+    <tbody>
+      {T.map(([n, ini, role, trips, seen, st]) => {
+        const [tone, name] = st.split('|');
+        return (
+          <tr>
+            <td><span class="who"><i>{ini}</i>{n}</span></td>
+            <td>{role}</td>
+            <td class="num">{trips}</td>
+            <td>{seen}</td>
+            <td><span class:list={['mk-st', tone]}>{name}</span></td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</App>

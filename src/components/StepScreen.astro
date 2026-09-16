@@ -37,7 +37,7 @@ const { shell, back, head, blocks = [], rows = [], msgs = [], composer, foot } =
         <div class:list={['mk-ui', { nonav: !shell.nav }]}>
           {shell.nav && (
             <div class="mk-rail2">
-              <span class="brand"><i />{shell.brand ?? 'Hyperporter'}</span>
+              <span class="brand"><i /><span>{shell.brand ?? 'Hyperporter'}</span></span>
               {shell.nav.map((n) => <a class:list={{ on: n === shell.active }}><i />{n}</a>)}
             </div>
           )}
@@ -68,15 +68,15 @@ const { shell, back, head, blocks = [], rows = [], msgs = [], composer, foot } =
                   ))}
                 </div>
               )}
-              {shell.table && (
+              {shell.table && ((tbl) => (
                 <table class="mk-tbl">
-                  {shell.table.w && <colgroup>{shell.table.w.map((w) => <col style={`width:${w}`} />)}</colgroup>}
-                  <thead><tr>{shell.table.cols.map((c) => <th>{c}</th>)}</tr></thead>
+                  {tbl.w && <colgroup>{tbl.w.map((w) => <col style={`width:${w}`} />)}</colgroup>}
+                  <thead><tr>{tbl.cols.map((c) => <th>{c}</th>)}</tr></thead>
                   <tbody>
-                    {shell.table.rows.map((r) => (
+                    {tbl.rows.map((r) => (
                       <tr>
                         {r.map((cell, ci) => {
-                          if (ci === 0 && shell.table.avatars) {
+                          if (ci === 0 && tbl.avatars) {
                             const [nm, ini] = Array.isArray(cell) ? cell : [cell, String(cell).slice(0, 2).toUpperCase()];
                             return <td><span class="who"><i>{ini}</i>{nm}</span></td>;
                           }
@@ -84,13 +84,13 @@ const { shell, back, head, blocks = [], rows = [], msgs = [], composer, foot } =
                             const [, tone, ...t] = cell.split(/[#:]/);
                             return <td><span class:list={['mk-st', tone]}>{t.join(':')}</span></td>;
                           }
-                          return <td class:list={{ num: shell.table.num?.includes(ci) }}>{cell}</td>;
+                          return <td class:list={{ num: tbl.num?.includes(ci) }}>{cell}</td>;
                         })}
                       </tr>
                     ))}
                   </tbody>
                 </table>
-              )}
+              ))(shell.table)}
               {shell.note && <p class="mk-fine" style="margin:.6em 0 0">{shell.note}</p>}
             </div>
           </div>

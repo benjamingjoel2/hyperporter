@@ -1,10 +1,38 @@
 ---
-/** Quotation Board — replies, your margin, your choice. */
+/** The quotation board — every offer received on one trip, with cost and
+    margin on your side of the table and the selling price on theirs. */
+import App from './App.astro';
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b>Supplier quotes</b><small>Nairobi · per person</small></div>
-  <div class="mk-row" data-live="tick" data-on="Chosen" data-off="Not chosen" data-off-amber="false"><span class="mk-chk"></span><div><b>Rift Valley Ground Services</b><small>Replied in 40 min</small></div><span class="r">€4,180</span></div>
-  <div class="mk-row" data-live="tick" data-on="Chosen" data-off="Not chosen" data-off-amber="false"><span class="mk-chk wait"></span><div><b>Acacia Safari Logistics</b><small>Replied in 2 h</small></div><span class="r">€4,505</span></div>
-  <div class="mk-sum" data-margin data-pct="18" data-base="4180"><span class="mk-p">Your <span class="mk-stepper"><button type="button" data-live="margin" data-step="-1" aria-label="Lower the margin">−</button><b data-margin-out>18%</b><button type="button" data-live="margin" data-step="1" aria-label="Raise the margin">+</button></span> margin</span><b data-margin-sum>€4,932</b></div>
-  <div class="mk-foot"><span class="mk-fine">Tick, set your margin, approve.</span><button type="button" class="mk-btn sig" data-live="set" data-done="Approved" data-fine="Sent to Lena &amp; Mark.">Approve</button></div>
-</div>
+<App
+  active="Trips"
+  title="Lena & Mark Ortiz"
+  meta="KE-2291 · Quotation"
+  who="LO"
+  tabs={['Overview', 'Quotation board', 'Pricing', 'Magic link']}
+  tab="Quotation board"
+  note="The traveller sees the last column only — never the cost, never the margin."
+>
+  <button slot="bar" type="button" class="mk-uibtn sig" data-live="set" data-done="Released">Release to traveller</button>
+  <table class="mk-tbl">
+    <colgroup><col style="width:28%" /><col style="width:18%" /><col style="width:13%" /><col style="width:11%" /><col style="width:14%" /><col style="width:16%" /></colgroup>
+    <thead><tr><th>Supplier</th><th>Offer</th><th>Cost pp</th><th>Margin</th><th>Sells at</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><span class="who"><i>RV</i>Rift Valley GS</span></td><td>Classic · 8 days</td><td class="num">€4,180</td><td class="num">18%</td><td class="num">€4,932</td><td><span class="mk-st go">Released</span></td></tr>
+      <tr><td><span class="who"><i>RV</i>Rift Valley GS</span></td><td>Shorter · 5 days</td><td class="num">€2,890</td><td class="num">18%</td><td class="num">€3,410</td><td><span class="mk-st go">Released</span></td></tr>
+      <tr><td><span class="who"><i>BE</i>Baobab Eco Safaris</span></td><td>Walking · 7 days</td><td class="num">€3,880</td><td class="num">18%</td><td class="num">€4,578</td><td><span class="mk-st go">Released</span></td></tr>
+      <tr><td><span class="who"><i>AS</i>Acacia Safari Logistics</span></td><td>Classic · 8 days</td><td class="num">€4,505</td><td class="num">—</td><td class="num">—</td><td><span class="mk-st amb">Draft</span></td></tr>
+      <tr><td><span class="who"><i>MN</i>Mara North Collective</span></td><td>Lodging · 4 nights</td><td class="num">€1,960</td><td class="num">18%</td><td class="num">€2,313</td><td><span class="mk-st go">Released</span></td></tr>
+      <tr><td><span class="who"><i>KO</i>Karen Overland Co.</span></td><td>Transfers only</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="mk-st red">Declined</span></td></tr>
+    </tbody>
+  </table>
+  <div class="mk-foot" data-margin data-pct="18" data-base="4180">
+    <span class="mk-fine">Margin on the classic offer
+      <span class="mk-stepper">
+        <button type="button" data-live="margin" data-step="-1" aria-label="Lower the margin">−</button>
+        <b data-margin-out>18%</b>
+        <button type="button" data-live="margin" data-step="1" aria-label="Raise the margin">+</button>
+      </span>
+    </span>
+    <span class="mk-mono" style="font-size:1.25em" data-margin-sum>€4,932</span>
+  </div>
+</App>

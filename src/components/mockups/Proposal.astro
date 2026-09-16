@@ -1,18 +1,43 @@
 ---
-/** A branded proposal and the magic link that carries it. */
+/** The proposal as the traveller opens it, from a link with no login: the
+    agency's brand, the trip day by day, and one price — the selling price.
+    Never the cost, never the margin, and no navigation, because they are
+    not signed into anything. */
+import App from './App.astro';
 ---
-<div class="mk-back">
-  <b>The Mara in March</b>
-  <p>Day 1 — Nairobi arrival. Private transfer, Hemingways, one night.</p>
-  <p>Day 2–5 — Mara North Conservancy. Offbeat Mara camp, full board, shared game drives.</p>
-  <p>Day 6–8 — Naboisho. Walking safaris, sundowners.</p>
-  <i class="l"></i><i class="m"></i><i class="l"></i>
-</div>
-<div class="mk-panel right">
-  <div class="mk-head"><b>Magic link</b><small>Proposal v3</small></div>
-  <div class="mk-field"><div>hyp.link/ines/ke-2291<span class="mk-tag">Live</span></div></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Opened twice</b><small>Last 2 h ago · no login needed</small></div></div>
-  <div class="mk-row"><span class="mk-chk wait"></span><div><b>Approval</b><small>Traveller comments and approves from the link</small></div></div>
-  <div class="mk-row plain"><div><b>Your logo, your reply-to</b></div><span class="mk-tog"></span></div>
-  <span class="mk-btn block">Send to Lena &amp; Mark</span>
-</div>
+<App
+  page
+  title="Meridian Travel Co."
+  meta="The Mara in March · v3"
+  note="Comment on any day, or accept. No login, no app to install."
+>
+  <span slot="bar" class="mk-pill">For Lena &amp; Mark</span>
+  <table class="mk-tbl">
+    <colgroup><col style="width:12%" /><col style="width:22%" /><col style="width:44%" /><col style="width:22%" /></colgroup>
+    <thead><tr><th>Day</th><th>Where</th><th>What you do</th><th>Staying</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td>Nairobi</td><td>Arrival, private transfer, quiet first night</td><td>Hemingways</td></tr>
+      <tr><td class="num">2 – 5</td><td>Mara North</td><td>Shared game drives, full board, sundowners</td><td>Offbeat Mara</td></tr>
+      <tr><td class="num">6 – 8</td><td>Naboisho</td><td>Walking safaris with a Maasai guide</td><td>Encounter Mara</td></tr>
+      <tr><td class="num">9</td><td>Nairobi</td><td>Return transfer, day room before the flight</td><td>Hemingways</td></tr>
+    </tbody>
+  </table>
+  <div class="mk-two" style="margin-top:.55em">
+    <div class="mk-pane">
+      <h6>What it costs</h6>
+      <div class="ln"><span>Per person, all of the above</span><span>€4,932</span></div>
+      <div class="ln"><span>Two travellers</span><span>€9,864</span></div>
+      <div class="ln"><span>Deposit to hold it</span><span>€1,480</span></div>
+    </div>
+    <div class="mk-pane">
+      <h6>Your agent</h6>
+      <div class="ln"><span>Lena Ortiz · Meridian Travel Co.</span><span>Replies same day</span></div>
+      <div class="ln"><span>Version 3 · updated Tuesday</span><span>Always current</span></div>
+      <div class="ln"><span>Questions go straight to her</span><span>On this page</span></div>
+    </div>
+  </div>
+  <div class="mk-foot">
+    <span class="mk-fine">Prices hold until 28 February.</span>
+    <button type="button" class="mk-uibtn sig" data-live="set" data-done="Accepted">Accept this plan</button>
+  </div>
+</App>

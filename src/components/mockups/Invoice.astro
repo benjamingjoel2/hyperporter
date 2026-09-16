@@ -1,15 +1,35 @@
 ---
-/** Payments & Invoicing — the schedule and the invoice. */
+/** Payments & invoicing — the schedule on a trip, and the invoice the
+    accepted proposal produced. */
+import App from './App.astro';
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b>Payments · Marrakesh</b><small>Priya Nair</small></div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Deposit · €880</b><small>Received 14 Jan</small></div><span class="mk-tag">Received</span></div>
-  <div class="mk-row" data-live="tick" data-on="Received" data-off="Needs you" data-off-amber="true"><span class="mk-chk wait"></span><div><b>Balance · €3,520</b><small>Due 20 Feb · reminder sent</small></div><span class="mk-tag amb">Needs you</span></div>
-  <div class="mk-row"><span class="mk-ico pdf">PDF</span><div><b>Invoice INV-0937</b><small>From the accepted proposal</small></div><button type="button" class="mk-btn o" data-live="set" data-done="Open" data-reveal=".js-invoice">Open</button></div>
-  <div class="js-invoice" hidden>
-    <div class="mk-row plain"><div><b>Riad Yasmine · 4 nights</b><small>Atlas Maroc DMC</small></div><span class="r">€2,960</span></div>
-    <div class="mk-row plain"><div><b>Transfers, Atlas day trip</b><small>Atlas Maroc DMC</small></div><span class="r">€1,440</span></div>
-    <div class="mk-sum"><span class="mk-p">Total</span><b>€4,400</b></div>
+<App
+  active="Trips"
+  title="Priya Nair"
+  meta="MA-0937 · Marrakesh, 4 nights"
+  who="LO"
+  tabs={['Overview', 'Thread', 'Pricing', 'Documents']}
+  tab="Pricing"
+  note="Click the balance row when the money lands. Nothing marks itself paid."
+>
+  <button slot="bar" type="button" class="mk-uibtn o" data-live="set" data-done="Open" data-reveal=".js-invoice">Open invoice</button>
+  <table class="mk-tbl">
+    <colgroup><col style="width:26%" /><col style="width:14%" /><col style="width:16%" /><col style="width:18%" /><col style="width:26%" /></colgroup>
+    <thead><tr><th>Item</th><th>Due</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Deposit · 20%</td><td>14 Jan</td><td class="num">€880</td><td>Transfer</td><td><span class="mk-st go">Received 14 Jan</span></td></tr>
+      <tr data-live="tick" data-on="Received · marked by you" data-off="Due 20 Feb · reminder sent" data-off-amber="true">
+        <td>Balance · 80%</td><td>20 Feb</td><td class="num">€3,520</td><td>Transfer</td>
+        <td><span class="mk-st amb">Due 20 Feb · reminder sent</span></td>
+      </tr>
+      <tr><td>Supplier payout</td><td>24 Feb</td><td class="num">€3,650</td><td>Transfer</td><td><span class="mk-st">Scheduled</span></td></tr>
+      <tr><td>Invoice INV-0937</td><td>14 Jan</td><td class="num">€4,400</td><td>Issued</td><td><span class="mk-st go">Sent</span></td></tr>
+    </tbody>
+  </table>
+  <div class="mk-pane js-invoice" hidden style="margin-top:.55em">
+    <h6>Invoice INV-0937 · from the accepted proposal</h6>
+    <div class="ln"><span>Riad Yasmine · 4 nights · Atlas Maroc</span><span>€2,960</span></div>
+    <div class="ln"><span>Transfers and the Atlas day trip</span><span>€1,440</span></div>
+    <div class="ln"><span>Total, 2 travellers</span><span>€4,400</span></div>
   </div>
-  <span class="mk-fine">Click the balance when it lands.</span>
-</div>
+</App>

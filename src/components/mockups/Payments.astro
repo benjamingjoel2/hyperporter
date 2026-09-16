@@ -1,13 +1,42 @@
 ---
-/** Automated Payment — the request went out; you mark the money. */
+/** Automated payment — the request goes out on its own; the money is marked
+    by a person, on every tier below Intelligence. */
+import App from './App.astro';
 ---
-<div class="mk-panel">
-  <div class="mk-head"><b><span class="mk-dot amb"></span>Deposit · Marrakesh</b><small>MA-0937</small></div>
-  <div class="mk-kpis">
-    <div class="mk-kpi"><span>Requested</span><b>€880</b></div>
-    <div class="mk-kpi"><span>From</span><b style="font-size:1.05em">Priya Nair</b></div>
+<App
+  active="Trips"
+  title="Priya Nair"
+  meta="MA-0937 · Booking"
+  who="LO"
+  tabs={['Overview', 'Pricing', 'Autopilot', 'Documents']}
+  tab="Autopilot"
+  note="The requests go out on their own. Nothing marks itself paid."
+>
+  <div class="mk-metrics">
+    <div class="mk-metric"><span>Requested</span><b>€880</b></div>
+    <div class="mk-metric"><span>Received</span><b>€0</b></div>
+    <div class="mk-metric"><span>Due</span><b>14 Jan</b></div>
+    <div class="mk-metric"><span>Reminders sent</span><b>1</b></div>
   </div>
-  <div class="mk-row"><span class="mk-chk"></span><div><b>Request sent</b><small>Automatic · 09:31</small></div></div>
-  <div class="mk-row js-money"><span class="mk-chk wait"></span><div><b>Money received</b><small>A person marks this</small></div><span class="mk-tag amb">Needs you</span></div>
-  <div class="mk-row plain" style="border-bottom:0;padding-bottom:0"><div class="mk-fine">When it lands:</div><button type="button" class="mk-btn amb" data-live="set" data-row=".js-money" data-done="Received" data-tag="Received" data-small="Marked by you" data-clear="amb">Mark received</button></div>
-</div>
+  <table class="mk-tbl">
+    <colgroup><col style="width:27%" /><col style="width:34%" /><col style="width:14%" /><col style="width:25%" /></colgroup>
+    <thead><tr><th>Step</th><th>Fires</th><th>Last run</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Deposit request</td><td>On acceptance</td><td>09:31</td><td><span class="mk-st go">Sent</span></td></tr>
+      <tr><td>Instructions on her link</td><td>With the request</td><td>09:31</td><td><span class="mk-st go">Shown</span></td></tr>
+      <tr><td>Unpaid reminder</td><td>7 days after due</td><td>—</td><td><span class="mk-st">Scheduled</span></td></tr>
+      <tr class="js-money"><td>Money received</td><td>Never — a person does this</td><td>—</td><td><span class="mk-st amb">Needs you</span></td></tr>
+    </tbody>
+  </table>
+  <div class="mk-foot">
+    <span class="mk-fine">When it lands in the account:</span>
+    <button
+      type="button"
+      class="mk-uibtn amb"
+      data-live="set"
+      data-row=".js-money"
+      data-done="Marked"
+      data-tag="Received · marked by you"
+    >Mark received</button>
+  </div>
+</App>

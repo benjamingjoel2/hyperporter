@@ -290,7 +290,7 @@
    as everything else so it still scales like a photograph of itself. */
 
 .mk-ui{position:absolute;left:5.5%;right:5.5%;top:50%;transform:translateY(-50%);
-  max-height:84%;display:grid;grid-template-columns:7.4em 1fr;font-size:.9em;
+  max-height:84%;display:grid;grid-template-columns:8.6em 1fr;font-size:.9em;
   background:#FCFCFB;border-radius:.7em;overflow:hidden;
   box-shadow:0 0 0 1px rgba(13,16,22,.10),0 2.2em 4.4em rgba(8,12,18,.24)}
 .mk-ui.nonav{grid-template-columns:1fr}
@@ -299,7 +299,8 @@
 .mk-rail2{background:#F3F3F1;border-right:1px solid var(--line);padding:.75em .55em;min-height:100%;
   display:flex;flex-direction:column;gap:.1em;min-width:0}
 .mk-rail2 .brand{display:flex;align-items:center;gap:.4em;padding:.15em .35em .7em;
-  font-weight:500;font-size:.92em;letter-spacing:-.01em}
+  font-weight:500;font-size:.84em;letter-spacing:-.015em;white-space:nowrap;overflow:hidden}
+.mk-rail2 .brand span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mk-rail2 .brand i{width:1.05em;height:1.05em;border-radius:50%;border:.13em solid var(--paper);
   display:inline-block;flex:0 0 auto}
 .mk-rail2 a{display:flex;align-items:center;gap:.42em;padding:.32em .4em;border-radius:.34em;
@@ -311,12 +312,12 @@
 
 /* main column */
 .mk-main{display:flex;flex-direction:column;min-width:0;min-height:0}
-.mk-bar{display:flex;align-items:center;gap:.6em;padding:.62em .85em;border-bottom:1px solid var(--line)}
-.mk-bar b{font-size:.98em;letter-spacing:-.01em}
-.mk-bar small{color:var(--dim);font-size:.8em}
-.mk-bar .sp{margin-left:auto;display:flex;align-items:center;gap:.4em}
+.mk-bar{display:flex;align-items:center;gap:.6em;padding:.62em .85em;border-bottom:1px solid var(--line);overflow:hidden}
+.mk-bar b{font-size:.98em;letter-spacing:-.01em;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-bar small{color:var(--dim);font-size:.8em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mk-bar .sp{margin-left:auto;display:flex;align-items:center;gap:.4em;flex:0 0 auto}
 .mk-pill{border:1px solid var(--line);border-radius:999px;padding:.2em .6em;font-size:.74em;color:var(--muted);white-space:nowrap}
-.mk-bar .av{width:1.35em;height:1.35em;border-radius:50%;background:var(--signal);color:#fff;
+.mk-bar .av{width:1.5em;height:1.5em;flex:0 0 auto;overflow:hidden;border-radius:50%;background:var(--signal);color:#fff;
   font-size:.7em;display:grid;place-items:center;letter-spacing:.02em}
 
 /* tabs */
@@ -334,9 +335,11 @@
 .mk-tbl td{padding:.4em .9em .4em 0;border-bottom:1px solid rgba(13,16,22,.055);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mk-tbl tr:last-child td{border-bottom:0}
-.mk-tbl .who{display:flex;align-items:center;gap:.42em;min-width:0}
-.mk-tbl .who i{width:1.3em;height:1.3em;border-radius:50%;background:#E3E6E4;color:var(--muted);
-  font-size:.7em;display:grid;place-items:center;flex:0 0 auto}
+/* A name with its avatar. Block rather than flex, so a long name gets a
+   real ellipsis instead of running into the next column. */
+.mk-tbl .who{display:block;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-tbl .who i{width:1.85em;height:1.85em;border-radius:50%;background:#E3E6E4;color:var(--muted);
+  font-size:.7em;display:inline-grid;place-items:center;vertical-align:-.45em;margin-right:.45em}
 .mk-tbl .num{font-variant-numeric:tabular-nums;text-align:right}
 .mk-st{display:inline-flex;align-items:center;gap:.3em;font-size:.94em;color:var(--muted);white-space:nowrap}
 .mk-st::before{content:"";width:.42em;height:.42em;border-radius:50%;background:currentColor;opacity:.45}
@@ -358,7 +361,95 @@
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mk-kan .kc.amb{box-shadow:0 .1em .3em rgba(13,16,22,.04),inset .17em 0 0 var(--amber)}
 
+/* A narrow frame gets a denser table rather than a truncated one. */
+@container (max-width: 560px){
+  .mk-tbl{font-size:.74em}
+  .mk-tbl th,.mk-tbl td{padding-right:.6em}
+  .mk-metric b{font-size:1em}
+}
 @container (max-width: 380px){
-  .mk-ui{inset:4%;grid-template-columns:6.4em 1fr}
+  .mk-ui{inset:4%;grid-template-columns:7.2em 1fr}
   .mk-kan .kcol{flex-basis:6.6em}
 }
+
+/* ---- more of the application ---------------------------------------------
+   The pieces a real screen needs beyond a table: a toolbar button, a form
+   laid out in a panel, a conversation in the body, two panes side by side,
+   a metric strip, and the bare page a traveller or a supplier opens from a
+   link — which has a brand bar where the app has navigation, because they
+   are not logged into anything. */
+
+.mk-uibtn{border:0;font:inherit;font-size:.76em;line-height:1.3;padding:.32em .7em;border-radius:.4em;
+  background:var(--paper);color:#fff;white-space:nowrap;cursor:pointer}
+.mk-uibtn.o{background:none;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line-2)}
+.mk-uibtn.amb{background:var(--amber);color:#fff}
+.mk-uibtn.sig{background:var(--signal);color:#fff}
+.mk-uibtn.done{background:none;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line-2);cursor:default}
+.mk-uibtn.done::before{content:"✓ ";color:var(--signal)}
+.mk-uibtn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.mk-tbl td .mk-uibtn{font-size:.9em}
+
+/* a form in the body */
+.mk-form{display:grid;grid-template-columns:1fr 1fr;gap:.45em .6em}
+.mk-form .f{display:flex;flex-direction:column;gap:.18em;min-width:0}
+.mk-form .f.wide{grid-column:1/-1}
+.mk-form label{font-size:.68em;letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+.mk-form .val{border:1px solid var(--line-2);border-radius:.34em;padding:.34em .5em;font-size:.82em;
+  background:#fff;min-height:1.9em;display:flex;align-items:center;justify-content:space-between;gap:.4em}
+.mk-form .val.focus{border-color:var(--signal);box-shadow:0 0 0 .1em var(--signal-dim)}
+.mk-form .val.ph{color:var(--dim)}
+.mk-form .val[contenteditable]:focus{outline:0;border-color:var(--signal)}
+
+/* a conversation in the body */
+.mk-chat{display:flex;flex-direction:column;gap:.45em;min-height:0}
+.mk-chat .mk-msg{font-size:.86em}
+.mk-chat .mk-composer{padding-top:.5em;margin-top:auto}
+.mk-body.talk{display:flex;flex-direction:column;gap:.5em}
+
+/* two panes */
+.mk-two{display:grid;grid-template-columns:1fr 1fr;gap:.55em;align-items:start}
+.mk-pane{border:1px solid var(--line);border-radius:.45em;overflow:hidden;background:#fff;min-width:0}
+.mk-pane > h6{margin:0;padding:.34em .55em;background:#F3F3F1;border-bottom:1px solid var(--line);
+  font-weight:400;font-size:.7em;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.mk-pane .ln{display:flex;justify-content:space-between;gap:.5em;padding:.33em .55em;font-size:.8em;
+  border-bottom:1px solid rgba(13,16,22,.05);min-width:0}
+.mk-pane .ln:last-child{border-bottom:0}
+.mk-pane .ln > :first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-pane .ln > :last-child{color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* a metric strip above a table */
+.mk-metrics{display:flex;gap:.45em;margin-bottom:.5em}
+.mk-metric{flex:1;border:1px solid var(--line);border-radius:.4em;padding:.33em .5em;background:#fff;min-width:0}
+.mk-metric span{display:block;font-size:.68em;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-metric b{display:block;font-weight:400;font-size:1.1em;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.mk-metric b em{font-style:normal;font-size:.6em;color:var(--signal);margin-left:.25em}
+
+/* a column of bars, for a send report */
+.mk-plot{display:flex;align-items:flex-end;gap:.25em;height:3.4em;padding-bottom:.2em;border-bottom:1px solid var(--line)}
+.mk-plot i{flex:1;background:#DCE3E2;border-radius:.1em .1em 0 0}
+.mk-plot i.hi{background:var(--signal)}
+
+/* the bare page: no navigation, a brand bar instead */
+.mk-ui.page .mk-bar{background:#fff}
+.mk-ui.page .mk-bar b{font-size:1.02em}
+.mk-ui.page .mk-body{padding:.75em .95em .9em}
+.mk-hero{font-size:1.5em;letter-spacing:-.02em;line-height:1.15;margin:.1em 0 .45em}
+
+/* an upload / drop target */
+.mk-drop{border:1px dashed var(--line-2);border-radius:.45em;padding:.5em;text-align:center;
+  font-size:.78em;color:var(--dim);margin-top:.5em}
+
+/* bare mode puts the application in flow instead of floating it */
+.mk.bare .mk-ui{position:relative;left:auto;right:auto;top:auto;transform:none;max-height:none;
+  box-shadow:0 0 0 1px rgba(13,16,22,.10),0 1em 2.4em rgba(0,0,0,.28)}
+
+/* live hooks on the application's own parts */
+.mk .mk-kan .kc[data-live="move"]{cursor:pointer;transition:transform .15s ease,box-shadow .2s ease}
+.mk .mk-kan .kc[data-live="move"]:hover{transform:translateY(-1px);box-shadow:0 .1em .3em rgba(13,16,22,.04),inset 0 0 0 1px var(--signal)}
+.mk .mk-tbl tr[data-live="tick"]{cursor:pointer}
+.mk .mk-tbl tr[data-live="tick"]:hover td:first-child{color:var(--signal)}
+.mk .mk-tbl tr[data-live="tick"]:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
+.mk-sub{color:var(--dim)}
+.mk-body > .mk-search{font-size:.82em;padding:.42em .65em;border-radius:.4em;margin-bottom:.5em}
+.mk-body > .mk-search span:first-of-type{color:var(--paper)}
+.mk-body > .mk-msg.sys{font-size:.86em}

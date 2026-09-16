@@ -1,11 +1,34 @@
 ---
-/** DMCs — a quote, line by line; the total is what they receive. */
+/** A DMC quoting, in their own view: their rates, their lines, and the
+    total they receive in full. Horizon's 10% sits on the agency's side of
+    the transaction, not theirs. */
+import App from './App.astro';
+import { SUPPLIER_NAV } from './nav';
 ---
-<div class="mk-panel">
-  <div class="mk-head"><b>Your quote</b><small>per person · USD</small></div>
-  <div class="mk-row plain"><div><b>Offbeat Mara camp · 4 nights</b><small>From your 2026 rate sheet</small></div><span class="r">2,480</span></div>
-  <div class="mk-row plain"><div><b>Shared game drives · 4 days</b></div><span class="r">380</span></div>
-  <div class="mk-row plain"><div><b>Conservancy fees, flights, transfers</b></div><span class="r">954</span></div>
-  <div class="mk-sum"><span class="mk-p">You receive, in full</span><b>USD 3,814</b></div>
-  <div class="mk-foot"><span class="mk-fine">Horizon's 10% is added on the agency's side.</span><span class="mk-btn sig">Send quote</span></div>
-</div>
+<App
+  nav={SUPPLIER_NAV}
+  active="Quotes"
+  brand="Rift Valley"
+  title="Quote · Mara North, 4 nights"
+  meta="Meridian Travel Co. · 2 travellers"
+  who="PK"
+  tabs={['Lines', 'Inclusions', 'Terms', 'Validity']}
+  tab="Lines"
+  note="Horizon’s 10% is added on the agency’s side. You receive this in full."
+>
+  <button slot="bar" type="button" class="mk-uibtn sig" data-live="set" data-done="Sent">Send quote</button>
+  <table class="mk-tbl">
+    <colgroup><col style="width:34%" /><col style="width:22%" /><col style="width:12%" /><col style="width:16%" /><col style="width:16%" /></colgroup>
+    <thead><tr><th>Line</th><th>From your rate sheet</th><th>Nights</th><th>Rate pp</th><th>Total pp</th></tr></thead>
+    <tbody>
+      <tr><td>Offbeat Mara camp</td><td>2026 sheet · p.2</td><td class="num">4</td><td class="num">620</td><td class="num">2,480</td></tr>
+      <tr><td>Shared game drives</td><td>2026 sheet · p.2</td><td class="num">4</td><td class="num">95</td><td class="num">380</td></tr>
+      <tr><td>Conservancy fees</td><td>2026 sheet · p.5</td><td class="num">4</td><td class="num">116</td><td class="num">464</td></tr>
+      <tr><td>Flights and transfers</td><td>2026 sheet · p.7</td><td class="num">—</td><td class="num">490</td><td class="num">490</td></tr>
+    </tbody>
+  </table>
+  <div class="mk-foot">
+    <span class="mk-fine">Per person · USD · valid to 31 March</span>
+    <span class="mk-mono" style="font-size:1.25em">You receive USD 3,814</span>
+  </div>
+</App>

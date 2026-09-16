@@ -1,15 +1,41 @@
 ---
-/** Security — who did what, and what is automatic versus a person. */
-const L = [
-  ['09:31', 'Magic link opened', 'Priya Nair · proposal v3', 'Traveller'],
-  ['08:52', 'Payment marked received', 'Kyoto · €6,470 · Lena Ortiz', 'Human'],
-  ['08:40', 'Sign-in by magic link', 'Daniel Achebe · Lisbon, PT', 'Agent'],
-  ['Yesterday', 'Vault upload', 'Indexed to this account only', 'Owner'],
+/** Security — the access log: who did what, and which of it was a person.
+    SOC 2 and GDPR are targeted post-pilot, not held, and the screen says so
+    in exactly those words. */
+import App from './App.astro';
+
+const L: [string, string, string, string, string][] = [
+  ['09:31', 'Magic link opened', 'Priya Nair · proposal v3', 'Traveller', ''],
+  ['08:52', 'Payment marked received', 'Kyoto · €6,470', 'Lena Ortiz', 'amb'],
+  ['08:40', 'Sign-in by magic link', 'Lisbon, PT · Safari', 'Daniel Achebe', ''],
+  ['08:12', 'Vault read by Atlas', 'Rift Valley GS rates', 'Atlas', ''],
+  ['Yesterday', 'Vault upload', 'Indexed to this account', 'Lena Ortiz', 'amb'],
+  ['Yesterday', 'Margin 16% → 18%', 'KE-2291', 'Lena Ortiz', 'amb'],
 ];
 ---
-<div class="mk-panel wide">
-  <div class="mk-head"><b>Access &amp; audit</b><small>SOC 2 · GDPR — targeted post-pilot</small></div>
-  {L.map(([t, e, d, by]) => (
-    <div class="mk-row"><span class="mk-fine mk-mono" style="min-width:5em">{t}</span><div><b>{e}</b><small>{d}</small></div><span class:list={['mk-tag', { grey: by !== 'Human', amb: by === 'Human' }]}>{by}</span></div>
-  ))}
-</div>
+<App
+  active="Settings"
+  title="Access & audit"
+  meta="Meridian Travel Co."
+  who="LO"
+  tabs={['Account', 'Team', 'Access & audit', 'Data', 'Billing']}
+  tab="Access & audit"
+  note="SOC 2 and GDPR alignment are targeted post-pilot. Neither is certified today."
+>
+  <span slot="bar" class="mk-pill">Last 24 hours</span>
+  <table class="mk-tbl">
+    <colgroup><col style="width:12%" /><col style="width:28%" /><col style="width:27%" /><col style="width:16%" /><col style="width:17%" /></colgroup>
+    <thead><tr><th>When</th><th>Event</th><th>Detail</th><th>Who</th><th>By</th></tr></thead>
+    <tbody>
+      {L.map(([t, e, d, who, tone]) => (
+        <tr>
+          <td>{t}</td>
+          <td>{e}</td>
+          <td>{d}</td>
+          <td>{who}</td>
+          <td><span class:list={['mk-st', tone]}>{tone ? 'A person' : 'System'}</span></td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</App>
