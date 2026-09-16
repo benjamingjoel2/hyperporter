@@ -17,7 +17,8 @@
 import Base from '../../layouts/Base.astro';
 import { OVERVIEWS, SEGMENTS } from '../../lib/content/customers';
 import type { Overview, Segment } from '../../lib/content/customers';
-import Mockup from '../../components/Mockup.astro';
+import StepScreen from '../../components/StepScreen.astro';
+import { STEP_SCREENS } from '../../lib/content/steps';
 import Points from '../../components/Points.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import '../../styles/solutions.css';
@@ -54,6 +55,15 @@ const features = page.features;
 const asWho = (name: string): string => (/^[A-Z]{2}/.test(name) ? name : name.toLowerCase());
 const who = segment ? asWho(segment.name) : overview!.side === 'reseller' ? 'resellers' : 'suppliers';
 const howTitle = overview ? overview.sectionTitle : `How ${who} use Hyperporter`;
+
+/* One screen per step. These pages used to show a single screen beside the
+   whole accordion, so three of every four steps sat next to a picture of
+   something else. */
+const steps = STEP_SCREENS[page.slug];
+if (!steps) throw new Error(`No step screens for "${page.slug}" (content/steps.ts).`);
+if (steps.length !== features.length) {
+  throw new Error(`"${page.slug}": ${features.length} steps but ${steps.length} screens.`);
+}
 ---
 
 <Base
@@ -111,9 +121,11 @@ const howTitle = overview ? overview.sectionTitle : `How ${who} use Hyperporter`
           }
         </div>
         <div class="lg-acc-shot">
-          <div class="on">
-            <Mockup screen={SCREEN[page.slug]} />
-          </div>
+          {steps.map((sc, i) => (
+            <div class:list={{ on: i === 0 }} inert={i !== 0}>
+              <StepScreen screen={sc} ground="warm" app={page.name} alt={`${page.name}: ${features[i].name}`} />
+            </div>
+          ))}
         </div>
       </div>
     </div>
