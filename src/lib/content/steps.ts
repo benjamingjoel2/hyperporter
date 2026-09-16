@@ -27,12 +27,33 @@ export interface StepRow {
 
 export interface StepMsg {
   text: string;
+  /** The channel it arrived on, shown as a chip above the bubble. */
+  via?: string;
   from?: 'me' | 'them';
   cite?: string;
   state?: 'typing';
 }
 
+/** A screen is composed of blocks, so each step can be the interface it
+    describes rather than the same three-row list every time. */
+export type StepBlock =
+  | { k: 'lbl'; lbl: string; title: string }
+  | { k: 'search'; q: string; meta?: string }
+  | { k: 'kpis'; kpis: [string, string][] }
+  | { k: 'fields'; pair?: boolean; fields: [string, string, boolean?][] }
+  | { k: 'cols'; cols: { name: string; cards: [string, string][] }[] }
+  | { k: 'cards'; cards: { title: string; meta: string; price?: string; tag?: string; amber?: boolean; on?: boolean }[] }
+  | { k: 'files'; files: [string, string, string?][] }
+  | { k: 'people'; people: [string, string, string, string?][] }
+  | { k: 'doc'; title: string; lines: string[] }
+  | { k: 'sum'; label: string; value: string }
+  | { k: 'note'; text: string };
+
 export interface StepScreen {
+  /** The faded sheet behind the panel; `lines` are width classes s | m | l. */
+  back?: { title: string; lines: string[] };
+  blocks?: StepBlock[];
+  wide?: boolean;
   head?: [string, string];
   rows?: StepRow[];
   msgs?: StepMsg[];
@@ -44,42 +65,62 @@ export interface StepScreen {
 export const STEP_SCREENS: Record<string, StepScreen[]> = {
   // ---------------------------------------------------------------- tools
   portal: [
+    /* A lead arriving: three real messages, on the three channels they come
+       in on, with the people who sent them — not a list of channel names. */
     {
+      back: { title: 'Meridian Travel Co.', lines: ['l', 'm', 'l', 's'] },
       head: ['Inbox', '3 new'],
-      rows: [
-        { b: 'Lena Ortiz', s: 'Inquiry form · Nairobi, 9 nights', state: 'now' },
-        { b: 'Tom Achebe', s: 'Email · forwarded from hello@', state: 'wait' },
-        { b: 'Mira Sato', s: 'WhatsApp · +81 ··· 4417', state: 'wait' },
+      blocks: [
+        { k: 'people', people: [
+          ['LO', 'Lena Ortiz', '“Kenya in March, 9 nights, two of us…”', 'Inquiry form'],
+          ['TA', 'Tom Achebe', '“Is the Mara good in March? Budget ~€4k pp.”', 'Email'],
+          ['MS', 'Mira Sato', '“Hi! Planning a safari — where do we start?”', 'WhatsApp'],
+        ] },
+        { k: 'note', text: 'However they reach you, it starts here.' },
       ],
-      foot: ['Every channel lands in the same place.'],
     },
+    /* Getting quotes: an actual thread with the supplier, and the document
+       they attached. */
     {
       head: ['Rift Valley Ground Services', 'KE-2291'],
       msgs: [
         { text: 'Nairobi, 3 – 12 March. 2 travellers, wildlife and walking, no long drives. Can you quote?', from: 'me' },
         { text: 'Yes — €4,180 per person, full board. Park fees included. Holding until Friday.', from: 'them' },
       ],
-      foot: ['Their reply lands on the trip, where your whole team can see it.'],
-    },
-    {
-      head: ['Magic link', 'No password'],
-      rows: [
-        { b: 'Supplier link', s: 'The request and their own quote only', tag: 'Sent' },
-        { b: 'Your margin', s: 'Set by you, added before the traveller sees it', state: 'done' },
-        { b: 'Traveller link', s: 'Your branding · price including your margin', tag: 'Sent' },
+      blocks: [
+        { k: 'files', files: [['Rift Valley GS — Nairobi 9N.pdf', 'Their own quote, as sent · 240 KB', 'Attached']] },
+        { k: 'note', text: 'Their reply lands on the trip, where your whole team can see it.' },
       ],
-      foot: ['Each side sees only their own view of the trip.'],
     },
+    /* The magic link: the two views themselves, side by side, showing what
+       each side actually sees — which is the whole point of the step. */
     {
-      head: ['After the trip', 'KE-2291'],
-      rows: [
-        { b: 'Every message kept', s: 'Both sides, in order', state: 'done' },
-        { b: 'Rates as quoted', s: 'What was agreed, and when', state: 'done' },
-        { b: 'Ready to repeat', s: 'Duplicate for the next inquiry', tag: 'Reuse' },
+      blocks: [
+        { k: 'lbl', lbl: 'One trip · two links', title: 'What each side opens' },
+        { k: 'cards', cards: [
+          { title: 'Traveller', meta: 'Meridian Travel Co. · 9 nights, Kenya', price: '€4,932 pp', tag: 'Your branding' },
+          { title: 'Supplier', meta: 'The request and their own quote', price: '€4,180 pp', tag: 'Their rate' },
+        ] },
+        { k: 'sum', label: 'Your margin, added between the two', value: '18%' },
+        { k: 'note', text: 'Neither side sees the other’s number.' },
       ],
-      foot: ['The record outlives the trip.'],
+    },
+    /* Archived: the record itself, as a document, with what it is kept for. */
+    {
+      back: { title: 'KE-2291 · archived', lines: ['m', 'l', 's'] },
+      head: ['Lena & Mark Ortiz', 'Kenya · March 2026'],
+      blocks: [
+        { k: 'doc', title: 'What the record keeps', lines: [
+          'Every message, both sides, in order',
+          'Rates as quoted — what was agreed, and when',
+          'The supplier’s own document, as they sent it',
+        ] },
+        { k: 'kpis', kpis: [['Messages', '48'], ['Documents', '6']] },
+      ],
+      foot: ['Start the next trip from this one.', 'Duplicate', false],
     },
   ],
+
 
   'atlas-ai': [
     {
@@ -585,42 +626,50 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
 
   // ----------------------------------------------------------- automations
   inquiry: [
+    /* The raw message, exactly as it arrives — unstructured, on a channel. */
     {
-      head: ['A message lands', 'Any channel'],
-      rows: [
-        { b: 'Inquiry form', s: 'meridiantravel.co/enquire', state: 'done' },
-        { b: 'Email', s: 'Forwarded from hello@', state: 'done' },
-        { b: 'WhatsApp', s: '+254 ··· 8810', state: 'done' },
-      ],
-      foot: ['However they reach you, it starts here.'],
-    },
-    {
-      head: ['Brief', 'Being built'],
-      rows: [
-        { b: 'Kenya · 3 – 12 March', s: 'Read from the message', state: 'done' },
-        { b: '2 adults', s: 'Read from the message', state: 'done' },
-        { b: 'Budget', s: 'Not given', state: 'wait' },
-      ],
-      foot: ['Parsed into a structured brief, not a paragraph.'],
-    },
-    {
-      head: ['Asked about', 'Only the gaps'],
+      wide: false,
+      head: ['WhatsApp', '+81 ··· 4417'],
       msgs: [
-        { text: 'Two more things and I can get you options: rough budget per person, and are the dates fixed?', from: 'me' },
-        { text: 'About €5k each, and yes — fixed.', from: 'them' },
+        { via: 'Mira Sato · WhatsApp', text: 'Hi! Me and my husband want to do Kenya sometime in March, maybe 9 or 10 days. We love wildlife but not hours in a jeep. Around 4k each?', from: 'them' },
       ],
-      foot: ['It asks for what is missing. Nothing else.'],
+      blocks: [{ k: 'note', text: 'One paragraph, no structure, on whatever channel they use.' }],
     },
+    /* The same message, parsed into the fields of a brief. */
     {
-      head: ['Confirmed', 'Moving to Planning'],
-      rows: [
-        { b: 'Brief confirmed with the traveller', s: 'In their own words', state: 'done' },
-        { b: 'Trip record created', s: 'KE-2291', state: 'done' },
-        { b: 'Stage 2 of 9', s: 'Planning', tag: 'Planning' },
+      blocks: [
+        { k: 'lbl', lbl: 'Parsed from that message', title: 'The brief' },
+        { k: 'fields', pair: true, fields: [['Where', 'Kenya · the Mara'], ['When', 'March · 9 – 10 nights']] },
+        { k: 'fields', pair: true, fields: [['Travellers', '2 adults'], ['Budget, per person', '€4,000']] },
+        { k: 'fields', fields: [['Wants', 'Wildlife, walking — no long drives', true]] },
+        { k: 'note', text: 'Every field taken from what they actually wrote.' },
       ],
-      foot: ['Confirmed with them before it moves on.'],
+    },
+    /* The gap, asked as one question rather than a form to fill in. */
+    {
+      wide: false,
+      head: ['One question back', 'Not a form'],
+      msgs: [
+        { text: 'Two things before I price it: are the dates fixed, and is a fly-in camp in budget?', from: 'me' },
+        { text: 'Dates flexible by a few days. Fly-in is fine if it saves driving.', from: 'them' },
+      ],
+      blocks: [{ k: 'note', text: 'Only what is genuinely missing, batched into one message.' }],
+    },
+    /* The confirmed brief — and the line that says a person still decides. */
+    {
+      head: ['Brief · KE-2292', 'Confirmed by the traveller'],
+      blocks: [
+        { k: 'doc', title: 'Kenya · 9 nights · 2 adults', lines: [
+          'Dates flexible, early March',
+          'Wildlife and walking, no long drives',
+          'Fly-in acceptable · €4,000 per person',
+        ] },
+        { k: 'note', text: 'Nothing advances until they confirm it in their own words.' },
+      ],
+      foot: ['Ready to quote', 'Open the board', false],
     },
   ],
+
 
   quotation: [
     {
