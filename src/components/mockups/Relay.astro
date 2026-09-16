@@ -6,7 +6,6 @@ import App from './App.astro';
 const REPLIES = ['Perfect, 15:00. Thank you!'];
 ---
 <App
-  active="Trips"
   title="Sofia Brandt"
   meta="JP-0338 · Kyoto, day 4 of 8"
   who="LO"
@@ -18,7 +17,6 @@ const REPLIES = ['Perfect, 15:00. Thank you!'];
   <div class="mk-chat" data-thread>
     <div class="mk-msg"><span class="mk-via">Sofia · traveller · WhatsApp</span><p>Train delayed. Arriving 10:40, not 10. Can the driver wait?</p></div>
     <div class="mk-msg me"><span class="mk-via">Relayed to the driver · automatic</span><p>No problem. North exit, 10:40.</p></div>
-    <div class="mk-msg"><span class="mk-via">Sofia · traveller · WhatsApp</span><p>Could the tea ceremony move to 15:00?</p></div>
     <div class="mk-msg sys"><p>Changes a booking — held for you. <button type="button" class="mk-uibtn amb" data-live="set" data-done="Yours" data-reveal=".js-relay">Take over</button></p></div>
     <form class="mk-composer js-relay" hidden data-live="chat" data-replies={JSON.stringify(REPLIES)} data-reply-via="Sofia · traveller · WhatsApp" data-me-via="You · to Sofia">
       <input type="text" placeholder="Answer Sofia…" aria-label="Reply to Sofia" autocomplete="off" />

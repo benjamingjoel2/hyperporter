@@ -4,7 +4,6 @@
 import App from './App.astro';
 ---
 <App
-  active="Settings"
   title="Plan & billing"
   meta="Meridian Travel Co."
   who="LO"
@@ -13,13 +12,7 @@ import App from './App.astro';
   note="Portal and Horizon are on every tier, including the free one."
 >
   <span slot="bar" class="mk-pill">Autopilot · €49/mo</span>
-  <div class="mk-metrics">
-    <div class="mk-metric"><span>Plan</span><b>Autopilot</b></div>
-    <div class="mk-metric"><span>Per month</span><b>€49</b></div>
-    <div class="mk-metric"><span>Trips this month</span><b>23</b></div>
-    <div class="mk-metric"><span>Agents</span><b>4</b></div>
-  </div>
-  <table class="mk-tbl">
+  <table class="mk-tbl tight">
     <colgroup><col style="width:24%" /><col style="width:46%" /><col style="width:30%" /></colgroup>
     <thead><tr><th>Layer</th><th>What it carries</th><th>On this plan</th></tr></thead>
     <tbody>

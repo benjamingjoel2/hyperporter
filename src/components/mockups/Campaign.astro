@@ -3,10 +3,8 @@
     instead of in a separate marketing inbox. */
 import App from './App.astro';
 
-const BARS = [38, 44, 41, 52, 47, 55, 49, 61, 44, 48, 58, 61];
 ---
 <App
-  active="Reports"
   title="March in the Mara — four places left"
   meta="Sent 2 Feb · 09:00"
   who="LO"
@@ -20,8 +18,7 @@ const BARS = [38, 44, 41, 52, 47, 55, 49, 61, 44, 48, 58, 61];
     <div class="mk-metric"><span>Replies</span><b>9</b></div>
     <div class="mk-metric"><span>New trips</span><b>4</b></div>
   </div>
-  <div class="mk-plot">{BARS.map((h, i) => <i style={`height:${h}%`} class:list={{ hi: i === 11 }} />)}</div>
-  <table class="mk-tbl" style="margin-top:.5em">
+  <table class="mk-tbl">
     <colgroup><col style="width:24%" /><col style="width:42%" /><col style="width:18%" /><col style="width:16%" /></colgroup>
     <thead><tr><th>Replied</th><th>What they said</th><th>Landed on</th><th>State</th></tr></thead>
     <tbody>

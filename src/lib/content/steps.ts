@@ -53,9 +53,8 @@ export type StepBlock =
     and a dense table or the full pipeline board. A screen that claims to be
     a CRM has to look like one. */
 export interface StepShell {
-  brand?: string;
-  nav?: string[];
-  active?: string;
+  /** Whose application this is, at the head of the toolbar; false for none. */
+  brand?: string | false;
   title: string;
   meta?: string;
   pills?: string[];
@@ -82,13 +81,10 @@ export interface StepScreen {
   foot?: [string, string?, boolean?];
 }
 
-/** The Portal's own left-hand navigation, as built. */
-const NAV = ['Home', 'Trips', 'Contacts', 'Suppliers', 'Horizon', 'Vault', 'Reports', 'Settings'];
-
 export const STEP_SCREENS: Record<string, StepScreen[]> = {
   // ---------------------------------------------------------------- tools
   portal: [
-    { shell: { nav: NAV, active: 'Home', title: 'Inbox', meta: '3 new', who: 'LO',
+    { shell: { title: 'Inbox', meta: '3 new', who: 'LO',
       pills: ['Unassigned'],
       table: { cols: ['From', 'What they wrote', 'Channel', 'When'], avatars: true,
         w: ['22%', '44%', '17%', '17%'],
@@ -100,7 +96,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
         ] },
       note: 'However they reach you, it starts here — matched to a contact or opening one.' } },
 
-    { shell: { nav: NAV, active: 'Trips', title: 'Lena & Mark Ortiz', meta: 'KE-2291 · Quotation', who: 'LO',
+    { shell: { title: 'Lena & Mark Ortiz', meta: 'KE-2291 · Quotation', who: 'LO',
       tabs: ['Overview', 'Quotation board', 'Pricing', 'Magic link', 'Autopilot'], tab: 'Quotation board',
       table: { cols: ['Supplier', 'Offer', 'Cost pp', 'Sells at', 'Document', 'Status'],
         avatars: true, w: ['28%', '18%', '12%', '13%', '15%', '14%'],
@@ -109,7 +105,6 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
           [['Rift Valley Ground Services', 'RV'], 'Shorter · 5 days', '€2,890', '€3,410', 'PDF · 198 KB', '#go:In'],
           [['Baobab Eco Safaris', 'BE'], 'Walking · 7 days', '€3,880', '€4,578', 'PDF · 310 KB', '#go:In'],
           [['Acacia Safari Logistics', 'AS'], 'Classic · 8 days', '—', '—', '—', '#amb:Reminded'],
-          [['Mara North Collective', 'MN'], 'Lodging · 4 nights', '€1,960', '€2,313', 'XLS · 44 KB', '#go:In'],
         ] },
       note: 'Every quote you receive, on the trip, visible to everyone on your team.' } },
 
@@ -123,7 +118,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
         { k: 'note', text: 'Neither side sees the other’s number.' },
       ] },
 
-    { shell: { nav: NAV, active: 'Trips', title: 'Trips · closed', meta: 'KE-2291 archived', who: 'LO',
+    { shell: { title: 'Trips · closed', meta: 'KE-2291 archived', who: 'LO',
       pills: ['Completed'],
       table: { cols: ['Kept on the record', 'Detail', 'Count'], num: [2], w: ['34%', '46%', '20%'],
         rows: [
@@ -168,7 +163,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
 
 
   'crm-workflow': [
-    { shell: { nav: NAV, active: 'Trips', title: 'Trips', meta: '14 open', who: 'LO',
+    { shell: { title: 'Trips', meta: '14 open', who: 'LO',
       pills: ['All agents', 'This quarter'],
       kanban: [
         { name: 'Inquiry', n: '3', cards: [['Mira Sato', 'Japan · Oct'], ['R. Fontaine', 'Peru · Jun'], ['H. Okonkwo', 'Egypt · Feb']] },
@@ -180,22 +175,19 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
       ],
       note: 'One board for the whole agency. Colour is only ever a thread that needs a person.' } },
 
-    { shell: { nav: NAV, active: 'Trips', title: 'Lena & Mark Ortiz', meta: 'KE-2291 · Quotation', who: 'LO',
+    { shell: { title: 'Lena & Mark Ortiz', meta: 'KE-2291 · Quotation', who: 'LO',
       tabs: ['Overview', 'Quotation board', 'Pricing', 'Magic link', 'Autopilot'], tab: 'Quotation board',
       table: { cols: ['Supplier', 'Offer', 'Cost pp', 'Margin', 'Sells at', 'Status'],
         avatars: true, num: [2, 4], w: ['31%', '18%', '12%', '9%', '14%', '16%'],
         rows: [
           [['Rift Valley Ground Services', 'RV'], 'Classic · 8 days', '€4,180', '18%', '€4,932', '#go:Released'],
-          [['Rift Valley Ground Services', 'RV'], 'Shorter · 5 days', '€2,890', '18%', '€3,410', '#go:Released'],
           [['Baobab Eco Safaris', 'BE'], 'Walking · 7 days', '€3,880', '18%', '€4,578', '#go:Released'],
           [['Acacia Safari Logistics', 'AS'], 'Classic · 8 days', '€4,505', '—', '—', '#amb:Draft'],
           [['Karen Overland Co.', 'KO'], 'Transfers only', '—', '—', '—', '#red:Declined'],
-          [['Mara North Collective', 'MN'], 'Lodging · 4 nights', '€1,960', '18%', '€2,313', '#go:Released'],
-          [['Lamu Dhow Collective', 'LD'], 'Coast · 3 days', '€1,140', '—', '—', '#amb:Draft'],
         ] },
       note: 'Cost and margin are on your side of the table. The traveller sees the last column only.' } },
 
-    { shell: { nav: NAV, active: 'Trips', title: 'Lena & Mark Ortiz', meta: 'KE-2291 · Booking', who: 'LO',
+    { shell: { title: 'Lena & Mark Ortiz', meta: 'KE-2291 · Booking', who: 'LO',
       tabs: ['Overview', 'Quotation board', 'Pricing', 'Magic link', 'Autopilot'], tab: 'Pricing',
       table: { cols: ['Item', 'Due', 'Amount', 'Method', 'Status'], num: [2], w: ['30%', '13%', '15%', '15%', '27%'],
         rows: [
@@ -203,13 +195,10 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
           ['Balance · 70%', '1 Mar', '€3,452', 'Transfer', '#:Not due'],
           ['Rift Valley GS payout', '5 Mar', '€4,180', 'Transfer', '#:Scheduled'],
           ['Vouchers · 2 of 3 in', '20 Feb', '—', 'Upload', '#amb:Chasing'],
-          ['Traveller documents', '20 Feb', '—', 'Upload', '#go:Complete'],
-          ['Ground contact', '25 Feb', '—', 'Form', '#amb:Chasing'],
-          ['Invoice INV-0412', '14 Feb', '€1,480', 'Issued', '#go:Sent'],
         ] },
       note: 'Below Intelligence nothing marks itself paid — the amber rows are yours.' } },
 
-    { shell: { nav: NAV, active: 'Trips', title: 'Trips · closed', meta: '9 this quarter', who: 'LO',
+    { shell: { title: 'Trips · closed', meta: '9 this quarter', who: 'LO',
       pills: ['Completed', 'Lost', 'Cancelled'],
       table: { cols: ['Traveller', 'Trip', 'Closed', 'Value', 'Outcome'], avatars: true, num: [3], w: ['27%', '24%', '13%', '13%', '23%'],
         rows: [
@@ -217,10 +206,6 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
           [['K. Adeyemi', 'KA'], 'Kenya · 6 nights', '2 Mar', '€6,120', '#go:Completed'],
           [['S. Ferreira', 'SF'], 'Morocco · 5 nights', '28 Feb', '—', '#red:Lost · price'],
           [['H. Okonkwo', 'HO'], 'Egypt · 8 nights', '19 Feb', '—', '#red:Lost · no reply'],
-          [['A. Silva', 'AS'], 'Portugal · 4 nights', '11 Feb', '€3,280', '#go:Completed'],
-          [['J. Mendes', 'JM'], 'Chile · 7 nights', '4 Feb', '€7,410', '#go:Completed'],
-          [['R. Fontaine', 'RF'], 'Peru · 9 nights', '30 Jan', '—', '#red:Cancelled'],
-          [['D. Mwangi', 'DM'], 'Tanzania · 6 nights', '22 Jan', '€5,940', '#go:Completed'],
         ] },
       note: 'Lost carries the stage it stopped at, which is where the funnel actually leaks.' } },
   ],
@@ -265,7 +250,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
 
 
   'quotation-board': [
-    { shell: { nav: NAV, active: 'Trips', title: 'Lena & Mark Ortiz', meta: 'KE-2291 · flexible, March', who: 'LO',
+    { shell: { title: 'Lena & Mark Ortiz', meta: 'KE-2291 · flexible, March', who: 'LO',
       tabs: ['Overview', 'Quotation board', 'Pricing', 'Magic link'], tab: 'Quotation board',
       table: { cols: ['Offer', 'Supplier', 'Shape', 'Their document', 'Received'],
         w: ['20%', '26%', '20%', '19%', '15%'],
@@ -275,7 +260,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
           ['Offer 3', 'Baobab Eco Safaris', 'Walking · 7 days', 'PDF · 310 KB', '11:02'],
         ] },
       note: 'One supplier can send more than one. Each offer is a whole trip, not a price.' } },
-    { shell: { nav: NAV, active: 'Trips', title: 'Offer 3 · Baobab Eco Safaris', meta: 'Draft — not released', who: 'LO',
+    { shell: { title: 'Offer 3 · Baobab Eco Safaris', meta: 'Draft — not released', who: 'LO',
       tabs: ['Itinerary', 'Hotels', 'Inclusions', 'Terms', 'Pricing'], tab: 'Pricing',
       table: { cols: ['Line', 'Cost pp', 'Margin', 'Sells at', 'Visible to client'], num: [1, 3],
         w: ['30%', '15%', '13%', '15%', '27%'],
@@ -294,7 +279,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
           ['Shorter', '5 days · same supplier', '€3,410', 'If the dates have to tighten'],
         ] },
       note: 'The traveller’s own view. Selling price only — never the cost, never your margin.' } },
-    { shell: { nav: NAV, active: 'Trips', title: 'Walking · 7 days', meta: 'Chosen by the traveller', who: 'LO',
+    { shell: { title: 'Walking · 7 days', meta: 'Chosen by the traveller', who: 'LO',
       table: { cols: ['Offer', 'Supplier', 'Price pp', 'State'],
         w: ['24%', '30%', '16%', '30%'],
         rows: [
@@ -369,7 +354,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
 
 
   'three-way-inbox': [
-    { shell: { nav: NAV, active: 'Trips', title: 'Lena & Mark Ortiz', meta: 'KE-2291 · one thread', who: 'LO',
+    { shell: { title: 'Lena & Mark Ortiz', meta: 'KE-2291 · one thread', who: 'LO',
       tabs: ['Overview', 'Thread', 'Quotation board', 'Pricing'], tab: 'Thread',
       table: { cols: ['Side', 'Who', 'Message', 'Channel'], avatars: false,
         w: ['14%', '22%', '46%', '18%'],
@@ -387,7 +372,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
         { b: 'To the driver', s: 'WhatsApp · +254 ··· 8810', state: 'done' },
       ],
       blocks: [{ k: 'note', text: 'They never see each other’s channel, or each other.' }] },
-    { shell: { nav: NAV, active: 'Trips', title: 'KE-2291', meta: 'Full history', who: 'LO',
+    { shell: { title: 'KE-2291', meta: 'Full history', who: 'LO',
       tabs: ['Overview', 'Thread', 'Quotation board', 'Pricing'], tab: 'Thread',
       table: { cols: ['Time', 'Event', 'By', 'Kind'], w: ['14%', '46%', '22%', '18%'],
         rows: [
@@ -398,7 +383,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
           ['13:05', 'Proposal shared with traveller', 'Lena Ortiz', '#:By a person'],
         ] },
       note: 'Automatic steps appear as steps, so the history is complete.' } },
-    { shell: { nav: NAV, active: 'Home', title: 'Needs a person', meta: '2 flagged', who: 'LO',
+    { shell: { title: 'Needs a person', meta: '2 flagged', who: 'LO',
       table: { cols: ['Trip', 'What happened', 'Raised', 'Action'], w: ['22%', '40%', '16%', '22%'],
         rows: [
           ['KE-2291', 'Driver not at the gate · flight in 2 h', '05:52', '#amb:Decide'],
@@ -411,7 +396,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
 
 
   'document-vault': [
-    { shell: { nav: NAV, active: 'Vault', title: 'Vault', meta: '61 documents', who: 'LO',
+    { shell: { title: 'Vault', meta: '61 documents', who: 'LO',
       pills: ['All suppliers', '2026'],
       table: { cols: ['Document', 'Supplier', 'Covers', 'Uploaded', 'Status'],
         w: ['32%', '24%', '16%', '14%', '14%'],
@@ -423,7 +408,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
           ['Karen Overland — transfers.pdf', 'Karen Overland', '19 rates', '9 Dec', '#red:Expired'],
         ] },
       note: 'Supplier and year are picked up from the document. You confirm them.' } },
-    { shell: { nav: NAV, active: 'Vault', title: 'Rift Valley GS — rates 2026.pdf', meta: '48 rates extracted', who: 'LO',
+    { shell: { title: 'Rift Valley GS — rates 2026.pdf', meta: '48 rates extracted', who: 'LO',
       tabs: ['Extracted', 'Source pages', 'Access log'], tab: 'Extracted',
       table: { cols: ['Line', 'Rate', 'Unit', 'Valid to', 'Page'], num: [1],
         w: ['32%', '14%', '20%', '16%', '18%'],
@@ -434,7 +419,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
           ['Child rate · under 12', '−35%', 'of the adult rate', '31 Mar', 'p.6'],
         ] },
       note: 'Every figure shown against the page it came from, for you to check.' } },
-    { shell: { nav: NAV, active: 'Vault', title: 'Vault', meta: 'Searched', who: 'LO',
+    { shell: { title: 'Vault', meta: 'Searched', who: 'LO',
       pills: ['park fee, Mara North, March'],
       table: { cols: ['Match', 'Document', 'Where', 'Confidence'],
         w: ['30%', '34%', '16%', '20%'],
@@ -456,7 +441,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
 
 
   'itinerary-generator': [
-    { shell: { nav: NAV, active: 'Trips', title: 'Mira Sato', meta: 'KE-2292 · Planning', who: 'LO',
+    { shell: { title: 'Mira Sato', meta: 'KE-2292 · Planning', who: 'LO',
       tabs: ['Overview', 'Itinerary', 'Quotation board'], tab: 'Overview',
       table: { cols: ['Field', 'From the inquiry', 'State'], w: ['24%', '50%', '26%'],
         rows: [
@@ -466,7 +451,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
           ['Budget', '€4,000 per person', '#go:Given'],
           ['Pace', '—', '#amb:Asked, not assumed'],
         ] } } },
-    { shell: { nav: NAV, active: 'Suppliers', title: 'Matching', meta: 'From your Vault', who: 'LO',
+    { shell: { title: 'Matching', meta: 'From your Vault', who: 'LO',
       table: { cols: ['Part', 'Supplier', 'Rate', 'Valid to', 'Use'],
         w: ['22%', '28%', '15%', '15%', '20%'],
         rows: [
@@ -475,7 +460,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
           ['Transfers', 'Karen Overland Co.', 'USD 180 pp', 'Expired', '#red:Skipped'],
         ] },
       note: 'Only a supplier with a rate valid for those dates is used.' } },
-    { shell: { nav: NAV, active: 'Trips', title: 'Itinerary · draft', meta: 'KE-2292 · 9 nights', who: 'LO',
+    { shell: { title: 'Itinerary · draft', meta: 'KE-2292 · 9 nights', who: 'LO',
       tabs: ['Overview', 'Itinerary', 'Quotation board'], tab: 'Itinerary',
       table: { cols: ['Day', 'Where', 'What', 'Priced from'], w: ['12%', '22%', '36%', '30%'],
         rows: [
@@ -485,7 +470,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
           ['8 – 9', 'Rift Valley', 'Lakes, return transfer', 'Mara North · p.1'],
         ] },
       note: 'Every line cited to the contract it was priced from.' } },
-    { shell: { nav: NAV, active: 'Trips', title: 'Mira Sato', meta: 'KE-2292 · Planning', who: 'LO',
+    { shell: { title: 'Mira Sato', meta: 'KE-2292 · Planning', who: 'LO',
       tabs: ['Overview', 'Itinerary', 'Quotation board'], tab: 'Itinerary',
       table: { cols: ['State', 'Detail', 'Who'], w: ['26%', '46%', '28%'],
         rows: [
@@ -498,7 +483,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
 
 
   'payments-invoicing': [
-    { shell: { nav: NAV, active: 'Trips', title: 'Lena & Mark Ortiz', meta: 'KE-2291 · Pricing', who: 'LO',
+    { shell: { title: 'Lena & Mark Ortiz', meta: 'KE-2291 · Pricing', who: 'LO',
       tabs: ['Overview', 'Quotation board', 'Pricing', 'Magic link'], tab: 'Pricing',
       table: { cols: ['Item', 'Due', 'Amount', 'Shown to traveller', 'Status'], num: [2],
         w: ['28%', '13%', '15%', '22%', '22%'],
@@ -509,7 +494,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
           ['Reference KE-2291', '—', '—', 'On their link', '#go:Shown'],
         ] },
       note: 'Amount, due date and how to pay — on every tier, including Showcase.' } },
-    { shell: { nav: NAV, active: 'Trips', title: 'Autopilot', meta: 'KE-2291', who: 'LO',
+    { shell: { title: 'Autopilot', meta: 'KE-2291', who: 'LO',
       tabs: ['Overview', 'Quotation board', 'Pricing', 'Autopilot'], tab: 'Autopilot',
       table: { cols: ['Step', 'Fires', 'Last run', 'Status'],
         w: ['32%', '26%', '20%', '22%'],
@@ -527,7 +512,7 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
         { b: 'Then: Booking, supplier told', s: 'Follows your mark', state: 'wait' },
       ],
       foot: ['When it lands:', 'Mark received', true] },
-    { shell: { nav: NAV, active: 'Trips', title: 'Gateway processing', meta: 'Intelligence', who: 'LO',
+    { shell: { title: 'Gateway processing', meta: 'Intelligence', who: 'LO',
       table: { cols: ['Movement', 'Party', 'Amount', 'Cleared', 'Stage'], num: [2],
         w: ['26%', '24%', '15%', '15%', '20%'],
         rows: [

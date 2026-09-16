@@ -21,18 +21,14 @@ const DID: [string, string][] = [
 const CURRENT = 4;
 ---
 <App
-  active="Trips"
   title="Lena & Mark Ortiz"
   meta="KE-2291 · Nairobi, 9 nights"
   who="LO"
-  tabs={['Overview', 'Thread', 'Quotation board', 'Pricing', 'Autopilot']}
-  tab="Autopilot"
-  note="Escalation is designed in. The amber stages never run without you."
 >
   <span slot="bar" class="mk-pill">3 of 9 done</span>
-  <table class="mk-tbl">
-    <colgroup><col style="width:5%" /><col style="width:18%" /><col style="width:42%" /><col style="width:15%" /><col style="width:20%" /></colgroup>
-    <thead><tr><th>#</th><th>Stage</th><th>What it did</th><th>When</th><th>Runs</th></tr></thead>
+  <table class="mk-tbl tight">
+    <colgroup><col style="width:19%" /><col style="width:43%" /><col style="width:15%" /><col style="width:23%" /></colgroup>
+    <thead><tr><th>Stage</th><th>What it did</th><th>When</th><th>Runs</th></tr></thead>
     <tbody>
       {STAGES.map((s, i) => {
         const n = i + 1;
@@ -41,7 +37,6 @@ const CURRENT = 4;
         const now = n === CURRENT;
         return (
           <tr>
-            <td class="num">{s.n}</td>
             <td>{s.name}</td>
             <td>{DID[i][0]}</td>
             <td>{DID[i][1]}</td>

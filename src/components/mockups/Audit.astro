@@ -9,12 +9,9 @@ const L: [string, string, string, string, string][] = [
   ['08:52', 'Payment marked received', 'Kyoto · €6,470', 'Lena Ortiz', 'amb'],
   ['08:40', 'Sign-in by magic link', 'Lisbon, PT · Safari', 'Daniel Achebe', ''],
   ['08:12', 'Vault read by Atlas', 'Rift Valley GS rates', 'Atlas', ''],
-  ['Yesterday', 'Vault upload', 'Indexed to this account', 'Lena Ortiz', 'amb'],
-  ['Yesterday', 'Margin 16% → 18%', 'KE-2291', 'Lena Ortiz', 'amb'],
 ];
 ---
 <App
-  active="Settings"
   title="Access & audit"
   meta="Meridian Travel Co."
   who="LO"
@@ -24,7 +21,7 @@ const L: [string, string, string, string, string][] = [
 >
   <span slot="bar" class="mk-pill">Last 24 hours</span>
   <table class="mk-tbl">
-    <colgroup><col style="width:12%" /><col style="width:28%" /><col style="width:27%" /><col style="width:16%" /><col style="width:17%" /></colgroup>
+    <colgroup><col style="width:11%" /><col style="width:28%" /><col style="width:28%" /><col style="width:16%" /><col style="width:17%" /></colgroup>
     <thead><tr><th>When</th><th>Event</th><th>Detail</th><th>Who</th><th>By</th></tr></thead>
     <tbody>
       {L.map(([t, e, d, who, tone]) => (

@@ -34,15 +34,10 @@ const { shell, back, head, blocks = [], rows = [], msgs = [], composer, foot } =
   <div class="mk" data-ground={ground} role="group" aria-label={alt}>
     <div class="mk-stage">
       {shell && (
-        <div class:list={['mk-ui', { nonav: !shell.nav }]}>
-          {shell.nav && (
-            <div class="mk-rail2">
-              <span class="brand"><i /><span>{shell.brand ?? 'Hyperporter'}</span></span>
-              {shell.nav.map((n) => <a class:list={{ on: n === shell.active }}><i />{n}</a>)}
-            </div>
-          )}
+        <div class="mk-ui">
           <div class="mk-main">
             <div class="mk-bar">
+              {shell.brand !== false && <span class="mk-brand"><i />{shell.brand ?? 'Hyperporter'}</span>}
               <b>{shell.title}</b>
               {shell.meta && <small>{shell.meta}</small>}
               <span class="sp">

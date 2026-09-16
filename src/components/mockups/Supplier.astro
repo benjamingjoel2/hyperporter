@@ -3,12 +3,9 @@
     an agency, in the supplier's own view, over a photograph. A supplier
     signs into their requests — never into Horizon. */
 import App from './App.astro';
-import { SUPPLIER_NAV } from './nav';
 ---
 <div class="mk-back mk-back-photo" style="--back-photo:url('/photos/supplier-card.jpg');--back-pos:center 64%" aria-hidden="true"></div>
 <App
-  nav={SUPPLIER_NAV}
-  active="Requests"
   brand="Rift Valley"
   title="Requests"
   meta="2 new"
@@ -18,14 +15,13 @@ import { SUPPLIER_NAV } from './nav';
 >
   <button slot="bar" type="button" class="mk-uibtn sig" data-live="set" data-done="Quoted">Send quote</button>
   <table class="mk-tbl">
-    <colgroup><col style="width:29%" /><col style="width:25%" /><col style="width:8%" /><col style="width:15%" /><col style="width:23%" /></colgroup>
+    <colgroup><col style="width:26%" /><col style="width:26%" /><col style="width:8%" /><col style="width:14%" /><col style="width:26%" /></colgroup>
     <thead><tr><th>From</th><th>Trip</th><th>Pax</th><th>Quote by</th><th>Status</th></tr></thead>
     <tbody>
       <tr><td><span class="who"><i>MT</i>Meridian Travel Co.</span></td><td>Mara North · 4 nights</td><td class="num">2</td><td>Thu 6 Feb</td><td><span class="mk-st amb">Open</span></td></tr>
       <tr><td><span class="who"><i>MT</i>Meridian Travel Co.</span></td><td>Laikipia · 3 nights</td><td class="num">5</td><td>Fri 7 Feb</td><td><span class="mk-st amb">Open</span></td></tr>
       <tr><td><span class="who"><i>AW</i>Ashford &amp; Wren</span></td><td>Amboseli · 2 nights</td><td class="num">2</td><td>Sent</td><td><span class="mk-st go">Quoted · USD 1,940</span></td></tr>
       <tr><td><span class="who"><i>MT</i>Meridian Travel Co.</span></td><td>Mara North · 6 nights</td><td class="num">4</td><td>—</td><td><span class="mk-st go">Booked</span></td></tr>
-      <tr><td><span class="who"><i>NV</i>Northvale Travel</span></td><td>Samburu · 3 nights</td><td class="num">2</td><td>—</td><td><span class="mk-st red">Not available</span></td></tr>
     </tbody>
   </table>
 </App>
