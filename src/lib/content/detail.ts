@@ -26,7 +26,11 @@ export interface Step {
   body: string;
 }
 
+import type { PointIcon } from '../pointIcons';
+
 export interface Reason {
+  /** Declared, never guessed — see lib/pointIcons.ts. */
+  icon: PointIcon;
   title: string;
   body: string;
 }
@@ -69,9 +73,9 @@ export const TOOLS: DetailPage[] = [
     screen: 'dashboard',
     whatTitle: 'What Portal gives you on day one',
     what: [
-      { title: 'One record per trip', body: 'Inquiry, quotes, confirmations and payments on the same thread, moved through the same nine stages, rather than spread across an inbox, a spreadsheet and a chat app.' },
-      { title: 'Two sides, one link', body: 'A magic link per trip that the traveller and the supplier each open on their own side. Both always see the current version; nothing is copied by hand.' },
-      { title: 'Your team, your brand', body: 'Every agent on the same CRM, every touchpoint carrying your logo and your name. Suppliers reply from their own side without a new inbox to check.' },
+      { icon: 'doc', title: 'One record per trip', body: 'Inquiry, quotes, confirmations and payments on the same thread, moved through the same nine stages, rather than spread across an inbox, a spreadsheet and a chat app.' },
+      { icon: 'sides', title: 'Two sides, one link', body: 'A magic link per trip that the traveller and the supplier each open on their own side. Both always see the current version; nothing is copied by hand.' },
+      { icon: 'brand', title: 'Your team, your brand', body: 'Every agent on the same CRM, every touchpoint carrying your logo and your name. Suppliers reply from their own side without a new inbox to check.' },
     ],
     howTitle: 'How a trip runs through Portal',
     how: [
@@ -95,9 +99,9 @@ export const TOOLS: DetailPage[] = [
     screen: 'atlas',
     whatTitle: 'What Atlas does',
     what: [
-      { title: 'Answers you can check', body: 'Ask what a supplier charges in shoulder season and Atlas returns the rate with the contract and page it came from. No answer arrives without a source.' },
-      { title: 'Drafts from what you know', body: 'A first itinerary, a quote outline or a reply to a traveller, drafted from your own data and your own past trips, not from a generic model of travel.' },
-      { title: 'Your data only', body: 'Atlas is trained on your account’s Vault and nothing else. Another account’s contracts never inform your answers, and yours never inform theirs.' },
+      { icon: 'cite', title: 'Answers you can check', body: 'Ask what a supplier charges in shoulder season and Atlas returns the rate with the contract and page it came from. No answer arrives without a source.' },
+      { icon: 'draft', title: 'Drafts from what you know', body: 'A first itinerary, a quote outline or a reply to a traveller, drafted from your own data and your own past trips, not from a generic model of travel.' },
+      { icon: 'shield', title: 'Your data only', body: 'Atlas is trained on your account’s Vault and nothing else. Another account’s contracts never inform your answers, and yours never inform theirs.' },
     ],
     howTitle: 'How Atlas works',
     how: [
@@ -121,9 +125,9 @@ export const TOOLS: DetailPage[] = [
     screen: 'board',
     whatTitle: 'What the CRM workflow does',
     what: [
-      { title: 'Stages, not statuses', body: 'Nine named stages with a meaning each — Inquiry, Planning, Quotation, Confirmation, Booking, Ready, Traveling, Post-Trip, Completed — so the whole team reads a trip the same way.' },
-      { title: 'People attached to trips', body: 'Travellers and suppliers are contacts with a history, not names in a cell. Open a contact and see every trip they have been part of.' },
-      { title: 'Nothing falls through', body: 'A trip that has sat too long in a stage is visible on the board. On Autopilot, it is chased automatically.' },
+      { icon: 'board', title: 'Stages, not statuses', body: 'Nine named stages with a meaning each — Inquiry, Planning, Quotation, Confirmation, Booking, Ready, Traveling, Post-Trip, Completed — so the whole team reads a trip the same way.' },
+      { icon: 'users', title: 'People attached to trips', body: 'Travellers and suppliers are contacts with a history, not names in a cell. Open a contact and see every trip they have been part of.' },
+      { icon: 'check', title: 'Nothing falls through', body: 'A trip that has sat too long in a stage is visible on the board. On Autopilot, it is chased automatically.' },
     ],
     howTitle: 'How a trip moves',
     how: [
@@ -147,9 +151,9 @@ export const TOOLS: DetailPage[] = [
     screen: 'inquiry',
     whatTitle: 'What the inquiry form does',
     what: [
-      { title: 'Structured from the start', body: 'Guided questions — where, when, who, budget — so what arrives is a brief you can quote from, not a message you have to decode.' },
-      { title: 'Straight into the CRM', body: 'No forwarding, no retyping. The submission creates the contact and the trip at the Inquiry stage, with the brief attached.' },
-      { title: 'Yours to brand', body: 'Your logo and your name on the form and the confirmation the traveller receives. From Autopilot up, the Hyperporter badge comes off.' },
+      { icon: 'doc', title: 'Structured from the start', body: 'Guided questions — where, when, who, budget — so what arrives is a brief you can quote from, not a message you have to decode.' },
+      { icon: 'board', title: 'Straight into the CRM', body: 'No forwarding, no retyping. The submission creates the contact and the trip at the Inquiry stage, with the brief attached.' },
+      { icon: 'brand', title: 'Yours to brand', body: 'Your logo and your name on the form and the confirmation the traveller receives. From Autopilot up, the Hyperporter badge comes off.' },
     ],
     howTitle: 'How it works',
     how: [
@@ -173,9 +177,9 @@ export const TOOLS: DetailPage[] = [
     screen: 'sourcing',
     whatTitle: 'What the board does',
     what: [
-      { title: 'An offer, not a number', body: 'Each proposal carries a day-by-day itinerary, the hotels, what is included and what is not, its own terms, and its own price. Comparing two offers compares two trips, not two totals.' },
-      { title: 'Margin per offer', body: 'Cost, margin and selling price sit on each offer and are editable per offer. The traveller sees the selling price. The cost and your margin are never on their side of it.' },
-      { title: 'The supplier keeps their rate', body: 'Your margin sits on top of the supplier’s price. Whatever the traveller pays, the supplier always receives their full quoted rate.' },
+      { icon: 'layers', title: 'An offer, not a number', body: 'Each proposal carries a day-by-day itinerary, the hotels, what is included and what is not, its own terms, and its own price. Comparing two offers compares two trips, not two totals.' },
+      { icon: 'margin', title: 'Margin per offer', body: 'Cost, margin and selling price sit on each offer and are editable per offer. The traveller sees the selling price. The cost and your margin are never on their side of it.' },
+      { icon: 'rate', title: 'The supplier keeps their rate', body: 'Your margin sits on top of the supplier’s price. Whatever the traveller pays, the supplier always receives their full quoted rate.' },
     ],
     howTitle: 'How the offers come together',
     how: [
@@ -199,9 +203,9 @@ export const TOOLS: DetailPage[] = [
     screen: 'share',
     whatTitle: 'What Proposal Share does',
     what: [
-      { title: 'Built, not written', body: 'The proposal draws its days, its prices and its terms from the trip record. Change the itinerary and the proposal changes with it.' },
-      { title: 'A link that stays current', body: 'The traveller’s magic link always shows the latest version. There is no v3 in one inbox and v4 in another.' },
-      { title: 'Your brand on it', body: 'Your logo, your colours, your name. From Autopilot up the Hyperporter badge comes off; on Intelligence the link is on your own domain.' },
+      { icon: 'bolt', title: 'Built, not written', body: 'The proposal draws its days, its prices and its terms from the trip record. Change the itinerary and the proposal changes with it.' },
+      { icon: 'link', title: 'A link that stays current', body: 'The traveller’s magic link always shows the latest version. There is no v3 in one inbox and v4 in another.' },
+      { icon: 'brand', title: 'Your brand on it', body: 'Your logo, your colours, your name. From Autopilot up the Hyperporter badge comes off; on Intelligence the link is on your own domain.' },
     ],
     howTitle: 'How sharing works',
     how: [
@@ -225,9 +229,9 @@ export const TOOLS: DetailPage[] = [
     screen: 'sides',
     whatTitle: 'What each side sees',
     what: [
-      { title: 'The traveller’s side', body: 'The current itinerary, the total, payment instructions and a place to ask a question. No login: the magic link is the door.' },
-      { title: 'The supplier’s side', body: 'The request with dates and travellers, a place to quote line by line, and the confirmation once it is booked. They never see your margin.' },
-      { title: 'Your side', body: 'Both, together, with the stage and every message in one thread. You see what each side has opened and when.' },
+      { icon: 'users', title: 'The traveller’s side', body: 'The current itinerary, the total, payment instructions and a place to ask a question. No login: the magic link is the door.' },
+      { icon: 'route', title: 'The supplier’s side', body: 'The request with dates and travellers, a place to quote line by line, and the confirmation once it is booked. They never see your margin.' },
+      { icon: 'sides', title: 'Your side', body: 'Both, together, with the stage and every message in one thread. You see what each side has opened and when.' },
     ],
     howTitle: 'How the dashboards stay in sync',
     how: [
@@ -251,9 +255,9 @@ export const TOOLS: DetailPage[] = [
     screen: 'inbox',
     whatTitle: 'What the inbox does',
     what: [
-      { title: 'One thread per trip', body: 'Every message about a trip, from either side and whichever channel, is on that trip’s thread. Search a trip, not an inbox.' },
-      { title: 'Sides kept apart', body: 'The traveller never sees the supplier’s message and vice versa. You see both, in one sequence, with the stage each was sent at.' },
-      { title: 'Channels folded in', body: 'Messages from your form and your dashboard on every tier; email parsed into the thread from Autopilot; WhatsApp relayed in as an add-on.' },
+      { icon: 'thread', title: 'One thread per trip', body: 'Every message about a trip, from either side and whichever channel, is on that trip’s thread. Search a trip, not an inbox.' },
+      { icon: 'sides', title: 'Sides kept apart', body: 'The traveller never sees the supplier’s message and vice versa. You see both, in one sequence, with the stage each was sent at.' },
+      { icon: 'inbox', title: 'Channels folded in', body: 'Messages from your form and your dashboard on every tier; email parsed into the thread from Autopilot; WhatsApp relayed in as an add-on.' },
     ],
     howTitle: 'How a thread reads',
     how: [
@@ -277,9 +281,9 @@ export const TOOLS: DetailPage[] = [
     screen: 'vault',
     whatTitle: 'What the Vault does',
     what: [
-      { title: 'Reads what you upload', body: 'A contract goes in as a PDF and comes out as rates by season, validity dates, cancellation terms and inclusions — each traceable to its page.' },
-      { title: 'Knows what is current', body: 'Validity is tracked per document. A rate that has expired is shown as expired, and Atlas will not quote from it.' },
-      { title: 'Stays yours', body: 'Your Vault is indexed to your account and read only by your Atlas. It is never used to train anything that answers anyone else.' },
+      { icon: 'doc', title: 'Reads what you upload', body: 'A contract goes in as a PDF and comes out as rates by season, validity dates, cancellation terms and inclusions — each traceable to its page.' },
+      { icon: 'check', title: 'Knows what is current', body: 'Validity is tracked per document. A rate that has expired is shown as expired, and Atlas will not quote from it.' },
+      { icon: 'shield', title: 'Stays yours', body: 'Your Vault is indexed to your account and read only by your Atlas. It is never used to train anything that answers anyone else.' },
     ],
     howTitle: 'How the Vault works',
     how: [
@@ -303,9 +307,9 @@ export const TOOLS: DetailPage[] = [
     screen: 'itinerary',
     whatTitle: 'What the generator does',
     what: [
-      { title: 'Starts from your Vault', body: 'It proposes the suppliers whose contracts are in your Vault and prices the draft from their current rates. Nothing is invented from a directory.' },
-      { title: 'Learns your shape of trip', body: 'Your past itineraries inform the pacing and the pairings. A nine-night Kenya draft looks like your nine-night Kenya trips.' },
-      { title: 'Edits, not rewrites', body: 'Swap a camp, add a night, move a transfer. The draft is a live itinerary on the trip record, and the proposal follows it.' },
+      { icon: 'doc', title: 'Starts from your Vault', body: 'It proposes the suppliers whose contracts are in your Vault and prices the draft from their current rates. Nothing is invented from a directory.' },
+      { icon: 'route', title: 'Learns your shape of trip', body: 'Your past itineraries inform the pacing and the pairings. A nine-night Kenya draft looks like your nine-night Kenya trips.' },
+      { icon: 'hand', title: 'Edits, not rewrites', body: 'Swap a camp, add a night, move a transfer. The draft is a live itinerary on the trip record, and the proposal follows it.' },
     ],
     howTitle: 'How a draft is built',
     how: [
@@ -329,9 +333,9 @@ export const TOOLS: DetailPage[] = [
     screen: 'invoice',
     whatTitle: 'What it does',
     what: [
-      { title: 'A schedule per trip', body: 'Deposit and balance, with due dates, set on the trip and shown on the traveller’s side. Reminders go out as each falls due.' },
-      { title: 'Invoices from the record', body: 'An invoice is generated from the accepted proposal — the same lines, the same total, your details — without re-entry.' },
-      { title: 'Received means someone said so', body: 'Marking money received or sent is a deliberate, manual action on every tier. Nothing about payment happens silently.' },
+      { icon: 'clock', title: 'A schedule per trip', body: 'Deposit and balance, with due dates, set on the trip and shown on the traveller’s side. Reminders go out as each falls due.' },
+      { icon: 'doc', title: 'Invoices from the record', body: 'An invoice is generated from the accepted proposal — the same lines, the same total, your details — without re-entry.' },
+      { icon: 'hand', title: 'Received means someone said so', body: 'Marking money received or sent is a deliberate, manual action on every tier. Nothing about payment happens silently.' },
     ],
     howTitle: 'How payment runs',
     how: [
@@ -355,9 +359,9 @@ export const TOOLS: DetailPage[] = [
     screen: 'relay',
     whatTitle: 'What the relay does',
     what: [
-      { title: 'Numbers stay private', body: 'The traveller messages one number; the driver messages one number. Neither sees the other’s. Both reach the trip thread.' },
-      { title: 'Several contacts, one trip', body: 'Multiple ground-team contacts on the same trip — the transfer company today, the lodge tomorrow — each reachable through the same relay.' },
-      { title: 'Escalation by design', body: 'A pickup time confirmed is routine and relays through. A missed flight, a medical question or an upset traveller is flagged to a person immediately.' },
+      { icon: 'lock', title: 'Numbers stay private', body: 'The traveller messages one number; the driver messages one number. Neither sees the other’s. Both reach the trip thread.' },
+      { icon: 'users', title: 'Several contacts, one trip', body: 'Multiple ground-team contacts on the same trip — the transfer company today, the lodge tomorrow — each reachable through the same relay.' },
+      { icon: 'hand', title: 'Escalation by design', body: 'A pickup time confirmed is routine and relays through. A missed flight, a medical question or an upset traveller is flagged to a person immediately.' },
     ],
     howTitle: 'How a message travels',
     how: [
@@ -389,9 +393,9 @@ export const INTEGRATIONS: DetailPage[] = [
     screen: 'whatsapp',
     whatTitle: 'What the integration does',
     what: [
-      { title: 'Messages on the record', body: 'Every WhatsApp message about a trip lands on that trip’s thread, beside the emails and the dashboard questions.' },
-      { title: 'Replies from the thread', body: 'Answer in Portal; the traveller gets a WhatsApp. Your team works one inbox, not a shared phone.' },
-      { title: 'Inquiries through it', body: 'A WhatsApp message that reads like a new request is parsed into a brief on Autopilot, the same as the form or an email.' },
+      { icon: 'chat', title: 'Messages on the record', body: 'Every WhatsApp message about a trip lands on that trip’s thread, beside the emails and the dashboard questions.' },
+      { icon: 'send', title: 'Replies from the thread', body: 'Answer in Portal; the traveller gets a WhatsApp. Your team works one inbox, not a shared phone.' },
+      { icon: 'inbox', title: 'Inquiries through it', body: 'A WhatsApp message that reads like a new request is parsed into a brief on Autopilot, the same as the form or an email.' },
     ],
     howTitle: 'How it is set up',
     how: [
@@ -415,9 +419,9 @@ export const INTEGRATIONS: DetailPage[] = [
     screen: 'inbox',
     whatTitle: 'What the integration does',
     what: [
-      { title: 'Threaded by trip', body: 'A message is matched to the contact and their open trip, so the conversation sits with the itinerary and the quotes rather than in a mailbox of its own.' },
-      { title: 'Replies from your address', body: 'Answer on the thread; it arrives from your own domain. The traveller never sees a Hyperporter address.' },
-      { title: 'Inquiries through it', body: 'A message that reads like a new request is parsed into a brief on Autopilot, the same as the form or a WhatsApp.' },
+      { icon: 'thread', title: 'Threaded by trip', body: 'A message is matched to the contact and their open trip, so the conversation sits with the itinerary and the quotes rather than in a mailbox of its own.' },
+      { icon: 'send', title: 'Replies from your address', body: 'Answer on the thread; it arrives from your own domain. The traveller never sees a Hyperporter address.' },
+      { icon: 'inbox', title: 'Inquiries through it', body: 'A message that reads like a new request is parsed into a brief on Autopilot, the same as the form or a WhatsApp.' },
     ],
     howTitle: 'How it is set up',
     how: [
@@ -444,9 +448,9 @@ export const AUTOMATIONS: DetailPage[] = [
     screen: 'parse',
     whatTitle: 'What it automates',
     what: [
-      { title: 'Parsing', body: 'Dates, destination, travellers and budget pulled out of whatever was written, however it was written.' },
-      { title: 'The follow-up questions', body: 'What is missing is asked for, on the channel the message came from, in a short guided exchange.' },
-      { title: 'Confirmation', body: 'The traveller is shown the brief and asked whether it is right. Nothing moves forward until they say so.' },
+      { icon: 'bolt', title: 'Parsing', body: 'Dates, destination, travellers and budget pulled out of whatever was written, however it was written.' },
+      { icon: 'chat', title: 'The follow-up questions', body: 'What is missing is asked for, on the channel the message came from, in a short guided exchange.' },
+      { icon: 'check', title: 'Confirmation', body: 'The traveller is shown the brief and asked whether it is right. Nothing moves forward until they say so.' },
     ],
     howTitle: 'How it runs',
     how: [
@@ -471,9 +475,9 @@ export const AUTOMATIONS: DetailPage[] = [
     screen: 'quoting',
     whatTitle: 'What it automates',
     what: [
-      { title: 'Sending', body: 'One request per part, to each qualified supplier on your list — or a Horizon supplier where you have none — from the trip’s magic link.' },
-      { title: 'Chasing', body: 'A supplier who has not replied by the deadline is reminded. One who declines is replaced with the next qualified one.' },
-      { title: 'Collecting', body: 'Replies land on the board as they arrive, line by line, ready to compare. Your margin is applied on top of each.' },
+      { icon: 'send', title: 'Sending', body: 'One request per part, to each qualified supplier on your list — or a Horizon supplier where you have none — from the trip’s magic link.' },
+      { icon: 'clock', title: 'Chasing', body: 'A supplier who has not replied by the deadline is reminded. One who declines is replaced with the next qualified one.' },
+      { icon: 'inbox', title: 'Collecting', body: 'Replies land on the board as they arrive, line by line, ready to compare. Your margin is applied on top of each.' },
     ],
     howTitle: 'How it runs',
     how: [
@@ -498,9 +502,9 @@ export const AUTOMATIONS: DetailPage[] = [
     screen: 'reconfirm',
     whatTitle: 'What it automates',
     what: [
-      { title: 'Re-verification', body: 'Each supplier is asked to confirm the exact dates and rate they quoted, now that the traveller has said yes.' },
-      { title: 'Small changes', body: 'A room category swap or a different transfer time is put to the traveller for a yes, and applied when they give it.' },
-      { title: 'Backups', body: 'A supplier who can no longer deliver is replaced with the next qualified quote from the board, and the traveller is told.' },
+      { icon: 'check', title: 'Re-verification', body: 'Each supplier is asked to confirm the exact dates and rate they quoted, now that the traveller has said yes.' },
+      { icon: 'draft', title: 'Small changes', body: 'A room category swap or a different transfer time is put to the traveller for a yes, and applied when they give it.' },
+      { icon: 'layers', title: 'Backups', body: 'A supplier who can no longer deliver is replaced with the next qualified quote from the board, and the traveller is told.' },
     ],
     howTitle: 'How it runs',
     how: [
@@ -525,9 +529,9 @@ export const AUTOMATIONS: DetailPage[] = [
     screen: 'collect',
     whatTitle: 'What it automates',
     what: [
-      { title: 'Traveller documents', body: 'Passport details, dietary needs, arrival flight — requested on the traveller’s link and stored on the trip.' },
-      { title: 'Supplier confirmations', body: 'Booking references, vouchers and ground contacts requested from each supplier on their side of the link.' },
-      { title: 'A checklist that chases', body: 'The trip shows what is in and what is outstanding. Reminders escalate as departure gets closer.' },
+      { icon: 'doc', title: 'Traveller documents', body: 'Passport details, dietary needs, arrival flight — requested on the traveller’s link and stored on the trip.' },
+      { icon: 'check', title: 'Supplier confirmations', body: 'Booking references, vouchers and ground contacts requested from each supplier on their side of the link.' },
+      { icon: 'clock', title: 'A checklist that chases', body: 'The trip shows what is in and what is outstanding. Reminders escalate as departure gets closer.' },
     ],
     howTitle: 'How it runs',
     how: [
@@ -552,9 +556,9 @@ export const AUTOMATIONS: DetailPage[] = [
     screen: 'payments',
     whatTitle: 'What it automates',
     what: [
-      { title: 'The deposit request', body: 'Sent to the traveller’s link the moment the trip is confirmed, with the amount, the due date and your payment instructions.' },
-      { title: 'The balance request', body: 'Sent on the date you set, with reminders before and after it if unpaid.' },
-      { title: 'The supplier’s side', body: 'Once you mark the deposit received, each supplier is told their line is secured. On Intelligence, they are paid their full quoted rate automatically.' },
+      { icon: 'rate', title: 'The deposit request', body: 'Sent to the traveller’s link the moment the trip is confirmed, with the amount, the due date and your payment instructions.' },
+      { icon: 'clock', title: 'The balance request', body: 'Sent on the date you set, with reminders before and after it if unpaid.' },
+      { icon: 'route', title: 'The supplier’s side', body: 'Once you mark the deposit received, each supplier is told their line is secured. On Intelligence, they are paid their full quoted rate automatically.' },
     ],
     howTitle: 'How it runs',
     how: [
@@ -579,9 +583,9 @@ export const AUTOMATIONS: DetailPage[] = [
     screen: 'followup',
     whatTitle: 'What it automates',
     what: [
-      { title: 'Proposal nudges', body: 'A traveller who has opened the proposal and gone quiet gets a short check-in, timed from when they last looked.' },
-      { title: 'Pre-departure reminders', body: 'Vouchers, pickup details and ground contacts are chased from suppliers as departure gets close, with reminders escalating.' },
-      { title: 'After the trip', body: 'A thank-you, a request for feedback and a review ask go out on schedule. The thread stays open until anything raised is resolved.' },
+      { icon: 'bell', title: 'Proposal nudges', body: 'A traveller who has opened the proposal and gone quiet gets a short check-in, timed from when they last looked.' },
+      { icon: 'clock', title: 'Pre-departure reminders', body: 'Vouchers, pickup details and ground contacts are chased from suppliers as departure gets close, with reminders escalating.' },
+      { icon: 'chat', title: 'After the trip', body: 'A thank-you, a request for feedback and a review ask go out on schedule. The thread stays open until anything raised is resolved.' },
     ],
     howTitle: 'How it runs',
     how: [

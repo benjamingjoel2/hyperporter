@@ -12,7 +12,7 @@ const R = (x: number, y: number, w: number, h: number, rx = 2): string =>
 export type PointIcon =
   | 'columns' | 'margin' | 'rate' | 'thread' | 'sides' | 'brand' | 'check' | 'bolt' | 'layers'
   | 'link' | 'shield' | 'clock' | 'users' | 'doc' | 'chat' | 'tag' | 'route' | 'eye' | 'bell'
-  | 'lock' | 'hand' | 'inbox' | 'send' | 'cite' | 'draft' | 'board';
+  | 'lock' | 'hand' | 'inbox' | 'send' | 'cite' | 'draft' | 'board' | 'spark' | 'globe';
 
 export const POINT_ICONS: Record<PointIcon, string> = {
   columns: R(3, 4, 5, 16, 1) + R(9.5, 4, 5, 16, 1) + R(16, 4, 5, 16, 1),
@@ -41,37 +41,17 @@ export const POINT_ICONS: Record<PointIcon, string> = {
   cite: P('M6 3h12v18H6z') + P('M9 8h6') + P('M9 12h6') + P('M9 16h3') + C(17, 17, 3) + P('M19.2 19.2L22 22'),
   draft: P('M4 20h4l10-10-4-4L4 16z') + P('M12.5 7.5l4 4'),
   board: R(3, 3, 5, 12, 1.5) + R(9.5, 3, 5, 18, 1.5) + R(16, 3, 5, 8, 1.5),
+  spark: P('M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z') + P('M18.5 15.5l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z'),
+  globe: C(12, 12, 9) + P('M3 12h18') + P('M12 3c3 3.2 3 14.8 0 18') + P('M12 3c-3 3.2-3 14.8 0 18'),
 };
 
 export const pointIcon = (name: PointIcon): string =>
   `<svg class="pt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${POINT_ICONS[name]}</svg>`;
 
-/** Pick an icon for a point from its title; the fallback cycles so three
-    points never share one. */
-const RULES: [RegExp, PointIcon][] = [
-  [/crm|board|stage/i, 'board'],
-  [/brand|logo|touchpoint|look like/i, 'brand'],
-  [/horizon|network|supplier list|source|operator/i, 'route'],
-  [/link|magic/i, 'link'],
-  [/pay|paid|money|deposit|margin|rate|price|invoice|number/i, 'rate'],
-  [/time|schedule|remind|chase|nudge|late|quiet/i, 'clock'],
-  [/client|team|agent|traveller|people|everyone|book of|talent|side/i, 'users'],
-  [/document|contract|vault|voucher|upload|read/i, 'doc'],
-  [/message|inbox|thread|whatsapp|conversation|reply|channel|question/i, 'chat'],
-  [/confirm|check|verif|nothing falls/i, 'check'],
-  [/automat|autopilot|itself|parsing|sending|collecting/i, 'bolt'],
-  [/private|secure|data|yours|your own|only/i, 'shield'],
-  [/quote|compar|like with like|columns/i, 'columns'],
-  [/escalat|person|human|decid|choose|hand|edit/i, 'hand'],
-  [/cite|citation|answer/i, 'cite'],
-  [/draft|itinerar|start/i, 'draft'],
-  [/dashboard|two sides|each side/i, 'sides'],
-  [/see|view|open|visible|show/i, 'eye'],
-  [/backup|small change/i, 'layers'],
-];
-const FALLBACK: PointIcon[] = ['layers', 'bolt', 'users'];
-
-export const guessIcon = (title: string, index = 0): PointIcon => {
-  for (const [re, icon] of RULES) if (re.test(title)) return icon;
-  return FALLBACK[index % FALLBACK.length];
-};
+/** Every point declares its own icon in the content. There is no guesser
+    any more: it matched "Numbers stay private" — phone numbers — to the
+    currency mark, gave all three Quotation Board points the same shape, and
+    fell back to an arbitrary one of three for fourteen points that matched
+    no rule at all. */
+export const isPointIcon = (v: string): v is PointIcon =>
+  Object.prototype.hasOwnProperty.call(POINT_ICONS, v);
