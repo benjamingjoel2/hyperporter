@@ -154,7 +154,18 @@ payload = payload.replace('</script', '<\\/script')
 
 SHELL = open(os.path.join(os.path.dirname(__file__), 'preview-shell.html'),
              encoding='utf-8').read()
-out = SHELL.replace('/*__PAYLOAD__*/', payload)
+# Stamp the file with the build it came from. Three preview links have been
+# open at once in a review before now, and a screenshot of the oldest looks
+# exactly like a screenshot of the newest.
+try:
+    import subprocess
+    sha = subprocess.run(['git', 'rev-parse', '--short', 'HEAD'],
+                         capture_output=True, text=True, check=True).stdout.strip()
+except Exception:
+    sha = 'unknown'
+stamp = '%s &middot; %s' % (sha, __import__('datetime').datetime.now().strftime('%-d %b %H:%M'))
+
+out = SHELL.replace('/*__PAYLOAD__*/', payload).replace('__STAMP__', stamp)
 with open(OUT, 'w', encoding='utf-8') as fh:
     fh.write(out)
 

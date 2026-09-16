@@ -252,8 +252,8 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
   'quotation-board': [
     { shell: { title: 'Lena & Mark Ortiz', meta: 'KE-2291 · flexible, March', who: 'LO',
       tabs: ['Overview', 'Quotation board', 'Pricing', 'Magic link'], tab: 'Quotation board',
-      table: { cols: ['Offer', 'Supplier', 'Shape', 'Their document', 'Received'],
-        w: ['20%', '26%', '20%', '19%', '15%'],
+      table: { cols: ['Offer', 'Supplier', 'Shape', 'Document', 'Received'],
+        w: ['16%', '30%', '21%', '19%', '14%'],
         rows: [
           ['Offer 1', 'Rift Valley Ground Services', 'Classic · 8 days', 'PDF · 240 KB', '09:41'],
           ['Offer 2', 'Rift Valley Ground Services', 'Shorter · 5 days', 'PDF · 198 KB', '09:41'],
