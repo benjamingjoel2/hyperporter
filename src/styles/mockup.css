@@ -281,3 +281,84 @@
 .mk-side .mk-row:last-of-type{border-bottom:0}
 .mk.dark .mk-side{background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.09)}
 .mk-end{display:inline-flex;align-items:center;gap:.6em}
+
+/* ---- the application itself ----------------------------------------------
+   A floating panel with two tiles in it is not a CRM, however accurate its
+   words. A product screenshot has chrome — a sidebar you navigate with, a
+   toolbar, tabs, and a dense table or board with column headers and enough
+   rows to look like real work. These rules draw that, at the same em scale
+   as everything else so it still scales like a photograph of itself. */
+
+.mk-ui{position:absolute;left:5.5%;right:5.5%;top:50%;transform:translateY(-50%);
+  max-height:84%;display:grid;grid-template-columns:7.4em 1fr;font-size:.9em;
+  background:#FCFCFB;border-radius:.7em;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(13,16,22,.10),0 2.2em 4.4em rgba(8,12,18,.24)}
+.mk-ui.nonav{grid-template-columns:1fr}
+
+/* left rail */
+.mk-rail2{background:#F3F3F1;border-right:1px solid var(--line);padding:.75em .55em;min-height:100%;
+  display:flex;flex-direction:column;gap:.1em;min-width:0}
+.mk-rail2 .brand{display:flex;align-items:center;gap:.4em;padding:.15em .35em .7em;
+  font-weight:500;font-size:.92em;letter-spacing:-.01em}
+.mk-rail2 .brand i{width:1.05em;height:1.05em;border-radius:50%;border:.13em solid var(--paper);
+  display:inline-block;flex:0 0 auto}
+.mk-rail2 a{display:flex;align-items:center;gap:.42em;padding:.32em .4em;border-radius:.34em;
+  color:var(--muted);font-size:.86em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-rail2 a i{width:.72em;height:.72em;border-radius:.16em;background:currentColor;opacity:.42;flex:0 0 auto}
+.mk-rail2 a.on{background:var(--paper);color:#fff}
+.mk-rail2 a.on i{opacity:1}
+.mk-rail2 .sp{margin-top:auto}
+
+/* main column */
+.mk-main{display:flex;flex-direction:column;min-width:0;min-height:0}
+.mk-bar{display:flex;align-items:center;gap:.6em;padding:.62em .85em;border-bottom:1px solid var(--line)}
+.mk-bar b{font-size:.98em;letter-spacing:-.01em}
+.mk-bar small{color:var(--dim);font-size:.8em}
+.mk-bar .sp{margin-left:auto;display:flex;align-items:center;gap:.4em}
+.mk-pill{border:1px solid var(--line);border-radius:999px;padding:.2em .6em;font-size:.74em;color:var(--muted);white-space:nowrap}
+.mk-bar .av{width:1.35em;height:1.35em;border-radius:50%;background:var(--signal);color:#fff;
+  font-size:.7em;display:grid;place-items:center;letter-spacing:.02em}
+
+/* tabs */
+.mk-tabs{display:flex;gap:.9em;padding:0 .85em;border-bottom:1px solid var(--line)}
+.mk-tabs span{padding:.45em 0;font-size:.82em;color:var(--dim);border-bottom:.13em solid transparent;white-space:nowrap}
+.mk-tabs span.on{color:var(--paper);border-bottom-color:var(--paper)}
+
+/* a real table */
+.mk-body{padding:.55em .85em .8em;overflow:hidden;min-height:0}
+.mk-body > .mk-fine{padding-top:.7em;color:var(--dim)}
+.mk-tbl{width:100%;border-collapse:collapse;font-size:.8em;table-layout:fixed}
+.mk-tbl th{text-align:left;font-weight:400;color:var(--dim);font-size:.86em;letter-spacing:.04em;
+  text-transform:uppercase;padding:.3em .9em .34em 0;border-bottom:1px solid var(--line);white-space:nowrap}
+.mk-tbl th:last-child,.mk-tbl td:last-child{padding-right:0}
+.mk-tbl td{padding:.4em .9em .4em 0;border-bottom:1px solid rgba(13,16,22,.055);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-tbl tr:last-child td{border-bottom:0}
+.mk-tbl .who{display:flex;align-items:center;gap:.42em;min-width:0}
+.mk-tbl .who i{width:1.3em;height:1.3em;border-radius:50%;background:#E3E6E4;color:var(--muted);
+  font-size:.7em;display:grid;place-items:center;flex:0 0 auto}
+.mk-tbl .num{font-variant-numeric:tabular-nums;text-align:right}
+.mk-st{display:inline-flex;align-items:center;gap:.3em;font-size:.94em;color:var(--muted);white-space:nowrap}
+.mk-st::before{content:"";width:.42em;height:.42em;border-radius:50%;background:currentColor;opacity:.45}
+.mk-st.go{color:#0C6B6F}.mk-st.go::before{opacity:1}
+.mk-st.amb{color:var(--amber)}.mk-st.amb::before{opacity:1}
+.mk-st.red{color:#A8506B}.mk-st.red::before{opacity:1}
+
+/* the full pipeline, all of it */
+.mk-kan{display:flex;gap:.4em;overflow:hidden;align-items:flex-start}
+.mk-kan .kcol{flex:0 0 6.5em;min-width:0}
+.mk-kan .kh{display:flex;align-items:baseline;gap:.35em;padding:0 .12em .38em;
+  font-size:.76em;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+.mk-kan .kh b{font-weight:400;color:var(--paper)}
+.mk-kan .kc{background:#fff;border:1px solid var(--line);border-radius:.4em;padding:.4em .45em;
+  margin-bottom:.32em;box-shadow:0 .1em .3em rgba(13,16,22,.04)}
+.mk-kan .kc b{display:block;font-size:.8em;font-weight:400;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-kan .kc small{display:block;color:var(--dim);font-size:.72em;margin-top:.12em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-kan .kc.amb{box-shadow:0 .1em .3em rgba(13,16,22,.04),inset .17em 0 0 var(--amber)}
+
+@container (max-width: 380px){
+  .mk-ui{inset:4%;grid-template-columns:6.4em 1fr}
+  .mk-kan .kcol{flex-basis:6.6em}
+}

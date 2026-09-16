@@ -27,21 +27,86 @@ interface Props {
   alt: string;
 }
 const { screen, ground, app, alt } = Astro.props;
-const { back, head, blocks = [], rows = [], msgs = [], composer, foot } = screen;
+const { shell, back, head, blocks = [], rows = [], msgs = [], composer, foot } = screen;
 ---
 
 <div class="mockup">
   <div class="mk" data-ground={ground} role="group" aria-label={alt}>
     <div class="mk-stage">
+      {shell && (
+        <div class:list={['mk-ui', { nonav: !shell.nav }]}>
+          {shell.nav && (
+            <div class="mk-rail2">
+              <span class="brand"><i />{shell.brand ?? 'Hyperporter'}</span>
+              {shell.nav.map((n) => <a class:list={{ on: n === shell.active }}><i />{n}</a>)}
+            </div>
+          )}
+          <div class="mk-main">
+            <div class="mk-bar">
+              <b>{shell.title}</b>
+              {shell.meta && <small>{shell.meta}</small>}
+              <span class="sp">
+                {shell.pills?.map((x) => <span class="mk-pill">{x}</span>)}
+                {shell.who && <span class="av">{shell.who}</span>}
+              </span>
+            </div>
+            {shell.tabs && (
+              <div class="mk-tabs">
+                {shell.tabs.map((t) => <span class:list={{ on: t === shell.tab }}>{t}</span>)}
+              </div>
+            )}
+            <div class="mk-body">
+              {shell.kanban && (
+                <div class="mk-kan">
+                  {shell.kanban.map((c) => (
+                    <div class="kcol">
+                      <div class="kh"><b>{c.name}</b>{c.n}</div>
+                      {c.cards.map((cd) => (
+                        <div class:list={['kc', { amb: cd[2] }]}><b>{cd[0]}</b><small>{cd[1]}</small></div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              )}
+              {shell.table && (
+                <table class="mk-tbl">
+                  {shell.table.w && <colgroup>{shell.table.w.map((w) => <col style={`width:${w}`} />)}</colgroup>}
+                  <thead><tr>{shell.table.cols.map((c) => <th>{c}</th>)}</tr></thead>
+                  <tbody>
+                    {shell.table.rows.map((r) => (
+                      <tr>
+                        {r.map((cell, ci) => {
+                          if (ci === 0 && shell.table.avatars) {
+                            const [nm, ini] = Array.isArray(cell) ? cell : [cell, String(cell).slice(0, 2).toUpperCase()];
+                            return <td><span class="who"><i>{ini}</i>{nm}</span></td>;
+                          }
+                          if (typeof cell === 'string' && cell.startsWith('#')) {
+                            const [, tone, ...t] = cell.split(/[#:]/);
+                            return <td><span class:list={['mk-st', tone]}>{t.join(':')}</span></td>;
+                          }
+                          return <td class:list={{ num: shell.table.num?.includes(ci) }}>{cell}</td>;
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+              {shell.note && <p class="mk-fine" style="margin:.6em 0 0">{shell.note}</p>}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* A faded sheet behind the panel, for depth — the reference composes
           its product shots this way. */}
-      {back && (
+      {!shell && back && (
         <div class="mk-back">
           <b>{back.title}</b>
           {back.lines.map((w) => <i class={w} />)}
         </div>
       )}
 
+      {!shell && (
       <div class:list={['mk-panel', screen.wide === false ? '' : 'wide']}>
         {head && (
           <div class="mk-head">
@@ -173,6 +238,7 @@ const { back, head, blocks = [], rows = [], msgs = [], composer, foot } = screen
           </div>
         )}
       </div>
+      )}
     </div>
     <span class="mk-app" aria-hidden="true">
       <svg viewBox="0 0 100 100"><circle class="ring" cx="50" cy="50" r="44" /><rect x="32.5" y="26" width="7.5" height="47" /><rect x="60" y="26" width="7.5" height="47" /><rect x="32.5" y="46.5" width="35" height="7.5" /></svg>
