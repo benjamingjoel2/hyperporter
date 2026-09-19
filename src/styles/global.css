@@ -77,9 +77,9 @@
      tenth of the viewport either side — after the founder found the
      1,680px measure hard to read (Sep 2026). The bar keeps the wider
      measure so the wordmark and the actions stay near the edges. */
-  --pad:clamp(20px,8vw,120px);
-  --max:1200px;
-  --bar-max:1680px;
+  --pad:clamp(20px,4vw,64px);
+  --max:1640px;
+  --bar-max:1780px;
   --photo:url("/hero.jpg");
 }
 *{box-sizing:border-box}
