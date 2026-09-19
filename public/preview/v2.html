@@ -118,6 +118,28 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 .sticky .eyebrow{display:block;margin-bottom:22px}
 .sticky a{display:block;padding:13px 0 13px 16px;border-left:1px solid var(--line-d);font-size:14.5px;color:var(--chalk-3);transition:color .3s,border-color .3s}
 .sticky a.on{color:var(--chalk);border-left-color:var(--moss)}
+/* The product band pins: the three titles hold still on the left while the
+   panel beside them is replaced, one feature per screen of scroll, instead
+   of one long column the reader has to wade through. The track is as tall
+   as the number of panels; the stage inside it sticks. */
+.prod-track{position:relative;height:calc(100vh * 3)}
+.prod-stage{position:sticky;top:0;height:100vh;display:flex;align-items:center}
+.prod-stage .prod{width:100%;margin-top:0}
+.stack{position:relative;min-height:clamp(420px,58vh,620px)}
+.stack .feat{position:absolute;inset:0;opacity:0;transform:translateY(26px) scale(.985);
+  transition:opacity .5s ease,transform .7s cubic-bezier(.2,.8,.2,1);pointer-events:none;margin:0}
+.stack .feat.on{opacity:1;transform:none;pointer-events:auto}
+/* every panel's screen is the same height, so the headline under it lands
+   in the same place each time and the change reads as a swap, not a jump */
+.stack .feat .shot{height:min(46vh,380px);overflow:hidden}
+.stack .feat .shot .app{height:100%}
+/* the rail marks how far through the band you are */
+.sticky{counter-reset:f}
+.sticky a{position:relative}
+.sticky a::after{content:"";position:absolute;left:-1px;top:0;bottom:0;width:1px;background:var(--moss);
+  transform:scaleY(0);transform-origin:top;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.sticky a.on::after,.sticky a.done::after{transform:scaleY(1)}
+.sticky a.done{color:var(--chalk-2)}
 .feat{margin-bottom:clamp(54px,6.4vw,96px)}
 .feat:last-of-type{margin-bottom:0}
 .shot{background:var(--black-2);border:1px solid var(--line-d);border-radius:9px;overflow:hidden}
@@ -294,6 +316,12 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
   .faqwrap{grid-template-columns:1fr}.start{grid-template-columns:1fr}.start-r{min-height:210px}.start-r .shot{width:170%}}
 
 @media (max-width:1000px){
+  .prod-track{height:auto}
+  .prod-stage{position:static;height:auto;display:block}
+  .stack{min-height:0}
+  .stack .feat{position:static;opacity:1;transform:none;pointer-events:auto;margin-bottom:clamp(54px,6.4vw,96px)}
+  .stack .feat:last-child{margin-bottom:0}
+  .stack .feat .shot{height:auto}
   .hero-grid{grid-template-columns:1fr;min-height:0}
   .phone{justify-self:start;margin-top:36px;transform:none}
   .prod{grid-template-columns:1fr}
@@ -305,6 +333,14 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
   .statrow div+div{border-left:0;border-top:1px solid var(--line-l);padding-left:0}
   .foot-top{grid-template-columns:1fr 1fr}
 }
+/* Grid children default to min-width:auto, so the app mock-ups could not
+   shrink below their own column widths and pushed the page sideways on a
+   phone. Let them shrink, and let the long line in a row truncate. */
+.prod>*,.feat,.shot,.app,.main,.lines div{min-width:0}
+.lines div>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mhead{min-width:0}
+.mhead b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
 @media (max-width:700px){
   .nav menu{display:none}.burger{display:block}
   .nav.open menu{display:flex;position:absolute;top:62px;left:0;right:0;flex-direction:column;gap:0;background:var(--black);border-bottom:1px solid var(--line-d);padding:6px 0}
@@ -314,7 +350,14 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
   .kpis{grid-template-columns:1fr}
   .foot-top{grid-template-columns:1fr}
 }
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}html{scroll-behavior:auto}
+  .prod-track{height:auto}
+  .prod-stage{position:static;height:auto;display:block}
+  .stack{min-height:0}
+  .stack .feat{position:static;opacity:1;transform:none;pointer-events:auto;margin-bottom:clamp(54px,6.4vw,96px)}
+  .stack .feat .shot{height:auto}
+}
 </style>
 </head>
 <body>
@@ -403,6 +446,8 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
       <a class="pill" href="#demo">Request demo</a>
     </div>
 
+    <div class="prod-track" id="prodTrack">
+     <div class="prod-stage">
     <div class="prod">
       <div>
         <div class="sticky" id="sticky">
@@ -413,7 +458,7 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
         </div>
       </div>
 
-      <div id="feats">
+      <div id="feats" class="stack">
         <div class="feat" id="f1">
           <div class="shot">
             <div class="app">
@@ -437,14 +482,6 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
           <h3>Kill the chasing</h3>
           <p>Quotes go to the operators who can actually service the itinerary. Follow-ups, re-confirmations and voucher chases run on their own, and only the exceptions reach a coordinator.</p>
           <a class="pill-o" href="#demo">Learn more</a>
-        </div>
-
-        <div class="quote">
-          <p>Money is the one part of the chain we don't let an automation touch. Every settlement waits for a person, on purpose.</p>
-          <div class="by">
-            <u>H</u>
-            <div><b>Operating principle</b><span>Hyperporter</span></div>
-          </div>
         </div>
 
         <div class="feat" id="f2">
@@ -488,6 +525,16 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
         </div>
       </div>
     </div>
+     </div>
+    </div>
+
+    <div class="quote">
+          <p>Money is the one part of the chain we don't let an automation touch. Every settlement waits for a person, on purpose.</p>
+          <div class="by">
+            <u>H</u>
+            <div><b>Operating principle</b><span>Hyperporter</span></div>
+          </div>
+        </div>
   </div>
 </section>
 
@@ -833,15 +880,45 @@ new IntersectionObserver((es,o)=>es.forEach(e=>{
   o.unobserve(e.target);
 }),{threshold:.45}).observe(document.getElementById('statrow'));
 
-/* sticky nav tracks the feature in view */
+/* ---- the pinned product band -------------------------------------------
+   The stage sticks for three screens of scroll and the panel inside it is
+   swapped, one feature per screen, rather than the reader scrolling past a
+   long column. Below 1000px, and with reduced motion, the CSS unpins it and
+   the three panels simply stack — so this only has to drive the classes. */
 const links=[...document.querySelectorAll('#sticky a')];
 const feats=links.map(a=>document.querySelector(a.getAttribute('href')));
-const so=new IntersectionObserver(es=>es.forEach(e=>{
-  if(!e.isIntersecting)return;
-  const i=feats.indexOf(e.target);
-  links.forEach((a,n)=>a.classList.toggle('on',n===i));
-}),{rootMargin:'-45% 0px -45% 0px'});
-feats.forEach(f=>so.observe(f));
+const track=document.getElementById('prodTrack');
+
+function pinned(){
+  return !RM && matchMedia('(min-width:1001px)').matches;
+}
+function paint(i){
+  feats.forEach((el,n)=>el.classList.toggle('on',n===i));
+  links.forEach((a,n)=>{a.classList.toggle('on',n===i);a.classList.toggle('done',n<i);});
+}
+let at=-1;
+function step(){
+  if(!pinned()){ if(at!==-1){feats.forEach(f=>f.classList.add('on'));at=-1;} return; }
+  const r=track.getBoundingClientRect();
+  const run=track.offsetHeight-innerHeight;
+  const p=Math.min(1,Math.max(0,-r.top/run));
+  /* the last panel holds to the end of the track rather than for a third of it */
+  const i=Math.min(feats.length-1,Math.floor(p*feats.length));
+  if(i!==at){at=i;paint(i);}
+}
+addEventListener('scroll',step,{passive:true});
+addEventListener('resize',()=>{at=-1;step();});
+step();
+/* the first panel is up before any scrolling happens */
+if(pinned())paint(0); else feats.forEach(f=>f.classList.add('on'));
+
+/* clicking a title scrolls to that panel's slice of the track */
+links.forEach((a,n)=>a.addEventListener('click',e=>{
+  if(!pinned())return;
+  e.preventDefault();
+  const run=track.offsetHeight-innerHeight;
+  scrollTo({top:track.offsetTop+run*(n/feats.length)+8,behavior:RM?'auto':'smooth'});
+}));
 </script>
 </body>
 </html>
