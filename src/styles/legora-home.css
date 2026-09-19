@@ -26,7 +26,7 @@
  * that uses them. The ones worth knowing up front:
  *
  *   ground     rgb(250,250,249)   warm off-white, not white
- *   ink        rgb(13,16,22)
+ *   ink        rgb(20,23,21)
  *   secondary  rgb(104,101,94)    warm grey
  *   display    weight 400 at 41-56px with -.03/-.04em tracking, 1.05 leading
  *   hero       100vh, headline baseline at 87% down
@@ -45,7 +45,7 @@
 
 /* ------------------------------------------------------------------
    Tokens. Measured off legora.com at 1440px, not eyeballed:
-   ground rgb(250,250,249), ink rgb(13,16,22), secondary rgb(104,101,94),
+   ground rgb(250,250,249), ink rgb(20,23,21), secondary rgb(104,101,94),
    accent rgb(0,80,50). The accent is the one substitution — Hyperporter's
    teal darkened to the same weight so it holds white text in the same
    structural role (bar, buttons) and nowhere decorative.
@@ -112,7 +112,7 @@
    killed it: --signal is #0E4B52, which against #FAFAF9 makes the travelling
    light a smudge on a hairline. Here it is the brightest thing in the band,
    which is the only thing it is there to be. */
-.lg-pipe-sec{background:#0B0E12;color:#EDEFF2;padding-block:var(--sec-gap);
+.lg-pipe-sec{background:#0B0C0B;color:#EDEFE9;padding-block:var(--sec-gap);
   /* One value drives the numeral's size and the rail's offset, so the rail
      lands on the dots at every step of the clamp. */
   --lg-num-h:clamp(52px,6.4vw,88px);
@@ -147,7 +147,7 @@
 .lg-pnode{margin:0}
 
 .lg-pdot{display:block;width:var(--dot);height:var(--dot);border-radius:50%;
-  background:#0B0E12;border:1px solid var(--lg-lit);box-sizing:border-box;
+  background:#0B0C0B;border:1px solid var(--lg-lit);box-sizing:border-box;
   margin:calc(var(--rail-y) - var(--dot) / 2) 0 22px;position:relative;z-index:2}
 .lg-pnode h3{font-size:19px;letter-spacing:-.018em;color:#fff;margin:0 0 9px}
 .lg-pnode p{font-size:14.5px;line-height:1.6;color:#9AA1AA;margin:0;max-width:36ch}
@@ -201,7 +201,7 @@ section.lg-sec{padding-block:var(--sec-gap);background:var(--steel)}
 .lg-sides-head p{color:var(--muted);font-size:16px;line-height:1.55;margin:0 auto;max-width:52ch}
 .lg-sides-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
 .lg-side{position:relative;display:flex;flex-direction:column;overflow:hidden;border-radius:14px;
-  color:#EDEFF2;min-height:clamp(420px,38vw,560px)}
+  color:#EDEFE9;min-height:clamp(420px,38vw,560px)}
 /* Two grounds, one cool and one warm, each with a soft highlight in the
    top corner so the panel reads as lit rather than flat. */
 .lg-side[data-side="reseller"]{background:radial-gradient(120% 90% at 0% 0%,#1C2A2E 0%,#0C1214 60%,#080B0D 100%)}
@@ -221,7 +221,7 @@ section.lg-sec{padding-block:var(--sec-gap);background:var(--steel)}
 section.lg-close{text-align:center;padding-block:var(--sec-gap)}
 .lg-close h2{text-wrap:balance;margin-bottom:28px}
 /* ---------------- security: the one dark section ---------------- */
-.lg-sec-dark{background:#0B0E12;color:#EDEFF2;padding-block:var(--sec-gap)}
+.lg-sec-dark{background:#0B0C0B;color:#EDEFE9;padding-block:var(--sec-gap)}
 .lg-sec-dark h2{color:#fff;max-width:22ch}
 .lg-sec-dark .lg-read{color:#9AA1AA;font-size:24px;letter-spacing:-.02em;margin-top:10px}
 .lg-sec-dark .lg-read:hover{color:#fff}
@@ -318,7 +318,7 @@ section.lg-cat ~ section.lg-close{padding-top:clamp(44px,4.8vw,70px)}
   line-height:1.2;color:var(--paper);margin-bottom:9px}
 .lg-card-desc{font-size:14px;line-height:1.55;color:var(--muted);margin-bottom:22px}
 .lg-card-shot{display:block;margin-top:auto;margin-inline:-24px;margin-bottom:-24px;
-  border-radius:10px 10px 0 0;overflow:hidden;box-shadow:0 -1px 0 rgba(13,16,22,.06)}
+  border-radius:10px 10px 0 0;overflow:hidden;box-shadow:0 -1px 0 rgba(20,23,21,.06)}
 .lg-card-shot .mk{border-radius:10px 10px 0 0}
 
 /* The tool rail's card ends on the tool's own line icon rather than a
@@ -345,8 +345,8 @@ section.lg-cat ~ section.lg-close{padding-top:clamp(44px,4.8vw,70px)}
    photograph is graded down twice — once on the picture, once with a
    scrim top and bottom — so white type reads wherever the subject falls. */
 .lg-cat-photo .lg-card{flex-basis:clamp(244px,22vw,296px)}
-.lg-cat-photo .lg-card > a{aspect-ratio:53/88;padding:26px 24px;background:#0B0E12;justify-content:flex-start}
-.lg-cat-photo .lg-card > a:hover{background:#0B0E12}
+.lg-cat-photo .lg-card > a{aspect-ratio:53/88;padding:26px 24px;background:#0B0C0B;justify-content:flex-start}
+.lg-cat-photo .lg-card > a:hover{background:#0B0C0B}
 .lg-card-bg{position:absolute;inset:0;background-size:cover;background-position:50% 42%;
   filter:brightness(.78) saturate(.92);transition:transform .5s ease}
 .lg-cat-photo .lg-card > a:hover .lg-card-bg{transform:scale(1.03)}
@@ -357,7 +357,7 @@ section.lg-cat ~ section.lg-close{padding-top:clamp(44px,4.8vw,70px)}
   line-height:1.18;text-shadow:0 1px 14px rgba(6,10,13,.35)}
 /* Bottom-right on a photograph, where the reference puts it. */
 .lg-cat-photo .lg-card-more{top:auto;right:16px;bottom:16px;
-  background:rgba(255,255,255,.94);color:#0B0E12}
+  background:rgba(255,255,255,.94);color:#0B0C0B}
 /* The same icon the tools rail carries, white and pinned bottom-left, on the
    baseline of the + opposite it. Absolute rather than margin-top:auto: the
    headline is top-aligned on these cards, so there is no flex gap to push
@@ -404,13 +404,13 @@ section.lg-close{background:var(--steel)}
 .lg-card > a{position:relative}
 .lg-card-more{position:absolute;right:16px;top:16px;width:26px;height:26px;border-radius:50%;
   background:var(--raise);color:var(--muted);display:grid;place-items:center;font-size:15px;line-height:1;
-  box-shadow:0 1px 2px rgba(13,16,22,.10);transition:background .25s ease,color .25s ease}
+  box-shadow:0 1px 2px rgba(20,23,21,.10);transition:background .25s ease,color .25s ease}
 .lg-card > a:hover .lg-card-more{background:var(--paper);color:var(--void)}
 
 .lg-modal{width:min(560px,calc(100vw - 40px));max-width:none;border:0;border-radius:20px;
   padding:clamp(30px,4vw,44px);background:var(--raise);color:var(--paper);
   box-shadow:0 40px 90px rgba(8,12,18,.28)}
-.lg-modal::backdrop{background:rgba(13,16,22,.42);backdrop-filter:blur(3px)}
+.lg-modal::backdrop{background:rgba(20,23,21,.42);backdrop-filter:blur(3px)}
 .lg-modal-kind{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--muted);margin:0 0 14px}
 .lg-modal h3{font-family:var(--display);font-weight:400;font-size:clamp(26px,3.4vw,38px);
