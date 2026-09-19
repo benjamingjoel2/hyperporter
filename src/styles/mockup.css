@@ -449,3 +449,33 @@
 .mk-body > .mk-search{font-size:.82em;padding:.42em .65em;border-radius:.4em;margin-bottom:.5em}
 .mk-body > .mk-search span:first-of-type{color:var(--paper)}
 .mk-body > .mk-msg.sys{font-size:.86em}
+
+/* ---- narrow frames ------------------------------------------------------
+   These two blocks sit last on purpose. The chat's own rules further up the
+   file are written at the same specificity, so a container query placed
+   above them never won — the 380px block below had been dead for that
+   reason. A chat carrying a citation and its provenance line is the one
+   screen that outgrows a 4:3 frame, and the answer, the source and the
+   composer all have to stay in view, so the bubbles tighten as the frame
+   narrows rather than the frame growing. */
+@container (max-width: 640px){
+  .mk-chat{gap:.32em}
+  .mk-chat .mk-msg{font-size:.78em}
+  .mk .mk-stage .mk-chat .mk-msg p{padding:.5em .78em}
+  .mk-chat .mk-composer{padding-top:.4em}
+  .mk-chat .mk-composer input{padding:.45em .8em;font-size:.86em}
+}
+@container (max-width: 380px){
+  .mk-chat{gap:.28em}
+  .mk-chat .mk-msg{font-size:.74em}
+  .mk .mk-stage .mk-chat .mk-msg p{padding:.42em .7em}
+}
+
+/* On a phone the frame is barely 340px wide, and a 4:3 box that narrow
+   leaves a screen with a header, a body and a composer nothing to sit in.
+   Square it up: the shot is taller, the type inside it is larger, and
+   nothing is pushed out of the bottom. */
+@media (max-width:700px){
+  .mk{aspect-ratio:1/1}
+  .mk.tall{aspect-ratio:4/5}
+}
