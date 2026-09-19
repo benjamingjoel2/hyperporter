@@ -153,21 +153,17 @@ direction at commit `28d708a` at the founder's instruction — the harvey.ai /
 starlink.com rebuild is preserved in git history at `d05cc73` if it is ever
 wanted back.
 
-- **Type (v2, Sep 2026)**: Instrument Serif for display, Archivo for body and
-  UI, IBM Plex Mono for labels and figures, Newsreader for the occasional
-  secondary serif. All four are Google-hosted, which **ends the Hyperlocal ROM
-  licence problem** — that face is no longer requested anywhere. Display sizes
-  carry `-.018em` tracking and 1.06 leading: a serif at 70px wants less
-  tracking than the grotesque did, not more. Labels and eyebrows stay in
-  capitals with wide tracking, and an eyebrow carries a small dot before it.
-  Anything with digits that line up or tick over keeps
-  `font-variant-numeric:tabular-nums`.
-- **Accent**: `--signal` is moss `#2E7D6B` on light grounds, `--moss #5FBFA8`
-  on dark ones. Amber `#8A5409` (`--amber-hi #D79A3E` on dark) is still
-  reserved for human-touchpoint / manual states — never decorative.
-- **Ground**: `--void #F4F5F1` light, `--black #0B0C0B` dark, in alternating
-  bands. Buttons are pills (`--pill`); the primary one on a light ground is
-  ink, not the accent.
+- **Type**: Hyperlocal ROM throughout — display, body and labels — with Inter
+  as the single fallback. PT Serif and IBM Plex Mono were dropped (Aug 2026)
+  at the founder's instruction; the only Google Fonts request left is Inter.
+  Labels and eyebrows stay in capitals with their wide tracking.
+  Two things the switch needed: display sizes carry `-.022em` tracking (the
+  serif wanted `+.006em`; a grotesque at 108px wants the opposite), and
+  anything with digits that line up or tick over gets
+  `font-variant-numeric:tabular-nums`, since the labels are no longer
+  monospaced. Hyperlocal ROM ships real `tnum` figures.
+- **Accent**: `--signal` is teal `#1B747E`. Amber `#9A5F0B` is still reserved
+  for human-touchpoint / manual states — never decorative.
 - Homepage opens on the photo band with the flight-arc overlay, as it did
   before the rebuild.
 - `WorldMap.astro` + `lib/worldMap.ts` survived the revert: real Natural Earth
@@ -200,14 +196,10 @@ wanted back.
 - Removed with the earlier revert: `AppShot.astro` and `lib/counts.ts`, both
   recoverable from `d05cc73`.
 
-### Font licence — resolved in the markup, outstanding in git
+### Font licence — outstanding
 Hyperlocal ROM was supplied under a **desktop** licence, whose terms forbid
-"storing on publicly available servers". The v2 type system (Sep 2026) drops
-it: nothing on the site requests it any more, so the live site no longer
-serves it. Two things remain. `public/fonts/hyperlocal-rom-regular.woff2` is
-still committed, and the repository is public — and deleting the file now
-would not remove it from git history. Settle it with Dinamo, make the
-repository private, or rewrite the history.
+"storing on publicly available servers". It is live on hyperporter.com at the
+founder's explicit instruction. A Dinamo **web** licence is still required.
 
 ## Migration target
 
