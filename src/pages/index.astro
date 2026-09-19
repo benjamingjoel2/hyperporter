@@ -183,20 +183,31 @@ const OPERATING = ['Kenya', 'Morocco', 'Peru', 'Japan', 'Portugal', 'Vietnam'];
       <div class="v-prod-track" id="prodTrack" style={`--panels:${PRODUCTS.length}`}>
         <div class="v-prod-stage">
           <div class="v-prod">
+            {/* The layer list runs down the left as a numbered rail, the
+                active one carrying its own line — and the screen runs off
+                the right edge of the page rather than sitting in a frame
+                with room to spare around it. */}
             <div class="v-sticky" id="sticky">
-              {PRODUCTS.map((p, i) => <a href={`#lay-${p.slug}`} class:list={{ 'v-on': i === 0 }}>{p.label}</a>)}
+              {PRODUCTS.map((p, i) => (
+                <a href={`#lay-${p.slug}`} class:list={{ 'v-on': i === 0 }}>
+                  <span class="v-n">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="v-t">{p.label}</span>
+                </a>
+              ))}
             </div>
             <div id="feats" class="v-stack">
               {
-                PRODUCTS.map((p, i) => (
+                PRODUCTS.map((p) => (
                   <div class="v-feat" id={`lay-${p.slug}`}>
-                    <div class="v-copy">
-                      <h3>{p.label}</h3>
-                      <p>{p.summary}</p>
-                      <a class="v-pill-o" href={`/${p.slug}`}>Learn more</a>
-                    </div>
                     <div class="v-shot">
                       <Mockup screen={CARD_SCREEN[p.slug]} ground="warm" app={p.label} />
+                    </div>
+                    <div class="v-copy">
+                      <div>
+                        <h3>{p.label}</h3>
+                        <p>{p.summary}</p>
+                      </div>
+                      <a class="v-pill" href={`/${p.slug}`}>Learn more</a>
                     </div>
                   </div>
                 ))
