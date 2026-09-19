@@ -76,31 +76,30 @@ if (steps.length !== features.length) {
   title={overview ? overview.name : segment!.name}
   description={page.lede}
   currentNav="customers"
+  v2
 >
   {/* The solutions hero stays light and two-column, as the founder's
       sequence has it — headline left, lede and buttons right — and takes
       the v2 display heading and pills. */}
-  <div class="v2">
-    <section class="v-light v-band sol-hero">
-      <div class="v-wrap">
-        <div class="sol-hero-grid">
-          <div>
-            <span class="v-eyebrow">{page.eyebrow}</span>
-            <h1 class="v-disp"><b>{heroLead}</b>{heroRest && <i>{heroRest}</i>}</h1>
-          </div>
-          <div>
-            <p class="v-sub">{page.lede}</p>
-            <div class="v-cta">
-              <a class="v-pill-d" href="https://portal.hyperporter.com">Get started free</a>
-              <a class="v-pill-l" href={overview ? overview.pricingHref : '/pricing'}>
-                {overview ? overview.pricingLabel : 'See pricing'}
-              </a>
-            </div>
+  <section class="v-light v-band sol-hero">
+    <div class="v-wrap">
+      <div class="sol-hero-grid">
+        <div>
+          <span class="v-eyebrow">{page.eyebrow}</span>
+          <h1 class="v-disp"><b>{heroLead}</b>{heroRest && <i>{heroRest}</i>}</h1>
+        </div>
+        <div>
+          <p class="v-sub">{page.lede}</p>
+          <div class="v-cta">
+            <a class="v-pill-d" href="https://portal.hyperporter.com">Get started free</a>
+            <a class="v-pill-l" href={overview ? overview.pricingHref : '/pricing'}>
+              {overview ? overview.pricingLabel : 'See pricing'}
+            </a>
           </div>
         </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 
   {segment && <Points title={`How ${who} stay ahead`} points={segment.reasons} />}
 

@@ -11,6 +11,11 @@ interface Props {
   ogImage?: string;
   ogType?: 'website' | 'article';
   noindex?: boolean;
+  /** Built in the founder's v2 composition (Sep 2026). The class goes on
+      <main> rather than on each section's own wrapper: with a wrapper per
+      component two bands of the same ground could never see each other, so
+      their paddings doubled and the hairline between them never drew. */
+  v2?: boolean;
   /** Which header nav item to mark active. See Header.astro. */
   currentNav?:
     | 'home'
@@ -26,7 +31,8 @@ interface Props {
     | 'about';
 }
 
-const { title, description, canonical, ogImage, ogType, noindex, currentNav } = Astro.props;
+const { title, description, canonical, ogImage, ogType, noindex, currentNav, v2 = false } = Astro.props;
+import '../styles/v2.css';
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
@@ -71,7 +77,7 @@ const organizationJsonLd = {
   </head>
   <body>
     <Header current={currentNav} />
-    <main>
+    <main class:list={{ v2: v2 }}>
       <slot />
     </main>
     <Footer />

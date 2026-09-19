@@ -16,11 +16,9 @@ interface Props {
 const { lead, rest, cta = 'Get started free', href = 'https://portal.hyperporter.com' } = Astro.props;
 ---
 
-<div class="v2">
-  <div class="v-bigcta" data-chrome="dark">
-    <div class="v-wrap">
-      <h2 class="v-disp"><b>{lead}</b><i>{rest}</i></h2>
-      <a class="v-pill" href={href}>{cta} &rarr;</a>
-    </div>
+<div class="v-bigcta" data-chrome="dark">
+  <div class="v-wrap">
+    <h2 class="v-disp"><b>{lead}</b><i>{rest}</i></h2>
+    <a class="v-pill" href={href}>{cta} &rarr;</a>
   </div>
 </div>

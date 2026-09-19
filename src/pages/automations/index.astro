@@ -13,34 +13,33 @@ import '../../styles/v2.css';
   title="Automations"
   description="Six automations that run the nine stages for you — Inquiry, Quotation, Follow-up, Confirmation, Collection and Payment — each with the step a person always takes."
   currentNav="automations"
+  v2
 >
-  <div class="v2">
-    <V2Hero
-      eyebrow="Automations — Autopilot"
-      title="Six automations, one engine."
-      lede="Autopilot runs the nine stages from Inquiry to Completed. These are the six pieces of work it takes off your hands, and, on each, the moment it hands back to a person."
-      photo={photoFor('autopilot')}
-      secondary={{ label: 'The full overview of Autopilot', href: '/autopilot' }}
-    >
-      <Fragment slot="aside"><Mockup screen="pipeline" /></Fragment>
-    </V2Hero>
+  <V2Hero
+    eyebrow="Automations — Autopilot"
+    title="Six automations, one engine."
+    lede="Autopilot runs the nine stages from Inquiry to Completed. These are the six pieces of work it takes off your hands, and, on each, the moment it hands back to a person."
+    photo={photoFor('autopilot')}
+    secondary={{ label: 'The full overview of Autopilot', href: '/autopilot' }}
+  >
+    <Fragment slot="aside"><Mockup screen="pipeline" /></Fragment>
+  </V2Hero>
 
-    <section class="v-light v-band">
-      <div class="v-wrap">
-        <div class="v-grid3" style="margin-top:0">
-          {
-            AUTOMATIONS.map((a) => (
-              <a class="v-pcard" href={`/automations/${a.slug}`}>
-                <div class="v-cat">{a.tier}</div>
-                <h3>{a.name}</h3>
-                <p>{a.title}</p>
-              </a>
-            ))
-          }
-        </div>
+  <section class="v-light v-band">
+    <div class="v-wrap">
+      <div class="v-grid3" style="margin-top:0">
+        {
+          AUTOMATIONS.map((a) => (
+            <a class="v-pcard" href={`/automations/${a.slug}`}>
+              <div class="v-cat">{a.tier}</div>
+              <h3>{a.name}</h3>
+              <p>{a.title}</p>
+            </a>
+          ))
+        }
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 
   <CtaBand
     lead="Autopilot runs the stages."

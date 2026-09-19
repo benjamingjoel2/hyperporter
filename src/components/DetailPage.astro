@@ -39,72 +39,70 @@ const cta =
     : { lead: 'Autopilot runs the stages. You take the decisions.', rest: 'Start free on Showcase, and switch it on when you are ready.' };
 ---
 
-<div class="v2">
-  <V2Hero eyebrow={eyebrow} title={page.title} lede={page.lede} photo={photoFor(page.slug)} />
-</div>
+<V2Hero eyebrow={eyebrow} title={page.title} lede={page.lede} photo={photoFor(page.slug)} />
 
 <Points title={`${page.name} overview`} points={page.what} />
 
 {/* How it works: the reference's accordion — the steps on hairlines,
     the open one with its body, the screen beside. */}
-<div class="v2">
-  <section class="v-dark v-band acc-dark" data-chrome="dark">
-    <div class="v-wrap">
-      <div class="v-lead">
-        <h2 class="v-disp"><b>{page.howTitle}</b></h2>
-      </div>
-  <div class="lg-acc">
-    <div class="lg-acc-list">
-      {
-        page.how.map((s, i) => (
-          <div class:list={['lg-acc-item', { on: i === 0 }]}>
-            <button
-              type="button"
-              class="lg-acc-btn"
-              id={`${id}-how-tab-${i}`}
-              aria-expanded={i === 0 ? 'true' : 'false'}
-              aria-controls={`${id}-how-body-${i}`}
-            >
-              {s.name}
-            </button>
-            <div class="lg-acc-body" id={`${id}-how-body-${i}`} inert={i !== 0}>
-              <div>
-                <p>{s.body}</p>
-              </div>
+<section class="v-dark v-band acc-dark" data-chrome="dark">
+  <div class="v-wrap">
+    <div class="v-lead">
+      <h2 class="v-disp"><b>{page.howTitle}</b></h2>
+    </div>
+<div class="lg-acc">
+  <div class="lg-acc-list">
+    {
+      page.how.map((s, i) => (
+        <div class:list={['lg-acc-item', { on: i === 0 }]}>
+          <button
+            type="button"
+            class="lg-acc-btn"
+            id={`${id}-how-tab-${i}`}
+            aria-expanded={i === 0 ? 'true' : 'false'}
+            aria-controls={`${id}-how-body-${i}`}
+          >
+            {s.name}
+          </button>
+          <div class="lg-acc-body" id={`${id}-how-body-${i}`} inert={i !== 0}>
+            <div>
+              <p>{s.body}</p>
             </div>
           </div>
-        ))
-      }
-    </div>
-    <div class="lg-acc-shot lg-acc-ipad">
-      {
-        steps.map((sc, i) => (
-          <div class:list={{ on: i === 0 }} inert={i !== 0}>
-            <StepScreen
-              screen={sc}
-              ground="warm"
-              app={page.name}
-              alt={`${page.name}: ${page.how[i].name}`}
-            />
-          </div>
-        ))
-      }
-    </div>
+        </div>
+      ))
+    }
   </div>
-    </div>
-  </section>
+  <div class="lg-acc-shot lg-acc-ipad">
+    {
+      steps.map((sc, i) => (
+        <div class:list={{ on: i === 0 }} inert={i !== 0}>
+          <StepScreen
+            screen={sc}
+            ground="warm"
+            app={page.name}
+            alt={`${page.name}: ${page.how[i].name}`}
+          />
+        </div>
+      ))
+    }
+  </div>
 </div>
+  </div>
+</section>
 
 {
   /* Amber is the site's mark for a human / manual state, and this is the
      one place on an automation page it belongs. */
   page.human && (
-    <div class="sec-tight wrap">
-      <div class="human-note rv">
-        <p class="eyebrow">Where a person steps in</p>
-        <p>{page.human}</p>
+    <section class="v-light v-band v-band-tight">
+      <div class="v-wrap">
+        <div class="human-note">
+          <p class="v-eyebrow">Where a person steps in</p>
+          <p>{page.human}</p>
+        </div>
       </div>
-    </div>
+    </section>
   )
 }
 

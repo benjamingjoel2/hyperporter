@@ -14,33 +14,32 @@ import '../../styles/v2.css';
   title="Tools"
   description="Twelve tools across Portal, Autopilot and Intelligence — the CRM, the inquiry form, the Quotation Board, the Vault, Atlas and the rest — each on a page of its own."
   currentNav="product"
+  v2
 >
-  <div class="v2">
-    <V2Hero
-      eyebrow="Tools"
-      title="Every tool, on its own page."
-      lede="Twelve tools across Portal, Autopilot and Intelligence. Each page says what the tool does, how it works, and which tier it lands on."
-      photo={photoFor('tools')}
-    >
-      <Fragment slot="aside"><Mockup screen="dashboard" /></Fragment>
-    </V2Hero>
+  <V2Hero
+    eyebrow="Tools"
+    title="Every tool, on its own page."
+    lede="Twelve tools across Portal, Autopilot and Intelligence. Each page says what the tool does, how it works, and which tier it lands on."
+    photo={photoFor('tools')}
+  >
+    <Fragment slot="aside"><Mockup screen="dashboard" /></Fragment>
+  </V2Hero>
 
-    <section class="v-light v-band">
-      <div class="v-wrap">
-        <div class="v-grid3" style="margin-top:0">
-          {
-            TOOLS.map((t) => (
-              <a class="v-pcard" href={`/tools/${t.slug}`}>
-                <div class="v-cat">{t.tier === t.layer ? t.layer : `${t.layer} · ${t.tier}`}</div>
-                <h3>{t.name}</h3>
-                <p>{t.title}</p>
-              </a>
-            ))
-          }
-        </div>
+  <section class="v-light v-band">
+    <div class="v-wrap">
+      <div class="v-grid3" style="margin-top:0">
+        {
+          TOOLS.map((t) => (
+            <a class="v-pcard" href={`/tools/${t.slug}`}>
+              <div class="v-cat">{t.tier === t.layer ? t.layer : `${t.layer} · ${t.tier}`}</div>
+              <h3>{t.name}</h3>
+              <p>{t.title}</p>
+            </a>
+          ))
+        }
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 
   <CtaBand
     lead="Every tool is in the free tier to try."

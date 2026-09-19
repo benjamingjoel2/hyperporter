@@ -14,33 +14,32 @@ import '../../styles/v2.css';
   title="Integrations"
   description="WhatsApp Business and email connected onto the same trip thread, so a message about a trip lands on that trip rather than in a mailbox somebody has to remember to check."
   currentNav="integrations"
+  v2
 >
-  <div class="v2">
-    <V2Hero
-      eyebrow="Integrations"
-      title="The channels they already use."
-      lede="WhatsApp Business and email, connected onto the same trip thread. Your travellers and your suppliers keep writing where they always did; you stop keeping the record in your head."
-      photo={photoFor('whatsapp-integration')}
-    >
-      <Fragment slot="aside"><Mockup screen="whatsapp" /></Fragment>
-    </V2Hero>
+  <V2Hero
+    eyebrow="Integrations"
+    title="The channels they already use."
+    lede="WhatsApp Business and email, connected onto the same trip thread. Your travellers and your suppliers keep writing where they always did; you stop keeping the record in your head."
+    photo={photoFor('whatsapp-integration')}
+  >
+    <Fragment slot="aside"><Mockup screen="whatsapp" /></Fragment>
+  </V2Hero>
 
-    <section class="v-light v-band">
-      <div class="v-wrap">
-        <div class="v-grid3" style="margin-top:0">
-          {
-            INTEGRATIONS.map((i) => (
-              <a class="v-pcard" href={`/integrations/${i.slug}`}>
-                <div class="v-cat">{i.tier === i.layer ? i.layer : `${i.layer} · ${i.tier}`}</div>
-                <h3>{i.name}</h3>
-                <p>{i.title}</p>
-              </a>
-            ))
-          }
-        </div>
+  <section class="v-light v-band">
+    <div class="v-wrap">
+      <div class="v-grid3" style="margin-top:0">
+        {
+          INTEGRATIONS.map((i) => (
+            <a class="v-pcard" href={`/integrations/${i.slug}`}>
+              <div class="v-cat">{i.tier === i.layer ? i.layer : `${i.layer} · ${i.tier}`}</div>
+              <h3>{i.name}</h3>
+              <p>{i.title}</p>
+            </a>
+          ))
+        }
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 
   <CtaBand
     lead="Connect the channels once."
