@@ -7,7 +7,8 @@
 import Base from '../../layouts/Base.astro';
 import { CATEGORIES } from '../../lib/content/solutions';
 import Mockup from '../../components/Mockup.astro';
-import PhotoHero from '../../components/PhotoHero.astro';
+import V2Hero from '../../components/V2Hero.astro';
+import { photoFor } from '../../lib/photos';
 
 // One screen per category: the part of Portal where that category's features live.
 const SCREEN: Record<string, string> = {
@@ -30,42 +31,50 @@ const { c } = Astro.props;
   title={c.name}
   description={`${c.title} ${c.lede}`}
   currentNav="solutions"
+  v2
 >
-  <PhotoHero>
-    <div class="sec wrap page-hero">
-      <div class="page-hero-copy">
+  <V2Hero
+    eyebrow={`Solutions — ${c.name}`}
+    title={c.title}
+    lede={c.lede}
+    photo={photoFor(c.slug, 'solutions')}
+  >
+    <Fragment slot="aside"><Mockup screen={SCREEN[c.slug]} /></Fragment>
+  </V2Hero>
 
-        <p class="eyebrow rv">Solutions &mdash; {c.name}</p>
-        <h1 class="rv">{c.title}</h1>
-        <p class="lede rv">{c.lede}</p>
+  {/* Every feature in the category, each saying which tier it lands on —
+      the tier is the point of this page, so it sits on the row. */}
+  <section class="v-light v-band">
+    <div class="v-wrap">
+      <div class="v-lead">
+        <span class="v-eyebrow">What's included</span>
+        <h2 class="v-disp"><b>Every feature in {c.name.toLowerCase()},</b><i>and the tier it lands on</i></h2>
       </div>
-      <Mockup screen={SCREEN[c.slug]} />
-    </div>
-  </PhotoHero>
-
-  <div class="sec-tight wrap">
-    <div class="flist rv">
-      {
-        c.features.map((f, i) => (
-          <div class="fitem">
-            <div class="fn">{String(i + 1).padStart(2, '0')}</div>
-            <div>
-              <b>{f.name}</b>
-              <p>{f.body}</p>
-              <span class="tierpill">{f.tier}</span>
+      <div class="v-rows">
+        {
+          c.features.map((f, i) => (
+            <div class="v-row">
+              <span class="v-n mono">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{f.name}</h3>
+                <p>{f.body}</p>
+              </div>
+              <span class="v-tier">{f.tier}</span>
             </div>
-          </div>
-        ))
-      }
-    </div>
-
-    <div class="nextup rv">
-      <div>
-        <p class="eyebrow" style="margin-bottom:0">Up next</p>
-        <h3>{c.next.title}</h3>
-        <p>{c.next.desc}</p>
+          ))
+        }
       </div>
-      <a class="plink" href={c.next.href}>{c.next.cta} &rarr;</a>
+    </div>
+  </section>
+
+  <div class="v-bigcta" data-chrome="dark">
+    <div class="v-wrap">
+      <div>
+        <span class="v-eyebrow">Up next</span>
+        <h2>{c.next.title}</h2>
+      </div>
+      <a class="v-pill" href={c.next.href}>{c.next.cta} &rarr;</a>
     </div>
   </div>
+
 </Base>

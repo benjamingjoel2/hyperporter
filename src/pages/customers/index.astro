@@ -24,47 +24,46 @@ const SIDES = [
   title="Customers"
   description="Same product underneath. Different starting point, depending on whether you're sourcing suppliers or being sourced."
   currentNav="customers"
+  v2
 >
-  <div class="v2">
-    <V2Hero
-      eyebrow="Customers"
-      title="Whichever side of the booking you're on."
-      lede="Same product underneath. Different starting point, depending on whether you're sourcing suppliers or being sourced."
-      photo={photoFor('customers')}
-    >
-      <Fragment slot="aside"><Mockup screen="contacts" /></Fragment>
-    </V2Hero>
+  <V2Hero
+    eyebrow="Customers"
+    title="Whichever side of the booking you're on."
+    lede="Same product underneath. Different starting point, depending on whether you're sourcing suppliers or being sourced."
+    photo={photoFor('customers')}
+  >
+    <Fragment slot="aside"><Mockup screen="contacts" /></Fragment>
+  </V2Hero>
 
-    <section class="v-light v-band">
-      <div class="v-wrap">
-        <div class="v-inds v-cols">
-          {
-            SIDES.map(({ side, body }) => {
-              const overview = OVERVIEWS.find((o) => o.side === side)!;
-              const segments = SEGMENTS.filter((s) => s.side === side);
-              return (
-                <div class="v-ind">
-                  <span class="v-eyebrow">{SIDE_LABEL[side]}</span>
-                  <h3>{SIDE_SUB[side]}</h3>
-                  <p>{body}</p>
-                  <ul class="v-seglist">
-                    {segments.map((s) => (
-                      <li>
-                        <a href={`/customers/${s.slug}`}>{s.name}</a>
-                      </li>
-                    ))}
-                  </ul>
-                  <a class="v-pill-d" href={`/customers/${overview.slug}`}>
-                    Explore {overview.name}
-                  </a>
-                </div>
-              );
-            })
-          }
-        </div>
+  <section class="v-light v-band">
+    <div class="v-wrap">
+      <div class="v-inds v-cols">
+        {
+          SIDES.map(({ side, body }) => {
+            const overview = OVERVIEWS.find((o) => o.side === side)!;
+            const segments = SEGMENTS.filter((s) => s.side === side);
+            return (
+              <div class="v-ind">
+                <span class="v-eyebrow">{SIDE_LABEL[side]}</span>
+                <h3>{SIDE_SUB[side]}</h3>
+                <p>{body}</p>
+                <ul class="v-seglist">
+                  {segments.map((s) => (
+                    <li>
+                      <a href={`/customers/${s.slug}`}>{s.name}</a>
+                    </li>
+                  ))}
+                </ul>
+                <a class="v-pill-d" href={`/customers/${overview.slug}`}>
+                  Explore {overview.name}
+                </a>
+              </div>
+            );
+          })
+        }
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 
   <CtaBand
     lead="Same platform, either side."

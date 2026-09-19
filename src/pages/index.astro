@@ -90,226 +90,222 @@ const OPERATING = ['Kenya', 'Morocco', 'Peru', 'Japan', 'Portugal', 'Vietnam'];
   title="Home"
   description="Travel operations infrastructure — one connected system for agencies, DMCs and tour operators."
   currentNav="home"
+  v2
 >
-  <div class="v2">
-    {/* ---------------------------------------------------------- HERO */}
-    <section class="v-hero" data-chrome="dark">
-      <div class="v-hero-bg" style="background-image:url(/hero.jpg)"></div>
-      <div class="v-wrap">
-        <div class="v-hero-grid">
-          <div>
-            <span class="v-badge"><b>New</b> Horizon reaches 130+ countries</span>
-            <h1 class="v-disp"><b>Run your trips</b><i>on Autopilot.</i></h1>
-            <p class="v-sub">
-              AI-powered operating system for travel agencies, DMCs, and tour operators.
-            </p>
-            <div class="v-cta">
-              <a class="v-pill" href="https://portal.hyperporter.com">Get started free</a>
-              <a class="v-pill-o" href="/product">See the whole system</a>
-            </div>
-          </div>
-
-          <div class="v-phone">
-            <div class="v-screen">
-              <div class="v-ph-top">
-                <span class="v-av">HP</span>
-                <div><b>KE-2291 · Nairobi</b><span>traveller · agency · supplier</span></div>
-              </div>
-              <div class="v-ph-body">
-                <div class="v-bub v-sys">Inquiry arrived by email — contact and trip created</div>
-                <div class="v-bub"><span class="v-who">Rift Valley GS</span>Classic, 8 days. €4,180 per person.</div>
-                <div class="v-bub v-me"><span class="v-who">Autopilot</span>Re-checking availability before this goes to the traveller.</div>
-                <div class="v-bub v-sys">Availability re-verified · 12:41</div>
-                <div class="v-bub v-me"><span class="v-who">Autopilot</span>Proposal shared. Deposit requested for 14 Feb.</div>
-                <div class="v-bub v-sys v-amb">Payment waiting on a person</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="v-strip">
-        <div class="v-wrap">
-          <span>Operating in</span>
-          {OPERATING.map((c) => <span>{c}</span>)}
-        </div>
-      </div>
-    </section>
-
-    {/* ------------------------------------------------ LIGHT: why + stats */}
-    <section class="v-light v-band" id="why">
-      <div class="v-wrap">
-        <div class="v-lead">
-          <span class="v-eyebrow">Why Hyperporter</span>
-          <h2 class="v-disp"><b>Simplify your operations</b><i>from start to finish.</i></h2>
-          <p>
-            Inquiry to arrival on one thread. The coordination runs on its own, and stops at
-            the points where a person is meant to decide.
+  {/* ---------------------------------------------------------- HERO */}
+  <section class="v-hero" data-chrome="dark">
+    <div class="v-hero-bg" style="background-image:url(/hero.jpg)"></div>
+    <div class="v-wrap">
+      <div class="v-hero-grid">
+        <div>
+          <span class="v-badge"><b>New</b> Horizon reaches 130+ countries</span>
+          <h1 class="v-disp"><b>Run your trips</b><i>on Autopilot.</i></h1>
+          <p class="v-sub">
+            AI-powered operating system for travel agencies, DMCs, and tour operators.
           </p>
-          <a class="v-pill-d" href="/product">See the whole system</a>
-        </div>
-        <div class="v-statrow" id="statrow">
-          <div><b class="v-mono">130+</b><span>Countries with a vetted supplier</span></div>
-          <div><b class="v-mono" data-to="9">0</b><span>Stages, inquiry to post-trip</span></div>
-          <div><b class="v-mono" data-to="1">0</b><span>Thread per trip, start to finish</span></div>
+          <div class="v-cta">
+            <a class="v-pill" href="https://portal.hyperporter.com">Get started free</a>
+            <a class="v-pill-o" href="/product">See the whole system</a>
+          </div>
         </div>
 
-        <div class="v-center" style="margin-top:clamp(56px,7vw,96px)">
-          <span class="v-eyebrow">The shape of a trip</span>
-          <h2 class="v-disp"><b>Four moments</b><i>every trip passes through</i></h2>
-          <p>Automated by default, human where it counts.</p>
-        </div>
-        <div class="v-inds v-cols">
-          {WHY.map((m) => (
-            <div class="v-ind">
-              <h3>{m.name}</h3>
-              <p>{m.body}</p>
+        <div class="v-phone">
+          <div class="v-screen">
+            <div class="v-ph-top">
+              <span class="v-av">HP</span>
+              <div><b>KE-2291 · Nairobi</b><span>traveller · agency · supplier</span></div>
             </div>
-          ))}
+            <div class="v-ph-body">
+              <div class="v-bub v-sys">Inquiry arrived by email — contact and trip created</div>
+              <div class="v-bub"><span class="v-who">Rift Valley GS</span>Classic, 8 days. €4,180 per person.</div>
+              <div class="v-bub v-me"><span class="v-who">Autopilot</span>Re-checking availability before this goes to the traveller.</div>
+              <div class="v-bub v-sys">Availability re-verified · 12:41</div>
+              <div class="v-bub v-me"><span class="v-who">Autopilot</span>Proposal shared. Deposit requested for 14 Feb.</div>
+              <div class="v-bub v-sys v-amb">Payment waiting on a person</div>
+            </div>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    {/* --------------------------------------------- DARK: the product, pinned */}
-    <section class="v-dark v-band" id="product" data-chrome="dark">
+    <div class="v-strip">
       <div class="v-wrap">
-        <div class="v-center">
-          <span class="v-eyebrow">Product</span>
-          <h2 class="v-disp"><b>Four layers</b><i>on one record</i></h2>
-          <p>Business in the palm of your hand. Four toolkits, one platform, end to end.</p>
-          <a class="v-pill" href="/product">See the whole system</a>
-        </div>
+        <span>Operating in</span>
+        {OPERATING.map((c) => <span>{c}</span>)}
+      </div>
+    </div>
+  </section>
 
-        <div class="v-prod-track" id="prodTrack" style={`--panels:${PRODUCTS.length}`}>
-          <div class="v-prod-stage">
-            <div class="v-prod">
-              <div>
-                <div class="v-sticky" id="sticky">
-                  <span class="v-eyebrow">The layers</span>
-                  {PRODUCTS.map((p, i) => <a href={`#lay-${p.slug}`} class:list={{ 'v-on': i === 0 }}>{p.label}</a>)}
-                </div>
-              </div>
-              <div id="feats" class="v-stack">
-                {
-                  PRODUCTS.map((p, i) => (
-                    <div class="v-feat" id={`lay-${p.slug}`}>
-                      <div class="v-copy">
-                        <h3>{p.label}</h3>
-                        <p>{p.summary}</p>
-                        <a class="v-pill-o" href={`/${p.slug}`}>Learn more</a>
-                      </div>
-                      <div class="v-shot">
-                        <Mockup screen={CARD_SCREEN[p.slug]} ground="warm" app={p.label} />
-                      </div>
+  {/* ------------------------------------------------ LIGHT: why + stats */}
+  <section class="v-light v-band" id="why">
+    <div class="v-wrap">
+      <div class="v-lead">
+        <span class="v-eyebrow">Why Hyperporter</span>
+        <h2 class="v-disp"><b>Simplify your operations</b><i>from start to finish.</i></h2>
+        <p>
+          Inquiry to arrival on one thread. The coordination runs on its own, and stops at
+          the points where a person is meant to decide.
+        </p>
+        <a class="v-pill-d" href="/product">See the whole system</a>
+      </div>
+      <div class="v-statrow" id="statrow">
+        <div><b class="v-mono">130+</b><span>Countries with a vetted supplier</span></div>
+        <div><b class="v-mono" data-to="9">0</b><span>Stages, inquiry to post-trip</span></div>
+        <div><b class="v-mono" data-to="1">0</b><span>Thread per trip, start to finish</span></div>
+      </div>
+
+      <div class="v-center" style="margin-top:clamp(56px,7vw,96px)">
+        <span class="v-eyebrow">The shape of a trip</span>
+        <h2 class="v-disp"><b>Four moments</b><i>every trip passes through</i></h2>
+        <p>Automated by default, human where it counts.</p>
+      </div>
+      <div class="v-inds v-cols">
+        {WHY.map((m) => (
+          <div class="v-ind">
+            <h3>{m.name}</h3>
+            <p>{m.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* --------------------------------------------- DARK: the product, pinned */}
+  <section class="v-dark v-band" id="product" data-chrome="dark">
+    <div class="v-wrap">
+      <div class="v-center">
+        <span class="v-eyebrow">Product</span>
+        <h2 class="v-disp"><b>Four layers</b><i>on one record</i></h2>
+        <p>Business in the palm of your hand. Four toolkits, one platform, end to end.</p>
+        <a class="v-pill" href="/product">See the whole system</a>
+      </div>
+
+      <div class="v-prod-track" id="prodTrack" style={`--panels:${PRODUCTS.length}`}>
+        <div class="v-prod-stage">
+          <div class="v-prod">
+            <div class="v-sticky" id="sticky">
+              {PRODUCTS.map((p, i) => <a href={`#lay-${p.slug}`} class:list={{ 'v-on': i === 0 }}>{p.label}</a>)}
+            </div>
+            <div id="feats" class="v-stack">
+              {
+                PRODUCTS.map((p, i) => (
+                  <div class="v-feat" id={`lay-${p.slug}`}>
+                    <div class="v-copy">
+                      <h3>{p.label}</h3>
+                      <p>{p.summary}</p>
+                      <a class="v-pill-o" href={`/${p.slug}`}>Learn more</a>
                     </div>
-                  ))
-                }
-              </div>
+                    <div class="v-shot">
+                      <Mockup screen={CARD_SCREEN[p.slug]} ground="warm" app={p.label} />
+                    </div>
+                  </div>
+                ))
+              }
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    {/* ------------------------------------------------ LIGHT: the two sides */}
-    <section class="v-light v-band" id="customers">
-      <div class="v-wrap">
-        <div class="v-lead">
-          <span class="v-eyebrow">Who it's for</span>
-          <h2 class="v-disp"><b>Tailored for</b><i>your operation</i></h2>
-          <p>
-            DMCs and tour operators — organise inbound requests and quote from one place, with
-            easily sharable proposal and support tools.
-          </p>
-        </div>
-        <div class="v-inds v-cols">
-          {
-            SIDES.map((s) => (
-              <div class="v-ind">
-                <h3>{s.name}</h3>
-                <p>{s.line}</p>
-                <a class="v-pill-d" href={s.href}>{s.cta}</a>
-                <div class="v-shot"><Mockup screen={s.screen} /></div>
-              </div>
-            ))
-          }
-        </div>
+  {/* ------------------------------------------------ LIGHT: the two sides */}
+  <section class="v-light v-band" id="customers">
+    <div class="v-wrap">
+      <div class="v-lead">
+        <span class="v-eyebrow">Who it's for</span>
+        <h2 class="v-disp"><b>Tailored for</b><i>your operation</i></h2>
+        <p>
+          DMCs and tour operators — organise inbound requests and quote from one place, with
+          easily sharable proposal and support tools.
+        </p>
       </div>
-    </section>
+      <div class="v-inds v-cols">
+        {
+          SIDES.map((s) => (
+            <div class="v-ind">
+              <h3>{s.name}</h3>
+              <p>{s.line}</p>
+              <a class="v-pill-d" href={s.href}>{s.cta}</a>
+              <div class="v-shot"><Mockup screen={s.screen} /></div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
 
-    {/* ------------------------------------------------------- LIGHT: the tools */}
-    <section class="v-light v-band" id="tools">
-      <div class="v-wrap">
-        <div class="v-bloghero">
-          <span class="v-eyebrow">Every tool</span>
-          <h2 class="v-disp" style="margin-top:20px"><b>The interface you work in,</b><i>from inquiry to invoice</i></h2>
-          <a class="v-pill-d" href="/tools">All tools</a>
-        </div>
-        <div class="v-grid3">
-          {
-            toolCards.map((t) => (
-              <a class="v-pcard" href={t.href}>
-                <div class="v-cat">Tool</div>
-                <h3>{t.label}</h3>
-                <p>{t.desc}</p>
-              </a>
-            ))
-          }
-        </div>
+  {/* ------------------------------------------------------- LIGHT: the tools */}
+  <section class="v-light v-band" id="tools">
+    <div class="v-wrap">
+      <div class="v-bloghero">
+        <span class="v-eyebrow">Every tool</span>
+        <h2 class="v-disp" style="margin-top:20px"><b>The interface you work in,</b><i>from inquiry to invoice</i></h2>
+        <a class="v-pill-d" href="/tools">All tools</a>
       </div>
-    </section>
+      <div class="v-grid3">
+        {
+          toolCards.map((t) => (
+            <a class="v-pcard" href={t.href}>
+              <div class="v-cat">Tool</div>
+              <h3>{t.label}</h3>
+              <p>{t.desc}</p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
 
-    {/* ------------------------------------------------ DARK: the automations */}
-    <section class="v-dark v-band" id="automations" data-chrome="dark">
-      <div class="v-wrap">
-        <div class="v-center">
-          <span class="v-eyebrow">Every automation</span>
-          <h2 class="v-disp"><b>The steps that run on their own</b><i>and the ones a person still takes</i></h2>
-          <a class="v-pill" href="/automations">All automations</a>
-        </div>
-        <div class="v-grid3" style="margin-top:clamp(34px,4.4vw,60px)">
-          {
-            autoCards.map((a) => (
-              <a class="v-pcard" href={a.href}>
-                <div class="v-cat">Automation</div>
-                <img class="v-art" src={a.photo} alt="" width="1200" height="800" loading="lazy" decoding="async" />
-                <h3>{a.label}</h3>
-                <p>{a.desc}</p>
-              </a>
-            ))
-          }
-        </div>
+  {/* ------------------------------------------------ DARK: the automations */}
+  <section class="v-dark v-band" id="automations" data-chrome="dark">
+    <div class="v-wrap">
+      <div class="v-center">
+        <span class="v-eyebrow">Every automation</span>
+        <h2 class="v-disp"><b>The steps that run on their own</b><i>and the ones a person still takes</i></h2>
+        <a class="v-pill" href="/automations">All automations</a>
       </div>
-    </section>
+      <div class="v-grid3" style="margin-top:clamp(34px,4.4vw,60px)">
+        {
+          autoCards.map((a) => (
+            <a class="v-pcard" href={a.href}>
+              <div class="v-cat">Automation</div>
+              <img class="v-art" src={a.photo} alt="" width="1200" height="800" loading="lazy" decoding="async" />
+              <h3>{a.label}</h3>
+              <p>{a.desc}</p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
 
-    {/* ------------------------------------------------------ LIGHT: channels */}
-    <section class="v-light v-band" id="integrations">
-      <div class="v-wrap">
-        <div class="v-lead">
-          <span class="v-eyebrow">Integrations</span>
-          <h2 class="v-disp"><b>Integrations.</b><i>The channels they already use.</i></h2>
-        </div>
-        <div class="v-grid3">
-          {
-            CONNECT.map((c) => (
-              <a class="v-pcard" href={c.href}>
-                <img class="v-art" src={c.photo} alt={c.alt} width="1200" height="800" loading="lazy" decoding="async" />
-                <h3>{c.lead}</h3>
-                <p>{c.rest}</p>
-                <span class="v-more">{c.cta} →</span>
-              </a>
-            ))
-          }
-        </div>
+  {/* ------------------------------------------------------ LIGHT: channels */}
+  <section class="v-light v-band" id="integrations">
+    <div class="v-wrap">
+      <div class="v-lead">
+        <span class="v-eyebrow">Integrations</span>
+        <h2 class="v-disp"><b>Integrations.</b><i>The channels they already use.</i></h2>
       </div>
-    </section>
+      <div class="v-grid3">
+        {
+          CONNECT.map((c) => (
+            <a class="v-pcard" href={c.href}>
+              <img class="v-art" src={c.photo} alt={c.alt} width="1200" height="800" loading="lazy" decoding="async" />
+              <h3>{c.lead}</h3>
+              <p>{c.rest}</p>
+              <span class="v-more">{c.cta} →</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
 
-    {/* ------------------------------------------------------------- the close */}
-    <div class="v-bigcta" data-chrome="dark">
-      <div class="v-wrap">
-        <h2>Run your next trip on infrastructure, not inboxes.</h2>
-        <a class="v-pill" href="https://portal.hyperporter.com">Get started free</a>
-      </div>
+  {/* ------------------------------------------------------------- the close */}
+  <div class="v-bigcta" data-chrome="dark">
+    <div class="v-wrap">
+      <h2>Run your next trip on infrastructure, not inboxes.</h2>
+      <a class="v-pill" href="https://portal.hyperporter.com">Get started free</a>
     </div>
   </div>
 </Base>

@@ -49,90 +49,88 @@ const [lead, rest] = twoTone(title);
 const anchor = (name: string): string => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 ---
 
-<div class="v2">
-  <section class="v-hero" data-chrome="dark">
-    {photo && <div class="v-hero-bg" style={`background-image:url(${photo.src})`} />}
-    <div class="v-wrap">
-      <div class:list={['v-hero-grid', { 'v-solo': !hasAside }]}>
-        <div>
-          <span class="v-eyebrow">{eyebrow}</span>
-          <h1 class="v-disp"><b>{lead}</b>{rest && <i>{rest}</i>}</h1>
-          <p class="v-sub">{lede}</p>
-          <div class="v-cta">
-            <a class="v-pill" href="https://portal.hyperporter.com">Get started free</a>
-            <a class="v-pill-o" href="/pricing">See pricing</a>
-          </div>
-        </div>
-        {hasAside && (
-          <div class="v-hero-aside">
-            <slot name="hero-aside" />
-          </div>
-        )}
-      </div>
-    </div>
-  </section>
-
-  <slot name="after-hero" />
-
-  {
-    features.length > 0 && (
-      <section class="v-light v-band">
-        <div class="v-wrap">
-          <div class="v-lead">
-            <span class="v-eyebrow">What it does</span>
-            {featuresTitle && <h2 class="v-disp"><b>{twoTone(featuresTitle)[0]}</b>{twoTone(featuresTitle)[1] && <i>{twoTone(featuresTitle)[1]}</i>}</h2>}
-          </div>
-          <div class="v-inds v-cols">
-            {features.map((f) => (
-              <div class="v-ind" id={anchor(f.name)}>
-                <span class="v-eyebrow">{f.n}</span>
-                <h3>{f.name}</h3>
-                <p>{f.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  <slot name="after-features" />
-
-  {
-    cases.length > 0 && (
-      <section class="v-dark v-band" data-chrome="dark">
-        <div class="v-wrap">
-          <div class="v-center">
-            <span class="v-eyebrow">On the ground</span>
-            {casesTitle && <h2 class="v-disp"><b>{twoTone(casesTitle)[0]}</b>{twoTone(casesTitle)[1] && <i>{twoTone(casesTitle)[1]}</i>}</h2>}
-          </div>
-          <div class="v-cases" data-cases>
-            {cases.map((c, i) => (
-              <div class:list={['v-case', { 'v-open': i === 0 }]}>
-                <span class="v-mk">{c.kind}</span>
-                <div class="v-body">
-                  <blockquote>{c.title}</blockquote>
-                  <p class="v-att">{c.body}</p>
-                </div>
-                <button class="v-exp" type="button" aria-label={`Read: ${c.title}`}>+</button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  <slot name="after-cases" />
-
-  <div class="v-bigcta" data-chrome="dark">
-    <div class="v-wrap">
+<section class="v-hero" data-chrome="dark">
+  {photo && <div class="v-hero-bg" style={`background-image:url(${photo.src})`} />}
+  <div class="v-wrap">
+    <div class:list={['v-hero-grid', { 'v-solo': !hasAside }]}>
       <div>
-        <span class="v-eyebrow">{next.eyebrow}</span>
-        <h2>{next.title}</h2>
+        <span class="v-eyebrow">{eyebrow}</span>
+        <h1 class="v-disp"><b>{lead}</b>{rest && <i>{rest}</i>}</h1>
+        <p class="v-sub">{lede}</p>
+        <div class="v-cta">
+          <a class="v-pill" href="https://portal.hyperporter.com">Get started free</a>
+          <a class="v-pill-o" href="/pricing">See pricing</a>
+        </div>
       </div>
-      <a class="v-pill" href={next.href}>{next.cta} &rarr;</a>
+      {hasAside && (
+        <div class="v-hero-aside">
+          <slot name="hero-aside" />
+        </div>
+      )}
     </div>
+  </div>
+</section>
+
+<slot name="after-hero" />
+
+{
+  features.length > 0 && (
+    <section class="v-light v-band">
+      <div class="v-wrap">
+        <div class="v-lead">
+          <span class="v-eyebrow">What it does</span>
+          {featuresTitle && <h2 class="v-disp"><b>{twoTone(featuresTitle)[0]}</b>{twoTone(featuresTitle)[1] && <i>{twoTone(featuresTitle)[1]}</i>}</h2>}
+        </div>
+        <div class="v-inds v-cols">
+          {features.map((f) => (
+            <div class="v-ind" id={anchor(f.name)}>
+              <span class="v-eyebrow">{f.n}</span>
+              <h3>{f.name}</h3>
+              <p>{f.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<slot name="after-features" />
+
+{
+  cases.length > 0 && (
+    <section class="v-dark v-band" data-chrome="dark">
+      <div class="v-wrap">
+        <div class="v-center">
+          <span class="v-eyebrow">On the ground</span>
+          {casesTitle && <h2 class="v-disp"><b>{twoTone(casesTitle)[0]}</b>{twoTone(casesTitle)[1] && <i>{twoTone(casesTitle)[1]}</i>}</h2>}
+        </div>
+        <div class="v-cases" data-cases>
+          {cases.map((c, i) => (
+            <div class:list={['v-case', { 'v-open': i === 0 }]}>
+              <span class="v-mk">{c.kind}</span>
+              <div class="v-body">
+                <blockquote>{c.title}</blockquote>
+                <p class="v-att">{c.body}</p>
+              </div>
+              <button class="v-exp" type="button" aria-label={`Read: ${c.title}`}>+</button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<slot name="after-cases" />
+
+<div class="v-bigcta" data-chrome="dark">
+  <div class="v-wrap">
+    <div>
+      <span class="v-eyebrow">{next.eyebrow}</span>
+      <h2>{next.title}</h2>
+    </div>
+    <a class="v-pill" href={next.href}>{next.cta} &rarr;</a>
   </div>
 </div>
 
