@@ -64,6 +64,28 @@ const RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
   }, { passive: true });
 })();
 
+/* ---- the case panels ---------------------------------------------------
+   One panel is open at a time and takes the room; clicking another moves
+   the room to it. Below 1000px the CSS opens all of them and hides the
+   buttons, so this only has to drive the class. */
+document.querySelectorAll('[data-cases]').forEach((set) => {
+  const panels = [...set.querySelectorAll('.v-case')];
+  panels.forEach((panel) => {
+    const btn = panel.querySelector('.v-exp');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const open = panel.classList.contains('v-open');
+      panels.forEach((p) => p.classList.remove('v-open'));
+      if (!open) panel.classList.add('v-open');
+      panels.forEach((p) => {
+        const b = p.querySelector('.v-exp');
+        if (b) b.setAttribute('aria-expanded', String(p.classList.contains('v-open')));
+      });
+    });
+    btn.setAttribute('aria-expanded', String(panel.classList.contains('v-open')));
+  });
+});
+
 /* counters */
 const statsIO = new IntersectionObserver((es, o) => es.forEach((e) => {
   if (!e.isIntersecting) return;

@@ -446,3 +446,34 @@
    are a little squarer — the same shape for all four, so the panel does not
    change height as they swap. */
 @media (min-width:701px){ .v2 .v-feat .v-shot .mk{aspect-ratio:5/4} }
+
+/* The channel and automation photographs are 3:2. The design's card art is
+   a shallow band, which cropped nearly half of each one away — and two of
+   the three channel photographs are screens, where the crop takes the part
+   that makes the point. Show them whole, at their own ratio. */
+.v2 .v-pcard img.v-art{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;background:none}
+
+/* ---- the layer pages -------------------------------------------------
+   The homepage hero puts a phone beside the headline; a layer page puts
+   the screen that layer is. A page with nothing beside it keeps the
+   headline on the design's measure rather than letting it run the width
+   of the band. */
+.v2 .v-hero-aside{justify-self:end;width:100%;max-width:clamp(360px,46vw,640px)}
+.v2 .v-hero-grid.v-solo{grid-template-columns:minmax(0,1fr)}
+.v2 .v-hero-grid.v-solo .v-sub{max-width:52ch}
+.v2 .v-hero .v-eyebrow{color:var(--chalk-3);margin-bottom:22px;display:inline-flex}
+.v2 .v-hero h1{margin-top:6px}
+
+/* A numbered feature card: the number is the card's eyebrow. */
+.v2 .v-ind .v-eyebrow{color:var(--ink-3);display:inline-flex;margin-bottom:14px}
+.v2 .v-dark .v-ind .v-eyebrow{color:var(--chalk-3)}
+
+/* The design's case panels carry a quote and an attribution. Ours carry a
+   situation and what happens in it, so the second block is prose rather
+   than a name — same rule down its left edge, set as running text. */
+.v2 .v-case p.v-att{font-size:14.5px;line-height:1.6;color:var(--chalk-2);max-width:46ch}
+.v2 .v-case .v-mk{display:block}
+
+/* The closing band carries an eyebrow above its line here. */
+.v2 .v-bigcta .v-eyebrow{color:var(--chalk-3);margin-bottom:12px;display:inline-flex}
+.v2 .v-bigcta h2{max-width:24ch}

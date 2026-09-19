@@ -22,7 +22,7 @@ import { NAV } from '../lib/content/nav';
 import { photoFor } from '../lib/photos';
 import { TOOLS, AUTOMATIONS } from '../lib/content/detail';
 import Mockup from '../components/Mockup.astro';
-import '../styles/v2home.css';
+import '../styles/v2.css';
 
 /** The screen each layer shows — the part of the interface that layer is. */
 const CARD_SCREEN: Record<string, string> = {
@@ -272,7 +272,7 @@ const OPERATING = ['Kenya', 'Morocco', 'Peru', 'Japan', 'Portugal', 'Vietnam'];
             autoCards.map((a) => (
               <a class="v-pcard" href={a.href}>
                 <div class="v-cat">Automation</div>
-                <div class="v-art" style={`background-image:url(${a.photo});background-size:cover;background-position:center`}></div>
+                <img class="v-art" src={a.photo} alt="" width="1200" height="800" loading="lazy" decoding="async" />
                 <h3>{a.label}</h3>
                 <p>{a.desc}</p>
               </a>
@@ -293,7 +293,7 @@ const OPERATING = ['Kenya', 'Morocco', 'Peru', 'Japan', 'Portugal', 'Vietnam'];
           {
             CONNECT.map((c) => (
               <a class="v-pcard" href={c.href}>
-                <div class="v-art" style={`background-image:url(${c.photo});background-size:cover;background-position:center`}></div>
+                <img class="v-art" src={c.photo} alt={c.alt} width="1200" height="800" loading="lazy" decoding="async" />
                 <h3>{c.lead}</h3>
                 <p>{c.rest}</p>
                 <span class="v-more">{c.cta} →</span>
@@ -315,5 +315,5 @@ const OPERATING = ['Kenya', 'Morocco', 'Peru', 'Japan', 'Portugal', 'Vietnam'];
 </Base>
 
 <script>
-  import '../lib/v2home';
+  import '../lib/v2';
 </script>
