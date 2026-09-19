@@ -44,8 +44,12 @@ import '../styles/v2.css';
         <div class="sec-tight wrap">
           <p class="eyebrow rv">{l.intro}</p>
           <div class="tiers rv">
-            {l.tiers.map((t) => (
-              <div class="tier">
+            {l.tiers.map((t, i) => (
+              /* The adopted system fills the featured tier with aloe and
+                 gives it the aloe pill — it is the one place on the light
+                 track the green appears as a surface. The middle tier is
+                 the one the ladder is pointing at. */
+              <div class:list={['tier', { featured: i === 1 }]}>
                 <div class="tname">{t.name}</div>
                 <div class="tkind">{t.kind}</div>
                 <div class="tamt">{t.amount}</div>
@@ -55,7 +59,7 @@ import '../styles/v2.css';
                     <li>{f}</li>
                   ))}
                 </ul>
-                <a class="btn" href={t.href}>
+                <a class:list={['btn', { 'btn-aloe': i === 1 }]} href={t.href}>
                   {t.cta}
                 </a>
               </div>
