@@ -9,6 +9,8 @@
 import Base from '../layouts/Base.astro';
 import { LADDERS } from '../lib/content/pricing';
 import Mockup from '../components/Mockup.astro';
+import V2Hero from '../components/V2Hero.astro';
+import '../styles/v2.css';
 ---
 
 <Base
@@ -16,16 +18,15 @@ import Mockup from '../components/Mockup.astro';
   description="Same three tiers. Resellers run the full ladder; Suppliers skip straight from Showcase to Intelligence. Every tier is strictly additive."
   currentNav="pricing"
 >
-  <div class="sec wrap page-hero">
-    <div class="page-hero-copy">
-
-      <p class="eyebrow rv">Pricing</p>
-      <h1 class="rv">Plans &amp; Pricing</h1>
-      <p class="lede rv">
-        Same three tiers — which ones apply depends on who you are. Every tier is strictly additive.
-        Resellers run the full ladder; Suppliers skip straight to Intelligence.
-      </p>
-      <div class="switch rv" id="p-switch">
+  <div class="v2">
+    <V2Hero
+      eyebrow="Pricing"
+      title="Plans & Pricing"
+      lede="Same three tiers — which ones apply depends on who you are. Every tier is strictly additive. Resellers run the full ladder; Suppliers skip straight to Intelligence."
+      light
+      noCta
+    >
+      <div slot="under" class="switch" id="p-switch">
         {
           LADDERS.map((l, i) => (
             <button type="button" data-side={l.side} class={i === 0 ? 'on' : ''}>
@@ -34,8 +35,8 @@ import Mockup from '../components/Mockup.astro';
           ))
         }
       </div>
-    </div>
-    <Mockup screen="plan" />
+      <Fragment slot="aside"><Mockup screen="plan" /></Fragment>
+    </V2Hero>
   </div>
 
   {

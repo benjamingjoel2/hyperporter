@@ -8,6 +8,8 @@
  */
 import Base from '../layouts/Base.astro';
 import Mockup from '../components/Mockup.astro';
+import V2Hero from '../components/V2Hero.astro';
+import '../styles/v2.css';
 ---
 
 <Base
@@ -16,21 +18,20 @@ import Mockup from '../components/Mockup.astro';
   currentNav="about"
   noindex
 >
-  <div class="sec wrap page-hero">
-    <div class="page-hero-copy">
-
-      <p class="eyebrow rv">About</p>
-      <h1 class="rv">We used to run this<br />by hand too.</h1>
-      <p class="lede rv">
-        Hyperporter was built by people who've coordinated trips the old way — chasing DMCs over email, relaying
-        WhatsApp messages between travellers and drivers, rebuilding the same itinerary PDF for the fifth time.
+  <div class="v2">
+    <V2Hero
+      eyebrow="About"
+      title="We used to run this by hand too."
+      lede="Hyperporter was built by people who've coordinated trips the old way — chasing DMCs over email, relaying WhatsApp messages between travellers and drivers, rebuilding the same itinerary PDF for the fifth time."
+      light
+      noCta
+    >
+      <p slot="under" class="mission">
+        Every trip involves the same coordination work, repeated by hand, agency by agency. We think
+        that work should run itself — with a human only where real judgment is needed.
       </p>
-      <p class="mission rv">
-        Every trip involves the same coordination work, repeated by hand, agency by agency. We think that work should
-        run itself — with a human only where real judgment is needed.
-      </p>
-    </div>
-    <Mockup screen="relay" />
+      <Fragment slot="aside"><Mockup screen="relay" /></Fragment>
+    </V2Hero>
   </div>
   <div class="sec-tight wrap">
     <p class="eyebrow rv">Team</p>
