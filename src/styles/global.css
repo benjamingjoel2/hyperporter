@@ -479,7 +479,9 @@ p{margin:0 0 16px}
 .zcard h3{font-family:var(--display);font-size:16px;letter-spacing:.05em;margin:14px 0 12px}
 .zcard .one{font-size:13px;line-height:1.5;color:var(--paper);padding-bottom:13px;margin-bottom:13px;border-bottom:1px solid var(--line)}
 .zcard p{font-size:12.5px;color:var(--dim);margin:0;line-height:1.6}
-.hint{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+/* Capped after the measure widened: a 10px uppercase line running the full
+   1,500px of the container is a paragraph nobody finishes. */
+.hint{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);max-width:86ch}
 
 /* ============ FEATURES ============ */
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line)}
@@ -488,7 +490,7 @@ p{margin:0 0 16px}
 .fcell:nth-child(even){padding-left:clamp(30px,4vw,60px)}
 .fcell .fi{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--signal);margin-bottom:14px}
 .fcell p{color:var(--dim);font-size:14.5px;margin:0;max-width:42ch}
-.callout{margin-top:36px;border:1px dashed var(--line-2);border-radius:14px;padding:28px;background:rgba(27,116,126,.05);display:flex;gap:18px;align-items:flex-start}
+.callout{margin-top:36px;border:1px dashed var(--line-2);border-radius:14px;padding:28px;background:rgba(27,116,126,.05);display:flex;gap:18px;align-items:flex-start;max-width:980px}
 .callout .lock{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);flex-shrink:0;padding-top:3px}
 .callout p{margin:0;color:var(--muted);font-size:15px}
 /* The label does not shrink, so side-by-side it strands the paragraph in a
@@ -1155,6 +1157,12 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
   transform:translateX(-50%);border-radius:50%;background:#05070A;
   box-shadow:0 0 0 1px rgba(255,255,255,.12)}
 .lg-acc-ipad .mk{border-radius:14px}
+/* The tablet is a tall frame and the screen inside it is content-height, so
+   at the ladder's width the app floated in a void with a third of the bezel
+   empty above and below it. Scale the screen up in this context: everything
+   inside is em off the stage's font-size, so one line does it. */
+.lg-acc-ipad .mk-stage{font-size:clamp(11px,2.95cqw,16.5px)}
+.lg-acc-ipad .mk-stage .mk-ui{max-height:100%}
 
 @media (max-width:1180px){
   .lg-acc{grid-template-columns:1fr;gap:28px}
