@@ -75,11 +75,15 @@
   --pill:999px;
   /* Content runs no wider than the reference's — about 1,300px with a
      tenth of the viewport either side — after the founder found the
-     1,680px measure hard to read (Sep 2026). The bar keeps the wider
-     measure so the wordmark and the actions stay near the edges. */
+     1,680px measure hard to read (Sep 2026).
+
+     The bar sits on the same measure, not a wider one (founder, Sep 2026):
+     on its own measure the wordmark stood 85px inside the headline under
+     it, and nothing on the page lined up with anything else. --bar-max is
+     kept as a name so anything still asking for it gets the right number. */
   --pad:clamp(20px,4vw,64px);
   --max:1640px;
-  --bar-max:1780px;
+  --bar-max:1640px;
   --photo:url("/hero.jpg");
 }
 *{box-sizing:border-box}
@@ -188,7 +192,7 @@ body.drawer-open header.top .burger span{background:var(--paper)}
    paints over the ticker rather than under it. Safe now that the panel is
    anchored to its trigger — it was not when the panel was full-bleed, since
    a positioned .bar became its containing block and boxed it in. */
-.bar{max-width:var(--bar-max);margin:0 auto;padding:0 clamp(20px,3.2vw,48px);height:72px;
+.bar{max-width:var(--max);margin:0 auto;padding:0 var(--pad);height:72px;
   position:relative;z-index:2;
   /* Equal outer tracks, so the items sit on the page's centre whatever the
      wordmark and the buttons weigh. */
@@ -206,7 +210,12 @@ body.drawer-open header.top .burger span{background:var(--paper)}
 .links a.act{opacity:1}
 /* The current item and an open panel's trigger both carry the reference's
    underline: a 2px rule sitting on the bar's bottom edge. */
-.links a.act::after,.mega-wrap.open>.mega-trigger::after{content:"";position:absolute;left:11px;right:11px;bottom:-19px;height:2px;background:currentColor}
+/* The rule is always drawn and always animated; only its scale changes, so
+   it wipes out from the centre on hover and holds for the current item and
+   for an open panel's trigger. */
+.links a::after{content:"";position:absolute;left:11px;right:11px;bottom:-19px;height:2px;background:currentColor;
+  transform:scaleX(0);transform-origin:50% 50%;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.links a:hover::after,.links a.act::after,.mega-wrap.open>.mega-trigger::after{transform:scaleX(1)}
 @keyframes blip{0%,100%{opacity:1}50%{opacity:.25}}
 .bar-acts{display:flex;gap:10px;align-items:center;justify-content:flex-end;justify-self:end}
 .bar-acts .login{font-size:14px;color:var(--paper);padding:9px 16px;border:1px solid var(--line-2);border-radius:var(--radius);transition:border-color .2s,background .2s}
@@ -1373,7 +1382,11 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
    makes this element the sticky child's scrollport, and the panel below
    silently stops sticking. The photograph is inset:0 inside the sticky
    element, so there is nothing to clip anyway. */
-.ap-band{position:relative}
+/* The photograph used to run under this band from the hero above. In the v2
+   composition the hero's photograph stops with the hero, so the band carries
+   a dark ground of its own — the panel is glass over *something*, and over
+   the page's own ground it read as a grey slab on cream. */
+.ap-band{position:relative;background:var(--black);color:var(--chalk)}
 /* The photograph lives inside the element that gets pinned, so it holds still
    with the panel. It cannot be a sibling pulled up with a negative margin:
    percentage margins resolve against the container's *width*, so -100% there
@@ -1394,10 +1407,10 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 .ap-glass{display:grid;grid-template-columns:minmax(0,280px) auto minmax(0,1fr);
   gap:clamp(26px,3.4vw,56px);align-items:start;
   border-radius:18px;padding:clamp(26px,3.2vw,44px);
-  background:rgba(20,23,21,.66);border:1px solid rgba(255,255,255,.12);
+  background:var(--black-2);border:1px solid rgba(255,255,255,.12);
   -webkit-backdrop-filter:saturate(1.3) blur(20px);backdrop-filter:saturate(1.3) blur(20px)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .ap-glass{background:rgba(20,23,21,.9)}
+  .ap-glass{background:var(--black-2)}
 }
 .ap-band-lead .eyebrow{color:rgba(255,255,255,.62);margin:0 0 14px}
 .ap-band-lead .dek{color:rgba(255,255,255,.82);margin:0;font-size:15.5px;line-height:1.6}
@@ -1641,3 +1654,92 @@ header.top.mega-open{background:var(--paper);border-bottom-color:rgba(255,255,25
 header.top.mega-open::before{opacity:0}
 header.top.mega-open .mega-scrim{opacity:1}
 @media (max-width:1080px){.mega-scrim{display:none}}
+
+/* ===================================================================== */
+/* MOTION                                                                */
+/* --------------------------------------------------------------------- */
+/* The founder's ask (Sep 2026): the site should move — the bar, the
+   dropdowns, the drawer, the cards, and the step between pages. Every
+   rule below is a transform or an opacity, nothing that reflows, and the
+   whole block is switched off under prefers-reduced-motion at the end.
+   One curve throughout, --ease, so the site moves like one object.      */
+
+:root{ --ease:cubic-bezier(.2,.8,.2,1); --ease-out:cubic-bezier(.16,1,.3,1) }
+
+/* ---- the mega panel --------------------------------------------------
+   It used to appear at full size the instant `hidden` came off. Now it
+   drops from under the bar, and its rows arrive behind it a beat apart,
+   so the eye is led down the panel rather than hit with all of it. */
+.mega{transform-origin:50% 0}
+.mega.in{animation:mega-in .34s var(--ease) both}
+.mega.out{animation:mega-out .16s ease-in both;pointer-events:none}
+@keyframes mega-in{from{opacity:0;transform:translateY(-10px) scaleY(.982)}
+  to{opacity:1;transform:none}}
+@keyframes mega-out{from{opacity:1;transform:none}
+  to{opacity:0;transform:translateY(-7px)}}
+
+/* The rows, the group headings and the feature card stagger in. Only the
+   opening panel animates its contents; a closing one fades as one piece. */
+.mega.in .mega-head,.mega.in .mega-row,.mega.in .mega-feat{animation:mega-row .42s var(--ease-out) both}
+@keyframes mega-row{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.mega.in .mega-head{animation-delay:.04s}
+.mega.in .mega-row:nth-child(1){animation-delay:.06s}
+.mega.in .mega-row:nth-child(2){animation-delay:.09s}
+.mega.in .mega-row:nth-child(3){animation-delay:.12s}
+.mega.in .mega-row:nth-child(4){animation-delay:.15s}
+.mega.in .mega-row:nth-child(5){animation-delay:.18s}
+.mega.in .mega-row:nth-child(6){animation-delay:.21s}
+.mega.in .mega-row:nth-child(n+7){animation-delay:.24s}
+.mega.in .mega-feat{animation-delay:.16s}
+
+/* A row lifts its icon rather than only tinting its ground. */
+.mega .mega-row{transition:background .18s ease,transform .22s var(--ease)}
+.mega .mega-row:hover{transform:translateX(3px)}
+.mega-ico-box{transition:background .18s ease,transform .3s var(--ease)}
+.mega .mega-row:hover .mega-ico-box{transform:scale(1.07)}
+
+/* ---- the drawer ------------------------------------------------------ */
+.drawer.open{animation:drawer-in .34s var(--ease) both}
+@keyframes drawer-in{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+.drawer.open .drow{animation:mega-row .44s var(--ease-out) both}
+.drawer.open .dsec:nth-child(1) .drow,.drawer.open .drow:nth-child(1){animation-delay:.05s}
+.drawer.open .dsec:nth-child(2) .drow{animation-delay:.09s}
+.drawer.open .dsec:nth-child(3) .drow{animation-delay:.13s}
+.drawer.open .dsec:nth-child(4) .drow{animation-delay:.17s}
+.drawer.open .dsec:nth-child(n+5) .drow{animation-delay:.21s}
+.dsub:not([hidden]){animation:sub-in .3s var(--ease) both}
+@keyframes sub-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.drow{transition:padding-left .3s var(--ease),color .2s}
+.drow:hover{padding-left:6px}
+.drow[aria-expanded="true"] svg{transform:rotate(180deg)}
+
+/* ---- the bar's own controls ------------------------------------------ */
+.bar-acts .login,.cta-nav{transition:background .22s ease,color .22s ease,border-color .22s ease,transform .22s var(--ease)}
+.bar-acts .login:hover,.cta-nav:hover{transform:translateY(-1px)}
+.bar-acts .login:active,.cta-nav:active{transform:translateY(0)}
+.burger span{transition:transform .26s var(--ease),opacity .18s ease}
+.burger.on span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.burger.on span:nth-child(2){opacity:0}
+.burger.on span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* ---- between pages ---------------------------------------------------
+   A native cross-document transition: no router, no client-side
+   navigation, and nothing to go wrong where it is not supported — the
+   browser simply navigates as it always did. */
+@view-transition{ navigation:auto }
+::view-transition-old(root){animation:vt-out .18s ease-in both}
+::view-transition-new(root){animation:vt-in .34s var(--ease-out) both}
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* The chrome is the same object on both pages, so it must not cross-fade
+   with the content under it. */
+header.top{view-transition-name:site-bar}
+footer{view-transition-name:site-foot}
+
+@media (prefers-reduced-motion:reduce){
+  .mega.in,.mega.out,.mega.in .mega-head,.mega.in .mega-row,.mega.in .mega-feat,
+  .drawer.open,.drawer.open .drow,.dsub:not([hidden]){animation:none!important}
+  .mega .mega-row:hover,.drow:hover{transform:none;padding-left:0}
+  .bar-acts .login:hover,.cta-nav:hover{transform:none}
+  ::view-transition-old(root),::view-transition-new(root){animation:none!important}
+}

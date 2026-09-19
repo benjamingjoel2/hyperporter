@@ -31,10 +31,7 @@ const CURRENT_STAGE = 3;
   description="Full nine-stage automation, from Inquiry through Post-Trip, with human escalation points built in by design."
   currentNav="product"
 >
-  <ProductPage product={product} photoHero photoSpan>
-    {/* The photograph the hero and the nine-stage band both sit on. */}
-    <img slot="hero-bg" class:list={["p-photo-bg", { "p-photo-true": photo.own }]} src={photo.src} alt="" />
-    {photo.own && <div slot="hero-bg" class="p-photo-veil" aria-hidden="true" />}
+  <ProductPage product={product} photo={photo}>
 
     {/* Beside the headline rather than below it: the card is the hero's
         illustration, not a section of its own. */}
@@ -70,7 +67,7 @@ const CURRENT_STAGE = 3;
 
         The outer element is the scroll track; `.ap-band-stick` is what stays
         put while the stages advance. */}
-    <section slot="after-hero" class="ap-band" id="stages">
+    <section slot="after-hero" class="ap-band" id="stages" data-chrome="dark">
       <div class="ap-band-stick">
         <div class="wrap">
           <div class="ap-glass">
