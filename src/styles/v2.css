@@ -3,54 +3,95 @@
    file at public/preview/v2.html — change that file and re-port rather
    than diverging here. */
 
+/* Shopify's two-track system (VoltAgent/awesome-design-md, Sep 2026): a
+   cinematic black marketing track and a light/cream transactional one,
+   sharing one button vocabulary. Its rule is that there is no third canvas
+   — no greys, beiges or blues — so the warm off-white this site used is
+   gone, and every surface is now black, white or cream. */
 .v2{
-  --black:#0B0C0B; --black-2:#121413; --black-3:#1B1E1C;
-  --sheet:#F4F5F1; --sheet-2:#E8EAE4; --card:#EDEFE9;
-  --type:#141715; --type-2:#4A544E; --type-3:#7C857F;
-  --chalk:#EDEFE9; --chalk-2:#A3ADA7; --chalk-3:#6E7873;
-  --line-d:rgba(237,239,233,.13); --line-l:#D3D8CE;
-  --moss:#5FBFA8; --amber-v:#D79A3E;
-  --sans:'Archivo',system-ui,sans-serif;
-  --disp-f:'Instrument Serif',Georgia,serif;
-  --serif-2:'Newsreader',Georgia,serif;
-  --mono:'IBM Plex Mono',monospace;
+  --black:#000000; --black-2:#0a0a0a; --black-3:#1e2c31;
+  --sheet:#ffffff; --sheet-2:#fbfbf5; --card:#ffffff;
+  --type:#000000; --type-2:#52525b; --type-3:#71717a;
+  --chalk:#ffffff; --chalk-2:#a1a1aa; --chalk-3:#9dabad;
+  --line-d:#1e2c31; --line-l:#e4e4e7;
+  --aloe:#c1fbd4; --pistachio:#d4f9e0;
+  /* Amber stays, against the adopted system's palette: on this site it is
+     not decoration but the mark for a step a person has to take, and the
+     product's whole claim is that automation stops where judgement starts.
+     Dropping it would remove a meaning the copy depends on. */
+  --amber-v:#D79A3E;
+  --sans:'Inter',system-ui,-apple-system,Helvetica,Arial,sans-serif;
+  --disp-f:'Inter',Helvetica,Arial,sans-serif;
+  --serif-2:'Inter',Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
   --max:1640px;
 }
+/* The stylistic set is the system's character-level signature, applied at
+   the root across every role. */
+.v2{font-feature-settings:"ss03"}
 .v2 *{box-sizing:border-box}
 /* The design file resets margin and padding on everything. Here that
    would also strip the site components rendered inside the page, so the
    reset is kept but given no specificity: :where() loses every tie. */
-.v2 :where(h1,h2,h3,h4,h5,h6,p,figure,blockquote,dl,dd,ul,ol,li,menu,fieldset,legend,button){margin:0;padding:0}
-.v2 :where(ul,ol,menu){list-style:none}
+:where(.v2) :where(h1,h2,h3,h4,h5,h6,p,figure,blockquote,dl,dd,ul,ol,li,menu,fieldset,legend,button){margin:0;padding:0}
+:where(.v2) :where(ul,ol,menu){list-style:none}
 .v2{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-.v2{background:var(--sheet);color:var(--type);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.v2{background:var(--sheet);color:var(--type);font-family:var(--sans);font-size:16px;font-weight:420;line-height:1.5;-webkit-font-smoothing:antialiased}
 .v2 .v-wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,4vw,64px)}
-.v2 a{color:inherit;text-decoration:none}
-.v2 button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
-.v2 :focus-visible{outline:2px solid var(--moss);outline-offset:3px}
+/* The generic element resets are written through :where() so they carry no
+   specificity of their own. As plain `.v2 a` and `.v2 button` they beat
+   every site component rendered inside a v2 page — the pricing pills came
+   out black-on-black, and the pricing switch lost its label — which is the
+   same collision the token names caused. A reset should lose every tie. */
+:where(.v2) a{color:inherit;text-decoration:none}
+:where(.v2) button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+.v2 :focus-visible{outline:2px solid var(--type);outline-offset:3px}
+.v2 .v-dark :focus-visible,.v2 .v-hero :focus-visible,.v2 .v-bigcta :focus-visible{outline-color:var(--aloe)}
 .v2 .v-mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
-.v2 .v-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px}
-.v2 .v-eyebrow::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.6}
+/* eyebrow-cap: Inter 12/400 with 0.72px tracking. The dot this site used
+   before is not part of the adopted system. */
+.v2 .v-eyebrow{font-family:var(--sans);font-size:12px;font-weight:400;letter-spacing:.72px;line-height:1.2;text-transform:uppercase;display:inline-flex;align-items:center}
 
-/* serif display, two-tone like the reference */
-.v2 .v-disp{font-family:var(--disp-f);font-weight:400;letter-spacing:-.018em;line-height:1.06}
-.v2 .v-disp b{font-weight:400;display:block}
-.v2 .v-disp i{font-style:normal;font-weight:400;display:block;opacity:.4}
+/* Display is the thin cut — weight 300, the open substitute the system
+   names for Neue Haas Grotesk Display. Weight is the brand here: bumping
+   it to 400 loses the whole signature. The second line keeps this site's
+   two-part phrasing but takes a shade from the ladder rather than an
+   opacity, so it holds its contrast on either canvas. */
+.v2 .v-disp{font-family:var(--disp-f);font-weight:300;letter-spacing:0;line-height:1.05;
+  font-variation-settings:'opsz' 32}
+.v2 .v-disp b{font-weight:300;display:block}
+.v2 .v-disp i{font-style:normal;font-weight:300;display:block;color:var(--type-3)}
+.v2 .v-dark .v-disp i,.v2 .v-hero .v-disp i,.v2 .v-bigcta .v-disp i{color:var(--chalk-2)}
+/* the hero headline gets the positive tracking the thin glyphs need */
+.v2 .v-hero h1.v-disp{letter-spacing:2.4px}
 
-/* buttons */
-.v2 .v-pill{display:inline-block;background:var(--chalk);color:var(--black);padding:12px 24px;border-radius:99px;font-size:14.5px;font-weight:500}
-.v2 .v-pill:hover{background:#fff}
-.v2 .v-pill-d{display:inline-block;background:var(--black);color:var(--chalk);padding:12px 24px;border-radius:99px;font-size:14.5px;font-weight:500}
-.v2 .v-pill-d:hover{background:var(--black-3)}
-.v2 .v-pill-o{display:inline-block;border:1px solid var(--line-d);color:var(--chalk);padding:11px 22px;border-radius:99px;font-size:14.5px;font-weight:500}
-.v2 .v-pill-o:hover{border-color:var(--chalk-2)}
+/* Buttons. The pill is the only button shape in this system — on either
+   canvas, at either polarity. Labels are body-md: Inter 16/420. */
+.v2 .v-pill,.v2 .v-pill-d,.v2 .v-pill-o,.v2 .v-pill-l{
+  display:inline-block;border-radius:9999px;padding:12px 24px;
+  font-family:var(--sans);font-size:16px;font-weight:420;line-height:1.5;
+  transition:background .22s ease,color .22s ease,border-color .22s ease}
+/* on the black track: the white-stroked pill */
+.v2 .v-pill{background:var(--black);color:var(--chalk);box-shadow:inset 0 0 0 1px var(--chalk);padding:12px 26px}
+.v2 .v-pill:hover{background:var(--chalk);color:var(--black)}
+.v2 .v-pill-o{background:transparent;color:var(--chalk);box-shadow:inset 0 0 0 1px rgba(255,255,255,.4);padding:12px 26px}
+.v2 .v-pill-o:hover{box-shadow:inset 0 0 0 1px var(--chalk)}
+/* on the light track: the filled black pill, and the aloe one for the
+   action the page is actually asking for */
+.v2 .v-pill-d{background:var(--primary,#000);color:var(--chalk)}
+.v2 .v-pill-d:hover{background:#3f3f46}
+.v2 .v-pill-l{background:var(--sheet);color:var(--type);box-shadow:inset 0 0 0 1px var(--line-l)}
+.v2 .v-pill-l:hover{box-shadow:inset 0 0 0 1px var(--type)}
+.v2 .v-pill-aloe{display:inline-block;border-radius:9999px;padding:12px 24px;background:var(--aloe);color:var(--type);
+  font-family:var(--sans);font-size:16px;font-weight:420;transition:background .22s ease}
+.v2 .v-pill-aloe:hover{background:var(--pistachio)}
 
 /* ---------- nav ---------- */
 .v2 .v-nav{position:fixed;top:0;left:0;right:0;z-index:80;transition:background .3s,border-color .3s}
 .v2 .v-nav .v-wrap{display:flex;align-items:center;gap:26px;height:62px}
 .v2 .v-logo{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:600;letter-spacing:-.02em;color:var(--chalk)}
-.v2 .v-logo s{text-decoration:none;width:15px;height:15px;border:1.5px solid var(--moss);border-radius:50%;display:inline-block;position:relative}
-.v2 .v-logo s::after{content:"";position:absolute;inset:3.5px;background:var(--moss);border-radius:50%}
+.v2 .v-logo s{text-decoration:none;width:15px;height:15px;border:1.5px solid var(--aloe);border-radius:50%;display:inline-block;position:relative}
+.v2 .v-logo s::after{content:"";position:absolute;inset:3.5px;background:var(--aloe);border-radius:50%}
 .v2 .v-nav menu{margin-left:auto;display:flex;gap:22px;list-style:none}
 .v2 .v-nav menu a{font-size:14px;color:var(--chalk-2)}
 .v2 .v-nav menu a:hover{color:var(--chalk)}
@@ -61,26 +102,29 @@
 
 /* ---------- hero ---------- */
 .v2 .v-hero{position:relative;background:var(--black);color:var(--chalk);overflow:hidden;padding:clamp(96px,11vw,150px) 0 0}
-.v2 .v-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 30%;opacity:.5}
-.v2 .v-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(11,12,11,.94) 0%,rgba(11,12,11,.8) 42%,rgba(11,12,11,.38) 72%,rgba(11,12,11,.6) 100%)}
+/* Photography does the heavy lifting on the cinematic track, so the
+   photograph is shown nearly at strength and the scrim only does what the
+   white type needs. */
+.v2 .v-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 30%;opacity:.78}
+.v2 .v-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(0,0,0,.86) 0%,rgba(0,0,0,.66) 42%,rgba(0,0,0,.2) 72%,rgba(0,0,0,.45) 100%)}
 .v2 .v-hero .v-wrap{position:relative;z-index:3}
 .v2 .v-hero-grid{display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(26px,4vw,56px);align-items:center;min-height:clamp(420px,52vw,540px)}
 .v2 .v-badge{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line-d);border-radius:99px;padding:6px 13px 6px 7px;font-size:12.5px;color:var(--chalk-2);margin-bottom:26px}
 .v2 .v-badge b{background:var(--chalk);color:var(--black);border-radius:99px;padding:3px 9px;font-size:10.5px;font-weight:500;font-family:var(--mono)}
-.v2 .v-hero h1{font-size:clamp(34px,5.1vw,66px)}
-.v2 .v-hero p.v-sub{font-size:15.5px;color:var(--chalk-2);max-width:44ch;margin-top:24px;line-height:1.6}
+.v2 .v-hero h1{font-size:clamp(48px,7vw,96px)}
+.v2 .v-hero p.v-sub{font-size:18px;font-weight:550;color:var(--chalk-2);max-width:44ch;margin-top:24px;line-height:1.56}
 .v2 .v-hero .v-cta{margin-top:30px;display:flex;gap:11px;flex-wrap:wrap}
 
 /* phone */
-.v2 .v-phone{justify-self:end;width:clamp(230px,23vw,286px);border-radius:32px;background:#1C1F1D;border:1px solid rgba(237,239,233,.16);padding:9px;box-shadow:0 44px 90px rgba(0,0,0,.6);transform:rotate(-2.5deg)}
-.v2 .v-screen{background:#0E100F;border-radius:25px;overflow:hidden}
+.v2 .v-phone{justify-self:end;width:clamp(230px,23vw,286px);border-radius:32px;background:var(--black-3);border:1px solid rgba(255,255,255,.16);padding:9px;box-shadow:0 44px 90px rgba(0,0,0,.6);transform:rotate(-2.5deg)}
+.v2 .v-screen{background:var(--black-2);border-radius:25px;overflow:hidden}
 .v2 .v-ph-top{display:flex;align-items:center;gap:8px;padding:13px 14px;border-bottom:1px solid var(--line-d)}
-.v2 .v-ph-top .v-av{width:24px;height:24px;border-radius:50%;background:var(--moss);color:var(--black);font-size:9.5px;font-family:var(--mono);display:grid;place-items:center}
+.v2 .v-ph-top .v-av{width:24px;height:24px;border-radius:50%;background:var(--aloe);color:var(--black);font-size:9.5px;font-family:var(--mono);display:grid;place-items:center}
 .v2 .v-ph-top b{font-size:12px;font-weight:500;color:var(--chalk)}
 .v2 .v-ph-top span{font-family:var(--mono);font-size:8.5px;color:var(--chalk-3);display:block;margin-top:1px}
 .v2 .v-ph-body{padding:13px 12px;display:flex;flex-direction:column;gap:8px;min-height:300px}
-.v2 .v-bub{max-width:82%;font-size:11.5px;line-height:1.45;padding:8px 11px;border-radius:12px;background:#1B1F1D;color:#CBD4CE}
-.v2 .v-bub.v-me{align-self:flex-end;background:#1F4A42;color:#DDE7E2}
+.v2 .v-bub{max-width:82%;font-size:11.5px;line-height:1.45;padding:8px 11px;border-radius:12px;background:#18181b;color:var(--chalk-2)}
+.v2 .v-bub.v-me{align-self:flex-end;background:var(--black-3);color:var(--chalk)}
 .v2 .v-bub .v-who{font-family:var(--mono);font-size:8px;color:var(--chalk-3);display:block;margin-bottom:3px}
 .v2 .v-bub.v-sys{align-self:center;max-width:94%;text-align:center;background:none;border:1px dashed var(--line-d);color:var(--chalk-3);font-family:var(--mono);font-size:8.5px;padding:6px 9px}
 .v2 .v-bub.v-sys.v-amb{border-color:rgba(215,154,62,.45);color:var(--amber-v)}
@@ -95,20 +139,20 @@
 .v2 .v-light{background:var(--sheet);color:var(--type)}
 .v2 .v-band{padding:clamp(58px,7.4vw,112px) 0}
 .v2 .v-light .v-eyebrow{color:var(--type-3)}
-.v2 .v-lead h2{font-size:clamp(27px,3.8vw,48px);margin-top:20px}
-.v2 .v-lead p{font-size:15.5px;color:var(--type-2);max-width:48ch;margin-top:20px;line-height:1.62}
+.v2 .v-lead h2{font-size:clamp(34px,4.4vw,55px);margin-top:20px}
+.v2 .v-lead p{font-size:18px;font-weight:550;color:var(--type-2);max-width:48ch;margin-top:20px;line-height:1.56}
 .v2 .v-lead .v-pill-d{margin-top:26px}
 .v2 .v-statrow{display:grid;grid-template-columns:repeat(3,1fr);margin-top:clamp(44px,5.4vw,80px);border-top:1px solid var(--line-l)}
 .v2 .v-statrow div{padding:clamp(26px,3vw,38px) clamp(20px,2.4vw,32px) 0 0}
 .v2 .v-statrow div+div{border-left:1px solid var(--line-l);padding-left:clamp(20px,2.4vw,32px)}
-.v2 .v-statrow b{display:block;font-family:var(--disp-f);font-weight:400;font-size:clamp(40px,5.6vw,70px);letter-spacing:-.04em;line-height:1}
-.v2 .v-statrow span{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--type-3);margin-top:16px}
+.v2 .v-statrow b{display:block;font-family:var(--disp-f);font-weight:300;font-size:clamp(40px,5.6vw,70px);letter-spacing:0;line-height:1;font-variant-numeric:tabular-nums}
+.v2 .v-statrow span{display:block;font-family:var(--sans);font-size:12px;font-weight:400;letter-spacing:.72px;text-transform:uppercase;color:var(--type-3);margin-top:16px}
 
 /* ---------- dark product band ---------- */
 .v2 .v-dark{background:var(--black);color:var(--chalk)}
 .v2 .v-dark .v-eyebrow{color:var(--chalk-3)}
 .v2 .v-center{text-align:center;max-width:62ch;margin:0 auto}
-.v2 .v-center h2{font-size:clamp(27px,3.8vw,46px);margin-top:20px}
+.v2 .v-center h2{font-size:clamp(34px,4.4vw,55px);margin-top:20px}
 .v2 .v-center p{font-size:15.5px;color:var(--chalk-2);margin-top:20px;line-height:1.62;max-width:46ch;margin-left:auto;margin-right:auto}
 .v2 .v-center .v-pill{margin-top:26px}
 
@@ -122,7 +166,7 @@
 .v2 .v-sticky{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:clamp(14px,2vw,30px)}
 .v2 .v-sticky .v-eyebrow{display:none}
 .v2 .v-sticky a{display:block;padding:15px 0 0;border-top:2px solid var(--line-d);font-size:14.5px;color:var(--chalk-3);transition:color .3s,border-color .3s}
-.v2 .v-sticky a.v-on{color:var(--chalk);border-top-color:var(--moss)}
+.v2 .v-sticky a.v-on{color:var(--chalk);border-top-color:var(--aloe)}
 .v2 .v-sticky a.v-done{color:var(--chalk-2);border-top-color:var(--chalk-3)}
 /* The product band pins: the three titles hold still on the left while the
    panel beside them is replaced, one feature per screen of scroll, instead
@@ -142,52 +186,52 @@
 /* the rail marks how far through the band you are */
 .v2 .v-sticky{counter-reset:f}
 .v2 .v-sticky a{position:relative}
-.v2 .v-sticky a::after{content:"";position:absolute;left:-1px;top:0;bottom:0;width:1px;background:var(--moss);
+.v2 .v-sticky a::after{content:"";position:absolute;left:-1px;top:0;bottom:0;width:1px;background:var(--aloe);
   transform:scaleY(0);transform-origin:top;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
 .v2 .v-sticky a.v-on::after,.v2 .v-sticky a.v-done::after{transform:scaleY(1)}
 .v2 .v-sticky a.v-done{color:var(--chalk-2)}
 .v2 .v-feat{margin-bottom:clamp(54px,6.4vw,96px)}
 .v2 .v-feat:last-of-type{margin-bottom:0}
-.v2 .v-shot{background:var(--black-2);border:1px solid var(--line-d);border-radius:9px;overflow:hidden}
-.v2 .v-feat h3{font-family:var(--disp-f);font-weight:400;font-size:clamp(23px,2.6vw,32px);letter-spacing:-.02em;margin-top:26px}
+.v2 .v-shot{background:var(--black-2);border:1px solid var(--line-d);border-radius:12px;overflow:hidden}
+.v2 .v-feat h3{font-family:var(--sans);font-weight:500;font-size:clamp(20px,2.2vw,28px);letter-spacing:.42px;line-height:1.28;margin-top:26px}
 .v2 .v-feat p{font-size:14.5px;color:var(--chalk-2);margin-top:12px;max-width:52ch;line-height:1.62}
 .v2 .v-feat .v-pill-o{margin-top:20px}
 
 /* app mock chrome */
 .v2 .v-app{display:grid;grid-template-columns:104px 1fr;min-height:250px}
-.v2 .v-side{background:#0E100F;border-right:1px solid var(--line-d);padding:13px 11px}
+.v2 .v-side{background:var(--black-2);border-right:1px solid var(--line-d);padding:13px 11px}
 .v2 .v-side u{text-decoration:none;display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:8.5px;color:var(--chalk-3);padding:6px 0}
-.v2 .v-side u::before{content:"";width:11px;height:11px;border-radius:3px;background:#242826}
+.v2 .v-side u::before{content:"";width:11px;height:11px;border-radius:3px;background:#27272a}
 .v2 .v-side u.v-on{color:var(--chalk)}
-.v2 .v-side u.v-on::before{background:var(--moss)}
+.v2 .v-side u.v-on::before{background:var(--aloe)}
 .v2 .v-main{padding:14px 16px}
 .v2 .v-mhead{display:flex;align-items:center;gap:9px;padding-bottom:11px;border-bottom:1px solid var(--line-d)}
 .v2 .v-mhead b{font-size:12.5px;font-weight:500}
-.v2 .v-mhead .v-tag{margin-left:auto;font-family:var(--mono);font-size:8.5px;color:var(--moss);border:1px solid rgba(95,191,168,.35);border-radius:99px;padding:3px 8px}
+.v2 .v-mhead .v-tag{margin-left:auto;font-family:var(--mono);font-size:8.5px;color:var(--aloe);border:1px solid rgba(193,251,212,.35);border-radius:99px;padding:3px 8px}
 .v2 .v-mhead .v-tag.v-amb{color:var(--amber-v);border-color:rgba(215,154,62,.4)}
 .v2 .v-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:13px 0}
-.v2 .v-kpi{background:#161A18;border:1px solid var(--line-d);border-radius:6px;padding:10px}
+.v2 .v-kpi{background:var(--black-3);border:1px solid var(--line-d);border-radius:6px;padding:10px}
 .v2 .v-kpi b{display:block;font-family:var(--mono);font-size:15px;letter-spacing:-.02em}
 .v2 .v-kpi span{display:block;font-family:var(--mono);font-size:7.5px;color:var(--chalk-3);margin-top:4px;text-transform:uppercase;letter-spacing:.1em}
-.v2 .v-lines div{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line-d);font-size:11px;color:#C3CCC7}
+.v2 .v-lines div{display:grid;grid-template-columns:38px 1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line-d);font-size:11px;color:var(--chalk-2)}
 .v2 .v-lines div:last-child{border-bottom:0}
 .v2 .v-lines .v-c{font-family:var(--mono);font-size:9px;color:var(--chalk-3)}
-.v2 .v-lines .v-s{font-family:var(--mono);font-size:8.5px;color:var(--moss)}
+.v2 .v-lines .v-s{font-family:var(--mono);font-size:8.5px;color:var(--aloe)}
 .v2 .v-lines .v-s.v-amb{color:var(--amber-v)}
 /* timeline mock */
 .v2 .v-tl{padding:6px 0}
 .v2 .v-tl div{display:grid;grid-template-columns:14px 1fr;gap:11px;padding:9px 0;position:relative}
-.v2 .v-tl div::before{content:"";width:8px;height:8px;border-radius:50%;background:#2A2F2C;margin-top:3px}
-.v2 .v-tl div.v-done::before{background:var(--moss)}
+.v2 .v-tl div::before{content:"";width:8px;height:8px;border-radius:50%;background:#3f3f46;margin-top:3px}
+.v2 .v-tl div.v-done::before{background:var(--aloe)}
 .v2 .v-tl div.v-wait::before{background:var(--amber-v)}
 .v2 .v-tl div::after{content:"";position:absolute;left:3.5px;top:18px;bottom:-4px;width:1px;background:var(--line-d)}
 .v2 .v-tl div:last-child::after{display:none}
-.v2 .v-tl b{font-size:11.5px;font-weight:500;color:#C9D2CD}
+.v2 .v-tl b{font-size:11.5px;font-weight:500;color:var(--chalk)}
 .v2 .v-tl span{display:block;font-family:var(--mono);font-size:8.5px;color:var(--chalk-3);margin-top:2px}
 /* bars mock */
 .v2 .v-bars{display:flex;align-items:flex-end;gap:7px;height:96px;padding:14px 0 0}
-.v2 .v-bars i{flex:1;background:#23312D;border-radius:2px 2px 0 0;display:block}
-.v2 .v-bars i.v-hi{background:var(--moss)}
+.v2 .v-bars i{flex:1;background:var(--black-3);border-radius:2px 2px 0 0;display:block}
+.v2 .v-bars i.v-hi{background:var(--aloe)}
 
 /* quote card */
 .v2 .v-quote{background:var(--sheet);color:var(--type);border-radius:9px;padding:clamp(24px,2.8vw,34px);margin-bottom:clamp(54px,6.4vw,96px)}
@@ -200,11 +244,16 @@
 
 /* ---------- industries ---------- */
 .v2 .v-inds{margin-top:clamp(44px,5.4vw,78px);display:flex;flex-direction:column;gap:clamp(16px,2vw,24px)}
-.v2 .v-ind{background:var(--card);border-radius:10px;padding:clamp(22px,2.6vw,32px)}
-.v2 .v-ind h3{font-family:var(--disp-f);font-weight:400;font-size:clamp(22px,2.4vw,30px);letter-spacing:-.02em}
+/* Cards: 12px on the light track with the system's stacked tiny-shadow
+   halo; on the black track flat, with only the inset top-edge sheen —
+   the cinematic track wants flat blackness, not drop shadows. */
+.v2 .v-ind{background:var(--card);border-radius:12px;padding:32px;
+  box-shadow:0 8px 8px rgba(0,0,0,.1),0 4px 4px rgba(0,0,0,.1),0 2px 2px rgba(0,0,0,.1),0 0 0 1px rgba(0,0,0,.1)}
+.v2 .v-dark .v-ind{background:var(--black-2);box-shadow:0 1px 2px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.04)}
+.v2 .v-ind h3{font-family:var(--sans);font-weight:500;font-size:clamp(20px,2vw,28px);letter-spacing:.42px;line-height:1.28}
 .v2 .v-ind p{font-size:14.5px;color:var(--type-2);margin-top:12px;max-width:62ch;line-height:1.62}
 .v2 .v-ind .v-pill-d{margin-top:20px}
-.v2 .v-slab{margin-top:clamp(20px,2.4vw,28px);background:var(--black);border-radius:8px;padding:clamp(22px,2.6vw,32px);min-height:clamp(150px,17vw,210px);display:flex;flex-direction:column;justify-content:space-between;color:var(--chalk)}
+.v2 .v-slab{margin-top:clamp(20px,2.4vw,28px);background:var(--black);border-radius:12px;padding:clamp(22px,2.6vw,32px);min-height:clamp(150px,17vw,210px);display:flex;flex-direction:column;justify-content:space-between;color:var(--chalk)}
 .v2 .v-slab .v-who{font-family:var(--serif-2);font-weight:300;font-size:15px;color:var(--chalk-2)}
 .v2 .v-slab b{display:block;font-family:var(--disp-f);font-weight:400;font-size:clamp(36px,4.8vw,62px);letter-spacing:-.04em;line-height:1}
 .v2 .v-slab span{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--chalk-3);margin-top:12px}
@@ -222,17 +271,14 @@
 
 /* ---------- customer success ---------- */
 .v2 .v-cases{display:flex;gap:10px;margin-top:clamp(40px,5vw,70px);min-height:clamp(330px,38vw,460px)}
-.v2 .v-case{position:relative;flex:1;border-radius:8px;overflow:hidden;background:var(--black-2);transition:flex .55s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;justify-content:space-between;padding:clamp(20px,2.4vw,30px)}
+.v2 .v-case{position:relative;flex:1;border-radius:12px;overflow:hidden;background:var(--black-2);transition:flex .55s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;justify-content:space-between;padding:clamp(20px,2.4vw,30px)}
 .v2 .v-case.v-open{flex:2.6}
 .v2 .v-case::before{content:"";position:absolute;inset:0;background:
-  repeating-linear-gradient(118deg,rgba(237,239,233,.055) 0 2px,transparent 2px 22px),
-  linear-gradient(150deg,#222624 0%,#14100E 60%,#0D0F0E 100%)}
+  linear-gradient(180deg,rgba(255,255,255,.04),transparent 40%),var(--black-2)}
 .v2 .v-case:nth-child(2)::before{background:
-  repeating-linear-gradient(62deg,rgba(237,239,233,.05) 0 3px,transparent 3px 26px),
-  linear-gradient(200deg,#2B2E2C 0%,#191B1A 55%,#0E100F 100%)}
+  linear-gradient(180deg,rgba(255,255,255,.04),transparent 40%),var(--black-3)}
 .v2 .v-case:nth-child(3)::before{background:
-  repeating-linear-gradient(94deg,rgba(237,239,233,.045) 0 2px,transparent 2px 18px),
-  linear-gradient(120deg,#26231F 0%,#171512 58%,#0D0C0B 100%)}
+  linear-gradient(180deg,rgba(255,255,255,.04),transparent 40%),var(--black-2)}
 .v2 .v-case>*{position:relative;z-index:2}
 .v2 .v-case .v-mk{font-family:var(--serif-2);font-weight:300;font-size:15px;color:var(--chalk-2)}
 .v2 .v-case .v-body{opacity:0;transition:opacity .4s .15s;pointer-events:none}
@@ -255,7 +301,7 @@
 .v2 .v-qa .v-a{padding:0 0 22px;font-size:15px;line-height:1.68;color:var(--type-2);max-width:62ch}
 
 /* ---------- get started card ---------- */
-.v2 .v-start{background:var(--black);color:var(--chalk);border-radius:12px;overflow:hidden;display:grid;grid-template-columns:.82fr 1.18fr;align-items:center;gap:clamp(20px,3vw,40px);margin-top:clamp(30px,3.6vw,48px)}
+.v2 .v-start{background:var(--black);color:var(--chalk);border-radius:20px;overflow:hidden;display:grid;grid-template-columns:.82fr 1.18fr;align-items:center;gap:clamp(20px,3vw,40px);margin-top:clamp(30px,3.6vw,48px)}
 .v2 .v-start-l{padding:clamp(30px,4vw,56px);color:var(--chalk)}
 .v2 .v-start-l h2{font-family:var(--disp-f);font-weight:400;font-size:clamp(24px,2.8vw,36px);letter-spacing:-.02em;margin-top:18px}
 .v2 .v-start-l p{font-size:15px;color:var(--chalk-2);margin-top:14px;max-width:34ch}
@@ -266,7 +312,7 @@
 /* ---------- big cta ---------- */
 .v2 .v-bigcta{background:var(--black);color:var(--chalk);padding:clamp(40px,5vw,72px) 0}
 .v2 .v-bigcta .v-wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
-.v2 .v-bigcta h2{font-family:var(--disp-f);font-weight:400;font-size:clamp(26px,3.4vw,46px);letter-spacing:-.025em}
+.v2 .v-bigcta h2{font-family:var(--disp-f);font-weight:300;font-size:clamp(34px,4.4vw,55px);letter-spacing:0;line-height:1.16}
 
 /* ---------- footer wordmark ---------- */
 .v2 .v-wordmark{position:relative;margin-top:clamp(36px,5vw,64px);overflow:hidden;height:clamp(70px,11vw,150px)}
@@ -498,12 +544,12 @@
 /* ---- points ----------------------------------------------------------
    The icon sits above the point's title, drawn as a line, so the card
    reads as a point rather than a feature in a list. */
-.v2 .v-ind .v-ico{display:block;width:26px;height:26px;margin-bottom:18px;color:var(--signal-hi,#2E7D6B)}
+.v2 .v-ind .v-ico{display:block;width:26px;height:26px;margin-bottom:18px;color:var(--type)}
 .v2 .v-ind .v-ico svg{width:100%;height:100%;display:block;color:inherit}
 /* global.css paints this icon with --sheet, which is the ink there and the
    ground here; left alone it drew a near-white line on a near-white card. */
 .v2 .v-ico .pt-ico{color:inherit}
-.v2 .v-dark .v-ind .v-ico{color:var(--moss)}
+.v2 .v-dark .v-ind .v-ico{color:var(--aloe)}
 .v2 .v-lead+.v-inds{margin-top:clamp(34px,4.4vw,60px)}
 
 /* ---- the accordion band ---------------------------------------------
@@ -511,22 +557,17 @@
    own styles; it only needs the band's spacing around it here. */
 .v2 .v-band .lg-acc{margin-top:clamp(30px,3.6vw,52px)}
 
-/* An outline pill on a light ground: the design only drew the dark one and
-   the light one, and a light hero needs the pair. */
-.v2 .v-pill-l{display:inline-block;border:1px solid var(--line-l);color:var(--type);padding:11px 22px;border-radius:99px;font-size:14.5px;font-weight:500;transition:border-color .25s,background .25s}
-.v2 .v-pill-l:hover{border-color:var(--type);background:var(--card)}
-
 /* The segments inside a side, listed on the customers index. */
 .v2 .v-seglist{margin:18px 0 22px;display:flex;flex-direction:column;gap:2px}
 .v2 .v-seglist a{display:inline-block;padding:5px 0;font-size:14.5px;color:var(--type-2);border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
-.v2 .v-seglist a:hover{color:var(--type);border-bottom-color:var(--signal,#2E7D6B)}
+.v2 .v-seglist a:hover{color:var(--type);border-bottom-color:var(--type)}
 
 /* A hero with no photograph of its own: the same composition on the page's
    own ground, so the page does not open on a black band with nothing in it. */
 .v2 .v-hero-light{background:var(--sheet);color:var(--type)}
 .v2 .v-hero-light::after{display:none}
-.v2 .v-hero-light .v-eyebrow{color:var(--type-3)}
-.v2 .v-hero-light .v-sub{color:var(--type-2)}
+.v2 .v-hero-light .v-eyebrow,.v2 .v-hero-light .v-hero .v-eyebrow{color:var(--type-3)}
+.v2 .v-hero-light p.v-sub{color:var(--type-2)}
 .v2 .v-hero-light .v-badge{border-color:var(--line-l);color:var(--type-2)}
 
 /* The hero's screen takes the same slightly squarer frame as the product
@@ -534,11 +575,6 @@
    On a phone the global rule squares it up further. */
 @media (min-width:701px){ .v2 .v-hero-aside .mk{aspect-ratio:5/4} }
 
-/* ---- site controls dropped into a v2 page ----------------------------
-   `.v2 button{font:inherit}` and `.switch button{font-family:var(--mono)}`
-   carry the same weight, so the design's reset was winning on source order
-   and the pricing switch lost its mono label. Say it again, inside .v2. */
-.v2 .switch button{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase}
 
 /* ---- a numbered list of rows ----------------------------------------
    The solutions categories list every feature with the tier it lands on.
@@ -548,7 +584,7 @@
 .v2 .v-row{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:clamp(18px,2.4vw,34px);
   align-items:baseline;padding:clamp(20px,2.4vw,30px) 0;border-bottom:1px solid var(--line-l)}
 .v2 .v-row .v-n{font-size:10.5px;letter-spacing:.14em;color:var(--type-3)}
-.v2 .v-row h3{font-family:var(--disp-f);font-weight:400;font-size:clamp(19px,2vw,25px);letter-spacing:-.02em}
+.v2 .v-row h3{font-family:var(--sans);font-weight:500;font-size:clamp(18px,1.8vw,24px);letter-spacing:.36px;line-height:1.14}
 .v2 .v-row p{font-size:14.5px;color:var(--type-2);margin-top:8px;max-width:62ch;line-height:1.6}
 .v2 .v-tier{justify-self:end;white-space:nowrap;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;
   text-transform:uppercase;color:var(--type-2);border:1px solid var(--line-l);border-radius:99px;padding:6px 12px}
@@ -561,4 +597,4 @@
    around it — the escalation note on an automation page is a footnote to
    the section above, not a section of its own. */
 .v2 .v-band-tight{padding:clamp(34px,4vw,60px) 0}
-.v2 .human-note .v-eyebrow{color:var(--amber-hi,#8A5409);margin-bottom:12px}
+.v2 .human-note .v-eyebrow{color:var(--amber);margin-bottom:12px}

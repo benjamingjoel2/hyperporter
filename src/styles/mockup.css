@@ -18,10 +18,10 @@
 /* Grounds. Four flat tones from the site's own palette plus the photograph.
    Amber is not among them — it is a state, not a colour. */
 .mk[data-ground="warm"]{background:var(--steel)}
-.mk[data-ground="slate"]{background:#A7B4B6}
-.mk[data-ground="sand"]{background:#CDBFAA}
+.mk[data-ground="slate"]{background:#d4d4d8}
+.mk[data-ground="sand"]{background:#fbfbf5}
 .mk[data-ground="teal"]{background:var(--signal)}
-.mk[data-ground="photo"]{background:#6B7377}
+.mk[data-ground="photo"]{background:#52525b}
 .mk[data-ground="photo"]::before{content:"";position:absolute;inset:-4%;
   background:var(--photo) center/cover;filter:blur(3px) saturate(.8);opacity:.9}
 .mk[data-ground="photo"]::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.18)}
@@ -194,16 +194,16 @@
    hero card, which sits in a dark card already. Tokens flip; the few
    hard-coded tints below flip with them. Teal and amber are lifted the way
    the site lifts them on dark grounds. */
-.mk.dark{--paper:#F2F3F1;--muted:rgba(255,255,255,.74);--dim:rgba(255,255,255,.52);
+.mk.dark{--paper:#ffffff;--muted:rgba(255,255,255,.74);--dim:rgba(255,255,255,.52);
   --line:rgba(255,255,255,.12);--line-2:rgba(255,255,255,.26);--ink:rgba(255,255,255,.07);--raise:rgba(255,255,255,.1);
-  --steel:rgba(255,255,255,.12);--signal:#5FBFA8;--signal-hi:#63C2CB;--signal-dim:rgba(79,179,189,.2);--amber:#D79A3E}
+  --steel:rgba(255,255,255,.12);--signal:var(--aloe);--signal-hi:var(--aloe);--signal-dim:rgba(79,179,189,.2);--amber:#D79A3E}
 .mk.dark .mk-panel{background:rgba(20,23,21,.8);box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 1.4em 3.2em rgba(0,0,0,.35)}
 .mk.dark[data-ground="teal"] .mk-panel{background:rgba(20,23,21,.84)}
 .mk.dark .mk-back{background:rgba(20,23,21,.45);color:var(--paper)}
 .mk.dark .mk-back i{background:rgba(255,255,255,.16)}
 .mk.dark .mk-back p,.mk.dark .mk-back .row{color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.1)}
-.mk.dark .mk-btn{color:#0D1016}
-.mk.dark .mk-btn.sig,.mk.dark .mk-btn.amb{color:#0D1016}
+.mk.dark .mk-btn{color:#000000}
+.mk.dark .mk-btn.sig,.mk.dark .mk-btn.amb{color:#000000}
 .mk.dark .mk-btn.o{color:var(--paper)}
 .mk.dark .mk-tag.amb{background:rgba(226,169,78,.16)}
 .mk.dark .mk-tag.red{background:rgba(224,123,117,.14);color:#E07B75}
@@ -212,7 +212,7 @@
 .mk.dark .mk-field div{background:rgba(255,255,255,.06)}
 .mk.dark .mk-search{background:rgba(255,255,255,.07)}
 .mk.dark .mk-stage .mk-msg p{background:rgba(255,255,255,.08)}
-.mk.dark .mk-stage .mk-msg.me p{background:#12606A;color:#fff}
+.mk.dark .mk-stage .mk-msg.me p{background:var(--black-3);color:#fff}
 .mk.dark .mk-via{background:rgba(255,255,255,.08)}
 .mk.dark .mk-cite{background:rgba(255,255,255,.06)}
 .mk.dark .mk-kpi{background:rgba(255,255,255,.06)}
@@ -293,7 +293,7 @@
 
 .mk-ui{position:relative;width:100%;max-height:100%;
   display:flex;flex-direction:column;font-size:1em;
-  background:#FCFCFB;border-radius:.7em;overflow:hidden;
+  background:#ffffff;border-radius:.7em;overflow:hidden;
   box-shadow:0 0 0 1px rgba(20,23,21,.10),0 2.2em 4.4em rgba(8,12,18,.24)}
 
 /* main column */
@@ -328,12 +328,12 @@
 /* A name with its avatar. Block rather than flex, so a long name gets a
    real ellipsis instead of running into the next column. */
 .mk-tbl .who{display:block;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mk-tbl .who i{width:1.85em;height:1.85em;border-radius:50%;background:#E3E6E4;color:var(--muted);
+.mk-tbl .who i{width:1.85em;height:1.85em;border-radius:50%;background:#e4e4e7;color:var(--muted);
   font-size:.7em;display:inline-grid;place-items:center;vertical-align:-.45em;margin-right:.45em}
 .mk-tbl .num{font-variant-numeric:tabular-nums;text-align:right}
 .mk-st{display:inline-flex;align-items:center;gap:.3em;font-size:.94em;color:var(--muted);white-space:nowrap}
 .mk-st::before{content:"";width:.42em;height:.42em;border-radius:50%;background:currentColor;opacity:.45}
-.mk-st.go{color:#0C6B6F}.mk-st.go::before{opacity:1}
+.mk-st.go{color:var(--paper)}.mk-st.go::before{opacity:1}
 .mk-st.amb{color:var(--amber)}.mk-st.amb::before{opacity:1}
 .mk-st.red{color:#A8506B}.mk-st.red::before{opacity:1}
 
@@ -406,7 +406,7 @@
 /* two panes */
 .mk-two{display:grid;grid-template-columns:1fr 1fr;gap:.55em;align-items:start}
 .mk-pane{border:1px solid var(--line);border-radius:.45em;overflow:hidden;background:#fff;min-width:0}
-.mk-pane > h6{margin:0;padding:.34em .55em;background:#F3F3F1;border-bottom:1px solid var(--line);
+.mk-pane > h6{margin:0;padding:.34em .55em;background:#fbfbf5;border-bottom:1px solid var(--line);
   font-weight:400;font-size:.7em;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
 .mk-pane .ln{display:flex;justify-content:space-between;gap:.5em;padding:.33em .55em;font-size:.8em;
   border-bottom:1px solid rgba(20,23,21,.05);min-width:0}
@@ -423,7 +423,7 @@
 
 /* a column of bars, for a send report */
 .mk-plot{display:flex;align-items:flex-end;gap:.25em;height:3.4em;padding-bottom:.2em;border-bottom:1px solid var(--line)}
-.mk-plot i{flex:1;background:#DCE3E2;border-radius:.1em .1em 0 0}
+.mk-plot i{flex:1;background:#e4e4e7;border-radius:.1em .1em 0 0}
 .mk-plot i.hi{background:var(--signal)}
 
 /* the bare page: no navigation, a brand bar instead */

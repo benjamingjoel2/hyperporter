@@ -23,64 +23,63 @@
    inverted. That means rules written as `background:var(--paper);
    color:var(--void)` (the inverted buttons) stay correct without edits.
 
-   Teal and amber are darkened well below their dark-theme values: #5FBFA8
+   Teal and amber are darkened well below their dark-theme values: var(--aloe)
    sits at ~1.9:1 against white, nowhere near readable. Amber is still
    reserved for human-touchpoint / manual states — never decorative. */
 :root{
-  /* Ground is warm off-white, not white, and the greys are warm with it —
-     measured off the reference at 1440px, where the ground reads
-     rgb(250,250,249), ink rgb(20,23,21) and secondary text rgb(104,101,94).
-     A neutral-grey secondary on this ground looks dirty; the warm one is
-     what makes the page read as considered. */
-  --void:#F4F5F1;
-  --ink:#EDEFE9;
-  --steel:#E8EAE4;
-  --raise:#FBFCF8;
-  --line:#E1E5DB;
-  --line-2:#D3D8CE;
-  --paper:#141715;
-  --muted:#4A544E;
-  --dim:#7C857F;
-  /* Teal darkened from #2E7D6B so it holds white text in the structural
-     role the reference gives its forest green: announcement bar, buttons,
-     and nothing decorative. */
-  --signal:#2E7D6B;
-  --signal-hi:#3A9480;
-  --signal-dim:rgba(46,125,107,.10);
-  --amber:#8A5409;
-  /* Photo scrim base. Light again, so the hero bands whiten the photograph
-     rather than darkening it. */
-  --scrim:244,245,241;
-  /* v2 (Sep 2026): a serif display against a grotesque body, with a real
-     monospace back on the labels. Hyperlocal ROM is out, which also ends the
-     desktop-only licence problem — every face here is Google-hosted. */
-  --display:'Instrument Serif',Georgia,serif;
-  --serif:'Newsreader',Georgia,serif;
-  --body:'Archivo',system-ui,-apple-system,sans-serif;
-  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;
-  /* Dark grounds: the band colours and the accent that only works on them. */
-  --black:#0B0C0B;
-  --black-2:#121413;
-  --black-3:#1B1E1C;
-  --chalk:#EDEFE9;
-  --chalk-2:#A3ADA7;
-  --chalk-3:#6E7873;
-  --line-d:rgba(237,239,233,.13);
-  --moss:#5FBFA8;
-  --amber-hi:#D79A3E;
-  --card:#EDEFE9;
-  /* Buttons, inputs and segmented controls. Not pills — a small, even
-     corner, as on the reference. Label chips keep their own pill radius. */
-  --radius:8px;
-  --pill:999px;
-  /* Content runs no wider than the reference's — about 1,300px with a
-     tenth of the viewport either side — after the founder found the
-     1,680px measure hard to read (Sep 2026).
+  /* Shopify's two-track system (VoltAgent/awesome-design-md, Sep 2026).
+     The system admits two canvases and no third: black for the cinematic
+     marketing track, white/cream for the transactional one. The warm
+     off-white and the warm greys this site used are gone with it — greys,
+     beiges and blues are explicitly not in the system.
 
-     The bar sits on the same measure, not a wider one (founder, Sep 2026):
-     on its own measure the wordmark stood 85px inside the headline under
-     it, and nothing on the page lined up with anything else. --bar-max is
-     kept as a name so anything still asking for it gets the right number. */
+     Names are kept as they were so the whole site does not have to be
+     rewritten to change palette; only the values move. --paper is the ink
+     and --void the ground here, which is this file's long-standing (and
+     confusing) convention — see DESIGN.md. */
+  --void:#ffffff;
+  --ink:#ffffff;
+  --steel:#fbfbf5;
+  --raise:#ffffff;
+  --line:#e4e4e7;
+  --line-2:#d4d4d8;
+  --paper:#000000;
+  --muted:#52525b;
+  --dim:#71717a;
+  /* The accent is the system's aloe. It is a surface fill, not a text
+     colour — never put type on it at small sizes, and never use it as a
+     link colour on white. --signal keeps the name for the structural role
+     but now resolves to ink, which is what the system uses for emphasis
+     on the light track. */
+  --signal:#000000;
+  --signal-hi:#3f3f46;
+  --signal-dim:rgba(0,0,0,.06);
+  --aloe:#c1fbd4;
+  --pistachio:#d4f9e0;
+  /* Amber is kept against the adopted palette: on this site it marks a
+     step a person has to take, which is a meaning the product depends on
+     and the system has no equivalent for. */
+  --amber:#8A5409;
+  --scrim:0,0,0;
+  /* One family. Display is the thin cut (300); UI and body are 420–550. */
+  --display:'Inter',Helvetica,Arial,sans-serif;
+  --serif:'Inter',Helvetica,Arial,sans-serif;
+  --body:'Inter',system-ui,-apple-system,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  --black:#000000;
+  --black-2:#0a0a0a;
+  --black-3:#1e2c31;
+  --chalk:#ffffff;
+  --chalk-2:#a1a1aa;
+  --chalk-3:#9dabad;
+  --line-d:#1e2c31;
+  --moss:#c1fbd4;
+  --amber-hi:#D79A3E;
+  --card:#ffffff;
+  /* The pill is the only button shape in this system. --radius stays for
+     inputs and frames. */
+  --radius:8px;
+  --pill:9999px;
   --pad:clamp(20px,4vw,64px);
   --max:1640px;
   --bar-max:1640px;
@@ -89,7 +88,7 @@
 *{box-sizing:border-box}
 
 html{scroll-behavior:smooth;background:var(--void)}
-body{margin:0;background:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
+body{font-feature-settings:"ss03";margin:0;background:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
   /* `clip`, not `hidden`. This was `overflow-x:hidden` — a safety net against
      sideways scroll that also made body a scroll container, which silently
      broke `position:sticky` for every descendant and capped programmatic
@@ -165,15 +164,15 @@ header.top{position:sticky;top:0;z-index:70;
    escapes to behind the parent entirely. */
 header.top::before{content:"";position:absolute;inset:0 0 -34px;z-index:0;pointer-events:none;
   opacity:0;transition:opacity .28s ease;
-  background:linear-gradient(180deg,rgba(6,10,13,.34) 0%,rgba(6,10,13,.26) 76%,rgba(6,10,13,0) 100%)}
+  background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.34) 76%,rgba(0,0,0,0) 100%)}
 /* Translucent over the dark regions rather than fully transparent: the
    photograph reads through the bar as glass, which is the effect asked for,
    and it holds white text without needing the heavier gradient. */
-header.top.over{background:rgba(10,14,18,.42);
+header.top.over{background:rgba(0,0,0,.62);
   -webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);
   border-bottom-color:rgba(255,255,255,.14)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  header.top.over{background:rgba(10,14,18,.72)}
+  header.top.over{background:rgba(0,0,0,.82)}
 }
 header.top.over::before{opacity:1}
 
@@ -290,9 +289,9 @@ body.drawer-open{overflow:hidden}
 @keyframes march{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ============ TYPE ============ */
-.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+.eyebrow{font-family:var(--body);font-size:12px;font-weight:400;letter-spacing:.72px;text-transform:uppercase;color:var(--muted);
   margin:0 0 22px;display:inline-flex;align-items:center;gap:8px}
-.eyebrow::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.6;flex:0 0 auto}
+/* the dot before an eyebrow was this site's device, not the adopted system's */
 /* Measured off the reference: h1 56.25/59.06 with -1.25px tracking, h2
    41.25/43.31 with -1.24px — i.e. 1.05 leading and -.03/-.04em, both at
    weight 400. The tracking is doing the work here; drop it and a 56px
@@ -301,9 +300,9 @@ body.drawer-open{overflow:hidden}
    tracking than the grotesque did, not more — -.018em, measured off the
    design file — and 1.06 leading so the two lines of a display heading sit
    close enough to read as one object. */
-h1{font-family:var(--display);font-weight:400;letter-spacing:-.018em;line-height:1.06;margin:0 0 26px;font-size:clamp(38px,5vw,70px);text-wrap:balance}
-h2{font-family:var(--display);font-weight:400;letter-spacing:-.018em;line-height:1.08;margin:0 0 20px;font-size:clamp(30px,3.6vw,50px);text-wrap:balance}
-h3{font-family:var(--display);font-weight:400;letter-spacing:-.015em;line-height:1.24;margin:0 0 10px;font-size:22px}
+h1{font-family:var(--display);font-weight:300;letter-spacing:0;line-height:1.02;margin:0 0 26px;font-size:clamp(48px,6vw,96px);text-wrap:balance}
+h2{font-family:var(--display);font-weight:300;letter-spacing:0;line-height:1.16;margin:0 0 20px;font-size:clamp(34px,4.4vw,55px);text-wrap:balance}
+h3{font-family:var(--body);font-weight:500;letter-spacing:.42px;line-height:1.28;margin:0 0 10px;font-size:20px}
 
 /* The two-tone display heading from the design file: the second line carries
    the same size and sits back, so the first line is the statement and the
@@ -344,7 +343,7 @@ p{margin:0 0 16px}
    .btn sat two pixels shorter and half a point smaller than the pill beside
    it on the same page (founder, Sep 2026). */
 .btn{display:inline-flex;align-items:center;gap:9px;background:var(--paper);color:var(--void);border:0;
-  padding:12px 24px;border-radius:var(--pill);font-weight:500;font-size:14.5px;letter-spacing:.005em;
+  padding:12px 24px;border-radius:var(--pill);font-weight:420;font-size:16px;letter-spacing:0;
   transition:background .18s ease,transform .22s var(--ease,cubic-bezier(.2,.8,.2,1))}
 .btn:hover{transform:translateY(-1px)}
 .btn:active{transform:translateY(0)}
@@ -352,7 +351,7 @@ p{margin:0 0 16px}
 .btn i{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.16);
   display:grid;place-items:center;font-style:normal;font-size:11px;line-height:1}
 .btn-o{display:inline-flex;align-items:center;gap:9px;background:none;border:1px solid var(--line-2);
-  color:var(--paper);padding:11px 22px;border-radius:var(--pill);font-weight:500;font-size:14.5px;
+  color:var(--paper);padding:11px 22px;border-radius:var(--pill);font-weight:420;font-size:16px;
   letter-spacing:.005em;transition:border-color .2s,background .2s,transform .22s var(--ease,cubic-bezier(.2,.8,.2,1))}
 .btn-o:hover{transform:translateY(-1px)}
 .btn-o:active{transform:translateY(0)}
@@ -789,23 +788,23 @@ p{margin:0 0 16px}
    The reference's format: dark ground, the mark top-left and the copyright
    pinned to the bottom of that same column, link columns across the right
    with grey labels and white links. Nothing above it and nothing below. */
-footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp(40px,5vw,72px);border-top:1px solid #1E242B}
+footer{background:var(--black);color:var(--chalk);padding-block:clamp(56px,6vw,84px) clamp(40px,5vw,72px);border-top:1px solid var(--line-d)}
 .f-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(30px,5vw,80px);align-items:stretch}
 .f-brand{display:flex;flex-direction:column;align-items:flex-start;min-height:100%}
 .f-mark{width:44px;height:44px;display:block;color:#fff;transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
 .f-mark svg{width:100%;height:100%;display:block}
 .f-mark svg rect{fill:currentColor}
 .f-mark svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6;stroke-linecap:butt}
-.f-mark:hover{color:#5FBFA8;transform:rotate(90deg)}
+.f-mark:hover{color:var(--aloe);transform:rotate(90deg)}
 .f-con{font-size:14px;line-height:1.6;color:#9AA1AA;margin-top:32px;max-width:34ch}
 .f-con div{margin-bottom:14px}
-.f-con a{color:#EDEFE9;text-decoration:none;border-bottom:1px solid transparent}
+.f-con a{color:var(--chalk);text-decoration:none;border-bottom:1px solid transparent}
 .f-con a:hover{border-bottom-color:#4A525C}
-.f-copy{margin:auto 0 0;padding-top:48px;font-size:14px;line-height:1.5;color:#7D848E}
+.f-copy{margin:auto 0 0;padding-top:48px;font-size:14px;line-height:1.5;color:var(--chalk-3)}
 .f-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,2.4vw,36px)}
-.f-col h4{display:block;font-family:var(--display);font-size:14px;font-weight:400;letter-spacing:-.01em;text-transform:none;color:#7D848E;margin:0 0 18px}
-.f-col a{display:block;color:#EDEFE9;font-family:var(--body);font-weight:400;font-size:14px;letter-spacing:-.01em;line-height:1.4;padding:6px 0;transition:color .2s}
-.f-col a:hover{color:#5FBFA8}
+.f-col h4{display:block;font-family:var(--display);font-size:14px;font-weight:400;letter-spacing:-.01em;text-transform:none;color:var(--chalk-3);margin:0 0 18px}
+.f-col a{display:block;color:var(--chalk);font-family:var(--body);font-weight:400;font-size:14px;letter-spacing:-.01em;line-height:1.4;padding:6px 0;transition:color .2s}
+.f-col a:hover{color:var(--aloe)}
 /* Stacked, the copyright belongs at the bottom, not between the address and
    the links — so the brand column dissolves into the flex column and its
    pieces are ordered directly. */
@@ -1062,10 +1061,10 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
    the green is the confirmation that a country is available. */
 .wm{
   position:relative;
-  --wm-bg:#0B1219;
-  --wm-off:#1E2A34;
-  --wm-on:#EDF1F5;
-  --wm-live:#2FD483;
+  --wm-bg:#000000;
+  --wm-off:#1e2c31;
+  --wm-on:#ffffff;
+  --wm-live:#c1fbd4;
 }
 
 .wm-bar{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:clamp(18px,2.2vw,28px)}
@@ -1100,7 +1099,7 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 .wm-tip[hidden]{display:none}
 .wm-tip b{display:block;font-family:var(--display);font-weight:400;font-size:16px;line-height:1.2}
 .wm-tip span{display:inline-flex;align-items:center;gap:6px;margin-top:4px;font-size:13px;color:var(--muted)}
-.wm-tip span::before{content:"";width:6px;height:6px;border-radius:50%;background:#12945B}
+.wm-tip span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--aloe)}
 /* Not-covered reads as the recessed state it describes, but still solid. */
 .wm-tip.off{background:#131C24;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .wm-tip.off b{color:rgba(255,255,255,.76)}
@@ -1210,9 +1209,9 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
   .lg-acc-ipad{padding:10px;border-radius:20px}
 }
 /* On a dark ground — the solutions pages' "how they use it" section. */
-.acc-dark{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(88px,10vw,160px)}
-.acc-dark .lg-acc-list{border-bottom-color:#2A313A}
-.acc-dark .lg-acc-item{border-top-color:#2A313A}
+.acc-dark{background:var(--black);color:var(--chalk);padding-block:clamp(88px,10vw,160px)}
+.acc-dark .lg-acc-list{border-bottom-color:var(--line-d)}
+.acc-dark .lg-acc-item{border-top-color:var(--line-d)}
 .acc-dark .lg-acc-item.on{border-top-color:#fff}
 .acc-dark .lg-acc-btn{color:#7C838C}
 .acc-dark .lg-acc-btn:hover,.acc-dark .lg-acc-item.on .lg-acc-btn{color:#fff}
@@ -1231,7 +1230,7 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 @media (max-width:900px){.pts{grid-template-columns:1fr;gap:34px}}
 
 /* ---------- the closing statement band (components/CtaBand.astro) ---------- */
-.cta-band{background:#0B0C0B;color:#fff;padding-block:clamp(88px,11vw,170px)}
+.cta-band{background:var(--black);color:#fff;padding-block:clamp(88px,11vw,170px)}
 .cta-band-t{font-family:var(--display);font-size:clamp(24px,2.6vw,36px);letter-spacing:-.018em;line-height:1.28;
   max-width:26ch;margin:0 0 clamp(26px,3vw,40px);color:#8A9098}
 .cta-band-t b{font-weight:400;color:#fff}
@@ -1366,12 +1365,12 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 .p-top-photo .chip.done{color:rgba(255,255,255,.78);border-color:rgba(255,255,255,.3)}
 .p-top-photo .chip.now{color:#fff;background:var(--signal-hi);border-color:var(--signal-hi)}
 .p-top-photo .thread .line{color:rgba(255,255,255,.84);border-top-color:rgba(255,255,255,.12)}
-.p-top-photo .thread .line i{background:#5FBFA8}
+.p-top-photo .thread .line i{background:var(--aloe)}
 .p-top-photo .thread .line.amb i{background:#D79A3E}
 .p-top-photo .thread .ft{color:rgba(255,255,255,.6);border-top-color:rgba(255,255,255,.12)}
-.p-top-photo .toggle{color:#5FBFA8}
-.p-top-photo .toggle span{background:rgba(79,179,189,.18);border-color:#5FBFA8}
-.p-top-photo .toggle span::after{background:#5FBFA8}
+.p-top-photo .toggle{color:var(--aloe)}
+.p-top-photo .toggle span{background:rgba(193,251,212,.18);border-color:var(--aloe)}
+.p-top-photo .toggle span::after{background:var(--aloe)}
 .p-top-photo .toggle[aria-pressed="false"]{color:rgba(255,255,255,.55)}
 .p-top-photo .toggle[aria-pressed="false"] span{background:none;border-color:rgba(255,255,255,.3)}
 
@@ -1467,7 +1466,9 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
   color:var(--signal);padding-top:26px;border-bottom:0}
 .pm td.pm-cell{text-align:center;width:118px;color:var(--muted);font-variant-numeric:tabular-nums}
 .pm td.pm-yes{color:var(--signal)}
-.pm td.pm-no{color:var(--line-2)}
+/* "not included" was set in the hairline colour, which on the new white
+   canvas measured 1.48:1 — a row the reader has to be able to scan. */
+.pm td.pm-no{color:var(--dim)}
 .pm tbody tr:last-child td{border-bottom:0}
 
 /* Below 700px the matrix stops being a table. Three tier columns will not fit
@@ -1500,7 +1501,7 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 
 /* Segment / tier switch. */
 .switch{display:inline-flex;gap:0;border:1px solid var(--line-2);border-radius:calc(var(--radius) + 3px);padding:4px;margin-top:26px}
-.switch button{background:none;border:0;border-radius:var(--radius);padding:9px 20px;font-family:var(--mono);font-size:10px;
+.switch button{background:none;border:0;border-radius:var(--radius);padding:9px 20px;font-family:var(--body);font-size:12px;font-weight:400;
   letter-spacing:.15em;text-transform:uppercase;color:var(--dim);cursor:pointer;transition:background .25s,color .25s}
 .switch button.on{background:var(--paper);color:var(--void)}
 
@@ -1603,21 +1604,21 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 .mega .mega-feat,.dsub .mega-feat{display:block;color:var(--paper);text-decoration:none;opacity:1;padding:14px 14px 20px;
   background:var(--ink);border:1px solid var(--line);border-radius:16px;transition:background .2s,border-color .2s}
 .mega .mega-feat:hover,.dsub .mega-feat:hover{background:var(--steel);border-color:var(--line-2)}
-.mega-card{position:relative;min-height:170px;border-radius:12px;background:#0B0C0B;color:#EDEFE9;padding:18px 20px;overflow:hidden;
+.mega-card{position:relative;min-height:170px;border-radius:12px;background:var(--black);color:var(--chalk);padding:18px 20px;overflow:hidden;
   display:flex;flex-direction:column;gap:8px;font-size:12px;line-height:1.35}
-.mc-kicker{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#7FD1C7;margin-bottom:2px}
-.mc-bub{align-self:flex-start;max-width:78%;padding:7px 10px;border-radius:9px;background:#1A2028;color:#EDEFE9}
-.mc-bub.me{align-self:flex-end;background:#124A47;border:1px solid #1E6B65}
-.mc-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #1A2028;color:#D6DBE1}
+.mc-kicker{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--aloe);margin-bottom:2px}
+.mc-bub{align-self:flex-start;max-width:78%;padding:7px 10px;border-radius:9px;background:var(--black-3);color:var(--chalk)}
+.mc-bub.me{align-self:flex-end;background:var(--black-3);border:1px solid #2C3A46}
+.mc-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--black-3);color:var(--chalk-2)}
 .mc-row:last-child{border-bottom:0}
 .mc-row i{width:6px;height:6px;border-radius:50%;background:var(--amber);flex:none}
-.mc-row.ok i{background:#5FBFA8}
-.mc-row em{font-style:normal;margin-left:auto;font-size:9.5px;font-weight:600;padding:3px 8px;border-radius:999px;background:#153F3C;color:#9FE2D8}
-.mc-dot{position:absolute;width:5px;height:5px;border-radius:50%;background:#7FD1C7;box-shadow:0 0 0 3px rgba(127,209,199,.12)}
+.mc-row.ok i{background:var(--aloe)}
+.mc-row em{font-style:normal;margin-left:auto;font-size:9.5px;font-weight:600;padding:3px 8px;border-radius:999px;background:var(--black-3);color:var(--aloe)}
+.mc-dot{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--aloe);box-shadow:0 0 0 3px rgba(127,209,199,.12)}
 .mc-title{font-size:13.5px;line-height:1.35;color:#fff;margin:2px 0 6px}
 .mc-line{height:6px;border-radius:3px;background:#222932}
 .mega-feat-t{margin:16px 2px 8px;font-size:15px;font-weight:400;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.mega-new{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:#DDF3E4;color:#146B4A}
+.mega-new{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--aloe);color:var(--paper)}
 .mega-feat-d{margin:0 2px;font-size:13.5px;line-height:1.45;color:var(--muted)}
 .mega .mega-feat:hover .mega-feat-t,.dsub .mega-feat:hover .mega-feat-t{color:var(--signal)}
 @media (max-width:1180px){.mega-in{grid-template-columns:minmax(0,1fr) 260px;gap:28px}.mega-side{padding-left:28px}}
@@ -1750,3 +1751,14 @@ footer{view-transition-name:site-foot}
   .bar-acts .login:hover,.cta-nav:hover{transform:none}
   ::view-transition-old(root),::view-transition-new(root){animation:none!important}
 }
+
+/* ---- the adopted system's aloe accent ---------------------------------
+   Aloe and pistachio belong to the light track only and are surface fills,
+   never a colour type sits in at small sizes. They appear in two places on
+   this site: the featured pricing tier, and the one band that marks a
+   different category of feature. */
+.tier.featured{background:var(--aloe);border-color:transparent}
+.tier.featured .tkind,.tier.featured .tnote{color:#3f3f46}
+.btn-aloe{background:var(--aloe);color:var(--paper)}
+.btn-aloe:hover{background:var(--pistachio)}
+.band-pistachio{background:var(--pistachio)}
