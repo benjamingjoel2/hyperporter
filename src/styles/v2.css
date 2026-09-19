@@ -156,33 +156,53 @@
 .v2 .v-center p{font-size:15.5px;color:var(--chalk-2);margin-top:20px;line-height:1.62;max-width:46ch;margin-left:auto;margin-right:auto}
 .v2 .v-center .v-pill{margin-top:26px}
 
-/* The layer list runs across the top of the band rather than down its
-   left side (founder, Sep 2026). On the side it pushed the panel's copy
-   318px inside the page's own edge, where it lined up with nothing —
-   across the top, each label sits over its own quarter of the band and the
-   panel's title starts on the same edge as every other heading on the
-   page. It doubles as the progress bar for a section that pins. */
-.v2 .v-prod{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(26px,3.2vw,46px);margin-top:clamp(40px,5vw,72px)}
-.v2 .v-sticky{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:clamp(14px,2vw,30px)}
+/* The product band, after the reference (founder, Sep 2026).
+   The layer list is a numbered rail down the left, the active one carrying
+   its own line; the screen runs off the right edge of the page instead of
+   sitting in a frame with room to spare around it; and the layer's name
+   and description sit UNDER the screen, on the screen's own left edge —
+   which is what keeps them aligned to something. */
+.v2 .v-prod{display:grid;grid-template-columns:minmax(210px,15.5%) minmax(0,1fr);
+  gap:clamp(24px,3.2vw,56px);margin-top:clamp(34px,4.2vw,64px);align-items:start}
+.v2 .v-sticky{display:block}
 .v2 .v-sticky .v-eyebrow{display:none}
-.v2 .v-sticky a{display:block;padding:15px 0 0;border-top:2px solid var(--line-d);font-size:14.5px;color:var(--chalk-3);transition:color .3s,border-color .3s}
-.v2 .v-sticky a.v-on{color:var(--chalk);border-top-color:var(--aloe)}
-.v2 .v-sticky a.v-done{color:var(--chalk-2);border-top-color:var(--chalk-3)}
-/* The product band pins: the three titles hold still on the left while the
-   panel beside them is replaced, one feature per screen of scroll, instead
-   of one long column the reader has to wade through. The track is as tall
-   as the number of panels; the stage inside it sticks. */
+.v2 .v-sticky a{display:grid;grid-template-columns:2.2em minmax(0,1fr);
+  column-gap:.8em;padding:0 0 clamp(18px,2vw,26px);color:var(--chalk-3);
+  transition:color .35s}
+.v2 .v-sticky a .v-n{font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  line-height:1.5;color:var(--chalk-3);transition:color .35s;font-variant-numeric:tabular-nums}
+.v2 .v-sticky a .v-t{font-size:16px;font-weight:420;line-height:1.35;color:var(--chalk-3);transition:color .35s}
+/* The reference's rail carries a line under the active item; ours does not,
+   because the same sentence is already set under the screen a few hundred
+   pixels away and any version short enough for the rail was a truncation
+   of it. The numbers and the names carry the list. */
+.v2 .v-sticky a.v-on{color:var(--chalk)}
+.v2 .v-sticky a.v-on .v-n,.v2 .v-sticky a.v-on .v-t{color:var(--chalk)}
+
+
 .v2 .v-prod-track{position:relative;height:calc(100vh * var(--panels,3))}
-.v2 .v-prod-stage{position:sticky;top:0;height:100vh;display:flex;align-items:center}
+.v2 .v-prod-stage{position:sticky;top:0;height:100vh;display:flex;align-items:center;padding-top:72px}
 .v2 .v-prod-stage .v-prod{width:100%;margin-top:0}
-.v2 .v-stack{position:relative;min-height:clamp(420px,58vh,620px)}
+.v2 .v-stack{position:relative;min-height:clamp(400px,58vh,560px)}
 .v2 .v-stack .v-feat{position:absolute;inset:0;opacity:0;transform:translateY(26px) scale(.985);
   transition:opacity .5s ease,transform .7s cubic-bezier(.2,.8,.2,1);pointer-events:none;margin:0}
 .v2 .v-stack .v-feat.v-on{opacity:1;transform:none;pointer-events:auto}
 /* every panel's screen is the same height, so the headline under it lands
    in the same place each time and the change reads as a swap, not a jump */
-.v2 .v-stack .v-feat .v-shot{height:min(46vh,380px);overflow:hidden}
-.v2 .v-stack .v-feat .v-shot .v-app{height:100%}
+/* A product shot, not a tile. The frame's default composition floats one
+   small panel in a wide ground; held to a fixed height here it read as an
+   empty white box with something in the middle of it. So the frame takes
+   its height from the screen rather than the screen being stretched to
+   the frame, and the screen fills the frame's width and runs off the
+   right edge of the page. */
+.v2 .v-feat .v-shot .mk{aspect-ratio:auto;height:auto}
+.v2 .v-feat .v-shot .mk-stage{position:relative;inset:auto;
+  padding:clamp(14px,1.6vw,22px) 0 0 clamp(16px,1.8vw,26px);
+  display:block}
+.v2 .v-feat .v-shot .mk-panel{position:relative;left:auto;top:auto;transform:none;
+  width:100%;border-radius:.9em 0 0 0}
+.v2 .v-feat .v-shot .mk-back{display:none}
+.v2 .v-feat .v-shot .mk-app{display:none}
 /* the rail marks how far through the band you are */
 .v2 .v-sticky{counter-reset:f}
 .v2 .v-sticky a{position:relative}
@@ -376,8 +396,14 @@
   .v2 .v-stack .v-feat .v-shot{height:auto}
   .v2 .v-hero-grid{grid-template-columns:1fr;min-height:0}
   .v2 .v-phone{justify-self:start;margin-top:36px;transform:none}
-  .v2 .v-sticky{display:flex;gap:18px;overflow-x:auto;padding-bottom:4px}
-  .v2 .v-sticky a{flex:none;padding:11px 0 0;white-space:nowrap;font-size:13.5px}
+  /* unpinned: the rail is a row above the panels, the shot runs the width
+     of the page and still runs off its right edge */
+  .v2 .v-prod{grid-template-columns:minmax(0,1fr)}
+  .v2 .v-sticky{display:flex;gap:20px;overflow-x:auto;padding-bottom:6px;
+    border-bottom:1px solid var(--line-d)}
+  .v2 .v-sticky a{flex:none;display:flex;align-items:baseline;gap:.5em;padding:0 0 10px;white-space:nowrap}
+  .v2 .v-sticky a .v-t{font-size:14px}
+  .v2 .v-feat .v-copy{flex-direction:column;align-items:flex-start;gap:20px}
   .v2 .v-statrow{grid-template-columns:1fr}
   .v2 .v-statrow div+div{border-left:0;border-top:1px solid var(--line-l);padding-left:0}
   .v2 .v-foot-top{grid-template-columns:1fr 1fr}
@@ -440,11 +466,20 @@
    under it. Ours is a Mockup, which carries its own aspect ratio and its
    own ground, so the panel splits instead: copy on the left, the screen at
    a legible size on the right, both centred in the pinned stage. */
-.v2 .v-feat{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
-  gap:clamp(26px,3.4vw,56px);align-items:start}
-/* The copy's first line sits on the screen's top edge, so the title, the
-   description and the button hold the same place as the panels swap. */
-.v2 .v-feat .v-copy{padding-top:clamp(6px,1.4vw,22px)}
+.v2 .v-feat{display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(20px,2.4vw,34px)}
+/* The screen is a product shot, not a tile: it runs past the page's right
+   edge and is cropped by the viewport, the way the reference crops it. */
+/* to the viewport's edge, not the container's — and the section crops it,
+   so the bleed never puts a scrollbar on the page */
+.v2 .v-feat .v-shot{margin-right:calc(-1 * (50vw - 50%));border-radius:12px 0 0 12px;border-right:0}
+/* `overflow:hidden` here would make the section a scroll container and
+   the stage inside it would silently stop sticking — the same trap the
+   autopilot band carries a warning about. `clip` crops without that. */
+.v2 #product{overflow-x:clip}
+.v2 .v-feat .v-copy{display:flex;align-items:flex-end;justify-content:space-between;gap:clamp(20px,3vw,48px)}
+.v2 .v-feat .v-copy h3{margin-top:0}
+.v2 .v-feat .v-copy p{margin-top:12px;max-width:56ch}
+.v2 .v-feat .v-copy .v-pill{flex:none}
 .v2 .v-feat .v-copy h3{margin-top:0}
 .v2 .v-feat .v-shot{background:none;border:0;border-radius:0;overflow:visible}
 .v2 .v-stack .v-feat .v-shot{height:auto}
@@ -473,7 +508,6 @@
 .v2 .v-dark + .v-dark{border-top:1px solid var(--line-d)}
 
 @media (max-width:1000px){
-  .v2 .v-feat{grid-template-columns:1fr;gap:clamp(20px,3vw,30px)}
   .v2 .v-prod-stage{padding-top:0}
   /* unpinned, the band needs the space back under its heading */
   .v2 .v-prod-stage .v-prod{margin-top:clamp(40px,6vw,70px)}
@@ -499,11 +533,9 @@
   padding-top:calc(var(--chrome-h,77px) + var(--rail-h,0px) + clamp(46px,5.5vw,84px));
 }
 
-/* The pinned band gives each screen about 550px of width. A 4:3 frame at
-   that size cuts the bottom row off the taller screens, so the frames here
-   are a little squarer — the same shape for all four, so the panel does not
-   change height as they swap. */
-@media (min-width:701px){ .v2 .v-feat .v-shot .mk{aspect-ratio:5/4} }
+/* The frame in this band takes its height from the screen — see the
+   product-shot rules above. It had a 5/4 ratio from an earlier pass, which
+   overrode that and stretched the frame to 1114px for a 307px screen. */
 
 /* The channel and automation photographs are 3:2. The design's card art is
    a shallow band, which cropped nearly half of each one away — and two of
