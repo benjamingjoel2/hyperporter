@@ -23,60 +23,52 @@
    inverted. That means rules written as `background:var(--paper);
    color:var(--void)` (the inverted buttons) stay correct without edits.
 
-   Teal and amber are darkened well below their dark-theme values: #5FBFA8
+   Teal and amber are darkened well below their dark-theme values: #46C6B9
    sits at ~1.9:1 against white, nowhere near readable. Amber is still
    reserved for human-touchpoint / manual states — never decorative. */
+@font-face{
+  font-family:'Hyperlocal ROM';
+  src:url('/fonts/hyperlocal-rom-regular.woff2') format('woff2');
+  font-weight:400;font-style:normal;font-display:swap;
+}
 :root{
   /* Ground is warm off-white, not white, and the greys are warm with it —
      measured off the reference at 1440px, where the ground reads
-     rgb(250,250,249), ink rgb(20,23,21) and secondary text rgb(104,101,94).
+     rgb(250,250,249), ink rgb(13,16,22) and secondary text rgb(104,101,94).
      A neutral-grey secondary on this ground looks dirty; the warm one is
      what makes the page read as considered. */
-  --void:#F4F5F1;
-  --ink:#EDEFE9;
-  --steel:#E8EAE4;
-  --raise:#FBFCF8;
-  --line:#E1E5DB;
-  --line-2:#D3D8CE;
-  --paper:#141715;
-  --muted:#4A544E;
-  --dim:#7C857F;
-  /* Teal darkened from #2E7D6B so it holds white text in the structural
+  --void:#FAFAF9;
+  --ink:#F1F2F0;
+  --steel:#E6E5E3;
+  --raise:#FFFFFF;
+  --line:#E1DFDA;
+  --line-2:#C8C5BF;
+  --paper:#0D1016;
+  --muted:#68655E;
+  --dim:#8F8D8A;
+  /* Teal darkened from #1B747E so it holds white text in the structural
      role the reference gives its forest green: announcement bar, buttons,
      and nothing decorative. */
-  --signal:#2E7D6B;
-  --signal-hi:#3A9480;
-  --signal-dim:rgba(46,125,107,.10);
-  --amber:#8A5409;
+  --signal:#0E4B52;
+  --signal-hi:#12606A;
+  --signal-dim:rgba(14,75,82,.10);
+  --amber:#9A5F0B;
   /* Photo scrim base. Light again, so the hero bands whiten the photograph
      rather than darkening it. */
-  --scrim:244,245,241;
-  /* v2 (Sep 2026): a serif display against a grotesque body, with a real
-     monospace back on the labels. Hyperlocal ROM is out, which also ends the
-     desktop-only licence problem — every face here is Google-hosted. */
-  --display:'Instrument Serif',Georgia,serif;
-  --serif:'Newsreader',Georgia,serif;
-  --body:'Archivo',system-ui,-apple-system,sans-serif;
-  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;
-  /* Dark grounds: the band colours and the accent that only works on them. */
-  --black:#0B0C0B;
-  --black-2:#121413;
-  --black-3:#1B1E1C;
-  --chalk:#EDEFE9;
-  --chalk-2:#A3ADA7;
-  --chalk-3:#6E7873;
-  --line-d:rgba(237,239,233,.13);
-  --moss:#5FBFA8;
-  --amber-hi:#D79A3E;
-  --card:#EDEFE9;
+  --scrim:255,255,255;
+  --display:'Hyperlocal ROM','Inter',system-ui,sans-serif;
+  --body:'Hyperlocal ROM','Inter',system-ui,sans-serif;
+  --mono:'Hyperlocal ROM','Inter',system-ui,sans-serif;
   /* Buttons, inputs and segmented controls. Not pills — a small, even
      corner, as on the reference. Label chips keep their own pill radius. */
-  --radius:8px;
-  --pill:999px;
+  --radius:6px;
   /* Content runs no wider than the reference's — about 1,300px with a
      tenth of the viewport either side — after the founder found the
      1,680px measure hard to read (Sep 2026). The bar keeps the wider
      measure so the wordmark and the actions stay near the edges. */
+  /* Widened Sep 2026 at the founder's instruction: an 8vw pad inside a
+     1320px measure left the content ~520px from each edge on a 1920 screen.
+     Now it starts 204px in. */
   --pad:clamp(20px,4vw,64px);
   --max:1640px;
   --bar-max:1780px;
@@ -281,34 +273,21 @@ body.drawer-open{overflow:hidden}
 @keyframes march{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ============ TYPE ============ */
-.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
-  margin:0 0 22px;display:inline-flex;align-items:center;gap:8px}
-.eyebrow::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.6;flex:0 0 auto}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 22px}
 /* Measured off the reference: h1 56.25/59.06 with -1.25px tracking, h2
    41.25/43.31 with -1.24px — i.e. 1.05 leading and -.03/-.04em, both at
    weight 400. The tracking is doing the work here; drop it and a 56px
    grotesque reads as shouting. */
-/* v2: Instrument Serif, set large and tight. A serif at 64px wants less
-   tracking than the grotesque did, not more — -.018em, measured off the
-   design file — and 1.06 leading so the two lines of a display heading sit
-   close enough to read as one object. */
-h1{font-family:var(--display);font-weight:400;letter-spacing:-.018em;line-height:1.06;margin:0 0 26px;font-size:clamp(38px,5vw,70px);text-wrap:balance}
-h2{font-family:var(--display);font-weight:400;letter-spacing:-.018em;line-height:1.08;margin:0 0 20px;font-size:clamp(30px,3.6vw,50px);text-wrap:balance}
-h3{font-family:var(--display);font-weight:400;letter-spacing:-.015em;line-height:1.24;margin:0 0 10px;font-size:22px}
+h1{font-family:var(--display);font-weight:400;letter-spacing:-.04em;line-height:1.05;margin:0 0 26px;font-size:clamp(34px,4.1vw,58px);text-wrap:balance}
+h2{font-family:var(--display);font-weight:400;letter-spacing:-.03em;line-height:1.05;margin:0 0 20px;font-size:clamp(28px,3vw,42px);text-wrap:balance}
+h3{font-family:var(--display);font-weight:400;letter-spacing:-.015em;line-height:1.25;margin:0 0 10px;font-size:19px}
 
-/* The two-tone display heading from the design file: the second line carries
-   the same size and sits back, so the first line is the statement and the
-   second is its qualifier. */
-.disp b,.disp i{font-weight:400;font-style:normal;display:block}
-.disp i{opacity:.4}
-
-/* IBM Plex Mono is back on the labels, so these are monospaced again — but
-   the rule stays: tabular figures keep the columns lined up and stop the
-   clock jittering as it ticks. */
+/* The labels were monospaced; Hyperlocal ROM is not. Its tabular figures
+   keep the columns lined up and stop the clock jittering as it ticks. */
 #clock,.sys span,.stat b,.d-modes .d-tally,.dreg .dn,.wm-status,.ohead .count,.eyebrow{
   font-variant-numeric:tabular-nums;
 }
-.lede{font-size:16.5px;color:var(--muted);max-width:60ch;margin:0 0 32px;line-height:1.62}
+.lede{font-size:17px;color:var(--muted);max-width:62ch;margin:0 0 32px;line-height:1.5}
 p{margin:0 0 16px}
 /* padding-block, not the `padding: X 0` shorthand: these come after .wrap
    in the cascade, so the shorthand's 0 wiped .wrap's horizontal gutter and
@@ -323,28 +302,25 @@ p{margin:0 0 16px}
 .sec + .sec-tight{padding-top:0}
 .sec:has(+ .sec-tight){padding-bottom:clamp(24px,3vw,40px)}
 .tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
-.tag-p{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);border:1px solid rgba(46,125,107,.28);background:var(--signal-dim);padding:7px 13px;border-radius:99px}
+.tag-p{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);border:1px solid rgba(27,116,126,.28);background:var(--signal-dim);padding:7px 13px;border-radius:99px}
 
 /* ============ BUTTONS / FORMS ============ */
 /* Solid accent, white label, squared. Not the reference's 48px pill: the
    no-fully-rounded-buttons rule on this site predates it and still holds. */
-/* v2: pills. The primary button on a light ground is ink, not the accent —
-   the accent is reserved for state and for dark grounds, where it is the
-   only thing that reads. */
-.btn{display:inline-flex;align-items:center;gap:9px;background:var(--paper);color:var(--void);border:0;
-  padding:12px 22px;border-radius:var(--pill);font-weight:500;font-size:14px;letter-spacing:.005em;
-  transition:background .18s ease,opacity .18s ease}
-.btn:hover{background:var(--black-2)}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--signal);color:#fff;border:0;
+  padding:12px 18px;border-radius:var(--radius);font-weight:400;font-size:15px;letter-spacing:-.01em;
+  transition:background .18s ease}
+.btn:hover{background:var(--signal-hi)}
 .btn i{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.16);
   display:grid;place-items:center;font-style:normal;font-size:11px;line-height:1}
 .btn-o{display:inline-flex;align-items:center;gap:9px;background:none;border:1px solid var(--line-2);
-  color:var(--paper);padding:11px 21px;border-radius:var(--pill);font-weight:500;font-size:14px;
-  letter-spacing:.005em;transition:border-color .2s,background .2s}
-.btn-o:hover{border-color:var(--paper);background:rgba(20,23,21,.05)}
+  color:var(--paper);padding:11px 17px;border-radius:var(--radius);font-weight:400;font-size:15px;
+  letter-spacing:-.01em;transition:border-color .2s,background .2s}
+.btn-o:hover{border-color:var(--paper);background:rgba(13,16,22,.05)}
 .iform{display:flex;gap:10px;flex-wrap:wrap;max-width:520px;align-items:center}
 .iform input{flex:1;min-width:210px;background:var(--raise);border:1px solid var(--line-2);color:var(--paper);padding:15px 20px;border-radius:var(--radius);font:inherit;font-size:15px;transition:border-color .2s,background .2s}
 .iform input::placeholder{color:var(--dim)}
-.iform input:focus{outline:none;border-color:var(--signal);background:rgba(46,125,107,.05)}
+.iform input:focus{outline:none;border-color:var(--signal);background:rgba(27,116,126,.05)}
 .note{font-size:13px;color:var(--dim);margin-top:14px}
 .msg{display:none;margin-top:14px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--signal)}
 .msg.show{display:block}
@@ -354,10 +330,10 @@ p{margin:0 0 16px}
 .hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(var(--scrim),.92) 0%,rgba(var(--scrim),.80) 46%,rgba(var(--scrim),.58) 100%),linear-gradient(180deg,rgba(var(--scrim),.74) 0%,rgba(var(--scrim),.40) 34%,rgba(var(--scrim),.86) 100%)}
 .routes{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .routes .grat{stroke:rgba(12,22,34,.10);fill:none;stroke-width:1}
-.routes .arc{fill:none;stroke:rgba(46,125,107,.38);stroke-width:1.15;stroke-dasharray:4 7}
+.routes .arc{fill:none;stroke:rgba(27,116,126,.38);stroke-width:1.15;stroke-dasharray:4 7}
 .routes .arc-lit{fill:none;stroke:var(--signal);stroke-width:1.6;stroke-linecap:round;stroke-dasharray:0 1200;animation:fly 9s ease-in-out infinite}
 .routes .wp{fill:var(--signal)}
-.routes .wp-ring{fill:none;stroke:rgba(46,125,107,.45);stroke-width:1}
+.routes .wp-ring{fill:none;stroke:rgba(27,116,126,.45);stroke-width:1}
 
 /* Product hero. One column by default; two when the page passes something
    for `hero-aside`, which is how the sample thread sits beside Autopilot's
@@ -457,7 +433,7 @@ p{margin:0 0 16px}
 .ohead .count{font-family:var(--display);font-weight:400;font-size:clamp(24px,4vw,60px);letter-spacing:-.022em;line-height:1;color:var(--paper);flex-shrink:0}
 
 .statement{text-align:center;padding:clamp(52px,6.5vw,92px) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);position:relative;overflow:hidden}
-.statement::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:760px;height:400px;background:radial-gradient(closest-side,rgba(46,125,107,.09),transparent);pointer-events:none}
+.statement::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:760px;height:400px;background:radial-gradient(closest-side,rgba(27,116,126,.09),transparent);pointer-events:none}
 .statement h2{font-size:clamp(30px,5.6vw,66px);margin:0;position:relative}
 .statement .u{color:var(--signal)}
 
@@ -512,7 +488,7 @@ p{margin:0 0 16px}
 .fcell:nth-child(even){padding-left:clamp(30px,4vw,60px)}
 .fcell .fi{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--signal);margin-bottom:14px}
 .fcell p{color:var(--dim);font-size:14.5px;margin:0;max-width:42ch}
-.callout{margin-top:36px;border:1px dashed var(--line-2);border-radius:14px;padding:28px;background:rgba(46,125,107,.05);display:flex;gap:18px;align-items:flex-start}
+.callout{margin-top:36px;border:1px dashed var(--line-2);border-radius:14px;padding:28px;background:rgba(27,116,126,.05);display:flex;gap:18px;align-items:flex-start}
 .callout .lock{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);flex-shrink:0;padding-top:3px}
 .callout p{margin:0;color:var(--muted);font-size:15px}
 /* The label does not shrink, so side-by-side it strands the paragraph in a
@@ -522,14 +498,14 @@ p{margin:0 0 16px}
 
 /* ============ DIAGRAM 3: RADIAL ============ */
 .radial{position:relative;height:460px;margin:24px auto 0;max-width:660px}
-.orbit{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:1px dashed rgba(46,125,107,.26);border-radius:50%;animation:spin 90s linear infinite}
+.orbit{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:1px dashed rgba(27,116,126,.26);border-radius:50%;animation:spin 90s linear infinite}
 .orbit.o1{width:340px;height:340px}
 .orbit.o2{width:452px;height:452px;animation-direction:reverse;animation-duration:130s;border-color:rgba(12,22,34,.10)}
 @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
-.hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:142px;height:142px;border-radius:50%;background:radial-gradient(circle at 50% 30%,#FFFFFF,#E4EBEF);border:1px solid var(--signal);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(46,125,107,.14);z-index:3}
+.hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:142px;height:142px;border-radius:50%;background:radial-gradient(circle at 50% 30%,#FFFFFF,#E4EBEF);border:1px solid var(--signal);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 40px rgba(27,116,126,.14);z-index:3}
 .hub b{font-family:var(--display);font-size:18px}
 .hub span{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:4px}
-.spoke{position:absolute;left:50%;top:50%;transform-origin:0 0;border-top:1px dashed rgba(46,125,107,.38);width:160px}
+.spoke{position:absolute;left:50%;top:50%;transform-origin:0 0;border-top:1px dashed rgba(27,116,126,.38);width:160px}
 .rnode{position:absolute;transform:translate(-50%,-50%);background:var(--raise);border:1px solid var(--line-2);border-radius:99px;padding:10px 17px;font-size:13px;white-space:nowrap;z-index:3;transition:border-color .25s,color .25s}
 .rnode:hover{border-color:var(--signal);color:var(--signal)}
 .rlist{display:none}
@@ -548,7 +524,7 @@ p{margin:0 0 16px}
 
 /* ============ DMC BAND ============ */
 .dmc{background:linear-gradient(115deg,#EDF3F5,#E2EFEE 70%,#E7EDF0);border:1px solid var(--line);border-radius:20px;padding:clamp(30px,4.4vw,58px);display:flex;gap:36px;align-items:center;justify-content:space-between;flex-wrap:wrap;position:relative;overflow:hidden}
-.dmc::before{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;border-radius:50%;background:radial-gradient(closest-side,rgba(46,125,107,.12),transparent)}
+.dmc::before{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;border-radius:50%;background:radial-gradient(closest-side,rgba(27,116,126,.12),transparent)}
 .dmc > *{position:relative}
 .dmc p{max-width:50ch;margin:0;color:var(--muted);font-size:16.5px}
 
@@ -557,11 +533,11 @@ p{margin:0 0 16px}
 .spine::before{content:"";position:absolute;left:6px;top:10px;bottom:10px;width:1px;background:var(--line-2)}
 .srow{position:relative;padding:24px 0;border-bottom:1px solid var(--line);display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;transition:padding-left .3s}
 .srow:hover{padding-left:8px}
-.srow::before{content:"";position:absolute;left:-46px;top:31px;width:13px;height:13px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 5px var(--void),0 0 14px rgba(46,125,107,.35)}
+.srow::before{content:"";position:absolute;left:-46px;top:31px;width:13px;height:13px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 5px var(--void),0 0 14px rgba(27,116,126,.35)}
 .srow.human::before{background:var(--amber);box-shadow:0 0 0 5px var(--void),0 0 14px rgba(154,95,11,.35)}
 .srow .scode{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--dim);width:38px;padding-top:5px;flex-shrink:0}
 .srow .sname{font-family:var(--display);font-weight:400;font-size:17px;letter-spacing:.04em;width:148px;flex-shrink:0}
-.pill-l{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;padding:6px 12px;border-radius:99px;border:1px solid rgba(46,125,107,.32);color:var(--signal);background:var(--signal-dim);flex-shrink:0}
+.pill-l{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;padding:6px 12px;border-radius:99px;border:1px solid rgba(27,116,126,.32);color:var(--signal);background:var(--signal-dim);flex-shrink:0}
 .srow.human .pill-l{border-color:rgba(154,95,11,.32);color:var(--amber);background:rgba(154,95,11,.08)}
 .srow .snote{color:var(--dim);font-size:14px;flex:1;min-width:230px}
 
@@ -771,23 +747,23 @@ p{margin:0 0 16px}
    The reference's format: dark ground, the mark top-left and the copyright
    pinned to the bottom of that same column, link columns across the right
    with grey labels and white links. Nothing above it and nothing below. */
-footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp(40px,5vw,72px);border-top:1px solid #1E242B}
+footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp(40px,5vw,72px);border-top:1px solid #1E242B}
 .f-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(30px,5vw,80px);align-items:stretch}
 .f-brand{display:flex;flex-direction:column;align-items:flex-start;min-height:100%}
 .f-mark{width:44px;height:44px;display:block;color:#fff;transition:color .25s,transform .5s cubic-bezier(.2,.8,.2,1)}
 .f-mark svg{width:100%;height:100%;display:block}
 .f-mark svg rect{fill:currentColor}
 .f-mark svg .ring{fill:none;stroke:currentColor;stroke-width:5;stroke-dasharray:54.1 15;stroke-dashoffset:61.6;stroke-linecap:butt}
-.f-mark:hover{color:#5FBFA8;transform:rotate(90deg)}
+.f-mark:hover{color:#4FB3BD;transform:rotate(90deg)}
 .f-con{font-size:14px;line-height:1.6;color:#9AA1AA;margin-top:32px;max-width:34ch}
 .f-con div{margin-bottom:14px}
-.f-con a{color:#EDEFE9;text-decoration:none;border-bottom:1px solid transparent}
+.f-con a{color:#EDEFF2;text-decoration:none;border-bottom:1px solid transparent}
 .f-con a:hover{border-bottom-color:#4A525C}
 .f-copy{margin:auto 0 0;padding-top:48px;font-size:14px;line-height:1.5;color:#7D848E}
 .f-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,2.4vw,36px)}
 .f-col h4{display:block;font-family:var(--display);font-size:14px;font-weight:400;letter-spacing:-.01em;text-transform:none;color:#7D848E;margin:0 0 18px}
-.f-col a{display:block;color:#EDEFE9;font-family:var(--body);font-weight:400;font-size:14px;letter-spacing:-.01em;line-height:1.4;padding:6px 0;transition:color .2s}
-.f-col a:hover{color:#5FBFA8}
+.f-col a{display:block;color:#EDEFF2;font-family:var(--body);font-weight:400;font-size:14px;letter-spacing:-.01em;line-height:1.4;padding:6px 0;transition:color .2s}
+.f-col a:hover{color:#4FB3BD}
 /* Stacked, the copyright belongs at the bottom, not between the address and
    the links — so the brand column dissolves into the flex column and its
    pieces are ordered directly. */
@@ -822,7 +798,7 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 .d-search{display:flex;gap:10px;align-items:center;max-width:460px;margin-top:clamp(26px,3.4vw,42px)}
 .d-search input{flex:1;background:var(--raise);border:1px solid var(--line-2);color:var(--paper);padding:14px 20px;border-radius:var(--radius);font:inherit;font-size:15px;transition:border-color .2s,background .2s}
 .d-search input::placeholder{color:var(--dim)}
-.d-search input:focus{outline:none;border-color:var(--signal);background:rgba(46,125,107,.05)}
+.d-search input:focus{outline:none;border-color:var(--signal);background:rgba(27,116,126,.05)}
 .d-clear{background:none;border:0;color:var(--dim);font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;padding:6px 4px;transition:color .2s}
 .d-clear:hover{color:var(--signal)}
 .d-group{padding:clamp(24px,3vw,38px) 0;border-top:1px solid var(--line)}
@@ -867,7 +843,7 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 .dp-help{border-bottom:1px solid var(--line);background:var(--ink)}
 .dp-help .wrap{padding-top:17px;padding-bottom:17px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
 .dp-help b{font-family:var(--display);font-weight:400;font-size:16px;display:block;margin-bottom:5px}
-.dp-help a{font-family:var(--mono);font-size:12px;letter-spacing:.05em;color:var(--signal);text-decoration:none;border-bottom:1px solid rgba(46,125,107,.42)}
+.dp-help a{font-family:var(--mono);font-size:12px;letter-spacing:.05em;color:var(--signal);text-decoration:none;border-bottom:1px solid rgba(27,116,126,.42)}
 .dp-help a:hover{border-bottom-color:var(--signal)}
 .dp-back{background:none;border:0;color:var(--dim);font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;padding:0;transition:color .25s}
 .dp-back:hover{color:var(--signal)}
@@ -1114,7 +1090,7 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 .ladder{border-top:1px solid var(--line-2);margin-top:clamp(26px,3.4vw,42px)}
 .lrow{display:grid;grid-template-columns:132px minmax(0,1fr) auto;gap:clamp(18px,3vw,44px);align-items:baseline;
   border-bottom:1px solid var(--line);padding:clamp(24px,3vw,38px) 0;transition:background .25s}
-.lrow:hover{background:rgba(46,125,107,.035)}
+.lrow:hover{background:rgba(27,116,126,.035)}
 .lrow-n{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
 .lrow h3{margin:0 0 10px;font-size:clamp(24px,3vw,38px);line-height:1.06;letter-spacing:-.022em}
 .lrow p{margin:0;color:var(--muted);font-size:15.5px;max-width:62ch}
@@ -1129,7 +1105,7 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 .fitem b{display:block;font-size:17px;font-weight:400;margin-bottom:6px}
 .fitem p{margin:0;color:var(--muted);font-size:15px;max-width:66ch}
 .fitem .tierpill{display:inline-block;margin-top:10px;font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--signal);border:1px solid rgba(46,125,107,.3);background:var(--signal-dim);
+  text-transform:uppercase;color:var(--signal);border:1px solid rgba(27,116,126,.3);background:var(--signal-dim);
   padding:5px 11px;border-radius:99px}
 @media (max-width:560px){.fitem{grid-template-columns:1fr;gap:6px}}
 
@@ -1186,7 +1162,7 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
   .lg-acc-ipad{padding:10px;border-radius:20px}
 }
 /* On a dark ground — the solutions pages' "how they use it" section. */
-.acc-dark{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(88px,10vw,160px)}
+.acc-dark{background:#0B0E12;color:#EDEFF2;padding-block:clamp(88px,10vw,160px)}
 .acc-dark .lg-acc-list{border-bottom-color:#2A313A}
 .acc-dark .lg-acc-item{border-top-color:#2A313A}
 .acc-dark .lg-acc-item.on{border-top-color:#fff}
@@ -1207,7 +1183,7 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 @media (max-width:900px){.pts{grid-template-columns:1fr;gap:34px}}
 
 /* ---------- the closing statement band (components/CtaBand.astro) ---------- */
-.cta-band{background:#0B0C0B;color:#fff;padding-block:clamp(88px,11vw,170px)}
+.cta-band{background:#0B0E12;color:#fff;padding-block:clamp(88px,11vw,170px)}
 .cta-band-t{font-family:var(--display);font-size:clamp(24px,2.6vw,36px);letter-spacing:-.018em;line-height:1.28;
   max-width:26ch;margin:0 0 clamp(26px,3vw,40px);color:#8A9098}
 .cta-band-t b{font-weight:400;color:#fff}
@@ -1329,11 +1305,11 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 
 /* The thread card on the photograph: the nav dropdown's glass, not a white
    card — a white card on a dark photograph is a dialog box. */
-.p-top-photo .thread{background:rgba(20,23,21,.66);border-color:rgba(255,255,255,.12);
+.p-top-photo .thread{background:rgba(13,16,22,.66);border-color:rgba(255,255,255,.12);
   -webkit-backdrop-filter:saturate(1.3) blur(20px);backdrop-filter:saturate(1.3) blur(20px);
   box-shadow:none;color:#fff}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .p-top-photo .thread{background:rgba(20,23,21,.9)}
+  .p-top-photo .thread{background:rgba(13,16,22,.9)}
 }
 .p-top-photo .thread .th{color:rgba(255,255,255,.6);border-bottom-color:rgba(255,255,255,.12)}
 .p-top-photo .thread .th b{color:#fff}
@@ -1342,12 +1318,12 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 .p-top-photo .chip.done{color:rgba(255,255,255,.78);border-color:rgba(255,255,255,.3)}
 .p-top-photo .chip.now{color:#fff;background:var(--signal-hi);border-color:var(--signal-hi)}
 .p-top-photo .thread .line{color:rgba(255,255,255,.84);border-top-color:rgba(255,255,255,.12)}
-.p-top-photo .thread .line i{background:#5FBFA8}
-.p-top-photo .thread .line.amb i{background:#D79A3E}
+.p-top-photo .thread .line i{background:#4FB3BD}
+.p-top-photo .thread .line.amb i{background:#E2A94E}
 .p-top-photo .thread .ft{color:rgba(255,255,255,.6);border-top-color:rgba(255,255,255,.12)}
-.p-top-photo .toggle{color:#5FBFA8}
-.p-top-photo .toggle span{background:rgba(79,179,189,.18);border-color:#5FBFA8}
-.p-top-photo .toggle span::after{background:#5FBFA8}
+.p-top-photo .toggle{color:#4FB3BD}
+.p-top-photo .toggle span{background:rgba(79,179,189,.18);border-color:#4FB3BD}
+.p-top-photo .toggle span::after{background:#4FB3BD}
 .p-top-photo .toggle[aria-pressed="false"]{color:rgba(255,255,255,.55)}
 .p-top-photo .toggle[aria-pressed="false"] span{background:none;border-color:rgba(255,255,255,.3)}
 
@@ -1386,10 +1362,10 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 .ap-glass{display:grid;grid-template-columns:minmax(0,280px) auto minmax(0,1fr);
   gap:clamp(26px,3.4vw,56px);align-items:start;
   border-radius:18px;padding:clamp(26px,3.2vw,44px);
-  background:rgba(20,23,21,.66);border:1px solid rgba(255,255,255,.12);
+  background:rgba(13,16,22,.66);border:1px solid rgba(255,255,255,.12);
   -webkit-backdrop-filter:saturate(1.3) blur(20px);backdrop-filter:saturate(1.3) blur(20px)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .ap-glass{background:rgba(20,23,21,.9)}
+  .ap-glass{background:rgba(13,16,22,.9)}
 }
 .ap-band-lead .eyebrow{color:rgba(255,255,255,.62);margin:0 0 14px}
 .ap-band-lead .dek{color:rgba(255,255,255,.82);margin:0;font-size:15.5px;line-height:1.6}
@@ -1427,7 +1403,7 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 .ap-pill-body[hidden]{display:none}
 /* Amber marks the human touchpoints and nothing else, here as everywhere. */
 .ap-pill-body .ap-tag{display:block;margin-top:9px;font-size:12px;letter-spacing:.08em;
-  text-transform:uppercase;color:#D79A3E}
+  text-transform:uppercase;color:#E2A94E}
 
 /* Feature comparison matrix. Scrolls on its own so the page never does. */
 .pm-scroll{overflow-x:auto;margin-top:clamp(28px,3.4vw,44px);border-top:1px solid var(--line-2)}
@@ -1575,15 +1551,15 @@ footer{background:#0B0C0B;color:#EDEFE9;padding-block:clamp(56px,6vw,84px) clamp
 .mega .mega-feat,.dsub .mega-feat{display:block;color:var(--paper);text-decoration:none;opacity:1;padding:14px 14px 20px;
   background:var(--ink);border:1px solid var(--line);border-radius:16px;transition:background .2s,border-color .2s}
 .mega .mega-feat:hover,.dsub .mega-feat:hover{background:var(--steel);border-color:var(--line-2)}
-.mega-card{position:relative;min-height:170px;border-radius:12px;background:#0B0C0B;color:#EDEFE9;padding:18px 20px;overflow:hidden;
+.mega-card{position:relative;min-height:170px;border-radius:12px;background:#0B0E12;color:#EDEFF2;padding:18px 20px;overflow:hidden;
   display:flex;flex-direction:column;gap:8px;font-size:12px;line-height:1.35}
 .mc-kicker{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#7FD1C7;margin-bottom:2px}
-.mc-bub{align-self:flex-start;max-width:78%;padding:7px 10px;border-radius:9px;background:#1A2028;color:#EDEFE9}
+.mc-bub{align-self:flex-start;max-width:78%;padding:7px 10px;border-radius:9px;background:#1A2028;color:#EDEFF2}
 .mc-bub.me{align-self:flex-end;background:#124A47;border:1px solid #1E6B65}
 .mc-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #1A2028;color:#D6DBE1}
 .mc-row:last-child{border-bottom:0}
 .mc-row i{width:6px;height:6px;border-radius:50%;background:var(--amber);flex:none}
-.mc-row.ok i{background:#5FBFA8}
+.mc-row.ok i{background:#4FB3BD}
 .mc-row em{font-style:normal;margin-left:auto;font-size:9.5px;font-weight:600;padding:3px 8px;border-radius:999px;background:#153F3C;color:#9FE2D8}
 .mc-dot{position:absolute;width:5px;height:5px;border-radius:50%;background:#7FD1C7;box-shadow:0 0 0 3px rgba(127,209,199,.12)}
 .mc-title{font-size:13.5px;line-height:1.35;color:#fff;margin:2px 0 6px}

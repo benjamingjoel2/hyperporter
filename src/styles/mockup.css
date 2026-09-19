@@ -46,11 +46,11 @@
   background:rgba(255,255,255,.55);border-radius:.6em;color:var(--paper);
   -webkit-mask-image:linear-gradient(180deg,#000 45%,transparent 95%);mask-image:linear-gradient(180deg,#000 45%,transparent 95%)}
 .mk-back b{display:block;font-weight:400;font-size:1.5em;letter-spacing:-.02em;margin-bottom:.9em}
-.mk-back i{display:block;height:.45em;border-radius:.3em;background:rgba(20,23,21,.14);margin:.65em 0}
+.mk-back i{display:block;height:.45em;border-radius:.3em;background:rgba(13,16,22,.14);margin:.65em 0}
 .mk-back i.s{width:55%}.mk-back i.m{width:78%}.mk-back i.l{width:92%}
-.mk-back p{margin:0 0 .8em;font-size:1em;color:rgba(20,23,21,.7);line-height:1.5}
+.mk-back p{margin:0 0 .8em;font-size:1em;color:rgba(13,16,22,.7);line-height:1.5}
 .mk-back.rows{padding:1.6em 1.8em}
-.mk-back .row{display:flex;justify-content:space-between;gap:1em;padding:.7em 0;border-bottom:1px solid rgba(20,23,21,.08);color:rgba(20,23,21,.65)}
+.mk-back .row{display:flex;justify-content:space-between;gap:1em;padding:.7em 0;border-bottom:1px solid rgba(13,16,22,.08);color:rgba(13,16,22,.65)}
 .mk[data-ground="teal"] .mk-back{background:rgba(255,255,255,.28)}
 /* A photograph as the whole ground of the frame, with the panel floating
    on it — the sheet's slot, but filling the frame edge to edge. */
@@ -92,7 +92,7 @@
 .mk-row.plain{grid-template-columns:minmax(0,1fr) auto}
 .mk-row b{font-weight:400;display:block;color:var(--paper)}
 .mk-row small{display:block;color:var(--dim);font-size:.82em;margin-top:.1em}
-.mk-row.done b{color:var(--dim);text-decoration:line-through;text-decoration-color:rgba(20,23,21,.35)}
+.mk-row.done b{color:var(--dim);text-decoration:line-through;text-decoration-color:rgba(13,16,22,.35)}
 .mk-row.dimmed{opacity:.45}
 .mk-row .r{text-align:right;font-variant-numeric:tabular-nums;color:var(--paper)}
 .mk-sum{display:flex;justify-content:space-between;align-items:baseline;padding-top:.7em;border-top:1px solid var(--line-2);font-variant-numeric:tabular-nums}
@@ -137,7 +137,7 @@
 .mk-field div.ph{color:var(--dim)}
 .mk-field div.focus{box-shadow:inset 0 0 0 1.5px var(--signal)}
 .mk-row2{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
-.mk-search{display:flex;align-items:center;gap:.6em;padding:.65em .9em;border-radius:.6em;background:rgba(20,23,21,.05);color:var(--paper)}
+.mk-search{display:flex;align-items:center;gap:.6em;padding:.65em .9em;border-radius:.6em;background:rgba(13,16,22,.05);color:var(--paper)}
 .mk-search i{width:.9em;height:.9em;border-radius:50%;border:1.5px solid var(--dim);flex:none;position:relative}
 .mk-search i::after{content:"";position:absolute;width:.45em;height:1.5px;background:var(--dim);right:-.4em;bottom:-.1em;transform:rotate(45deg)}
 .mk-search span{color:var(--dim);margin-left:auto;font-size:.82em}
@@ -145,28 +145,28 @@
 /* Messages. */
 .mk-msg{display:flex;flex-direction:column;gap:.3em;align-items:flex-start;max-width:92%}
 .mk-msg.me{align-self:flex-end;align-items:flex-end}
-.mk .mk-stage .mk-msg p{padding:.7em .95em;border-radius:1em;background:rgba(20,23,21,.06);line-height:1.4}
+.mk .mk-stage .mk-msg p{padding:.7em .95em;border-radius:1em;background:rgba(13,16,22,.06);line-height:1.4}
 .mk .mk-stage .mk-msg.me p{background:var(--signal);color:#fff;border-bottom-right-radius:.3em}
 .mk .mk-stage .mk-msg.sys p{background:none;box-shadow:inset 0 0 0 1px var(--line);color:var(--muted)}
-.mk-via{display:inline-block;font-size:.74em;color:var(--dim);padding:.1em .55em;border-radius:1em;background:rgba(20,23,21,.05)}
+.mk-via{display:inline-block;font-size:.74em;color:var(--dim);padding:.1em .55em;border-radius:1em;background:rgba(13,16,22,.05)}
 .mk-cite{display:inline-flex;align-items:center;gap:.45em;padding:.35em .7em;border-radius:.5em;background:rgba(255,255,255,.7);box-shadow:inset 0 0 0 1px var(--line);color:var(--muted);font-size:.82em}
 .mk-cite i{width:.7em;height:.9em;border-radius:.15em;background:#B4332C;flex:none}
 .mk-spark{width:1.3em;height:1.3em;flex:none;color:var(--paper)}
 
 /* Stats and bars. */
 .mk-kpis{display:grid;grid-template-columns:1fr 1fr;gap:.6em}
-.mk-kpi{padding:.7em .8em;border-radius:.6em;background:rgba(20,23,21,.045)}
+.mk-kpi{padding:.7em .8em;border-radius:.6em;background:rgba(13,16,22,.045)}
 .mk-kpi span{display:block;font-size:.78em;color:var(--dim)}
 .mk-kpi b{display:block;font-weight:400;font-size:1.5em;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:.1em}
 .mk-kpi b em{font-style:normal;font-size:.55em;color:var(--signal);margin-left:.3em}
 .mk-kpi b em.amb{color:var(--amber)}
-.mk-meter{height:.5em;border-radius:1em;background:rgba(20,23,21,.07);overflow:hidden}
+.mk-meter{height:.5em;border-radius:1em;background:rgba(13,16,22,.07);overflow:hidden}
 .mk-meter i{display:block;height:100%;background:var(--signal);border-radius:1em}
 .mk-bars{display:flex;align-items:flex-end;gap:.35em;height:4.5em;border-bottom:1px solid var(--line)}
 .mk-bars i{flex:1;background:var(--line-2);border-radius:.15em .15em 0 0}
 .mk-bars i.hi{background:var(--signal)}
 .mk-rail{display:flex;gap:.3em}
-.mk-rail i{flex:1;height:.4em;border-radius:1em;background:rgba(20,23,21,.1)}
+.mk-rail i{flex:1;height:.4em;border-radius:1em;background:rgba(13,16,22,.1)}
 .mk-rail i.done{background:var(--signal)}
 .mk-rail i.now{background:var(--signal);box-shadow:0 0 0 .2em var(--signal-dim)}
 .mk-rail i.amb.done,.mk-rail i.amb.now{background:var(--amber)}
@@ -176,7 +176,7 @@
 .mk-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6em}
 .mk-col{display:flex;flex-direction:column;gap:.45em;min-width:0}
 .mk-col > small{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:.2em}
-.mk-card{padding:.6em .7em;border-radius:.5em;background:rgba(20,23,21,.045);box-shadow:inset 0 0 0 1px rgba(20,23,21,.06)}
+.mk-card{padding:.6em .7em;border-radius:.5em;background:rgba(13,16,22,.045);box-shadow:inset 0 0 0 1px rgba(13,16,22,.06)}
 .mk-card b{display:block;font-weight:400;font-size:.9em;color:var(--paper);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mk-card small{display:block;font-size:.74em;color:var(--dim);margin-top:.15em}
 
@@ -196,10 +196,10 @@
    the site lifts them on dark grounds. */
 .mk.dark{--paper:#F2F3F1;--muted:rgba(255,255,255,.74);--dim:rgba(255,255,255,.52);
   --line:rgba(255,255,255,.12);--line-2:rgba(255,255,255,.26);--ink:rgba(255,255,255,.07);--raise:rgba(255,255,255,.1);
-  --steel:rgba(255,255,255,.12);--signal:#5FBFA8;--signal-hi:#63C2CB;--signal-dim:rgba(79,179,189,.2);--amber:#D79A3E}
-.mk.dark .mk-panel{background:rgba(20,23,21,.8);box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 1.4em 3.2em rgba(0,0,0,.35)}
-.mk.dark[data-ground="teal"] .mk-panel{background:rgba(20,23,21,.84)}
-.mk.dark .mk-back{background:rgba(20,23,21,.45);color:var(--paper)}
+  --steel:rgba(255,255,255,.12);--signal:#4FB3BD;--signal-hi:#63C2CB;--signal-dim:rgba(79,179,189,.2);--amber:#E2A94E}
+.mk.dark .mk-panel{background:rgba(13,16,22,.8);box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 1.4em 3.2em rgba(0,0,0,.35)}
+.mk.dark[data-ground="teal"] .mk-panel{background:rgba(13,16,22,.84)}
+.mk.dark .mk-back{background:rgba(13,16,22,.45);color:var(--paper)}
 .mk.dark .mk-back i{background:rgba(255,255,255,.16)}
 .mk.dark .mk-back p,.mk.dark .mk-back .row{color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.1)}
 .mk.dark .mk-btn{color:#0D1016}
@@ -220,7 +220,7 @@
 .mk.dark .mk-rail i{background:rgba(255,255,255,.14)}
 .mk.dark .mk-card{background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
 .mk.dark .mk-row.done b{text-decoration-color:rgba(255,255,255,.4)}
-.mk.dark .mk-app{background:rgba(20,23,21,.85);color:var(--paper)}
+.mk.dark .mk-app{background:rgba(13,16,22,.85);color:var(--paper)}
 .mk.dark .mk-app svg .ring{stroke:var(--paper)}
 .mk.dark .mk-app svg rect{fill:var(--paper)}
 
@@ -249,7 +249,7 @@
 .mk .mk-field div[contenteditable]:focus{outline:0;box-shadow:inset 0 0 0 1.5px var(--signal)}
 /* A chat composer: input plus send. */
 .mk-composer{display:flex;gap:.5em;align-items:center;padding-top:.6em;border-top:1px solid var(--line)}
-.mk-composer input{flex:1;min-width:0;font:inherit;font-size:.95em;color:var(--paper);background:rgba(20,23,21,.05);border:0;border-radius:2em;padding:.6em .95em;box-shadow:inset 0 0 0 1px var(--line-2)}
+.mk-composer input{flex:1;min-width:0;font:inherit;font-size:.95em;color:var(--paper);background:rgba(13,16,22,.05);border:0;border-radius:2em;padding:.6em .95em;box-shadow:inset 0 0 0 1px var(--line-2)}
 .mk-composer input::placeholder{color:var(--dim)}
 .mk-composer input:focus{outline:0;box-shadow:inset 0 0 0 1.5px var(--signal)}
 .mk.dark .mk-composer input{background:rgba(255,255,255,.06)}
@@ -278,7 +278,7 @@
 .mk .mk-stage .mk-without p{font-size:1.45em;line-height:1.45;color:var(--paper);letter-spacing:-.01em}
 
 /* Two sides of one record, each on its own card. */
-.mk-side{padding:.9em 1.1em .3em;border-radius:.7em;background:rgba(20,23,21,.04);box-shadow:inset 0 0 0 1px rgba(20,23,21,.07);display:flex;flex-direction:column}
+.mk-side{padding:.9em 1.1em .3em;border-radius:.7em;background:rgba(13,16,22,.04);box-shadow:inset 0 0 0 1px rgba(13,16,22,.07);display:flex;flex-direction:column}
 .mk-side > .mk-lbl{margin-bottom:.4em}
 .mk-side .mk-row:last-of-type{border-bottom:0}
 .mk.dark .mk-side{background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.09)}
@@ -294,7 +294,7 @@
 .mk-ui{position:relative;width:100%;max-height:100%;
   display:flex;flex-direction:column;font-size:1em;
   background:#FCFCFB;border-radius:.7em;overflow:hidden;
-  box-shadow:0 0 0 1px rgba(20,23,21,.10),0 2.2em 4.4em rgba(8,12,18,.24)}
+  box-shadow:0 0 0 1px rgba(13,16,22,.10),0 2.2em 4.4em rgba(8,12,18,.24)}
 
 /* main column */
 .mk-main{display:flex;flex-direction:column;min-width:0;min-height:0}
@@ -321,7 +321,7 @@
 .mk-tbl th{text-align:left;font-weight:400;color:var(--dim);font-size:.82em;letter-spacing:.05em;
   text-transform:uppercase;padding:.3em .9em .4em 0;border-bottom:1px solid var(--line);white-space:nowrap}
 .mk-tbl th:last-child,.mk-tbl td:last-child{padding-right:0}
-.mk-tbl td{padding:.48em .9em .48em 0;border-bottom:1px solid rgba(20,23,21,.055);
+.mk-tbl td{padding:.48em .9em .48em 0;border-bottom:1px solid rgba(13,16,22,.055);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mk-tbl tr:last-child td{border-bottom:0}
 .mk-tbl.tight td{padding-top:.28em;padding-bottom:.28em}
@@ -344,12 +344,12 @@
   font-size:.76em;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
 .mk-kan .kh b{font-weight:400;color:var(--paper)}
 .mk-kan .kc{background:#fff;border:1px solid var(--line);border-radius:.4em;padding:.4em .45em;
-  margin-bottom:.32em;box-shadow:0 .1em .3em rgba(20,23,21,.04)}
+  margin-bottom:.32em;box-shadow:0 .1em .3em rgba(13,16,22,.04)}
 .mk-kan .kc b{display:block;font-size:.8em;font-weight:400;letter-spacing:-.01em;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mk-kan .kc small{display:block;color:var(--dim);font-size:.72em;margin-top:.12em;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mk-kan .kc.amb{box-shadow:0 .1em .3em rgba(20,23,21,.04),inset .17em 0 0 var(--amber)}
+.mk-kan .kc.amb{box-shadow:0 .1em .3em rgba(13,16,22,.04),inset .17em 0 0 var(--amber)}
 
 /* A narrow frame gets a denser table rather than a truncated one. */
 @container (max-width: 560px){
@@ -409,7 +409,7 @@
 .mk-pane > h6{margin:0;padding:.34em .55em;background:#F3F3F1;border-bottom:1px solid var(--line);
   font-weight:400;font-size:.7em;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
 .mk-pane .ln{display:flex;justify-content:space-between;gap:.5em;padding:.33em .55em;font-size:.8em;
-  border-bottom:1px solid rgba(20,23,21,.05);min-width:0}
+  border-bottom:1px solid rgba(13,16,22,.05);min-width:0}
 .mk-pane .ln:last-child{border-bottom:0}
 .mk-pane .ln > :first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mk-pane .ln > :last-child{color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -437,11 +437,11 @@
   font-size:.78em;color:var(--dim);margin-top:.5em}
 
 /* bare mode puts the application in flow instead of floating it */
-.mk.bare .mk-ui{max-height:none;box-shadow:0 0 0 1px rgba(20,23,21,.10),0 1em 2.4em rgba(0,0,0,.28)}
+.mk.bare .mk-ui{max-height:none;box-shadow:0 0 0 1px rgba(13,16,22,.10),0 1em 2.4em rgba(0,0,0,.28)}
 
 /* live hooks on the application's own parts */
 .mk .mk-kan .kc[data-live="move"]{cursor:pointer;transition:transform .15s ease,box-shadow .2s ease}
-.mk .mk-kan .kc[data-live="move"]:hover{transform:translateY(-1px);box-shadow:0 .1em .3em rgba(20,23,21,.04),inset 0 0 0 1px var(--signal)}
+.mk .mk-kan .kc[data-live="move"]:hover{transform:translateY(-1px);box-shadow:0 .1em .3em rgba(13,16,22,.04),inset 0 0 0 1px var(--signal)}
 .mk .mk-tbl tr[data-live="tick"]{cursor:pointer}
 .mk .mk-tbl tr[data-live="tick"]:hover td:first-child{color:var(--signal)}
 .mk .mk-tbl tr[data-live="tick"]:focus-visible{outline:2px solid var(--signal);outline-offset:-2px}
