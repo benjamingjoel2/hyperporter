@@ -1,11 +1,13 @@
 ---
 /**
- * Three points under a heading, each with a small line icon above it —
- * the reference's "how teams stay ahead" section. Used on the tool,
- * automation and solutions pages.
+ * Three points under a heading, each with its line icon — the tool,
+ * automation and solutions pages all carry this section. In the v2 design
+ * it is a light band of cards in a row rather than a bare three-column
+ * grid, so it reads as a band of the page like every other one.
  */
 import { pointIcon, isPointIcon } from '../lib/pointIcons';
 import type { PointIcon } from '../lib/pointIcons';
+import '../styles/v2.css';
 
 interface Props {
   title: string;
@@ -22,19 +24,27 @@ for (const p of points) {
     throw new Error(`Point "${p.title}" has no valid icon (got ${JSON.stringify(p.icon)}).`);
   }
 }
+
+const parts = title.match(/^(.*?[.?!])\s+(\S.*)$/) ?? [null, title, ''];
 ---
 
-<section class="sec wrap pts-sec">
-  <h2 class="rv">{title}</h2>
-  <div class="pts rv">
-    {
-      points.map((p) => (
-        <div class="pt">
-          <span class="pt-ico-wrap" set:html={pointIcon(p.icon)} />
-          <b>{p.title}</b>
-          <p>{p.body}</p>
-        </div>
-      ))
-    }
-  </div>
-</section>
+<div class="v2">
+  <section class="v-light v-band">
+    <div class="v-wrap">
+      <div class="v-lead">
+        <h2 class="v-disp"><b>{parts[1]}</b>{parts[2] && <i>{parts[2]}</i>}</h2>
+      </div>
+      <div class="v-inds v-cols">
+        {
+          points.map((p) => (
+            <div class="v-ind">
+              <span class="v-ico" set:html={pointIcon(p.icon)} />
+              <h3>{p.title}</h3>
+              <p>{p.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</div>

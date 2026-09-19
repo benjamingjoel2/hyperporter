@@ -7,6 +7,8 @@
 import Base from '../layouts/Base.astro';
 import { SECURITY } from '../lib/content/pricing';
 import Mockup from '../components/Mockup.astro';
+import V2Hero from '../components/V2Hero.astro';
+import '../styles/v2.css';
 ---
 
 <Base
@@ -14,14 +16,10 @@ import Mockup from '../components/Mockup.astro';
   description="Encryption, zero standing access, account isolation, and no training on your data — the practices Hyperporter is built on, and what is not yet certified."
   currentNav="security"
 >
-  <div class="sec wrap page-hero">
-    <div class="page-hero-copy">
-
-      <p class="eyebrow rv">{SECURITY.eyebrow}</p>
-      <h1 class="rv">{SECURITY.title}</h1>
-      <p class="lede rv">{SECURITY.lede}</p>
-    </div>
-    <Mockup screen="audit" />
+  <div class="v2">
+    <V2Hero eyebrow={SECURITY.eyebrow} title={SECURITY.title} lede={SECURITY.lede} light noCta>
+      <Fragment slot="aside"><Mockup screen="audit" /></Fragment>
+    </V2Hero>
   </div>
 
   <div class="sec-tight wrap">

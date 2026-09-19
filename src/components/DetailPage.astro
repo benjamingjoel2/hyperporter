@@ -9,7 +9,9 @@
  * they read as one family; the copy is each page's own, in
  * lib/content/detail.ts.
  */
-import PhotoHero from './PhotoHero.astro';
+import V2Hero from './V2Hero.astro';
+import { photoFor } from '../lib/photos';
+import '../styles/v2.css';
 import Points from './Points.astro';
 import CtaBand from './CtaBand.astro';
 import StepScreen from './StepScreen.astro';
@@ -37,29 +39,20 @@ const cta =
     : { lead: 'Autopilot runs the stages. You take the decisions.', rest: 'Start free on Showcase, and switch it on when you are ready.' };
 ---
 
-<PhotoHero photo={page.slug}>
-  <div class="sec wrap page-hero hero-solo">
-    <div class="page-hero-copy">
-      <p class="eyebrow rv">{eyebrow}</p>
-      <h1 class="rv">{page.title}</h1>
-      <p class="lede rv">{page.lede}</p>
-      <div class="rv" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
-        <a class="btn" href="https://portal.hyperporter.com">Get started free</a>
-        <a class="btn-o" href="/pricing">See pricing</a>
-      </div>
-    </div>
-  </div>
-
-  {/* The overview, under the hero on the same photograph: a lead beside the
-      page's own screen, which works. */}
-</PhotoHero>
+<div class="v2">
+  <V2Hero eyebrow={eyebrow} title={page.title} lede={page.lede} photo={photoFor(page.slug)} />
+</div>
 
 <Points title={`${page.name} overview`} points={page.what} />
 
 {/* How it works: the reference's accordion — the steps on hairlines,
     the open one with its body, the screen beside. */}
-<section class="sec wrap">
-  <h2 class="rv" style="margin-bottom:clamp(30px,3.6vw,52px)">{page.howTitle}</h2>
+<div class="v2">
+  <section class="v-dark v-band acc-dark" data-chrome="dark">
+    <div class="v-wrap">
+      <div class="v-lead">
+        <h2 class="v-disp"><b>{page.howTitle}</b></h2>
+      </div>
   <div class="lg-acc">
     <div class="lg-acc-list">
       {
@@ -98,7 +91,9 @@ const cta =
       }
     </div>
   </div>
-</section>
+    </div>
+  </section>
+</div>
 
 {
   /* Amber is the site's mark for a human / manual state, and this is the
