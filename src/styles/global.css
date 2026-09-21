@@ -26,6 +26,11 @@
    Teal and amber are darkened well below their dark-theme values: #46C6B9
    sits at ~1.9:1 against white, nowhere near readable. Amber is still
    reserved for human-touchpoint / manual states — never decorative. */
+@font-face{
+  font-family:'Hyperlocal ROM';
+  src:url('/fonts/hyperlocal-rom-regular.woff2') format('woff2');
+  font-weight:400;font-style:normal;font-display:swap;
+}
 :root{
   /* Ground is warm off-white, not white, and the greys are warm with it —
      measured off the reference at 1440px, where the ground reads
@@ -68,14 +73,24 @@
   /* Photo scrim base. Light again, so the hero bands whiten the photograph
      rather than darkening it. */
   --scrim:255,255,255;
-  /* Three faces doing three jobs, all Google-hosted. Until Sep 2026 all
-     three of these tokens held the SAME stack, led by Hyperlocal ROM —
-     so the site had no display/body/mono distinction at all, and it was
-     serving a desktop-licensed face from a public server, which that
-     licence forbids. Both are fixed here; see the licence note below. */
-  --display:'Instrument Serif',Georgia,'Times New Roman',serif;
-  --body:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
-  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  /* Hyperlocal ROM, as it was. Put back at the founder's instruction after
+     I swapped it out unasked (Sep 2026).
+
+     TWO THINGS ARE STILL TRUE AND STILL NEED SETTLING, and neither is a
+     reason to change this again without being asked:
+
+     1. LICENCE. The face was supplied under a desktop licence, whose terms
+        forbid storing on publicly available servers. The build serves it
+        from /fonts/ and the repo is public. That is the founder's call to
+        settle with Dinamo, not something to fix by silently changing the
+        typeface.
+     2. All three tokens are the same stack, so the site has no display /
+        body / mono distinction — one face does all three jobs. If a
+        display/body split is ever wanted, that is a design decision to
+        take deliberately. */
+  --display:'Hyperlocal ROM','Inter',system-ui,sans-serif;
+  --body:'Hyperlocal ROM','Inter',system-ui,sans-serif;
+  --mono:'Hyperlocal ROM','Inter',system-ui,sans-serif;
   /* Buttons, inputs and segmented controls. Not pills — a small, even
      corner, as on the reference. Label chips keep their own pill radius. */
   --radius:6px;
