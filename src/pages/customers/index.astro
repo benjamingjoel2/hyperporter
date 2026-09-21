@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import { OVERVIEWS, SEGMENTS, SIDE_LABEL, SIDE_SUB } from '../../lib/content/customers';
 import Mockup from '../../components/Mockup.astro';
 import PhotoHero from '../../components/PhotoHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
 
 const SIDES = [
   {
@@ -64,4 +65,9 @@ const SIDES = [
       }
     </div>
   </div>
+
+  <CtaBand
+    before="Both sides used to meet over email."
+    after="Now they work one trip, from either side."
+  />
 </Base>
