@@ -212,8 +212,7 @@
   content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
   background:
     linear-gradient(135deg,rgba(255,255,255,.85) 0%,rgba(255,255,255,.22) 14%,rgba(255,255,255,0) 34%),
-    radial-gradient(140% 90% at 4% -6%,rgba(255,255,255,.45) 0%,rgba(255,255,255,0) 58%);
-  mix-blend-mode:soft-light}
+    radial-gradient(140% 90% at 4% -6%,rgba(255,255,255,.28) 0%,rgba(255,255,255,0) 58%)}
 /* the thickness at the rim: a ring of extra blur, masked out of the middle */
 .liq-lens::after{
   content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
@@ -228,8 +227,7 @@
 .liq.on-dark::before{
   background:
     linear-gradient(135deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,.07) 16%,rgba(255,255,255,0) 38%),
-    radial-gradient(140% 90% at 4% -6%,rgba(255,255,255,.16) 0%,rgba(255,255,255,0) 58%);
-  mix-blend-mode:screen}
+    radial-gradient(140% 90% at 4% -6%,rgba(255,255,255,.13) 0%,rgba(255,255,255,0) 58%)}
 
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .liq-lens::after{display:none}
@@ -256,10 +254,19 @@
 html{scroll-behavior:smooth;background:var(--void)}
 /* The canvas, not a flat fill. Glass needs something behind it with
    variation in it — a panel over one flat tone refracts nothing and reads
-   as a translucent white box. Fixed to the viewport rather than to the
-   document: a 700px wash stretched down a 14,000px page is a smear, and
-   an app canvas is viewport-sized anyway. */
-body{margin:0;background:var(--wash) fixed;background-color:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
+   as a translucent white box.
+
+   This used to be `var(--wash) fixed`. background-attachment:fixed makes
+   the browser re-rasterise a viewport-sized gradient on every scroll
+   frame, and on this page that competes with a permanently-animating
+   full-screen hero image and several backdrop-filters. In Safari that
+   combination drops layers: the hero went blank and repainted seconds
+   later (founder, Sep 2026, and reported more than once before that).
+
+   Same look without the hazard: the wash is sized to one viewport height
+   and pinned to the top of the document, so it is the canvas the first
+   screen sits on and flat --void below, where nothing refracts anyway. */
+body{margin:0;background:var(--wash) top center/100% 100vh no-repeat;background-color:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
   /* `clip`, not `hidden`. This was `overflow-x:hidden` — a safety net against
      sideways scroll that also made body a scroll container, which silently
      broke `position:sticky` for every descendant and capped programmatic
@@ -289,10 +296,19 @@ button{font:inherit;cursor:pointer}
 }
 ::selection{background:var(--signal);color:var(--void)}
 
+/* Film grain over the whole page. It is position:fixed and full-viewport,
+   so it is one compositing layer for the life of the page — and it used to
+   carry mix-blend-mode:multiply, which made the browser recomposite it
+   against everything underneath on every frame, the hero's forever-running
+   animation included. That is the classic Safari layer-drop recipe: the
+   hero goes blank and repaints seconds later.
+
+   At 5% opacity, multiply darkens by at most five percent. Plain alpha is
+   indistinguishable here and leaves the layer independent. Do not put the
+   blend mode back. */
 body::after{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.05;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-  mix-blend-mode:multiply;
 }
 
 .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
@@ -1931,9 +1947,12 @@ body.drawer-open .rail{opacity:0;transition:opacity .2s ease}
 header.top::after{
   content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
   background:
-    linear-gradient(135deg,rgba(255,255,255,.85) 0%,rgba(255,255,255,.22) 14%,rgba(255,255,255,0) 34%),
-    radial-gradient(140% 90% at 4% -6%,rgba(255,255,255,.45) 0%,rgba(255,255,255,0) 58%);
-  mix-blend-mode:soft-light}
+    linear-gradient(135deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,.14) 14%,rgba(255,255,255,0) 34%),
+    radial-gradient(140% 90% at 4% -6%,rgba(255,255,255,.28) 0%,rgba(255,255,255,0) 58%)}
+/* No mix-blend-mode. A blend mode couples an element's paint to its
+   backdrop, and this sheen's backdrop is the hero image — which animates
+   forever. Plain alpha gets within a few percent of the same highlight
+   and leaves the two layers independent. */
 /* the bar's sheen must not cover its own children */
 header.top::after{inset:0 0 auto;height:100%;z-index:0}
 
@@ -1954,9 +1973,8 @@ header.top::after{inset:0 0 auto;height:100%;z-index:0}
    near-black reads as a smear rather than as glass. */
 header.top.over::after,header.top.mega-open::after{
   background:
-    linear-gradient(135deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,.06) 16%,rgba(255,255,255,0) 38%),
-    radial-gradient(140% 90% at 4% -6%,rgba(255,255,255,.14) 0%,rgba(255,255,255,0) 58%);
-  mix-blend-mode:screen}
+    linear-gradient(135deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.05) 16%,rgba(255,255,255,0) 38%),
+    radial-gradient(140% 90% at 4% -6%,rgba(255,255,255,.11) 0%,rgba(255,255,255,0) 58%)}
 
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .mega::after,.mk-panel::after,.mk-ui::after,.drawer::after{display:none}
