@@ -31,19 +31,38 @@
 .mk.tall .mk-stage{font-size:clamp(10px,3.3cqw,14px)}
 
 /* The panel: frosted, lifted, one idea. */
+/* These are pictures of Portal, so they are made of Portal's material —
+   the same sheen and the same rim, token for token (global.css). The rim
+   is the part that reads as metal: a bright edge along the top, a dark one
+   along the bottom, as though the panel were a milled plate catching the
+   light above it. The drop shadow stays in em so it scales with the frame
+   like everything else inside a snippet. */
 .mk-panel{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);
   width:min(80%,30em);padding:1.1em 1.2em;border-radius:1.1em;
-  background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(20px) saturate(1.4);backdrop-filter:blur(20px) saturate(1.4);
-  box-shadow:0 0 0 1px rgba(255,255,255,.6) inset,0 1.4em 3.2em rgba(12,22,34,.18),0 .2em .5em rgba(12,22,34,.06);
+  background:var(--lg-bg);
+  -webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);
+  box-shadow:var(--lg-rim),0 1.4em 3.2em rgba(12,22,34,.18),0 .2em .5em rgba(12,22,34,.06);
   display:flex;flex-direction:column;gap:.75em;color:var(--paper)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .mk-panel{background:rgba(255,255,255,.94)}
+}
+@media (prefers-reduced-transparency:reduce){
+  .mk-panel{background:rgba(255,255,255,.96);-webkit-backdrop-filter:none;backdrop-filter:none}
+}
 .mk-panel.right{left:auto;right:7%;top:9%;transform:none;width:min(62%,26em)}
 .mk-panel.low{top:auto;bottom:-6%;transform:translateX(-50%)}
 .mk-panel.wide{width:min(86%,34em)}
-.mk[data-ground="teal"] .mk-panel{background:rgba(255,255,255,.92)}
+/* On the teal ground the middle stop of the sheen lets too much saturated
+   colour through behind 1em text. Same gradient, lifted. */
+.mk[data-ground="teal"] .mk-panel{background:linear-gradient(135deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.82) 50%,rgba(255,255,255,.9) 100%)}
 
 /* The sheet behind: a document or a list, faded, for depth. */
+/* The sheet behind takes the rim but not the blur: it is already veiled
+   and masked, and a second backdrop-filter on the same frame is a second
+   compositing layer for no visible gain. */
 .mk-back{position:absolute;left:-6%;top:12%;width:64%;bottom:-8%;padding:2em 2em 2em 2.4em;
   background:rgba(255,255,255,.55);border-radius:.6em;color:var(--paper);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.8);
   -webkit-mask-image:linear-gradient(180deg,#000 45%,transparent 95%);mask-image:linear-gradient(180deg,#000 45%,transparent 95%)}
 .mk-back b{display:block;font-weight:400;font-size:1.5em;letter-spacing:-.02em;margin-bottom:.9em}
 .mk-back i{display:block;height:.45em;border-radius:.3em;background:rgba(13,16,22,.14);margin:.65em 0}
