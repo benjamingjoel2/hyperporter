@@ -287,38 +287,11 @@ const stream = row + row;
 
   const bar = document.querySelector<HTMLElement>('header.top');
 
-  /**
-   * `hidden` is still what decides whether the panel exists for a screen
-   * reader and for the keyboard; the two classes around it only carry the
-   * animation. Opening restarts `in` (a reflow between the two class
-   * changes, or a panel re-opened within the same frame never replays).
-   * Closing holds `hidden` back until `out` has run — with a timer behind
-   * it, because an animation that never starts, as under reduced motion,
-   * never ends either.
-   */
   function setOpen(wrap: HTMLElement, open: boolean) {
     const panel = wrap.querySelector<HTMLElement>('.mega');
     const trigger = wrap.querySelector<HTMLElement>('.mega-trigger');
     if (!panel || !trigger) return;
-
-    if (open) {
-      clearTimeout(Number(panel.dataset.shut));
-      panel.classList.remove('out', 'in');
-      panel.hidden = false;
-      void panel.offsetWidth;
-      panel.classList.add('in');
-    } else if (!panel.hidden) {
-      panel.classList.remove('in');
-      panel.classList.add('out');
-      const settle = () => {
-        if (!panel.classList.contains('out')) return; /* re-opened meanwhile */
-        panel.hidden = true;
-        panel.classList.remove('out');
-      };
-      panel.addEventListener('animationend', settle, { once: true });
-      panel.dataset.shut = String(setTimeout(settle, 240));
-    }
-
+    panel.hidden = !open;
     wrap.classList.toggle('open', open);
     trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
     // the scrim follows whether *any* panel is open, not just this one

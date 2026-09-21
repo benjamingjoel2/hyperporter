@@ -13,6 +13,6 @@ const { page } = Astro.props as { page: Page };
 const description = page.lede.split(/(?<=\.)\s/)[0];
 ---
 
-<Base title={page.name} description={description} currentNav="automations" v2>
+<Base title={page.name} description={description} currentNav="automations">
   <DetailPage page={page} kind="automation" />
 </Base>

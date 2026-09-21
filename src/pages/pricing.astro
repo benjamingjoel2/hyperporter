@@ -9,34 +9,34 @@
 import Base from '../layouts/Base.astro';
 import { LADDERS } from '../lib/content/pricing';
 import Mockup from '../components/Mockup.astro';
-import V2Hero from '../components/V2Hero.astro';
-import '../styles/v2.css';
 ---
 
 <Base
   title="Pricing"
   description="Same three tiers. Resellers run the full ladder; Suppliers skip straight from Showcase to Intelligence. Every tier is strictly additive."
   currentNav="pricing"
-  v2
 >
-  <V2Hero
-    eyebrow="Pricing"
-    title="Plans & Pricing"
-    lede="Same three tiers — which ones apply depends on who you are. Every tier is strictly additive. Resellers run the full ladder; Suppliers skip straight to Intelligence."
-    light
-    noCta
-  >
-    <div slot="under" class="switch" id="p-switch">
-      {
-        LADDERS.map((l, i) => (
-          <button type="button" data-side={l.side} class={i === 0 ? 'on' : ''}>
-            {l.label}
-          </button>
-        ))
-      }
+  <div class="sec wrap page-hero">
+    <div class="page-hero-copy">
+
+      <p class="eyebrow rv">Pricing</p>
+      <h1 class="rv">Plans &amp; Pricing</h1>
+      <p class="lede rv">
+        Same three tiers — which ones apply depends on who you are. Every tier is strictly additive.
+        Resellers run the full ladder; Suppliers skip straight to Intelligence.
+      </p>
+      <div class="switch rv" id="p-switch">
+        {
+          LADDERS.map((l, i) => (
+            <button type="button" data-side={l.side} class={i === 0 ? 'on' : ''}>
+              {l.label}
+            </button>
+          ))
+        }
+      </div>
     </div>
-    <Fragment slot="aside"><Mockup screen="plan" /></Fragment>
-  </V2Hero>
+    <Mockup screen="plan" />
+  </div>
 
   {
     LADDERS.map((l, i) => (
@@ -44,12 +44,8 @@ import '../styles/v2.css';
         <div class="sec-tight wrap">
           <p class="eyebrow rv">{l.intro}</p>
           <div class="tiers rv">
-            {l.tiers.map((t, i) => (
-              /* The adopted system fills the featured tier with aloe and
-                 gives it the aloe pill — it is the one place on the light
-                 track the green appears as a surface. The middle tier is
-                 the one the ladder is pointing at. */
-              <div class:list={['tier', { featured: i === 1 }]}>
+            {l.tiers.map((t) => (
+              <div class="tier">
                 <div class="tname">{t.name}</div>
                 <div class="tkind">{t.kind}</div>
                 <div class="tamt">{t.amount}</div>
@@ -59,7 +55,7 @@ import '../styles/v2.css';
                     <li>{f}</li>
                   ))}
                 </ul>
-                <a class:list={['btn', { 'btn-aloe': i === 1 }]} href={t.href}>
+                <a class="btn" href={t.href}>
                   {t.cta}
                 </a>
               </div>

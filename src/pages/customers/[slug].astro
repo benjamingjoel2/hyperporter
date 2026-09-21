@@ -20,9 +20,7 @@ import type { Overview, Segment } from '../../lib/content/customers';
 import StepScreen from '../../components/StepScreen.astro';
 import { STEP_SCREENS } from '../../lib/content/steps';
 import Points from '../../components/Points.astro';
-import { twoTone } from '../../components/V2Hero.astro';
 import CtaBand from '../../components/CtaBand.astro';
-import '../../styles/v2.css';
 import '../../styles/solutions.css';
 
 // The screen each segment opens on: the part of the product that segment
@@ -63,10 +61,6 @@ const close = (segment ?? overview!).close;
 /* One screen per step. These pages used to show a single screen beside the
    whole accordion, so three of every four steps sat next to a picture of
    something else. */
-/* The display heading's second tone comes from where the title already
-   breaks — see V2Hero. */
-const [heroLead, heroRest] = twoTone(page.title);
-
 const steps = STEP_SCREENS[page.slug];
 if (!steps) throw new Error(`No step screens for "${page.slug}" (content/steps.ts).`);
 if (steps.length !== features.length) {
@@ -78,26 +72,20 @@ if (steps.length !== features.length) {
   title={overview ? overview.name : segment!.name}
   description={page.lede}
   currentNav="customers"
-  v2
 >
-  {/* The solutions hero stays light and two-column, as the founder's
-      sequence has it — headline left, lede and buttons right — and takes
-      the v2 display heading and pills. */}
-  <section class="v-light v-band sol-hero">
-    <div class="v-wrap">
-      <div class="sol-hero-grid">
-        <div>
-          <span class="v-eyebrow">{page.eyebrow}</span>
-          <h1 class="v-disp"><b>{heroLead}</b>{heroRest && <i>{heroRest}</i>}</h1>
-        </div>
-        <div>
-          <p class="v-sub">{page.lede}</p>
-          <div class="v-cta">
-            <a class="v-pill-d" href="https://portal.hyperporter.com">Get started free</a>
-            <a class="v-pill-l" href={overview ? overview.pricingHref : '/pricing'}>
-              {overview ? overview.pricingLabel : 'See pricing'}
-            </a>
-          </div>
+  <section class="sec wrap sol-hero">
+    <div class="sol-hero-grid">
+      <div>
+        <p class="eyebrow rv">{page.eyebrow}</p>
+        <h1 class="rv">{page.title}</h1>
+      </div>
+      <div>
+        <p class="lede rv">{page.lede}</p>
+        <div class="rv" style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn" href="https://portal.hyperporter.com">Get started free</a>
+          <a class="btn-o" href={overview ? overview.pricingHref : '/pricing'}>
+            {overview ? overview.pricingLabel : 'See pricing'}
+          </a>
         </div>
       </div>
     </div>

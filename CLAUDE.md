@@ -148,23 +148,33 @@ the closing band. The pricing ladder they used to end on is /pricing. The layer 
 
 ## Design direction (current)
 
-### What "v2" means
+### What "v2" means — and that the site is not on it
 Two design files, both the founder's, both kept in the repo (Sep 2026):
-`public/preview/v2.html` — the dark serif design the live site's composition
-comes from — and `public/preview/v2-figma.html` — the Figma-style study. When
-the founder says "v2", it is these two, not one of them.
+`public/preview/v2.html` — the dark serif design — and
+`public/preview/v2-figma.html` — the Figma-style study. When the founder says
+"v2", it is these two, not one of them. **They are reference files, not the
+site.** The site is v1, the design described below, and that is what the live
+build serves.
+
+A v2 rebuild — the two designs carried across every page, then restyled on
+Shopify's design system from awesome-design-md — was built and then reverted
+at the founder's instruction (Sep 2026): "back to our main main site, that's
+the v1". It is whole in git history at `ee24deb`, with its own `v2.css`,
+`V2Hero.astro`, `lib/v2.js` and `DESIGN.md`, if it is ever wanted back. Do not
+reintroduce any of it piecemeal.
 
 ### Closing bands — the before/after rule
-Every page's closing band states the same comparison and nothing else
-(founder, Sep 2026): **how the work was done traditionally, then how it is
-done here.** No tier, no price, no "free", no "Start on Showcase" — the close
-sells the feature, never the plan. `components/CtaBand.astro` takes `before`
-and `after`; the before line sits back in the dim tone, the after line carries
-the ink under it. Keep each clause under about 46 characters so it holds one
-line at full width. The copy is each page's own: `close: { before, after }` on
-every entry in `lib/content/detail.ts` and `lib/content/customers.ts`, and
-inline in the index pages. The layer pages' "Up next" bands are a different
-device — navigation, not a close — and stay as they are.
+Every closing band states the same comparison and nothing else (founder,
+Sep 2026): **how the work was done traditionally, then how it is done here.**
+No tier, no price, no "free", no "Start on Showcase" — the close sells the
+feature, never the plan. `components/CtaBand.astro` takes `before` and
+`after`; the before clause sits back in grey and the after clause carries the
+white on its own line under it. Keep each clause under about 40 characters so
+it holds one line on the band's 34ch measure. The copy is each page's own:
+`close: { before, after }` on every entry in `lib/content/detail.ts` and
+`lib/content/customers.ts`. The band is on the tool, automation, integration
+and customer pages; the index pages and the layer pages end on their own
+ladders and "Up next" bands, which are navigation, not closes.
 
 
 Light base with teal as the accent. Reverted (Aug 2026) to the pre-Harvey

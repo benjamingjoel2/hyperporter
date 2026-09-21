@@ -7,81 +7,69 @@
 import Base from '../layouts/Base.astro';
 import { SECURITY } from '../lib/content/pricing';
 import Mockup from '../components/Mockup.astro';
-import V2Hero from '../components/V2Hero.astro';
-import '../styles/v2.css';
 ---
 
 <Base
   title="Security"
   description="Encryption, zero standing access, account isolation, and no training on your data — the practices Hyperporter is built on, and what is not yet certified."
   currentNav="security"
-  v2
 >
-  <V2Hero eyebrow={SECURITY.eyebrow} title={SECURITY.title} lede={SECURITY.lede} light noCta>
-    <Fragment slot="aside"><Mockup screen="audit" /></Fragment>
-  </V2Hero>
+  <div class="sec wrap page-hero">
+    <div class="page-hero-copy">
 
-  {/* The practices, on the page's own ground. */}
-  <section class="v-light v-band">
-    <div class="v-wrap">
-      <div class="v-lead">
-        <span class="v-eyebrow">{SECURITY.practicesEyebrow}</span>
-        <h2 class="v-disp"><b>{SECURITY.practicesTitle}</b></h2>
-      </div>
-      <div class="v-inds v-cols">
-        {
-          SECURITY.practices.map((p) => (
-            <div class="v-ind">
-              <h3>{p.title}</h3>
-              <p>{p.body}</p>
+      <p class="eyebrow rv">{SECURITY.eyebrow}</p>
+      <h1 class="rv">{SECURITY.title}</h1>
+      <p class="lede rv">{SECURITY.lede}</p>
+    </div>
+    <Mockup screen="audit" />
+  </div>
+
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">{SECURITY.practicesEyebrow}</p>
+    <h2 class="rv">{SECURITY.practicesTitle}</h2>
+    <div class="reasons reasons-2 rv">
+      {
+        SECURITY.practices.map((p) => (
+          <div>
+            <b>{p.title}</b>
+            <p>{p.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">{SECURITY.controlEyebrow}</p>
+    <h2 class="rv">{SECURITY.controlTitle}</h2>
+    <div class="reasons rv">
+      {
+        SECURITY.controls.map((c) => (
+          <div>
+            <b>{c.title}</b>
+            <p>{c.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">FAQ</p>
+    <div class="acc rv" id="sec-faq">
+      {
+        SECURITY.faq.map((f, i) => (
+          <div class:list={['acc-i', { open: i === 0 }]}>
+            <button type="button" aria-expanded={i === 0 ? 'true' : 'false'}>
+              {f.q}
+              <i>+</i>
+            </button>
+            <div class="acc-b">
+              <p>{f.a}</p>
             </div>
-          ))
-        }
-      </div>
+          </div>
+        ))
+      }
     </div>
-  </section>
-
-  {/* What a customer controls, on the dark band — the page's one turn. */}
-  <section class="v-dark v-band" data-chrome="dark">
-    <div class="v-wrap">
-      <div class="v-lead">
-        <span class="v-eyebrow">{SECURITY.controlEyebrow}</span>
-        <h2 class="v-disp"><b>{SECURITY.controlTitle}</b></h2>
-      </div>
-      <div class="v-inds v-cols">
-        {
-          SECURITY.controls.map((c) => (
-            <div class="v-ind" style="background:var(--black-2)">
-              <h3 style="color:var(--chalk)">{c.title}</h3>
-              <p style="color:var(--chalk-2)">{c.body}</p>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  {/* The FAQ, in the design's own question list: the heading holds the left
-      column and the questions run down the right. */}
-  <section class="v-light v-band">
-    <div class="v-wrap">
-      <div class="v-faqwrap">
-        <div>
-          <span class="v-eyebrow">FAQ</span>
-          <h2 class="v-disp" style="margin-top:20px"><b>Your questions</b><i>answered</i></h2>
-        </div>
-        <div class="v-qa">
-          {
-            SECURITY.faq.map((f, i) => (
-              <details open={i === 0}>
-                <summary>{f.q}<i>+</i></summary>
-                <div class="v-a">{f.a}</div>
-              </details>
-            ))
-          }
-        </div>
-      </div>
-    </div>
-  </section>
-
+  </div>
 </Base>
