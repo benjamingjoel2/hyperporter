@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Mockup from '../../components/Mockup.astro';
 import PhotoHero from '../../components/PhotoHero.astro';
 import { AUTOMATIONS } from '../../lib/content/detail';
+import CtaBand from '../../components/CtaBand.astro';
 ---
 
 <Base
@@ -42,4 +43,9 @@ import { AUTOMATIONS } from '../../lib/content/detail';
       }
     </div>
   </div>
+
+  <CtaBand
+    before="The back-and-forth used to be the job."
+    after="Now Autopilot runs the nine stages."
+  />
 </Base>

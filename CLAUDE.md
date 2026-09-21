@@ -172,9 +172,10 @@ feature, never the plan. `components/CtaBand.astro` takes `before` and
 white on its own line under it. Keep each clause under about 40 characters so
 it holds one line on the band's 34ch measure. The copy is each page's own:
 `close: { before, after }` on every entry in `lib/content/detail.ts` and
-`lib/content/customers.ts`. The band is on the tool, automation, integration
-and customer pages; the index pages and the layer pages end on their own
-ladders and "Up next" bands, which are navigation, not closes.
+`lib/content/customers.ts`; the six index pages (`/tools`, `/automations`,
+`/integrations`, `/solutions`, `/customers`, `/product`) carry theirs inline.
+Every one of those pages ends on the band. The layer pages keep their "Up
+next" bands, which are navigation to the next layer, not closes.
 
 
 Light base with teal as the accent. Reverted (Aug 2026) to the pre-Harvey

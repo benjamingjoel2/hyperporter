@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import { CATEGORIES } from '../../lib/content/solutions';
 import Mockup from '../../components/Mockup.astro';
 import PhotoHero from '../../components/PhotoHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
 ---
 
 <Base
@@ -42,4 +43,9 @@ import PhotoHero from '../../components/PhotoHero.astro';
       }
     </div>
   </div>
+
+  <CtaBand
+    before="The work used to be split across four tools."
+    after="Now it is six categories of one platform."
+  />
 </Base>

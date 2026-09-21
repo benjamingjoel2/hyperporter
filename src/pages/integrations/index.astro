@@ -5,6 +5,7 @@ import Base from '../../layouts/Base.astro';
 import Mockup from '../../components/Mockup.astro';
 import PhotoHero from '../../components/PhotoHero.astro';
 import { INTEGRATIONS } from '../../lib/content/detail';
+import CtaBand from '../../components/CtaBand.astro';
 ---
 
 <Base
@@ -40,4 +41,9 @@ import { INTEGRATIONS } from '../../lib/content/detail';
       }
     </div>
   </div>
+
+  <CtaBand
+    before="Every channel used to be its own island."
+    after="Now a message lands on the trip it is about."
+  />
 </Base>
