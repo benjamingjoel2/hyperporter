@@ -107,7 +107,7 @@ export const CATEGORIES: Category[] = [
       },
       {
         name: 'Domain masking',
-        body: "A taste of Intelligence's custom domain, scoped to the itinerary creator URL.",
+        body: "A taste of Intelligence’s custom domain, scoped to the itinerary creator URL.",
         tier: '€19/mo add-on',
       },
       {

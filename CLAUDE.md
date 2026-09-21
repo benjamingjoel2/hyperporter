@@ -138,7 +138,10 @@ the closing band. The pricing ladder they used to end on is /pricing. The layer 
 3. **Thin content risk.** 137 destination pages currently share near-identical copy apart from
    the country name. Google penalises this. Each page needs genuinely unique material before
    the SEO play is worth anything.
-4. **About page** has three `Name pending` placeholder bios.
+4. **About page team section** — the three `Name pending` placeholder bios are
+   no longer rendered. `src/pages/about.astro` holds a `TEAM` array, empty; fill
+   in the three real people and the section returns, heading and all. The page
+   ends on the mission statement until then.
 5. **Footer** Terms / Privacy / FAQ buttons have no handlers.
 6. **Country count** — site says "130+ countries", the dataset holds 137, and a founder brief
    said "100+". Unresolved. Confirm the real number before publishing.
@@ -345,14 +348,27 @@ wanted back.
 - Removed with the earlier revert: `AppShot.astro` and `lib/counts.ts`, both
   recoverable from `d05cc73`.
 
-### Font licence — resolved in the markup, outstanding in git
+### Font licence — resolved in the build, outstanding in git history
 Hyperlocal ROM was supplied under a **desktop** licence, whose terms forbid
-"storing on publicly available servers". The v2 type system (Sep 2026) drops
-it: nothing on the site requests it any more, so the live site no longer
-serves it. Two things remain. `public/fonts/hyperlocal-rom-regular.woff2` is
-still committed, and the repository is public — and deleting the file now
-would not remove it from git history. Settle it with Dinamo, make the
-repository private, or rewrite the history.
+"storing on publicly available servers".
+
+This note used to say the problem was resolved. It was — in v2. **The revert
+to v1 brought it straight back**, and it went unnoticed until the Sep 2026
+audit: `global.css` still carried the `@font-face`, all three family tokens
+still led with `'Hyperlocal ROM'`, and every build was copying the `.woff2`
+into `dist/fonts/` and serving it. The file is deleted and the `@font-face`
+is gone, so no build serves it any more.
+
+That also fixed a second thing hiding behind it: `--display`, `--body` and
+`--mono` all held the *same* stack, so the site had no display / body / mono
+distinction at all — one face was doing all three jobs. They are now
+Instrument Serif, Archivo and IBM Plex Mono, Google-hosted, which is the
+type system this file has described all along.
+
+**Still outstanding**: the `.woff2` remains in git history and the
+repository is public, so deleting it from the working tree does not remove
+it. Settle it with Dinamo, make the repository private, or rewrite the
+history.
 
 ## Migration target
 
