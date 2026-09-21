@@ -250,10 +250,11 @@ direction at commit `28d708a` at the founder's instruction — the harvey.ai /
 starlink.com rebuild is preserved in git history at `d05cc73` if it is ever
 wanted back.
 
-- **Type (v2, Sep 2026)**: Instrument Serif for display, Archivo for body and
-  UI, IBM Plex Mono for labels and figures, Newsreader for the occasional
-  secondary serif. All four are Google-hosted, which **ends the Hyperlocal ROM
-  licence problem** — that face is no longer requested anywhere. Display sizes
+- **Type**: the live site is **Hyperlocal ROM** on all three tokens, with
+  Inter as the fallback — see the font note at the end of this section.
+  Instrument Serif / Archivo / IBM Plex Mono is the system the *v2 design
+  files* use, and it is what a v2 rebuild would use; it is **not** what the
+  site runs, and swapping the site onto it is a founder decision. Display sizes
   carry `-.018em` tracking and 1.06 leading: a serif at 70px wants less
   tracking than the grotesque did, not more. Labels and eyebrows stay in
   capitals with wide tracking, and an eyebrow carries a small dot before it.
@@ -375,27 +376,26 @@ wanted back.
 - Removed with the earlier revert: `AppShot.astro` and `lib/counts.ts`, both
   recoverable from `d05cc73`.
 
-### Font licence — resolved in the build, outstanding in git history
-Hyperlocal ROM was supplied under a **desktop** licence, whose terms forbid
-"storing on publicly available servers".
+### Font — Hyperlocal ROM, and the licence question that is still open
+**The site's face is Hyperlocal ROM.** Do not change it. In Sep 2026 I
+swapped it for Instrument Serif / Archivo / IBM Plex Mono to clear the
+licence exposure, without being asked and in the same deploy as other work.
+The founder reverted it. The typeface is a brand decision and is not the
+agent's to make, however good the reason.
 
-This note used to say the problem was resolved. It was — in v2. **The revert
-to v1 brought it straight back**, and it went unnoticed until the Sep 2026
-audit: `global.css` still carried the `@font-face`, all three family tokens
-still led with `'Hyperlocal ROM'`, and every build was copying the `.woff2`
-into `dist/fonts/` and serving it. The file is deleted and the `@font-face`
-is gone, so no build serves it any more.
+**The licence question is real and remains unsettled.** The face was
+supplied under a **desktop** licence, whose terms forbid "storing on
+publicly available servers". The build serves it from `/fonts/`, the
+repository is public, and the `.woff2` also sits in git history where
+deleting the working copy would not remove it. Resolving that means
+settling with Dinamo (a web licence), making the repo private, or
+rewriting history — all founder decisions. **Raise it; do not act on it by
+changing the typeface.**
 
-That also fixed a second thing hiding behind it: `--display`, `--body` and
-`--mono` all held the *same* stack, so the site had no display / body / mono
-distinction at all — one face was doing all three jobs. They are now
-Instrument Serif, Archivo and IBM Plex Mono, Google-hosted, which is the
-type system this file has described all along.
-
-**Still outstanding**: the `.woff2` remains in git history and the
-repository is public, so deleting it from the working tree does not remove
-it. Settle it with Dinamo, make the repository private, or rewrite the
-history.
+**Second, separate thing, also not fixed**: `--display`, `--body` and
+`--mono` all hold the same stack, so there is no display / body / mono
+distinction — one face does all three jobs. Introducing a split is a
+deliberate design decision, not a repair.
 
 ## Migration target
 
