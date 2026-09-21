@@ -245,7 +245,7 @@ export const SECURITY = {
     },
     {
       title: 'Isolated by account',
-      body: "One DMC's rates never leak into another's Vault, even on the same tier, even on the same network.",
+      body: "One DMC’s rates never leak into another’s Vault, even on the same tier, even on the same network.",
     },
     {
       title: 'No training on your data',
@@ -275,7 +275,7 @@ export const SECURITY = {
     },
     {
       q: 'Can another DMC or agency see my data?',
-      a: "No. Every account's Vault, CRM, and rates are isolated — visibility across accounts happens only through Horizon's intended search, quote, and book flow, never by browsing another account's data directly.",
+      a: "No. Every account’s Vault, CRM, and rates are isolated — visibility across accounts happens only through Horizon’s intended search, quote, and book flow, never by browsing another account’s data directly.",
     },
     {
       q: 'What happens to my data if I stop using Hyperporter?',

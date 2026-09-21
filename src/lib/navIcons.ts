@@ -46,6 +46,8 @@ export const NAV_ICONS: Record<string, string> = {
   'Automated Confirmation': AUTO(C(12, 12, 9) + P('M8 12l3 3 5-6')),
   'Automated Collection': AUTO(P('M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z') + P('M12 10v6') + P('M9.5 13.5 12 16l2.5-2.5')),
   'Automated Payment': AUTO(R(3, 6, 18, 12) + P('M3 10h18') + P('M7 14.5h4')),
+  // One document handed on as another — the supplier's page behind, yours in front.
+  'Automated Conversion': AUTO(R(3, 2.5, 11, 14, 1) + P('M7 6.5h3') + R(10, 7.5, 11, 14, 1) + P('M13.5 12h4') + P('M13.5 15h2.5')),
   // Solutions
   'Travel agencies': P('M3 21h18') + P('M6 21V4a1 1 0 011-1h10a1 1 0 011 1v17') + P('M9.5 7h1.5') + P('M13 7h1.5') + P('M9.5 11h1.5') + P('M13 11h1.5') + P('M9.5 15h1.5') + P('M13 15h1.5') + P('M10.5 21v-3h3v3'),
   'Advisors & Agents': C(12, 8, 4) + P('M4 21a8 8 0 0116 0'),

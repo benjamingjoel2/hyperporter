@@ -55,6 +55,11 @@ export interface DetailPage {
   how: Step[];
   /** Automations only: the step a person always takes. */
   human?: string;
+  /**
+   * The closing band's comparison: how the work was done before, then how
+   * it is done here. Features only — no tier, no price (Sep 2026).
+   */
+  close: { before: string; after: string };
   /** Slugs of pages on either collection, shown as related. */
   related: string[];
   next: { eyebrow: string; title: string; desc: string; cta: string; href: string };
@@ -84,6 +89,10 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'Send a Magic Link', body: 'To supplier(s), with the inquiry details, requesting a quote. Receive quote(s), define your margin and send the link to the traveller. They see a visually stunning itinerary with your branding. Price is displayed including your margin. Both sides see only what they are supposed to know.' },
       { n: '04', name: 'Archive. Reuse', body: 'After the trip, the link archives itself and becomes the starting point for the next inquiry from the same client.' },
     ],
+    close: {
+      before: 'A trip used to live in three places at once.',
+      after: 'Now it lives on one record.',
+    },
     related: ['crm-workflow', 'inquiry-form', 'client-supplier-dashboard'],
     next: { eyebrow: 'Up next', title: 'Let the back-and-forth run itself.', desc: 'Autopilot layers the nine-stage engine on top of Portal — same CRM, same links, less chasing.', cta: 'See Autopilot', href: '/autopilot' },
   },
@@ -110,6 +119,10 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'It answers with a citation', body: 'The answer names the document and the page. If the Vault has nothing on it, Atlas says so rather than guessing.' },
       { n: '04', name: 'You decide', body: 'Atlas drafts and suggests. Sending a quote, confirming a booking or marking a payment is always yours to do.' },
     ],
+    close: {
+      before: 'You used to hunt a rate through four PDFs.',
+      after: 'Now you ask, and it cites the page.',
+    },
     related: ['document-vault', 'itinerary-generator', 'quotation-board'],
     next: { eyebrow: 'Up next', title: 'Where Atlas reads from.', desc: 'The Vault holds the contracts and rates Atlas answers from — and only those.', cta: 'See the Document vault', href: '/tools/document-vault' },
   },
@@ -136,6 +149,10 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'Booking to Ready', body: 'Payment requests go out and are marked received by a person. Vouchers and ground contacts are gathered before departure.' },
       { n: '04', name: 'Traveling to Completed', body: 'Live support runs on the thread, feedback is collected afterwards, and the record archives itself once everything is resolved.' },
     ],
+    close: {
+      before: 'You used to chase trips from memory.',
+      after: 'Now the board says who is waiting on you.',
+    },
     related: ['portal', 'client-supplier-dashboard', 'quotation-board'],
     next: { eyebrow: 'Up next', title: 'Move the stages without touching them.', desc: 'Automated Inquiry is the first of six automations that run the board for you.', cta: 'See Automated Inquiry', href: '/automations/inquiry' },
   },
@@ -162,6 +179,10 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'The trip appears', body: 'A new contact and a new trip at Inquiry, on the board, with the brief ready to work from.' },
       { n: '04', name: 'Autopilot takes it from there', body: 'On Autopilot, the brief is checked back with the traveller and a first itinerary is proposed without anyone typing.' },
     ],
+    close: {
+      before: 'An inquiry used to be retyped by hand.',
+      after: 'Now it arrives as a structured lead.',
+    },
     related: ['crm-workflow', 'portal', 'three-way-inbox'],
     next: { eyebrow: 'Up next', title: 'Turn the brief into a trip.', desc: 'Automated Inquiry confirms the brief with the traveller and moves it to Planning on its own.', cta: 'See Automated Inquiry', href: '/automations/inquiry' },
   },
@@ -188,6 +209,10 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'The traveller compares and chooses', body: 'They see the offers you released, side by side, at the selling price. Choosing one sends a confirmation request to that supplier.' },
       { n: '04', name: 'Choosing one does not close the others', body: 'The rest stay released and available as a backup while the chosen one is confirmed. Only once it is actually booked are the others declined.' },
     ],
+    close: {
+      before: 'Quotes used to arrive as five PDFs.',
+      after: 'Now they line up, your margin already in.',
+    },
     related: ['proposal-share', 'atlas-ai', 'crm-workflow'],
     next: { eyebrow: 'Up next', title: 'Request the proposals without sending the emails.', desc: 'Automated Quotation sends the brief to the right suppliers and manages every reply.', cta: 'See Automated Quotation', href: '/automations/quotation' },
   },
@@ -214,6 +239,10 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'See it opened', body: 'The trip record shows when the link was opened and how many times, so a follow-up is timed rather than guessed.' },
       { n: '04', name: 'Accept on the page', body: 'The traveller accepts on their side of the link. The trip moves to Confirmation and the supplier is re-checked.' },
     ],
+    close: {
+      before: 'You used to send a proposal as a file.',
+      after: 'Now you send a page that stays current.',
+    },
     related: ['quotation-board', 'itinerary-generator', 'client-supplier-dashboard'],
     next: { eyebrow: 'Up next', title: 'Let the itinerary write itself.', desc: 'The Itinerary generator drafts the days from your Vault before you open the proposal.', cta: 'See the Itinerary generator', href: '/tools/itinerary-generator' },
   },
@@ -240,6 +269,10 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'Questions land on the thread', body: 'Either side asks from their dashboard. The message arrives on the trip thread, addressed to you.' },
       { n: '04', name: 'Money is marked by a person', body: 'Payment instructions appear on the traveller’s side automatically. Marking money received is always a deliberate action on yours.' },
     ],
+    close: {
+      before: 'You used to be the wire between them.',
+      after: 'Now each side has a view of its own.',
+    },
     related: ['portal', 'three-way-inbox', 'payments-invoicing'],
     next: { eyebrow: 'Up next', title: 'All three conversations in one place.', desc: 'The 3-way inbox holds the traveller’s side and the supplier’s side of a trip on one thread.', cta: 'See the 3-way inbox', href: '/tools/three-way-inbox' },
   },
@@ -266,6 +299,10 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'Automatic steps are shown', body: 'When Autopilot sends a quote request or a reminder, it appears on the thread as a step, so the history is complete.' },
       { n: '04', name: 'Anything urgent is flagged', body: 'A message that needs a person is flagged and organised by what to do next, rather than lost in the sequence.' },
     ],
+    close: {
+      before: 'You used to copy between two inboxes.',
+      after: 'Now all three of you are on one thread.',
+    },
     related: ['client-supplier-dashboard', 'whatsapp', 'support-relay'],
     next: { eyebrow: 'Up next', title: 'Bring WhatsApp onto the thread.', desc: 'The WhatsApp integration connects the real Business API straight into your inbox.', cta: 'See the WhatsApp integration', href: '/tools/whatsapp-integration' },
   },
@@ -292,6 +329,10 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'Index', body: 'The document becomes queryable. Every extracted figure knows the page it came from.' },
       { n: '04', name: 'Answer', body: 'Atlas and the Itinerary generator read from the Vault and cite it. The audit log records every access.' },
     ],
+    close: {
+      before: 'Rates used to sit in a folder, unsearchable.',
+      after: 'Now they are quotable down to the page.',
+    },
     related: ['atlas-ai', 'itinerary-generator', 'quotation-board'],
     next: { eyebrow: 'Up next', title: 'Ask it a question.', desc: 'Atlas is the assistant that answers from the Vault, with the page it took the answer from.', cta: 'See Atlas AI', href: '/tools/atlas-ai' },
   },
@@ -318,6 +359,10 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'Lay out the days', body: 'A day-by-day draft with each line priced and cited to the contract it came from.' },
       { n: '04', name: 'Hand it to you', body: 'The draft appears on the trip at Planning. You edit, then send it as the proposal.' },
     ],
+    close: {
+      before: 'A day-by-day used to take an evening.',
+      after: 'Now it is generated, then edited.',
+    },
     related: ['atlas-ai', 'document-vault', 'proposal-share'],
     next: { eyebrow: 'Up next', title: 'Share the draft as a proposal.', desc: 'Proposal Share turns the itinerary into a link, a PDF or a message with your brand on it.', cta: 'See Proposal Share', href: '/tools/proposal-share' },
   },
@@ -344,6 +389,10 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'Marked by hand', body: 'You mark the deposit received. The trip moves to Booking and the supplier is told.' },
       { n: '04', name: 'Processed, on Intelligence', body: 'With gateway processing, Hyperporter takes the payment, pays the supplier their full quoted rate, and moves the stage as each side clears.' },
     ],
+    close: {
+      before: 'Invoices used to live in another tool.',
+      after: 'Now the payment sits on the trip.',
+    },
     related: ['client-supplier-dashboard', 'crm-workflow', 'quotation-board'],
     next: { eyebrow: 'Up next', title: 'Send the requests without the calendar.', desc: 'Automated Payment sends deposit and balance requests on schedule. Marking money received stays yours.', cta: 'See Automated Payment', href: '/automations/payment' },
   },
@@ -370,6 +419,10 @@ export const TOOLS: DetailPage[] = [
       { n: '03', name: 'Routine is handled', body: 'Pickup times, meeting points and confirmations relay without your involvement and are logged on the thread.' },
       { n: '04', name: 'Urgent breaks through', body: 'Anything flagged reaches you on your phone with the context, and the thread shows what needs deciding.' },
     ],
+    close: {
+      before: 'Mid-trip, you used to hunt for a number.',
+      after: 'Now it reaches the operator on the ground.',
+    },
     related: ['whatsapp', 'three-way-inbox', 'client-supplier-dashboard'],
     next: { eyebrow: 'Up next', title: 'The channel underneath the relay.', desc: 'The WhatsApp integration connects the Business API the relay runs on.', cta: 'See the WhatsApp integration', href: '/tools/whatsapp-integration' },
   },
@@ -378,7 +431,7 @@ export const TOOLS: DetailPage[] = [
 
 /* Integrations: the channels your travellers and suppliers already use,
    connected onto the trip thread. WhatsApp moved out of Tools when the
-   Integrations menu was added (Sep 2026, founder's ask); /tools/whatsapp-integration
+   Integrations menu was added (Sep 2026, founder’s ask); /tools/whatsapp-integration
    redirects to its new home. */
 export const INTEGRATIONS: DetailPage[] = [
   {
@@ -404,6 +457,10 @@ export const INTEGRATIONS: DetailPage[] = [
       { n: '03', name: 'Work the thread', body: 'Read and reply in the 3-way inbox. Templates cover the messages WhatsApp requires them for.' },
       { n: '04', name: 'Add the relay', body: 'The Support relay runs on the same connection during Traveling, if you switch it on.' },
     ],
+    close: {
+      before: 'A WhatsApp used to stay on one phone.',
+      after: 'Now it lands on the trip, for the team.',
+    },
     related: ['three-way-inbox', 'support-relay', 'inquiry-form'],
     next: { eyebrow: 'Up next', title: 'Turn a message into a brief.', desc: 'Automated Inquiry parses an incoming WhatsApp, email or form into a structured lead.', cta: 'See Automated Inquiry', href: '/automations/inquiry' },
   },
@@ -430,6 +487,10 @@ export const INTEGRATIONS: DetailPage[] = [
       { n: '03', name: 'Work the thread', body: 'Read and reply in the 3-way inbox, beside the WhatsApp messages and the supplier replies about the same trip.' },
       { n: '04', name: 'Keep the record', body: 'Every message stays on the trip after it is over \u2014 what was agreed, and when, without anyone forwarding a chain.' },
     ],
+    close: {
+      before: 'A trip’s history used to be a sent folder.',
+      after: 'Now every mail files itself onto the trip.',
+    },
     related: ['whatsapp', 'three-way-inbox', 'inquiry-form'],
     next: { eyebrow: 'Next', title: 'The 3-way inbox', desc: 'Where the email, the WhatsApp and the supplier reply about one trip sit together.', cta: 'Open 3-way inbox', href: '/tools/three-way-inbox' },
   },
@@ -460,6 +521,10 @@ export const AUTOMATIONS: DetailPage[] = [
       { n: '04', name: 'The brief is confirmed', body: 'The traveller confirms. The trip moves to Planning and a first itinerary is proposed.' },
     ],
     human: 'A brief the traveller has not confirmed does not advance. A message the parser cannot make sense of is flagged to you with the original text, not guessed at.',
+    close: {
+      before: 'An inquiry used to wait for the inbox.',
+      after: 'Now it is read and acknowledged in a minute.',
+    },
     related: ['quotation', 'follow-up'],
     next: { eyebrow: 'Next stage', title: 'Planning and Quotation.', desc: 'Automated Quotation sends each part of the trip to the right suppliers and manages the replies.', cta: 'See Automated Quotation', href: '/automations/quotation' },
   },
@@ -487,6 +552,10 @@ export const AUTOMATIONS: DetailPage[] = [
       { n: '04', name: 'You choose', body: 'The board shows the options with your margin applied. You pick per part and the proposal is built.' },
     ],
     human: 'Choosing which quote to accept is yours. The supplier’s quoted rate is what the supplier receives; your margin is added on top and never taken from it.',
+    close: {
+      before: 'One inquiry used to mean six emails.',
+      after: 'Now it reaches all six at once.',
+    },
     related: ['confirmation', 'inquiry'],
     next: { eyebrow: 'Next stage', title: 'Confirmation.', desc: 'Automated Confirmation re-checks the accepted quote with the supplier before anything is booked.', cta: 'See Automated Confirmation', href: '/automations/confirmation' },
   },
@@ -514,6 +583,10 @@ export const AUTOMATIONS: DetailPage[] = [
       { n: '04', name: 'The trip is confirmed', body: 'All lines confirmed, the trip moves to Booking and payment requests begin.' },
     ],
     human: 'A supplier gone unavailable with no backup on the board, or a price change the traveller will not accept, escalates to you with both sides’ messages in view. That escalation is the design, not a failure of it.',
+    close: {
+      before: 'Confirming used to be a chain of replies.',
+      after: 'Now it is issued, filed and on both sides.',
+    },
     related: ['quotation', 'payment'],
     next: { eyebrow: 'Next stage', title: 'Booking and payment.', desc: 'Automated Payment sends the deposit and balance requests on schedule.', cta: 'See Automated Payment', href: '/automations/payment' },
   },
@@ -541,8 +614,43 @@ export const AUTOMATIONS: DetailPage[] = [
       { n: '04', name: 'Late is chased', body: 'Reminders go out at intervals. Anything still missing near departure is flagged to you.' },
     ],
     human: 'A supplier who does not deliver a voucher, or a traveller whose documents raise a question, is flagged to you before the traveller finds out. Collection asks and tracks; it does not decide what to do about a gap.',
+    close: {
+      before: 'Documents used to take weeks of nudging.',
+      after: 'Now the chasing runs itself.',
+    },
     related: ['follow-up', 'payment'],
     next: { eyebrow: 'Next stage', title: 'Traveling.', desc: 'The Support relay handles the trip on the ground, routing routine messages and escalating the rest.', cta: 'See the Support relay', href: '/tools/support-relay' },
+  },
+  {
+    slug: 'conversion',
+    name: 'Automated Conversion',
+    layer: 'Autopilot',
+    tier: 'Autopilot up',
+    tierNote: 'Part of Autopilot at €49 a month, and of Intelligence. Runs wherever a supplier document arrives.',
+    title: 'Their confirmation, in your documents.',
+    lede: 'A supplier sends back a booking confirmation on their letterhead, or a voucher with their logo on it. Automated Conversion reads it, takes the details that matter, and issues the same thing as your own document — your name on it, your layout, ready for the traveller.',
+    overview: 'A supplier’s booking confirmation or voucher is read, its details lifted onto the trip, and reissued as your own branded document — so the traveller only ever sees your brand.',
+    screen: 'collect',
+    whatTitle: 'What it automates',
+    what: [
+      { icon: 'doc', title: 'Reading the supplier’s document', body: 'A confirmation or voucher that arrives by email or on the supplier’s side of the link is read for the details that matter — reference, dates, times, inclusions, the ground contact.' },
+      { icon: 'brand', title: 'Reissuing it as yours', body: 'The same booking comes back out on your letterhead, in your layout, under your name — the supplier’s branding does not reach the traveller.' },
+      { icon: 'layers', title: 'Filed against the trip', body: 'Both versions are kept: the supplier’s original for your record, and the branded one the traveller receives.' },
+    ],
+    howTitle: 'How it runs',
+    how: [
+      { n: '01', name: 'The document arrives', body: 'A confirmation or voucher lands by email or is uploaded on the supplier’s side of the link.' },
+      { n: '02', name: 'The details are read', body: 'Reference, dates, pickup times, what is included and the ground contact are lifted onto the trip.' },
+      { n: '03', name: 'Your version is issued', body: 'The same booking is generated on your letterhead, in your layout, and attached to the trip.' },
+      { n: '04', name: 'The traveller gets yours', body: 'The branded document goes out on their link. The supplier’s original stays filed on your side.' },
+    ],
+    human: 'A document that cannot be read cleanly — a scan, a handwritten amendment, an inclusion that does not match what was quoted — is flagged to you with both versions side by side rather than reissued on a guess.',
+    close: {
+      before: 'You used to retype their voucher by hand.',
+      after: 'Now it comes out as your own document.',
+    },
+    related: ['collection', 'confirmation'],
+    next: { eyebrow: 'Next stage', title: 'Ready.', desc: 'Automated Collection gathers everything else the trip needs before departure.', cta: 'See Automated Collection', href: '/automations/collection' },
   },
   {
     slug: 'payment',
@@ -568,6 +676,10 @@ export const AUTOMATIONS: DetailPage[] = [
       { n: '04', name: 'Processed, on Intelligence', body: 'With gateway processing, the payment is taken, the supplier is paid in full, and the stage moves as each side clears.' },
     ],
     human: 'Marking money received or sent is always manual, on every tier, and not only on exceptions. Nothing about payment ever happens silently.',
+    close: {
+      before: 'Payment used to be a link sent by hand.',
+      after: 'Now request and receipt sit on the trip.',
+    },
     related: ['confirmation', 'collection'],
     next: { eyebrow: 'Next stage', title: 'Ready.', desc: 'Automated Collection gathers everything the trip needs before departure.', cta: 'See Automated Collection', href: '/automations/collection' },
   },
@@ -595,6 +707,10 @@ export const AUTOMATIONS: DetailPage[] = [
       { n: '04', name: 'A reply reopens the thread', body: 'Whatever comes back lands on the thread, flagged if it needs a decision.' },
     ],
     human: 'A reply that asks for a change, raises a complaint or needs a judgement is flagged to you with the context. Follow-up sends the reminder; it does not negotiate.',
+    close: {
+      before: 'Follow-up used to depend on remembering.',
+      after: 'Now the quiet trips raise their hand.',
+    },
     related: ['inquiry', 'collection'],
     next: { eyebrow: 'Next stage', title: 'Collection.', desc: 'Automated Collection gathers traveller documents and supplier confirmations before departure.', cta: 'See Automated Collection', href: '/automations/collection' },
   },
