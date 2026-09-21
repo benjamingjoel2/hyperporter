@@ -312,37 +312,44 @@
 
 .mk-ui{position:relative;width:100%;max-height:100%;
   display:flex;flex-direction:column;font-size:1em;
-  background:#FCFCFB;border-radius:.7em;overflow:hidden;
-  box-shadow:0 0 0 1px rgba(13,16,22,.10),0 2.2em 4.4em rgba(8,12,18,.24)}
+  background:#FFFFFF;border-radius:1.1em;overflow:hidden;
+  box-shadow:var(--lg-rim),0 2.2em 4.4em rgba(8,12,18,.24)}
 
 /* main column */
 .mk-main{display:flex;flex-direction:column;min-width:0;min-height:0}
-.mk-bar{display:flex;align-items:center;gap:.55em;padding:.7em .95em;border-bottom:1px solid var(--line);overflow:hidden}
-.mk-brand{display:inline-flex;align-items:center;gap:.35em;padding-right:.6em;margin-right:.1em;
-  border-right:1px solid var(--line);color:var(--muted);font-size:.8em;white-space:nowrap;flex:0 0 auto}
+.mk-bar{display:flex;align-items:center;gap:.55em;padding:.85em 1.05em .8em;border-bottom:0;overflow:hidden}
+.mk-brand{display:inline-flex;align-items:center;gap:.35em;padding-right:.65em;margin-right:.1em;
+  border-right:0;color:var(--dim);font-size:.8em;white-space:nowrap;flex:0 0 auto}
 .mk-brand i{width:.85em;height:.85em;border-radius:50%;border:.12em solid currentColor;flex:0 0 auto}
 .mk-bar b{font-size:1.02em;letter-spacing:-.01em;flex:0 0 auto;white-space:nowrap}
 .mk-bar small{color:var(--dim);font-size:.8em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;min-width:0}
 .mk-bar .sp{margin-left:auto;display:flex;align-items:center;gap:.4em;flex:0 0 auto}
-.mk-pill{border:1px solid var(--line);border-radius:999px;padding:.2em .6em;font-size:.74em;color:var(--muted);white-space:nowrap}
+.mk-pill{border:0;background:var(--fill);border-radius:999px;padding:.28em .7em;font-size:.74em;color:var(--muted);white-space:nowrap}
 .mk-bar .av{width:1.5em;height:1.5em;flex:0 0 auto;overflow:hidden;border-radius:50%;background:var(--signal);color:#fff;
   font-size:.7em;display:grid;place-items:center;letter-spacing:.02em}
 
 /* tabs */
-.mk-tabs{display:flex;gap:1em;padding:0 .95em;border-bottom:1px solid var(--line)}
-.mk-tabs span{padding:.5em 0;font-size:.85em;color:var(--dim);border-bottom:.13em solid transparent;white-space:nowrap}
-.mk-tabs span.on{color:var(--paper);border-bottom-color:var(--paper)}
+/* A segmented control on a tertiary fill. An underlined tab rail with a
+   hairline under it is the single most dated thing in these screens. */
+.mk-tabs{display:inline-flex;gap:.12em;margin:0 1.05em .15em;padding:.2em;
+  background:var(--fill);border-radius:999px;align-self:flex-start;max-width:calc(100% - 2.1em);overflow:hidden}
+.mk-tabs span{padding:.34em .75em;font-size:.8em;color:var(--muted);border-radius:999px;white-space:nowrap}
+.mk-tabs span.on{color:var(--paper);background:#fff;box-shadow:var(--lg-rim)}
 
 /* a real table */
-.mk-body{padding:.65em .95em .9em;overflow:hidden;min-height:0}
+.mk-body{padding:.8em 1.05em 1em;overflow:hidden;min-height:0}
 .mk-body > .mk-fine{padding-top:.7em;color:var(--dim)}
 .mk-tbl{width:100%;border-collapse:collapse;font-size:.88em;table-layout:fixed}
-.mk-tbl th{text-align:left;font-weight:400;color:var(--dim);font-size:.82em;letter-spacing:.05em;
-  text-transform:uppercase;padding:.3em .9em .4em 0;border-bottom:1px solid var(--line);white-space:nowrap}
+/* Sentence case, no tracking, no rule under the head. Uppercase
+   letterspaced column heads over a hairline is a 2005 data grid. */
+.mk-tbl th{text-align:left;font-weight:400;color:var(--dim);font-size:.8em;letter-spacing:0;
+  text-transform:none;padding:.2em .9em .55em 0;border-bottom:0;white-space:nowrap}
 .mk-tbl th:last-child,.mk-tbl td:last-child{padding-right:0}
-.mk-tbl td{padding:.48em .9em .48em 0;border-bottom:1px solid rgba(13,16,22,.055);
+/* Space separates the rows, not a rule on every one of them. */
+.mk-tbl td{padding:.62em .9em .62em 0;border-bottom:0;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mk-tbl tr:last-child td{border-bottom:0}
+.mk-tbl tbody tr{border-radius:.5em}
+.mk-tbl tbody tr + tr td{box-shadow:inset 0 1px 0 rgba(13,16,22,.045)}
 .mk-tbl.tight td{padding-top:.28em;padding-bottom:.28em}
 /* A name with its avatar. Block rather than flex, so a long name gets a
    real ellipsis instead of running into the next column. */
@@ -350,25 +357,28 @@
 .mk-tbl .who i{width:1.85em;height:1.85em;border-radius:50%;background:#E3E6E4;color:var(--muted);
   font-size:.7em;display:inline-grid;place-items:center;vertical-align:-.45em;margin-right:.45em}
 .mk-tbl .num{font-variant-numeric:tabular-nums;text-align:right}
-.mk-st{display:inline-flex;align-items:center;gap:.3em;font-size:.94em;color:var(--muted);white-space:nowrap}
-.mk-st::before{content:"";width:.42em;height:.42em;border-radius:50%;background:currentColor;opacity:.45}
-.mk-st.go{color:#0C6B6F}.mk-st.go::before{opacity:1}
-.mk-st.amb{color:var(--amber)}.mk-st.amb::before{opacity:1}
-.mk-st.red{color:#A8506B}.mk-st.red::before{opacity:1}
+/* A tinted pill, and the dot stays: colour alone must never carry a state
+   (HIG, and the site's own rule). The word is always there too. */
+.mk-st{display:inline-flex;align-items:center;gap:.36em;font-size:.86em;color:var(--muted);white-space:nowrap;
+  background:var(--fill);border-radius:999px;padding:.24em .6em .24em .52em}
+.mk-st::before{content:"";width:.44em;height:.44em;border-radius:50%;background:currentColor;opacity:.45;flex:0 0 auto}
+.mk-st.go{color:#0A5E62;background:rgba(14,75,82,.10)}.mk-st.go::before{opacity:1}
+.mk-st.amb{color:var(--amber);background:rgba(154,95,11,.12)}.mk-st.amb::before{opacity:1}
+.mk-st.red{color:#8E3F58;background:rgba(142,63,88,.11)}.mk-st.red::before{opacity:1}
 
 /* the full pipeline, all of it */
 .mk-kan{display:flex;gap:.5em;overflow:hidden;align-items:flex-start}
 .mk-kan .kcol{flex:0 0 8.2em;min-width:0}
-.mk-kan .kh{display:flex;align-items:baseline;gap:.35em;padding:0 .12em .38em;
-  font-size:.76em;letter-spacing:.05em;text-transform:uppercase;color:var(--dim)}
+.mk-kan .kh{display:flex;align-items:baseline;gap:.35em;padding:0 .12em .45em;
+  font-size:.78em;letter-spacing:0;text-transform:none;color:var(--dim)}
 .mk-kan .kh b{font-weight:400;color:var(--paper)}
-.mk-kan .kc{background:#fff;border:1px solid var(--line);border-radius:.4em;padding:.4em .45em;
-  margin-bottom:.32em;box-shadow:0 .1em .3em rgba(13,16,22,.04)}
+.mk-kan .kc{background:#fff;border:0;border-radius:.7em;padding:.5em .55em;
+  margin-bottom:.36em;box-shadow:var(--lg-rim),0 .1em .3em rgba(13,16,22,.05)}
 .mk-kan .kc b{display:block;font-size:.8em;font-weight:400;letter-spacing:-.01em;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mk-kan .kc small{display:block;color:var(--dim);font-size:.72em;margin-top:.12em;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mk-kan .kc.amb{box-shadow:0 .1em .3em rgba(13,16,22,.04),inset .17em 0 0 var(--amber)}
+.mk-kan .kc.amb{box-shadow:var(--lg-rim),0 .1em .3em rgba(13,16,22,.05),inset .2em 0 0 var(--amber)}
 
 /* A narrow frame gets a denser table rather than a truncated one. */
 @container (max-width: 560px){
@@ -395,12 +405,12 @@
    link — which has a brand bar where the app has navigation, because they
    are not logged into anything. */
 
-.mk-uibtn{border:0;font:inherit;font-size:.76em;line-height:1.3;padding:.32em .7em;border-radius:.4em;
+.mk-uibtn{border:0;font:inherit;font-size:.76em;line-height:1.3;padding:.4em .85em;border-radius:999px;
   background:var(--paper);color:#fff;white-space:nowrap;cursor:pointer}
-.mk-uibtn.o{background:none;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line-2)}
+.mk-uibtn.o{background:var(--fill);color:var(--muted);box-shadow:none}
 .mk-uibtn.amb{background:var(--amber);color:#fff}
 .mk-uibtn.sig{background:var(--signal);color:#fff}
-.mk-uibtn.done{background:none;color:var(--muted);box-shadow:inset 0 0 0 1px var(--line-2);cursor:default}
+.mk-uibtn.done{background:var(--fill);color:var(--muted);box-shadow:none;cursor:default}
 .mk-uibtn.done::before{content:"✓ ";color:var(--signal)}
 .mk-uibtn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 .mk-tbl td .mk-uibtn{font-size:.9em}
@@ -409,9 +419,9 @@
 .mk-form{display:grid;grid-template-columns:1fr 1fr;gap:.45em .6em}
 .mk-form .f{display:flex;flex-direction:column;gap:.18em;min-width:0}
 .mk-form .f.wide{grid-column:1/-1}
-.mk-form label{font-size:.68em;letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
-.mk-form .val{border:1px solid var(--line-2);border-radius:.34em;padding:.34em .5em;font-size:.82em;
-  background:#fff;min-height:1.9em;display:flex;align-items:center;justify-content:space-between;gap:.4em}
+.mk-form label{font-size:.72em;letter-spacing:0;text-transform:none;color:var(--dim)}
+.mk-form .val{border:0;border-radius:.6em;padding:.42em .65em;font-size:.82em;
+  background:var(--fill);min-height:2em;display:flex;align-items:center;justify-content:space-between;gap:.4em}
 .mk-form .val.focus{border-color:var(--signal);box-shadow:0 0 0 .1em var(--signal-dim)}
 .mk-form .val.ph{color:var(--dim)}
 .mk-form .val[contenteditable]:focus{outline:0;border-color:var(--signal)}
@@ -424,19 +434,19 @@
 
 /* two panes */
 .mk-two{display:grid;grid-template-columns:1fr 1fr;gap:.55em;align-items:start}
-.mk-pane{border:1px solid var(--line);border-radius:.45em;overflow:hidden;background:#fff;min-width:0}
-.mk-pane > h6{margin:0;padding:.34em .55em;background:#F3F3F1;border-bottom:1px solid var(--line);
-  font-weight:400;font-size:.7em;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
-.mk-pane .ln{display:flex;justify-content:space-between;gap:.5em;padding:.33em .55em;font-size:.8em;
-  border-bottom:1px solid rgba(13,16,22,.05);min-width:0}
+.mk-pane{border:0;border-radius:.8em;overflow:hidden;background:var(--fill);min-width:0;padding:.25em 0 .45em}
+.mk-pane > h6{margin:0;padding:.5em .75em .35em;background:none;border-bottom:0;
+  font-weight:400;font-size:.74em;letter-spacing:0;text-transform:none;color:var(--dim)}
+.mk-pane .ln{display:flex;justify-content:space-between;gap:.5em;padding:.3em .75em;font-size:.82em;
+  border-bottom:0;min-width:0}
 .mk-pane .ln:last-child{border-bottom:0}
 .mk-pane .ln > :first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mk-pane .ln > :last-child{color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
 
 /* a metric strip above a table */
 .mk-metrics{display:flex;gap:.45em;margin-bottom:.5em}
-.mk-metric{flex:1;border:1px solid var(--line);border-radius:.4em;padding:.33em .5em;background:#fff;min-width:0}
-.mk-metric span{display:block;font-size:.68em;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-metric{flex:1;border:0;border-radius:.7em;padding:.45em .65em .5em;background:var(--fill);min-width:0}
+.mk-metric span{display:block;font-size:.72em;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mk-metric b{display:block;font-weight:400;font-size:1.1em;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .mk-metric b em{font-style:normal;font-size:.6em;color:var(--signal);margin-left:.25em}
 
@@ -446,7 +456,7 @@
 .mk-plot i.hi{background:var(--signal)}
 
 /* the bare page: no navigation, a brand bar instead */
-.mk-ui.page .mk-bar{background:#fff}
+.mk-ui.page .mk-bar{background:#fff;border-bottom:0}
 .mk-ui.page .mk-bar b{font-size:1.02em}
 .mk-ui.page .mk-body{padding:.75em .95em .9em}
 .mk-hero{font-size:1.5em;letter-spacing:-.02em;line-height:1.15;margin:.1em 0 .45em}

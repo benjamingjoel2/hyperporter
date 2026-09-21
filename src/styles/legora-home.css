@@ -214,8 +214,18 @@ section.lg-sec{padding-block:var(--sec-gap);background:var(--steel)}
 .lg-side-btn:hover{border-color:#fff;background:rgba(255,255,255,.06)}
 /* The screen: inset from the left by the copy's padding, bleeding off the
    right and the bottom, so it reads as a window rising into view. */
+/* The two screens are a pair, so they have to be one size. They are not
+   the same height on their own — the reseller's is a trip record with two
+   panes and a log, the supplier's is a single request list — and 40px of
+   difference across a two-up reads as one card being bigger than the other
+   (founder, Sep 2026). The window is stretched to the frame on both sides,
+   so whatever runs past the bottom is clipped identically. */
 .lg-side-shot{margin:auto 0 0 clamp(28px,3vw,44px);padding-top:32px;height:clamp(220px,22vw,320px);overflow:hidden}
 .lg-side-shot .mk{border-radius:10px 0 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.35)}
+/* stretch, but keep the stage's inset — filling the frame edge to edge
+   covers the photograph the window is meant to float on. */
+.lg-side-shot .mk-stage{align-items:stretch;padding:7% 0 0 7%}
+.lg-side-shot .mk-ui{max-height:none;border-radius:12px 0 0 0}
 
 /* ---------------- closing + footer ---------------- */
 section.lg-close{text-align:center;padding-block:var(--sec-gap)}
