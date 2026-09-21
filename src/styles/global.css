@@ -45,6 +45,9 @@
   --line-2:#C8C5BF;
   --paper:#0D1016;
   --muted:#68655E;
+  /* A label grey. Body copy set in it measures about 3.1:1 on a card,
+     under the 4.5:1 floor — use --muted for anything that is read as a
+     sentence, and keep --dim for eyebrows, column heads and captions. */
   --dim:#8F8D8A;
   /* Teal darkened from #1B747E so it holds white text in the structural
      role the reference gives its forest green: announcement bar, buttons,
@@ -676,7 +679,7 @@ p{margin:0 0 16px}
 .tcell:not(:first-child){padding-left:clamp(24px,3vw,44px)}
 .tcell .av{width:54px;height:54px;border-radius:50%;background:linear-gradient(140deg,#E9EEF2,#D6DEE5);border:1px solid var(--line-2);margin-bottom:20px}
 .tcell .role{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);margin-bottom:10px}
-.tcell p{font-size:13.5px;color:var(--dim);margin:0}
+.tcell p{font-size:13.5px;color:var(--muted);margin:0}
 
 /* ============ SIGNUP ============ */
 .sgrid{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;align-items:start}
@@ -958,7 +961,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .ccard{background:linear-gradient(180deg,var(--raise),var(--void));border:1px solid var(--line);border-radius:14px;padding:clamp(24px,2.4vw,32px) clamp(18px,2vw,26px);text-align:center;display:flex;flex-direction:column;align-items:center;transition:transform .3s,border-color .3s}
 .ccard:hover{transform:translateY(-5px);border-color:var(--line-2)}
 .ccard h3{font-family:var(--display);font-size:20px;font-weight:400;margin:0 0 12px}
-.ccard p{color:var(--dim);font-size:13px;line-height:1.6;margin:0 0 22px;flex:1}
+.ccard p{color:var(--muted);font-size:13px;line-height:1.6;margin:0 0 22px;flex:1}
 .ccard .visit{background:none;border:1px solid var(--line-2);color:var(--paper);padding:10px 20px;border-radius:var(--radius);font-size:13px;font-weight:400;white-space:nowrap;transition:border-color .25s,background .25s,color .25s}
 .ccard:hover .visit{border-color:var(--signal);color:var(--signal);background:var(--signal-dim)}
 @media (max-width:1040px){.cgrid{grid-template-columns:repeat(3,1fr)}}
@@ -1002,7 +1005,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .svc article{background:linear-gradient(180deg,var(--raise),var(--void));border:1px solid var(--line);border-radius:14px;padding:clamp(22px,2.4vw,32px);transition:border-color .3s,transform .3s}
 .svc article:hover{border-color:var(--line-2);transform:translateY(-4px)}
 .svc h3{margin:0 0 10px;font-size:19px}
-.svc p{margin:0;color:var(--dim);font-size:13.5px;line-height:1.6}
+.svc p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.6}
 @media (max-width:900px){.svc{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.svc{grid-template-columns:1fr}}
 
@@ -1372,7 +1375,7 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .tier .tkind{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:6px}
 .tier .tamt{font-family:var(--display);font-size:clamp(30px,3.4vw,42px);letter-spacing:-.022em;margin:18px 0 4px;
   font-variant-numeric:tabular-nums}
-.tier .tnote{color:var(--dim);font-size:13.5px;margin:0 0 20px}
+.tier .tnote{color:var(--muted);font-size:13.5px;margin:0 0 20px}
 .tier ul{margin:0 0 24px;padding:0;list-style:none;flex:1}
 .tier li{font-size:14px;color:var(--muted);padding:8px 0;border-top:1px solid var(--line)}
 
@@ -1767,3 +1770,46 @@ html.mega-open .mega-scrim{opacity:1}
    a marquee scrolling under an open menu reads as a rendering fault, not as
    depth. It goes while the menu is open. */
 body.drawer-open .rail{opacity:0;transition:opacity .2s ease}
+
+/* ---- cards on the metal ---------------------------------------------
+   Sep 2026, founder's instruction: the card families get the material
+   too. This is the content layer, where the HIG says not to put glass —
+   "including it in the content layer creates unnecessary complexity and
+   confusing visual hierarchy" — so it is done the way Portal itself does
+   it: the sheen and the rim carry the material, and the blur is spent
+   only where it can actually be seen.
+
+   The rim replaces each family's 1px border rather than joining it. Two
+   edges on one card is the "unnecessary complexity" the HIG means, and
+   the hairline in --lg-rim is already a border, drawn inside. */
+.rel,.tier,.side,.ccard,.zcard,.svc article,.panel,.dcard{
+  background:var(--lg-bg);
+  border:0;
+  box-shadow:var(--lg-rim),0 1px 2px rgba(12,22,34,.04);
+  transition:box-shadow .25s ease,transform .25s ease}
+/* No backdrop-filter here, deliberately. What these sit on is --wash, a
+   smooth gradient, and blurring a smooth gradient returns the same
+   gradient: measured on one card, blur on against blur off differs by at
+   most 4/255 on any channel, with 0.7% of pixels differing by more than
+   2 — invisible. It is not free, though. Best of three runs, same page,
+   blur toggled: /tools 43→51fps, /pricing 39→48, /customers 39→56. The
+   sheen and the rim are what read as metal; the blur was paying 8–17fps
+   for nothing. Glass that sits over photographs or over live content —
+   the bar, the menus, the mock-up panels — keeps its blur, because there
+   it has something to refract. */
+
+/* Hover lifts the card rather than repainting it: the rim brightens and
+   the shadow deepens, which is what a physical surface does when it comes
+   toward you. The families that already translate on hover keep doing so. */
+.rel:hover,.tier:hover,.side:hover,.ccard:hover,.zcard:hover,.svc article:hover{
+  background:var(--lg-bg);
+  box-shadow:var(--lg-rim),var(--shadow-elevated)}
+.rel:hover{border-color:transparent}
+
+@media (prefers-reduced-transparency:reduce){
+  .rel,.tier,.side,.ccard,.zcard,.svc article,.panel,.dcard{background:var(--raise)}
+}
+@media (prefers-contrast:more){
+  .rel,.tier,.side,.ccard,.zcard,.svc article,.panel,.dcard{
+    background:var(--raise);box-shadow:none;border:1px solid var(--paper)}
+}

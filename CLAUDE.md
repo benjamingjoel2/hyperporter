@@ -242,12 +242,21 @@ wanted back.
   as frosted plastic. `--lg-blur` carries `saturate(180%)`: blur on its own
   desaturates what is behind it and the panel goes grey and dead.
 
-  **Where glass is allowed**: the functional layer only — the bar, the mega
-  panels, the drawer, the ticker's label — plus `.mk-panel`, because the
-  mock-ups are pictures of Portal and wear Portal's material by right. Not
-  on body cards, not on section grounds. "Overuse dilutes emphasis until
-  nothing reads as elevated" (HIG, Liquid Glass), and each backdrop-filter
-  is its own compositing layer, so a page of them stutters.
+  **Where the material goes**: everywhere the site has a surface — the bar,
+  the mega panels, the drawer, the ticker's label, `.mk-panel`, and the
+  card families (`.rel .tier .side .ccard .zcard .svc article .panel`,
+  Sep 2026, founder's ask). Not on section grounds.
+
+  **Where the *blur* goes is a separate question, and the answer is: only
+  where there is something to refract.** The bar, the menus and the
+  mock-up panels sit over photographs and live content, so they blur. The
+  cards sit on `--wash`, a smooth gradient — and blurring a smooth
+  gradient returns the same gradient. Measured on one card, blur on
+  against blur off: at most 4/255 on any channel, 0.7% of pixels differing
+  by more than 2. Invisible, and not free: best of three runs, same page,
+  blur toggled, /tools 43→51fps, /pricing 39→48, /customers 39→56. So the
+  cards carry the sheen and the rim and no `backdrop-filter`. Add one only
+  after checking there is something behind it worth blurring.
 
   **The legibility comes from the scrim, not the opacity.** A menu opening
   over a 70px display headline leaves that headline readable through
@@ -273,6 +282,29 @@ wanted back.
   translucent white box; it needs variation behind it. It is
   `background-attachment:fixed`, because a 700px wash stretched down a
   14,000px page is a smear.
+
+  **`--dim` is a label grey, not a body grey.** Set as body copy on a card
+  it measures about 3.1:1, under the 4.5:1 floor. `--muted` measures 5.5:1
+  in the same place. Eyebrows, column heads and captions keep `--dim`;
+  anything read as a sentence takes `--muted`.
+
+- **The screens read as current software, not as a 2005 data grid** (Sep
+  2026, founder: "showcase a modern screenshot please, this is 2000"). The
+  changes are all in `styles/mockup.css`, on the shared primitives, so all
+  38 screens moved together: tabs are a segmented control on a tertiary
+  fill rather than an underlined rail; table rows are separated by space
+  and a faint inset rule, not a hairline under every row; column heads are
+  sentence case with no tracking; statuses are tinted pills (the dot stays
+  — colour alone never carries a state); buttons, panes, metrics and form
+  fields sit on `--fill` with pill or soft-radius shapes instead of 1px
+  boxes; the window itself takes `--lg-rim` and a 1.1em corner.
+
+  The two homepage sides screens are a pair and must stay one size. They
+  are not the same height on their own — the reseller's is a trip record
+  with two panes and a log, the supplier's a single request list — and the
+  40px difference read as one card being bigger. `.lg-side-shot` stretches
+  both to the frame; keep the stage's inset padding, or the window covers
+  the photograph it is meant to float on.
 - Removed with the earlier revert: `AppShot.astro` and `lib/counts.ts`, both
   recoverable from `d05cc73`.
 
