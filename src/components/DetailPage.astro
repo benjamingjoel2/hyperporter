@@ -33,10 +33,6 @@ if (!steps) throw new Error(`No step screens for "${page.slug}" (content/steps.t
 if (steps.length !== page.how.length) {
   throw new Error(`"${page.slug}": ${page.how.length} steps but ${steps.length} screens.`);
 }
-const cta =
-  kind === 'tool'
-    ? { lead: `${page.name} is part of ${page.layer}.`, rest: 'Start free on Showcase, and switch on what you need as the trips come in.' }
-    : { lead: 'Autopilot runs the stages. You take the decisions.', rest: 'Start free on Showcase, and switch it on when you are ready.' };
 ---
 
 <V2Hero eyebrow={eyebrow} title={page.title} lede={page.lede} photo={photoFor(page.slug)} />
@@ -106,7 +102,7 @@ const cta =
   )
 }
 
-<CtaBand lead={cta.lead} rest={cta.rest} />
+<CtaBand before={page.close.before} after={page.close.after} />
 
 <script>
   import '../lib/accordion';

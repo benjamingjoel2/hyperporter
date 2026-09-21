@@ -42,6 +42,11 @@ export interface Segment {
   lede: string;
   reasons: Reason[];
   features: SegmentFeature[];
+  /**
+   * The closing band's comparison: how this audience worked before, and how
+   * it works here. Features only — no tier, no price (Sep 2026).
+   */
+  close: { before: string; after: string };
   pricingTitle: string;
   tiers: SegmentTier[];
 }
@@ -62,6 +67,11 @@ export interface Overview {
   sectionTitle: string;
   /** Only Supplier Portal carries this — the honest "why now" framing. */
   note?: string;
+  /**
+   * The closing band's comparison: how this audience worked before, and how
+   * it works here. Features only — no tier, no price (Sep 2026).
+   */
+  close: { before: string; after: string };
   features: SegmentFeature[];
   pricingHref: string;
   pricingLabel: string;
@@ -77,6 +87,10 @@ export const OVERVIEWS: Overview[] = [
     lede: 'Travel agencies, independent advisors, content creators — coordinate your traveller and your supplier in one thread, not three apps.',
     sectionEyebrow: 'What changes',
     sectionTitle: 'Everything you already do, minus the manual chasing.',
+    close: {
+      before: 'An agency used to run a trip in three apps.',
+      after: 'Now it runs in one, inquiry to payment.',
+    },
     features: [
       {
         n: '01',
@@ -113,6 +127,10 @@ export const OVERVIEWS: Overview[] = [
     sectionEyebrow: 'Why Showcase, why now',
     sectionTitle: 'Useful today, not just once the network is bigger.',
     note: 'The value isn’t “get discovered” — that takes volume we don’t have yet. It’s a free CRM for the requests you’re already getting, and a real upgrade path to Intelligence when you want AI-assisted quoting from your own rates.',
+    close: {
+      before: 'Inbound requests used to arrive as email.',
+      after: 'Now they arrive quotable, at your own rate.',
+    },
     features: [
       {
         n: '01',
@@ -162,6 +180,10 @@ export const SEGMENTS: Segment[] = [
         title: 'Shared Horizon access',        body: 'The whole team sources from the same vetted supplier list — no agent working off an outdated contact sheet.',
       },
     ],
+    close: {
+      before: 'Each agent used to keep their own files.',
+      after: 'Now the whole team works one pipeline.',
+    },
     features: [
       { n: '01', name: 'CRM access', body: 'Every agent, every trip, one stage engine.' },
       {
@@ -209,6 +231,10 @@ export const SEGMENTS: Segment[] = [
         title: 'Get paid without chasing',        body: 'Structured payment instructions on every magic link, all tiers.',
       },
     ],
+    close: {
+      before: 'You used to be the system, on your own.',
+      after: 'Now the system runs, and you decide.',
+    },
     features: [
       { n: '01', name: 'CRM access', body: 'Your whole client book, one stage engine.' },
       { n: '02', name: 'Magic link creation', body: 'Proposal and itinerary links, sent to travellers or suppliers.' },
@@ -248,6 +274,10 @@ export const SEGMENTS: Segment[] = [
         title: 'Solo-scale automation',        body: 'Autopilot does the coordination work a small team would otherwise handle.',
       },
     ],
+    close: {
+      before: 'Working alone used to mean doing it all.',
+      after: 'Now the chasing is done for you.',
+    },
     features: [
       {
         n: '01',
@@ -296,6 +326,10 @@ export const SEGMENTS: Segment[] = [
         title: 'Free, with real room to grow',        body: 'Most creators never need to leave Showcase — 20 trips/mo goes a long way.',
       },
     ],
+    close: {
+      before: 'An audience used to turn into a DM pile.',
+      after: 'Now every inquiry lands as a trip.',
+    },
     features: [
       {
         n: '01',
@@ -334,6 +368,10 @@ export const SEGMENTS: Segment[] = [
         title: 'Intelligence, when ready',        body: 'Atlas-assisted quoting from your own contracted rates, on your terms.',
       },
     ],
+    close: {
+      before: 'Requests used to arrive in five formats.',
+      after: 'Now they arrive in one, ready to quote.',
+    },
     features: [
       { n: '01', name: 'CRM access', body: 'Organise every inbound request in one place, free.' },
       { n: '02', name: 'Listed on Horizon', body: 'Discoverable by every agency searching the network.' },
@@ -376,6 +414,10 @@ export const SEGMENTS: Segment[] = [
         title: 'Listed on Horizon',        body: 'Discoverable by agencies sourcing packaged tours, at no cost.',
       },
     ],
+    close: {
+      before: 'Departures used to live in a spreadsheet.',
+      after: 'Now each one is a record that runs itself.',
+    },
     features: [
       { n: '01', name: 'CRM access', body: 'Every request and quote, tracked in one place.' },
       {
