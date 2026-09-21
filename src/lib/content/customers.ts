@@ -189,7 +189,7 @@ export const SEGMENTS: Segment[] = [
       {
         n: '02',
         name: 'Logo & branding toggle',
-        body: "One brand identity across the whole team's client-facing links.",
+        body: "One brand identity across the whole team’s client-facing links.",
       },
       {
         n: '03',
@@ -259,7 +259,7 @@ export const SEGMENTS: Segment[] = [
     name: 'Independent advisors',
     eyebrow: 'Customers — Resellers — Independent advisors',
     title: 'Look like a full agency, without the overhead.',
-    lede: "Your own brand on every client touchpoint, a supplier network you didn't have to build yourself, and nothing that requires a team to run.",
+    lede: "Your own brand on every client touchpoint, a supplier network you didn’t have to build yourself, and nothing that requires a team to run.",
     reasons: [
       {
         icon: 'brand',
@@ -353,7 +353,7 @@ export const SEGMENTS: Segment[] = [
     name: 'DMCs',
     eyebrow: 'Customers — Suppliers — DMCs',
     title: 'Reply your way, get discovered as the network grows.',
-    lede: "A free CRM for the requests you're already getting — not a pitch about discovery, since that takes volume we don't have yet.",
+    lede: "A free CRM for the requests you’re already getting — not a pitch about discovery, since that takes volume we don’t have yet.",
     reasons: [
       {
         icon: 'board',

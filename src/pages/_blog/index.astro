@@ -22,7 +22,7 @@ const fmt = (d: Date) =>
   d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
 /* Every post after the featured one is a card in one grid (Sep 2026,
-   founder's ask, after harvey.ai): the split that put three in a grid and
+   founder’s ask, after harvey.ai): the split that put three in a grid and
    the rest in a row list gave the page two different shapes for the same
    thing. */
 const [featured, ...rest] = posts;
@@ -33,7 +33,7 @@ const cats = ['All', ...Array.from(new Set(posts.map((p) => p.data.cat)))];
 
 <Base
   title="Resources"
-  description="Product updates, pilot progress, and what we're learning about automation in travel."
+  description="Product updates, pilot progress, and what we’re learning about automation in travel."
   currentNav="blog"
 >
   <div class="sec wrap bx-head">

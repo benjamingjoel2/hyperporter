@@ -431,7 +431,7 @@ export const TOOLS: DetailPage[] = [
 
 /* Integrations: the channels your travellers and suppliers already use,
    connected onto the trip thread. WhatsApp moved out of Tools when the
-   Integrations menu was added (Sep 2026, founder's ask); /tools/whatsapp-integration
+   Integrations menu was added (Sep 2026, founder’s ask); /tools/whatsapp-integration
    redirects to its new home. */
 export const INTEGRATIONS: DetailPage[] = [
   {

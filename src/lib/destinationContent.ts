@@ -10,7 +10,7 @@
 
 export const SERVICES: [title: string, body: string][] = [
   ['Popular Itineraries', 'Access our library of pre-made packages that you can start selling right away.'],
-  ['Bespoke Trips', "Simply forward us your client's inquiry and we'll execute every detail."],
+  ['Bespoke Trips', "Simply forward us your client’s inquiry and we’ll execute every detail."],
   ['Transportation', 'Airport pickups, trusted drivers, intercity transfers and flexible car hire.'],
   ['Accommodation', 'Special B2B rates and partner perks from our curated list of hotels.'],
   ['Concierge', 'Dedicated end-to-end support for your VIPs, handled over WhatsApp.'],

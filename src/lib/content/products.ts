@@ -36,8 +36,8 @@ export interface Product {
   n: string;
   name: string;
   /** Plain-English name for the layer where it is listed as a category —
-      the homepage ladder and /product (Sep 2026, founder's rename). The
-      product name itself stays on the layer's own page and in the copy. */
+      the homepage ladder and /product (Sep 2026, founder’s rename). The
+      product name itself stays on the layer’s own page and in the copy. */
   label: string;
   eyebrow: string;
   /** Short line for the ladder on /product. */
@@ -73,7 +73,7 @@ export const PRODUCTS: Product[] = [
       {
         n: '02',
         name: 'Magic links',
-        body: "The core of how trips move — a single link per trip that's customer-facing on one side and supplier-facing on the other, always in sync, no manual duplication.",
+        body: "The core of how trips move — a single link per trip that’s customer-facing on one side and supplier-facing on the other, always in sync, no manual duplication.",
       },
       {
         n: '03',
@@ -92,7 +92,7 @@ export const PRODUCTS: Product[] = [
         kind: 'Case — Travel agency',
 
         title: 'Coordinating a trip without a shared inbox.',
-        body: "An agent runs everything through the CRM — inquiry in, magic link out to both the traveller and the DMC, proposal generated straight from the same data. No spreadsheet, no copy-pasting between three apps. Once volume picks up, the manual back-and-forth is the bottleneck — that's what Autopilot automates. And if the agency doesn't have a supplier list yet, Horizon gives them one, free, on Showcase.",
+        body: "An agent runs everything through the CRM — inquiry in, magic link out to both the traveller and the DMC, proposal generated straight from the same data. No spreadsheet, no copy-pasting between three apps. Once volume picks up, the manual back-and-forth is the bottleneck — that’s what Autopilot automates. And if the agency doesn’t have a supplier list yet, Horizon gives them one, free, on Showcase.",
       },
       {
         kind: 'Case — Supplier / DMC',
@@ -118,7 +118,7 @@ export const PRODUCTS: Product[] = [
     eyebrow: 'Product — Autopilot',
     availability: 'From Autopilot',
     summary:
-      "Communication automation — inquiry through booking, automated based on what's actually being said. Two-sided workflows only, with human escalation built in.",
+      "Communication automation — inquiry through booking, automated based on what’s actually being said. Two-sided workflows only, with human escalation built in.",
     title: 'Automation that still knows when to stop.',
     lede: 'Full nine-stage automation, from Inquiry through Post-Trip — with human escalation points built in by design, not bolted on.',
     /* No feature list: /autopilot renders all nine stages off STAGES in the
@@ -131,7 +131,7 @@ export const PRODUCTS: Product[] = [
         kind: 'Case — Travel agency',
 
         title: 'Same agency, three weeks later.',
-        body: "An agency running 20 trips a month on Portal alone hits a ceiling — every reprice, every confirmation chase, every status update is a human doing it manually. Autopilot doesn't change what they offer travellers, it changes how much of it one person can run at once.",
+        body: "An agency running 20 trips a month on Portal alone hits a ceiling — every reprice, every confirmation chase, every status update is a human doing it manually. Autopilot doesn’t change what they offer travellers, it changes how much of it one person can run at once.",
       },
     ],
     next: {
@@ -163,7 +163,7 @@ export const PRODUCTS: Product[] = [
       {
         n: '02',
         name: 'Memory',
-        body: "Carries forward your quoting style, preferred suppliers, and traveller preferences — so Atlas isn't re-taught from scratch on every trip.",
+        body: "Carries forward your quoting style, preferred suppliers, and traveller preferences — so Atlas isn’t re-taught from scratch on every trip.",
       },
       {
         n: '03',
@@ -178,7 +178,7 @@ export const PRODUCTS: Product[] = [
       {
         n: '05',
         name: 'AI itinerary suggestions',
-        body: "Proposes day-by-day structure from your own suppliers and past itineraries, and Memory of what's worked before.",
+        body: "Proposes day-by-day structure from your own suppliers and past itineraries, and Memory of what’s worked before.",
       },
       {
         n: '06',
@@ -192,13 +192,13 @@ export const PRODUCTS: Product[] = [
         kind: 'Case — Travel agency',
 
         title: 'Quoting from your own negotiated rates, not a guess.',
-        body: "An agency with years of DMC contracts stops re-reading PDFs for every quote — Atlas drafts from the actual contracted rate, remembers the agency's preferred suppliers, and proposes itineraries structured like the ones that already worked.",
+        body: "An agency with years of DMC contracts stops re-reading PDFs for every quote — Atlas drafts from the actual contracted rate, remembers the agency’s preferred suppliers, and proposes itineraries structured like the ones that already worked.",
       },
       {
         kind: 'Case — Supplier / DMC',
 
         title: 'AI-assisted quoting, from rates only you have.',
-        body: "A DMC's own rate sheets and seasonal pricing become the source Atlas quotes from — not a generic estimate, and not visible to any other DMC on the network.",
+        body: "A DMC’s own rate sheets and seasonal pricing become the source Atlas quotes from — not a generic estimate, and not visible to any other DMC on the network.",
       },
     ],
     next: {
@@ -283,8 +283,8 @@ export const AUTOPILOT_TARGETS: { metric: string; before: string; after: string 
  * from it, not a product they open.
  */
 /** The homepage's "Why Hyperporter" band: four points along a trip rather
-    than the four layers (Sep 2026, founder's rename); the terminology rules hold — Portal is the platform,
-    Atlas answers from the account's own Vault, escalation is designed in,
+    than the four layers (Sep 2026, founder’s rename); the terminology rules hold — Portal is the platform,
+    Atlas answers from the account’s own Vault, escalation is designed in,
     Horizon is a list and the supplier keeps their full rate. */
 export const WHY: { name: string; body: string }[] = [
   {
