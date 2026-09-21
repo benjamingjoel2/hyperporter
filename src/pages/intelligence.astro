@@ -9,19 +9,17 @@ import Base from '../layouts/Base.astro';
 import ProductPage from '../components/ProductPage.astro';
 import Mockup from '../components/Mockup.astro';
 import { byProduct } from '../lib/content/products';
-import { photoFor } from '../lib/photos';
 
 const product = byProduct('intelligence');
-const photo = photoFor('atlas-ai', 'intelligence');
 ---
 
 <Base
   title="Intelligence"
   description="An AI layer trained on your own contracts, rates and history — queryable, quotable, and able to suggest full itineraries."
   currentNav="product"
-  v2
 >
-  <ProductPage product={product} photo={photo}>
+  <ProductPage product={product} photoHero>
+    <img slot="hero-bg" class="p-photo-bg" src="/hero.jpg" alt="" />
     <Fragment slot="hero-aside">
       <Mockup screen="atlas" />
     </Fragment>

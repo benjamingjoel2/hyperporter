@@ -8,9 +8,6 @@
  */
 import Base from '../layouts/Base.astro';
 import Mockup from '../components/Mockup.astro';
-import V2Hero from '../components/V2Hero.astro';
-import CtaBand from '../components/CtaBand.astro';
-import '../styles/v2.css';
 ---
 
 <Base
@@ -18,48 +15,45 @@ import '../styles/v2.css';
   description="Hyperporter was built by people who've coordinated trips the old way — we think that work should run itself, with a human only where real judgment is needed."
   currentNav="about"
   noindex
-  v2
 >
-  <V2Hero
-    eyebrow="About"
-    title="We used to run this by hand too."
-    lede="Hyperporter was built by people who've coordinated trips the old way — chasing DMCs over email, relaying WhatsApp messages between travellers and drivers, rebuilding the same itinerary PDF for the fifth time."
-    light
-    noCta
-  >
-    <p slot="under" class="mission">
-      Every trip involves the same coordination work, repeated by hand, agency by agency. We think
-      that work should run itself — with a human only where real judgment is needed.
-    </p>
-    <Fragment slot="aside"><Mockup screen="relay" /></Fragment>
-  </V2Hero>
-  {/* The three bios are still placeholders, carried over visibly rather
-      than quietly invented. The page is noindex until real ones land —
-      see CLAUDE.md's known gaps. */}
-  <section class="v-light v-band">
-    <div class="v-wrap">
-      <div class="v-lead">
-        <span class="v-eyebrow">Team</span>
-        <h2 class="v-disp"><b>The people behind it.</b></h2>
+  <div class="sec wrap page-hero">
+    <div class="page-hero-copy">
+
+      <p class="eyebrow rv">About</p>
+      <h1 class="rv">We used to run this<br />by hand too.</h1>
+      <p class="lede rv">
+        Hyperporter was built by people who've coordinated trips the old way — chasing DMCs over email, relaying
+        WhatsApp messages between travellers and drivers, rebuilding the same itinerary PDF for the fifth time.
+      </p>
+      <p class="mission rv">
+        Every trip involves the same coordination work, repeated by hand, agency by agency. We think that work should
+        run itself — with a human only where real judgment is needed.
+      </p>
+    </div>
+    <Mockup screen="relay" />
+  </div>
+  <div class="sec-tight wrap">
+    <p class="eyebrow rv">Team</p>
+    <div class="team rv">
+      <div class="tcell">
+        <div class="av"></div>
+        <div class="role">Founder / CEO</div>
+        <h3>Name pending</h3>
+        <p>Placeholder bio — replace before this page goes live publicly.</p>
       </div>
-      <div class="v-inds v-cols">
-        {
-          ['Founder / CEO', 'Co-founder / CTO', 'Co-founder / Operations'].map((role) => (
-            <div class="v-ind">
-              <span class="v-eyebrow">{role}</span>
-              <h3>Name pending</h3>
-              <p>Placeholder bio — replace before this page goes live publicly.</p>
-            </div>
-          ))
-        }
+      <div class="tcell">
+        <div class="av"></div>
+        <div class="role">Co-founder / CTO</div>
+        <h3>Name pending</h3>
+        <p>Placeholder bio — replace before this page goes live publicly.</p>
+      </div>
+      <div class="tcell">
+        <div class="av"></div>
+        <div class="role">Co-founder / Operations</div>
+        <h3>Name pending</h3>
+        <p>Placeholder bio — replace before this page goes live publicly.</p>
       </div>
     </div>
-  </section>
-
-  <CtaBand
-    before="Travel used to run on inboxes and goodwill."
-    after="Now it runs on infrastructure."
-    cta="Sign up"
-  />
-
+    <div style="margin-top:52px"><a class="btn rv" href="https://portal.hyperporter.com">Sign up →</a></div>
+  </div>
 </Base>

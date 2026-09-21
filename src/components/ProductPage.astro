@@ -1,97 +1,82 @@
 ---
 /**
- * Shared shape for the product pages, in the founder's v2 composition
- * (Sep 2026): the dark photographic hero with the screen beside it, a light
- * band of what the layer does, a dark band of the two segments as panels
- * that open, and the closing band pointing at the next layer.
+ * Shared shape for the four product pages. Each one is a hero, a numbered
+ * feature list, optional cases, and a link forward to the next layer.
  *
- * The content is unchanged — same eyebrow, same title, same lede, same
- * features and cases, same next-up — and the three slots are still here, so
- * a page that carries something of its own (Autopilot's nine stages,
- * Horizon's fee explanation) drops it in where it always did.
- *
- * Slotted markup written before the v2 pass still renders as it did: the
- * design's element reset is written with :where(), which loses every tie
- * with global.css.
+ * Autopilot and Horizon carry extras the others don't — the pilot targets
+ * table and the supplier types / fee explanation — so both are slots rather
+ * than fields on the product, which would leave two nulls on every other page.
  */
 import type { Product } from '../lib/content/products';
-import type { Photo } from '../lib/photos';
-import '../styles/v2.css';
 
 interface Props {
   product: Product;
-  /** The page's own photograph, behind the hero. */
-  photo?: Photo;
+  /** Open on a photograph, homepage-style; the page passes the image in `hero-bg`. */
+  photoHero?: boolean;
+  /** The photograph runs on under `after-hero` as a sticky full-viewport
+      image the band scrolls over — /autopilot's stage band. Without it the
+      photograph is the hero's own size and stops with it. */
+  photoSpan?: boolean;
 }
 
-const { product, photo } = Astro.props;
+const { product } = Astro.props;
 const { eyebrow, title, lede, features, featuresTitle, cases, casesTitle, next } = product;
 
+// A page can put something beside its hero — Autopilot puts the sample
+// thread there. Without it the hero stays a single column, so the other
+// three product pages are unaffected.
 const hasAside = Astro.slots.has('hero-aside');
+const { photoHero = false, photoSpan = false } = Astro.props;
 
-/**
- * The design sets a display heading in two tones: the statement, then the
- * part that qualifies it, sitting back. Our titles are written as one line,
- * so the break is taken where the sentence already breaks — a second
- * sentence first, then a comma. A title with neither stays on one line,
- * which the design also allows.
- */
-const twoTone = (t: string): string[] => {
-  const s = t.match(/^(.*?[.?!])\s+(\S.*)$/);
-  if (s) return [s[1], s[2]];
-  const c = t.match(/^(.*,)\s+(\S.*)$/);
-  if (c) return [c[1], c[2]];
-  return [t];
-};
-const [lead, rest] = twoTone(title);
-
-/** An id per feature, from its name, so the nav can link straight to one. */
+// An id per feature, from its name, so the nav can link straight to one.
 const anchor = (name: string): string => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 ---
 
-<section class="v-hero" data-chrome="dark">
-  {photo && <div class="v-hero-bg" style={`background-image:url(${photo.src})`} />}
-  <div class="v-wrap">
-    <div class:list={['v-hero-grid', { 'v-solo': !hasAside }]}>
+{/* `photoHero` puts the hero and whatever follows it in `after-hero` on one
+    photograph, the way the homepage opens — the page supplies the image in
+    `hero-bg`. Without it this wrapper is an unstyled div. */}
+<div class:list={['p-top', { 'p-top-photo': photoHero, 'p-top-fit': photoHero && !photoSpan }]} data-chrome={photoHero ? 'dark' : undefined}>
+  {photoHero && <slot name="hero-bg" />}
+  <div class="sec wrap">
+    <div class:list={['p-hero', { 'p-hero-split': hasAside }]}>
       <div>
-        <span class="v-eyebrow">{eyebrow}</span>
-        <h1 class="v-disp"><b>{lead}</b>{rest && <i>{rest}</i>}</h1>
-        <p class="v-sub">{lede}</p>
-        <div class="v-cta">
-          <a class="v-pill" href="https://portal.hyperporter.com">Get started free</a>
-          <a class="v-pill-o" href="/pricing">See pricing</a>
-        </div>
+        <p class="eyebrow rv">{eyebrow}</p>
+        <h1 class="rv">{title}</h1>
+        <p class="lede rv" style="margin-bottom:0">{lede}</p>
       </div>
       {hasAside && (
-        <div class="v-hero-aside">
+        <div class="p-hero-aside rv">
           <slot name="hero-aside" />
         </div>
       )}
     </div>
   </div>
-</section>
 
-<slot name="after-hero" />
+  {/* Only a spanning photograph keeps what follows the hero on it. */}
+  {photoSpan && <slot name="after-hero" />}
+</div>
+
+{!photoSpan && <slot name="after-hero" />}
 
 {
+  /* A product whose page shows its own list some other way passes none —
+     /autopilot draws the nine stages off STAGES, and this list repeated
+     five of them a screen further down. */
   features.length > 0 && (
-    <section class="v-light v-band">
-      <div class="v-wrap">
-        <div class="v-lead">
-          <span class="v-eyebrow">What it does</span>
-          {featuresTitle && <h2 class="v-disp"><b>{twoTone(featuresTitle)[0]}</b>{twoTone(featuresTitle)[1] && <i>{twoTone(featuresTitle)[1]}</i>}</h2>}
-        </div>
-        <div class="v-inds v-cols">
-          {features.map((f) => (
-            <div class="v-ind" id={anchor(f.name)}>
-              <span class="v-eyebrow">{f.n}</span>
-              <h3>{f.name}</h3>
+    <div class="sec-tight wrap">
+      {featuresTitle && <h2 class="rv">{featuresTitle}</h2>}
+      <div class="flist rv">
+        {features.map((f) => (
+          <div class="fitem" id={anchor(f.name)}>
+            <div class="fn">{f.n}</div>
+            <div>
+              <b>{f.name}</b>
               <p>{f.body}</p>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-    </section>
+    </div>
   )
 }
 
@@ -99,41 +84,30 @@ const anchor = (name: string): string => name.toLowerCase().replace(/[^a-z0-9]+/
 
 {
   cases.length > 0 && (
-    <section class="v-dark v-band" data-chrome="dark">
-      <div class="v-wrap">
-        <div class="v-center">
-          <span class="v-eyebrow">On the ground</span>
-          {casesTitle && <h2 class="v-disp"><b>{twoTone(casesTitle)[0]}</b>{twoTone(casesTitle)[1] && <i>{twoTone(casesTitle)[1]}</i>}</h2>}
-        </div>
-        <div class="v-cases" data-cases>
-          {cases.map((c, i) => (
-            <div class:list={['v-case', { 'v-open': i === 0 }]}>
-              <span class="v-mk">{c.kind}</span>
-              <div class="v-body">
-                <blockquote>{c.title}</blockquote>
-                <p class="v-att">{c.body}</p>
-              </div>
-              <button class="v-exp" type="button" aria-label={`Read: ${c.title}`}>+</button>
-            </div>
-          ))}
-        </div>
+    <div class="sec-tight wrap">
+      {casesTitle && <h2 class="rv">{casesTitle}</h2>}
+      <div class="cases rv">
+        {cases.map((c) => (
+          <div class="case">
+            <div class="kind">{c.kind}</div>
+            <h3>{c.title}</h3>
+            <p>{c.body}</p>
+          </div>
+        ))}
       </div>
-    </section>
+    </div>
   )
 }
 
 <slot name="after-cases" />
 
-<div class="v-bigcta" data-chrome="dark">
-  <div class="v-wrap">
+<div class="sec-tight wrap">
+  <div class="nextup rv">
     <div>
-      <span class="v-eyebrow">{next.eyebrow}</span>
-      <h2>{next.title}</h2>
+      <p class="eyebrow" style="margin-bottom:0">{next.eyebrow}</p>
+      <h3>{next.title}</h3>
+      <p>{next.desc}</p>
     </div>
-    <a class="v-pill" href={next.href}>{next.cta} &rarr;</a>
+    <a class="plink" href={next.href}>{next.cta} &rarr;</a>
   </div>
 </div>
-
-<script>
-  import '../lib/v2';
-</script>

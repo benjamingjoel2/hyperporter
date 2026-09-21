@@ -1,60 +1,80 @@
 ---
 /**
- * Homepage, in the founder's v2 design (Sep 2026).
+ * Homepage, on the legora.com design direction.
  *
- * The composition comes from the design file the founder supplied, which is
- * kept whole at public/preview/v2.html: a dark photographic hero with the
- * two-tone serif headline and the trip thread beside it, a strip of where we
- * operate, then alternating light and dark bands — the stat row, the product
- * band that pins while its three panels are swapped, the two sides of the
- * market, every tool and every automation, the channels, and the close.
+ * Structure and every spacing value came from measuring the reference at
+ * 1440px rather than eyeballing it; the numbers are noted in
+ * src/styles/legora-home.css at the rule that uses them. The shape, in
+ * order: a 100vh photographic hero with the headline at 87% down, a
+ * full-viewport band of the nine stages, the four layers as 4:5 portrait
+ * cards, the two sides of the market as a pair of cards, the four boxes and the close. The reference's statement
+ * block, carousel, gallery, interstitial, stat rows and vision block were
+ * removed (Sep 2026) at the founder's instruction.
  *
- * The content is the site's own and has not been rewritten: PRODUCTS, WHY,
- * TOOLS, AUTOMATIONS and the integration cards, same as before. The header
- * and footer are the site's, unchanged — same items, same mega panels.
+ * Content comes from the content modules, as everywhere else on this site —
+ * PRODUCTS and WHY — so
+ * the page stays thin and cannot drift from /product, /autopilot or
+ * /security.
  *
- * The design's CSS is ported verbatim to src/styles/v2home.css, scoped under
- * `.v2` so it governs this page without reaching the rest of the site.
+ * Two of the reference's sections have no honest equivalent here and are
+ * handled rather than faked: its "Trusted by" logo wall is omitted, since
+ * there are no named customers at pilot stage; and the security cards carry real
+ * status instead of certification seals — SOC 2 and GDPR are targeted
+ * post-pilot, not held. Do not turn that last one into a seal.
  */
 import Base from '../layouts/Base.astro';
 import { PRODUCTS, WHY } from '../lib/content/products';
 import { NAV } from '../lib/content/nav';
+import { AUTOMATION_HEADLINE } from '../lib/content/rails';
 import { photoFor } from '../lib/photos';
+import { navIcon } from '../lib/navIcons';
 import { TOOLS, AUTOMATIONS } from '../lib/content/detail';
 import Mockup from '../components/Mockup.astro';
-import '../styles/v2.css';
 
-/** The screen each layer shows — the part of the interface that layer is. */
-const CARD_SCREEN: Record<string, string> = {
-  portal: 'crm', autopilot: 'pipeline', intelligence: 'atlas', horizon: 'horizon',
+// The screen each layer shows — the part of the interface that layer is.
+const CARD_SCREEN: Record<string, string> = { portal: 'crm', autopilot: 'pipeline', intelligence: 'atlas', horizon: 'horizon', integrations: 'integrations' };
+
+/* The ladder: the four layers, and under them the channels an account
+   connects. Integration is not a fifth layer and has no page of its own,
+   so it carries no "Learn more". */
+/* Everything in one place, as a carousel: every tool and every automation
+   as a card — its layer, its name, the menu's one line, and its own screen.
+   Names and lines come from nav.ts so the section cannot drift from the
+   menu; the screen comes from detail.ts, matched on the page's slug. The
+   Automations "Overview" row points at /autopilot, a layer page rather
+   than an automation, so it is not a card. */
+const DETAIL_BY_SLUG = new Map([...TOOLS, ...AUTOMATIONS].map((d) => [d.slug, d]));
+
+const cardsFor = (id: 'tools' | 'automations') => {
+  const nav = NAV.find((n) => n.id === id)!;
+  return (nav.groups ?? []).flatMap((g) => g.items)
+    .filter((i) => i.href !== '/autopilot')
+    .map((i) => {
+      const slug = i.href.split('/').pop()!;
+      const d = DETAIL_BY_SLUG.get(slug);
+      if (!d) throw new Error(`Homepage carousel: no detail page for "${slug}".`);
+      const headline = AUTOMATION_HEADLINE[slug];
+      if (id === 'automations' && !headline) throw new Error(`Homepage carousel: no headline for automation "${slug}".`);
+      return {
+        kind: id === 'tools' ? 'Tool' : 'Automation',
+        label: i.label, desc: i.desc, href: i.href, screen: d.screen, overview: d.overview,
+        headline, photo: photoFor(slug).src,
+      };
+    });
 };
 
-/** The two sides of the market, as on the live site — same names, same
-    lines, same links, and the same screen beside each. */
-const SIDES = [
-  {
-    name: 'For Resellers',
-    line: 'Travel agencies, independent advisors, content creators — coordinate your traveller and your supplier in one thread, not three apps.',
-    href: '/customers/agent-portal',
-    cta: 'Explore Hyperporter for Resellers',
-    screen: 'reseller',
-  },
-  {
-    name: 'For Suppliers',
-    line: 'DMCs and tour operators — organise inbound requests and quote from one place, free from day one, keeping your full quoted rate on every booking.',
-    href: '/customers/supplier-portal',
-    cta: 'Explore Hyperporter for Suppliers',
-    screen: 'supplier',
-  },
-];
-
-/** The channels, as on the live site. */
+/* One rail each (Sep 2026, founder's ask). Sixteen cards on a single rail
+   asked the reader to scroll past the tools to reach the automations; two
+   rails let them start at whichever they came for. */
+/* The Integrations carousel (Sep 2026, founder's ask, after apple.com's
+   Connectivity section): a wide screen per card with its caption under it,
+   not inside it. Three cards, so it is a rail rather than a grid. */
 const CONNECT = [
   {
     photo: '/photos/connect-whatsapp.jpg',
-    alt: 'A traveller’s WhatsApp thread with a hotel, open on a phone.',
+    alt: 'A traveller\u2019s WhatsApp thread with a hotel, open on a phone.',
     lead: 'WhatsApp integration.',
-    rest: 'The real Business API connected to your account — a traveller’s message lands on the trip thread, and your reply goes back to their phone.',
+    rest: 'The real Business API connected to your account — a traveller\u2019s message lands on the trip thread, and your reply goes back to their phone.',
     cta: 'Learn more about WhatsApp',
     href: '/integrations/whatsapp',
   },
@@ -70,257 +90,485 @@ const CONNECT = [
     photo: '/photos/connect-horizon.jpg',
     alt: 'The earth at night from orbit, city lights strung across the dark.',
     lead: 'Horizon.',
-    rest: 'A vetted list of DMCs and tour operators to source from — see who covers a destination, and what they reply like, before you quote.',
+    rest: 'A vetted list of DMCs and tour operators to source from \u2014 see who covers a destination, and what they reply like, before you quote.',
     cta: 'Learn more about Horizon',
     href: '/horizon',
   },
 ];
 
-/** Tool and automation cards, from the menu, so they cannot drift from it. */
-const menuItems = (id: string) =>
-  (NAV.find((n) => n.id === id)?.groups ?? []).flatMap((g) => g.items).filter((i) => i.href !== '/autopilot');
-const toolCards = menuItems('tools');
-const autoCards = menuItems('automations').map((i) => ({ ...i, photo: photoFor(i.href.split('/').pop()!).src }));
+const RAILS = [
+  { id: 'tools', variant: 'icon', title: 'Every tool.', line: 'The interface you work in, from inquiry to invoice.', href: '/tools', cta: 'All tools', cards: cardsFor('tools') },
+  { id: 'automations', variant: 'photo', title: 'Every automation.', line: 'The steps that run on their own — and the ones a person still takes.', href: '/automations', cta: 'All automations', cards: cardsFor('automations') },
+];
 
-/** Where Horizon reaches, for the strip under the hero. */
-const OPERATING = ['Kenya', 'Morocco', 'Peru', 'Japan', 'Portugal', 'Vietnam'];
+const LAYERS = [
+  ...PRODUCTS.map((p) => ({ slug: p.slug, label: p.label, availability: p.availability, summary: p.summary, href: `/${p.slug}` })),
+  {
+    slug: 'integrations',
+    label: 'Integration',
+    availability: 'From Autopilot',
+    summary:
+      'WhatsApp Business and email connected onto the same trip thread, and magic links that need no connecting at all — your travellers and suppliers keep the channel they already use.',
+    href: '',
+  },
+];
+import '../styles/legora-home.css';
+
+/** Who it is for: the two sides of the market, in the reference's pair of
+    cards — the name, one line and a link, and a screen of the side of the
+    product that side lives in. */
+const SIDES = [
+  {
+    side: 'reseller',
+    name: 'For Resellers',
+    line: 'Travel agencies, independent advisors, content creators — coordinate your traveller and your supplier in one thread, not three apps.',
+    href: '/customers/agent-portal',
+    cta: 'Explore Hyperporter for Resellers',
+    screen: 'reseller',
+  },
+  {
+    side: 'supplier',
+    name: 'For Suppliers',
+    line: 'DMCs and tour operators — organise inbound requests and quote from one place, free from day one, keeping your full quoted rate on every booking.',
+    href: '/customers/supplier-portal',
+    cta: 'Explore Hyperporter for Suppliers',
+    screen: 'supplier',
+  },
+];
+
 ---
 
 <Base
   title="Home"
   description="Travel operations infrastructure — one connected system for agencies, DMCs and tour operators."
   currentNav="home"
-  v2
 >
-  {/* ---------------------------------------------------------- HERO */}
-  <section class="v-hero" data-chrome="dark">
-    <div class="v-hero-bg" style="background-image:url(/hero.jpg)"></div>
-    <div class="v-wrap">
-      <div class="v-hero-grid">
-        <div>
-          <span class="v-badge"><b>New</b> Horizon reaches 130+ countries</span>
-          <h1 class="v-disp"><b>Run your trips</b><i>on Autopilot.</i></h1>
-          <p class="v-sub">
-            AI-powered operating system for travel agencies, DMCs, and tour operators.
-          </p>
-          <div class="v-cta">
-            <a class="v-pill" href="https://portal.hyperporter.com">Get started free</a>
-            <a class="v-pill-o" href="/product">See the whole system</a>
-          </div>
+  {/* Base.astro supplies <main>; this is a plain wrapper. */}
+  <div class="lg-home">
+    <section class="lg-hero" data-chrome="dark">
+      <img
+        class="lg-hero-img"
+        src="/hero.jpg"
+        alt="Aerial view of a mountain range at dawn, cloud filling the valleys below the ridgelines."
+      />
+    <svg class="routes" viewBox="0 0 1400 760" preserveAspectRatio="xMidYMid slice">
+      <g class="grat">
+        <path d="M-50 200 Q700 120 1450 200"></path><path d="M-50 330 Q700 240 1450 330"></path>
+        <path d="M-50 460 Q700 380 1450 460"></path><path d="M-50 590 Q700 520 1450 590"></path>
+        <path d="M180 -20 Q120 380 180 780"></path><path d="M480 -20 Q440 380 480 780"></path>
+        <path d="M780 -20 Q760 380 780 780"></path><path d="M1080 -20 Q1090 380 1080 780"></path>
+      </g>
+      <g>
+        <path class="arc" d="M170 520 Q520 190 880 300"></path>
+        <path class="arc" d="M880 300 Q1080 200 1290 420"></path>
+        <path class="arc" d="M330 240 Q640 430 1010 210"></path>
+        <path class="arc" d="M170 520 Q560 640 1010 560"></path>
+        <path class="arc-lit" d="M170 520 Q520 190 880 300" style="animation-delay:0s"></path>
+        <path class="arc-lit" d="M880 300 Q1080 200 1290 420" style="animation-delay:2.4s"></path>
+        <path class="arc-lit" d="M330 240 Q640 430 1010 210" style="animation-delay:4.6s"></path>
+        <path class="arc-lit" d="M170 520 Q560 640 1010 560" style="animation-delay:6.5s"></path>
+      </g>
+      <g>
+        <circle class="wp-ring" cx="170" cy="520" r="9"></circle><circle class="wp" cx="170" cy="520" r="3"></circle>
+        <circle class="wp-ring" cx="880" cy="300" r="9"></circle><circle class="wp" cx="880" cy="300" r="3"></circle>
+        <circle class="wp-ring" cx="1290" cy="420" r="9"></circle><circle class="wp" cx="1290" cy="420" r="3"
+        ></circle>
+        <circle class="wp-ring" cx="330" cy="240" r="9"></circle><circle class="wp" cx="330" cy="240" r="3"></circle>
+        <circle class="wp-ring" cx="1010" cy="210" r="9"></circle><circle class="wp" cx="1010" cy="210" r="3"
+        ></circle>
+        <circle class="wp-ring" cx="1010" cy="560" r="9"></circle><circle class="wp" cx="1010" cy="560" r="3"
+        ></circle>
+      </g>
+    </svg>
+      <div class="lg-hero-veil"></div>
+      <div class="lg-hero-in">
+        <h1>Run your trips on Autopilot.</h1>
+        <div class="lg-hero-sub">
+          <span>AI-powered operating system for travel agencies, DMCs, and tour operators.</span>
+          <a class="btn btn-lg" href="https://portal.hyperporter.com">Get started free <i aria-hidden="true">&rarr;</i></a>
         </div>
+      </div>
+      <button class="lg-cue" id="lg-cue" type="button" aria-label="Scroll to content">&darr;</button>
+    </section>
 
-        <div class="v-phone">
-          <div class="v-screen">
-            <div class="v-ph-top">
-              <span class="v-av">HP</span>
-              <div><b>KE-2291 · Nairobi</b><span>traveller · agency · supplier</span></div>
-            </div>
-            <div class="v-ph-body">
-              <div class="v-bub v-sys">Inquiry arrived by email — contact and trip created</div>
-              <div class="v-bub"><span class="v-who">Rift Valley GS</span>Classic, 8 days. €4,180 per person.</div>
-              <div class="v-bub v-me"><span class="v-who">Autopilot</span>Re-checking availability before this goes to the traveller.</div>
-              <div class="v-bub v-sys">Availability re-verified · 12:41</div>
-              <div class="v-bub v-me"><span class="v-who">Autopilot</span>Proposal shared. Deposit requested for 14 Feb.</div>
-              <div class="v-bub v-sys v-amb">Payment waiting on a person</div>
-            </div>
-          </div>
+    <section class="lg-pipe-sec" id="stages" data-chrome="dark">
+      <div class="wrap">
+        <div class="lg-pipe-lead">
+          <p class="eyebrow rv">Why Hyperporter</p>
+          <h2 class="rv">Simplify your operations<br />from start to finish.</h2>
         </div>
+        <div class="lg-pipe rv">
+          <div class="lg-pipe-rail"><span aria-hidden="true"></span></div>
+          <ol class="lg-pipe-row">
+            {
+              WHY.map((m, i) => (
+                <li class="lg-pnode">
+                  <span class="lg-pdot" aria-hidden="true" />
+                  <h3>{m.name}</h3>
+                  <p>{m.body}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+        <a class="lg-read rv" href="/product">
+          <span aria-hidden="true">&#8627;</span> <span>See the whole system</span>
+        </a>
       </div>
-    </div>
+    </section>
 
-    <div class="v-strip">
-      <div class="v-wrap">
-        <span>Operating in</span>
-        {OPERATING.map((c) => <span>{c}</span>)}
-      </div>
-    </div>
-  </section>
-
-  {/* ------------------------------------------------ LIGHT: why + stats */}
-  <section class="v-light v-band" id="why">
-    <div class="v-wrap">
-      <div class="v-lead">
-        <span class="v-eyebrow">Why Hyperporter</span>
-        <h2 class="v-disp"><b>Simplify your operations</b><i>from start to finish.</i></h2>
-        <p>
-          Inquiry to arrival on one thread. The coordination runs on its own, and stops at
-          the points where a person is meant to decide.
-        </p>
-        <a class="v-pill-d" href="/product">See the whole system</a>
-      </div>
-      <div class="v-statrow" id="statrow">
-        <div><b class="v-mono">130+</b><span>Countries with a vetted supplier</span></div>
-        <div><b class="v-mono" data-to="9">0</b><span>Stages, inquiry to post-trip</span></div>
-        <div><b class="v-mono" data-to="1">0</b><span>Thread per trip, start to finish</span></div>
-      </div>
-
-      <div class="v-center" style="margin-top:clamp(56px,7vw,96px)">
-        <span class="v-eyebrow">The shape of a trip</span>
-        <h2 class="v-disp"><b>Four moments</b><i>every trip passes through</i></h2>
-        <p>Automated by default, human where it counts.</p>
-      </div>
-      <div class="v-inds v-cols">
-        {WHY.map((m) => (
-          <div class="v-ind">
-            <h3>{m.name}</h3>
-            <p>{m.body}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  {/* --------------------------------------------- DARK: the product, pinned */}
-  <section class="v-dark v-band" id="product" data-chrome="dark">
-    <div class="v-wrap">
-      <div class="v-center">
-        <span class="v-eyebrow">Product</span>
-        <h2 class="v-disp"><b>Four layers</b><i>on one record</i></h2>
-        <p>Business in the palm of your hand. Four toolkits, one platform, end to end.</p>
-        <a class="v-pill" href="/product">See the whole system</a>
-      </div>
-
-      <div class="v-prod-track" id="prodTrack" style={`--panels:${PRODUCTS.length}`}>
-        <div class="v-prod-stage">
-          <div class="v-prod">
-            {/* The layer list runs down the left as a numbered rail, the
-                active one carrying its own line — and the screen runs off
-                the right edge of the page rather than sitting in a frame
-                with room to spare around it. */}
-            <div class="v-sticky" id="sticky">
-              {PRODUCTS.map((p, i) => (
-                <a href={`#lay-${p.slug}`} class:list={{ 'v-on': i === 0 }}>
-                  <span class="v-n">{String(i + 1).padStart(2, '0')}</span>
-                  <span class="v-t">{p.label}</span>
-                </a>
-              ))}
-            </div>
-            <div id="feats" class="v-stack">
-              {
-                PRODUCTS.map((p) => (
-                  <div class="v-feat" id={`lay-${p.slug}`}>
-                    <div class="v-shot">
-                      <Mockup screen={CARD_SCREEN[p.slug]} ground="warm" app={p.label} />
-                    </div>
-                    <div class="v-copy">
-                      <div>
-                        <h3>{p.label}</h3>
-                        <p>{p.summary}</p>
-                      </div>
-                      <a class="v-pill" href={`/${p.slug}`}>Learn more</a>
+    <section class="lg-sec">
+      <div class="wrap">
+        <div class="lg-sec-lead">
+          <h2>Business in the palm of your hand.</h2>
+          <p class="dek">Four toolkits. One platform. End-to-end.</p>
+        </div>
+        {/* The reference's layout for this: a hairline list of the layers on
+            the left, one open with its description and link, and the matching
+            product snippet large on the right. All four snippets are rendered
+            and stacked in one cell, so a switch is a cross-fade rather than a
+            swap, and with JS off the page still shows the first layer. */}
+        <div class="lg-acc">
+          <div class="lg-acc-list">
+            {
+              LAYERS.map((p, i) => (
+                <div class:list={['lg-acc-item', { on: i === 0 }]}>
+                  <button
+                    type="button"
+                    class="lg-acc-btn"
+                    id={`layer-tab-${i}`}
+                    aria-expanded={i === 0 ? 'true' : 'false'}
+                    aria-controls={`layer-body-${i}`}
+                  >
+                    {p.label}
+                  </button>
+                  <div class="lg-acc-body" id={`layer-body-${i}`} inert={i !== 0}>
+                    <div>
+                      <span class="lg-avail">{p.availability}</span>
+                      <p>{p.summary}</p>
+                      {p.href && (
+                        <a class="lg-read" href={p.href} aria-label={`Learn more about ${p.label}`}>
+                          <span aria-hidden="true">&#8627;</span> <span>Learn more</span>
+                        </a>
+                      )}
                     </div>
                   </div>
-                ))
-              }
-            </div>
+                </div>
+              ))
+            }
+          </div>
+          <div class="lg-acc-shot lg-acc-ipad">
+            {
+              LAYERS.map((p, i) => (
+                <div id={`layer-shot-${i}`} class:list={{ on: i === 0 }} inert={i !== 0}>
+                  <Mockup screen={CARD_SCREEN[p.slug]} ground="warm" app={p.label} />
+                </div>
+              ))
+            }
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  {/* ------------------------------------------------ LIGHT: the two sides */}
-  <section class="v-light v-band" id="customers">
-    <div class="v-wrap">
-      <div class="v-lead">
-        <span class="v-eyebrow">Who it's for</span>
-        <h2 class="v-disp"><b>Tailored for</b><i>your operation</i></h2>
-        <p>
-          DMCs and tour operators — organise inbound requests and quote from one place, with
-          easily sharable proposal and support tools.
-        </p>
+    <section class="lg-sides" id="customers">
+      <div class="wrap">
+        <div class="lg-sides-head">
+          <h2>Tailored for your operation</h2>
+          <p>DMCs and tour operators — organise inbound requests and quote from one place, with easily sharable proposal and support tool.</p>
+        </div>
+        <div class="lg-sides-grid">
+          {
+            SIDES.map((g) => (
+              <div class="lg-side" data-side={g.side}>
+                <div class="lg-side-copy">
+                  <h2>{g.name}</h2>
+                  <p>{g.line}</p>
+                  <a class="lg-side-btn" href={g.href}>{g.cta}</a>
+                </div>
+                <div class="lg-side-shot">
+                  <Mockup screen={g.screen} />
+                </div>
+              </div>
+            ))
+          }
+        </div>
       </div>
-      <div class="v-inds v-cols">
-        {
-          SIDES.map((s) => (
-            <div class="v-ind">
-              <h3>{s.name}</h3>
-              <p>{s.line}</p>
-              <a class="v-pill-d" href={s.href}>{s.cta}</a>
-              <div class="v-shot"><Mockup screen={s.screen} /></div>
+    </section>
+
+    {/* Every tool and every automation, one rail each. */}
+    {
+      RAILS.map((r, i) => (
+        <section
+          class:list={['lg-cat', `lg-cat-${r.variant}`, i === RAILS.length - 1 && 'lg-cat-last']}
+          id={r.id === 'tools' ? 'everything' : 'every-automation'}
+        >
+          <div class="wrap lg-cat-head">
+            <div>
+              <h2>{r.title}</h2>
+              <p>{r.line}</p>
             </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
+            <div class="lg-cat-links">
+              <a class="lg-read" href={r.href}><span aria-hidden="true">&#8627;</span> <span>{r.cta}</span></a>
+            </div>
+          </div>
+          <div class="lg-rail" data-rail>
+            <ul class="lg-rail-track" data-rail-track>
+              {r.cards.map((c) => (
+                <li class="lg-card">
+                  <a href={c.href} data-card data-kind={c.kind} data-name={c.label} data-copy={c.overview}>
+                    {r.variant === 'photo' ? (
+                      /* The automation's own page photograph, graded down so
+                         white type reads over it, with the name as the label
+                         and the card's claim set large above it. */
+                      <>
+                        <span class="lg-card-bg" style={`background-image:url(${c.photo})`} />
+                        <span class="lg-card-kind">{c.label}</span>
+                        <b>{c.headline}</b>
+                        <span class="lg-card-ico" set:html={navIcon(c.label)} />
+                      </>
+                    ) : (
+                      /* The tool's own line icon, in the bottom corner
+                         (founder's ask, Sep 2026) — the screen that used to
+                         fill the foot was clipped by the card and is better
+                         seen full size on the tool's own page. */
+                      <>
+                        <span class="lg-card-kind">{c.kind}</span>
+                        <b>{c.label}</b>
+                        <span class="lg-card-desc">{c.desc}</span>
+                        <span class="lg-card-ico" set:html={navIcon(c.label)} />
+                      </>
+                    )}
+                    <span class="lg-card-more" aria-hidden="true">+</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="wrap lg-rail-nav">
+            <button type="button" class="lg-arrow" data-rail-prev aria-label="Previous">&#8249;</button>
+            <button type="button" class="lg-arrow" data-rail-next aria-label="Next">&#8250;</button>
+          </div>
+        </section>
+      ))
+    }
 
-  {/* ------------------------------------------------------- LIGHT: the tools */}
-  <section class="v-light v-band" id="tools">
-    <div class="v-wrap">
-      <div class="v-bloghero">
-        <span class="v-eyebrow">Every tool</span>
-        <h2 class="v-disp" style="margin-top:20px"><b>The interface you work in,</b><i>from inquiry to invoice</i></h2>
-        <a class="v-pill-d" href="/tools">All tools</a>
+    {/* Integrations (founder's ask, Sep 2026): three cards, all visible,
+        as a grid rather than a rail — and inside the .wrap, so the cards
+        line up with the heading above them and with the rest of the page.
+        It keeps .lg-cat, which is what tightens the gap before the closing
+        band; dropping [data-rail] is what leaves the arrow wiring alone. */}
+    <section class="lg-cat lg-cat-conn" id="integrations">
+      <div class="wrap">
+        <div class="lg-conn-head">
+          <h2>Integrations.<br />The channels they already use.</h2>
+        </div>
+        <ul class="lg-conn-grid">
+          {
+            CONNECT.map((c) => (
+              <li class="lg-conn-card">
+                <span class="lg-conn-shot">
+                  <img src={c.photo} alt={c.alt} width="1200" height="800" loading="lazy" decoding="async" />
+                </span>
+                <p class="lg-conn-cap">
+                  <b>{c.lead}</b> {c.rest}
+                </p>
+                <a class="lg-read" href={c.href}>
+                  <span aria-hidden="true">&#8627;</span> <span>{c.cta}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </div>
-      <div class="v-grid3">
-        {
-          toolCards.map((t) => (
-            <a class="v-pcard" href={t.href}>
-              <div class="v-cat">Tool</div>
-              <h3>{t.label}</h3>
-              <p>{t.desc}</p>
-            </a>
-          ))
-        }
-      </div>
-    </div>
-  </section>
+    </section>
 
-  {/* ------------------------------------------------ DARK: the automations */}
-  <section class="v-dark v-band" id="automations" data-chrome="dark">
-    <div class="v-wrap">
-      <div class="v-center">
-        <span class="v-eyebrow">Every automation</span>
-        <h2 class="v-disp"><b>The steps that run on their own</b><i>and the ones a person still takes</i></h2>
-        <a class="v-pill" href="/automations">All automations</a>
-      </div>
-      <div class="v-grid3" style="margin-top:clamp(34px,4.4vw,60px)">
-        {
-          autoCards.map((a) => (
-            <a class="v-pcard" href={a.href}>
-              <div class="v-cat">Automation</div>
-              <img class="v-art" src={a.photo} alt="" width="1200" height="800" loading="lazy" decoding="async" />
-              <h3>{a.label}</h3>
-              <p>{a.desc}</p>
-            </a>
-          ))
-        }
-      </div>
-    </div>
-  </section>
+    {/* Opened by a card on either rail. With JS off the cards are plain
+        links and this never shows, so the page still reaches every page. */}
+    <dialog class="lg-modal" data-modal aria-labelledby="card-modal-title">
+      <button type="button" class="lg-modal-x" data-modal-close aria-label="Close">&times;</button>
+      <p class="lg-modal-kind" data-modal-kind></p>
+      <h3 id="card-modal-title" data-modal-title></h3>
+      <p class="lg-modal-copy" data-modal-copy></p>
+      <a class="lg-read" data-modal-link href="/tools"><span aria-hidden="true">&#8627;</span> <span>Learn more</span></a>
+    </dialog>
 
-  {/* ------------------------------------------------------ LIGHT: channels */}
-  <section class="v-light v-band" id="integrations">
-    <div class="v-wrap">
-      <div class="v-lead">
-        <span class="v-eyebrow">Integrations</span>
-        <h2 class="v-disp"><b>Integrations.</b><i>The channels they already use.</i></h2>
+    <section class="lg-close">
+      <div class="wrap">
+        <h2>Run your next trip on<br />infrastructure, not inboxes.</h2>
+        <a class="btn btn-lg" href="https://portal.hyperporter.com">Get started free <i aria-hidden="true">&rarr;</i></a>
       </div>
-      <div class="v-grid3">
-        {
-          CONNECT.map((c) => (
-            <a class="v-pcard" href={c.href}>
-              <img class="v-art" src={c.photo} alt={c.alt} width="1200" height="800" loading="lazy" decoding="async" />
-              <h3>{c.lead}</h3>
-              <p>{c.rest}</p>
-              <span class="v-more">{c.cta} →</span>
-            </a>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  {/* ------------------------------------------------------------- the close */}
-  <div class="v-bigcta" data-chrome="dark">
-    <div class="v-wrap">
-      <h2 class="v-disp"><i>Your trips used to run on inboxes.</i><b>Now they run on infrastructure.</b></h2>
-      <a class="v-pill" href="https://portal.hyperporter.com">Get started &rarr;</a>
-    </div>
+    </section>
   </div>
+
 </Base>
 
 <script>
-  import '../lib/v2';
+  import '../lib/accordion';
+</script>
+
+<script>
+  /* The catalogue rail and the panel a card opens.
+   *
+   * Everything is delegated from the document rather than bound to elements
+   * at load: the bundled preview runs a page's script once and then swaps
+   * route markup in and out, so anything captured up front points at a DOM
+   * that is no longer on screen. Delegation survives that, and costs
+   * nothing on the real page.
+   */
+  const railOf = (el: Element): HTMLElement | null =>
+    el.closest('.lg-cat')?.querySelector<HTMLElement>('[data-rail]') ?? null;
+
+  const stepOf = (rail: HTMLElement): number => {
+    const card = rail.querySelector<HTMLElement>('.lg-card, .lg-conn-card');
+    const track = rail.querySelector<HTMLElement>('[data-rail-track]');
+    if (!card) return rail.clientWidth * 0.8;
+    const gap = parseFloat(track ? getComputedStyle(track).columnGap || '18' : '18');
+    return card.getBoundingClientRect().width + (Number.isNaN(gap) ? 18 : gap);
+  };
+
+  const syncArrows = (rail: HTMLElement): void => {
+    const section = rail.closest('.lg-cat');
+    const prev = section?.querySelector<HTMLButtonElement>('[data-rail-prev]');
+    const next = section?.querySelector<HTMLButtonElement>('[data-rail-next]');
+    const max = rail.scrollWidth - rail.clientWidth;
+    if (prev) prev.disabled = rail.scrollLeft < 4;
+    if (next) next.disabled = rail.scrollLeft > max - 4;
+  };
+
+  /* Capture, not bubble: the bundled preview installs its own click handler
+     that turns every in-site link into a route change. Ours has to see the
+     card first and stop the event there, or the preview navigates away
+     instead of opening the panel. */
+  document.addEventListener('click', (event) => {
+    const target = event.target as Element | null;
+    if (!target) return;
+
+    const arrow = target.closest<HTMLButtonElement>('[data-rail-prev],[data-rail-next]');
+    if (arrow) {
+      const rail = railOf(arrow);
+      if (rail) {
+        const back = arrow.hasAttribute('data-rail-prev');
+        rail.scrollBy({ left: back ? -stepOf(rail) : stepOf(rail), behavior: 'smooth' });
+      }
+      return;
+    }
+
+    const card = target.closest<HTMLAnchorElement>('[data-card]');
+    if (card) {
+      const modal = document.querySelector<HTMLDialogElement>('[data-modal]');
+      if (!modal) return; /* No dialog: the card stays a plain link. */
+      event.preventDefault();
+      event.stopPropagation();
+      const set = (sel: string, text: string): void => {
+        const el = modal.querySelector<HTMLElement>(sel);
+        if (el) el.textContent = text;
+      };
+      set('[data-modal-kind]', card.dataset.kind ?? '');
+      set('[data-modal-title]', card.dataset.name ?? '');
+      set('[data-modal-copy]', card.dataset.copy ?? '');
+      const link = modal.querySelector<HTMLAnchorElement>('[data-modal-link]');
+      if (link) link.href = card.getAttribute('href') ?? '/tools';
+      modal.showModal();
+      return;
+    }
+
+    const closer = target.closest('[data-modal-close]');
+    if (closer) {
+      closer.closest('dialog')?.close();
+      return;
+    }
+
+    /* A click that lands on the dialog element itself is on its backdrop. */
+    if (target.matches('dialog[data-modal]')) (target as HTMLDialogElement).close();
+  }, true);
+
+  /* Scroll does not bubble, so listen in the capture phase. */
+  document.addEventListener(
+    'scroll',
+    (event) => {
+      const rail = event.target as HTMLElement | null;
+      if (rail?.matches?.('[data-rail]')) syncArrows(rail);
+    },
+    { capture: true, passive: true },
+  );
+
+  const syncAll = (): void =>
+    document.querySelectorAll<HTMLElement>('[data-rail]').forEach(syncArrows);
+  window.addEventListener('resize', syncAll);
+  syncAll();
+  /* The rail may arrive after this runs — in the preview, or with a late
+     render — so settle the arrows once more on the next frames. */
+  requestAnimationFrame(syncAll);
+  window.setTimeout(syncAll, 400);
+</script>
+
+<script>
+  /* Scroll cue: only means anything at rest, so it leaves once the page moves. */
+  const cue = document.getElementById('lg-cue');
+  if (cue) {
+    cue.addEventListener('click', () =>
+      document.getElementById('product')?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      })
+    );
+    window.addEventListener(
+      'scroll',
+      () => cue.classList.toggle('lg-gone', window.scrollY > 40),
+      { passive: true }
+    );
+  }
+
+  /**
+   * Stat numerals count up from zero each time the rows come into view — not
+   * once per page load, so scrolling back to the section replays it. A run is
+   * re-armed only after the row has left the viewport again, otherwise a
+   * scroll that jiggles the threshold restarts it mid-count.
+   *
+   * The final value lives in the markup, so with JS off, or under
+   * prefers-reduced-motion, the real number is what shows.
+   */
+  const stats = Array.from(document.querySelectorAll<HTMLElement>('.lg-strow b'));
+  if (stats.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const finals = new WeakMap<HTMLElement, string>();
+    const armed = new WeakMap<HTMLElement, boolean>();
+    stats.forEach((el) => {
+      finals.set(el, el.textContent ?? '');
+      armed.set(el, true);
+    });
+
+    const run = (el: HTMLElement): void => {
+      const final = finals.get(el) ?? '';
+      const m = final.match(/^(\D*)(\d+(?:\.\d+)?)(.*)$/);
+      if (!m) return;
+      const [, pre, num, post] = m;
+      const target = parseFloat(num);
+      const dp = (num.split('.')[1] ?? '').length;
+      let t0: number | null = null;
+      const step = (ts: number): void => {
+        if (t0 === null) t0 = ts;
+        const p = Math.min((ts - t0) / 900, 1);
+        el.textContent = pre + (target * (1 - Math.pow(1 - p, 3))).toFixed(dp) + post;
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = final;
+      };
+      el.textContent = pre + (0).toFixed(dp) + post;
+      requestAnimationFrame(step);
+    };
+
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          const el = e.target as HTMLElement;
+          if (e.isIntersecting) {
+            if (!armed.get(el)) return;
+            armed.set(el, false);
+            run(el);
+          } else {
+            armed.set(el, true);
+          }
+        }),
+      { threshold: 0.5 }
+    );
+    stats.forEach((el) => io.observe(el));
+  }
 </script>

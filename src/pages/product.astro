@@ -9,46 +9,45 @@
 import Base from '../layouts/Base.astro';
 import { PRODUCTS } from '../lib/content/products';
 import Mockup from '../components/Mockup.astro';
-import V2Hero from '../components/V2Hero.astro';
-import CtaBand from '../components/CtaBand.astro';
-import { photoFor } from '../lib/photos';
-import '../styles/v2.css';
+import PhotoHero from '../components/PhotoHero.astro';
 ---
 
 <Base
   title="Product"
   description="Portal is the foundation everyone gets. Autopilot and Intelligence layer on top as you grow. Horizon runs underneath, on every tier."
   currentNav="product"
-  v2
 >
-  <V2Hero
-    eyebrow="Product"
-    title="Every capability, in one connected system."
-    lede="Portal is the foundation everyone gets. Autopilot and Intelligence layer on top as you grow. Horizon runs underneath both, always on."
-    photo={photoFor('product', 'portal-overview')}
-  >
-    <Fragment slot="aside"><Mockup screen="dashboard" /></Fragment>
-  </V2Hero>
+  <PhotoHero>
+    <div class="sec wrap page-hero">
+      <div class="page-hero-copy">
 
-  <section class="v-light v-band">
-    <div class="v-wrap">
-      <div class="v-inds v-cols">
-        {
-          PRODUCTS.map((p) => (
-            <div class="v-ind">
-              <span class="v-eyebrow">{p.n} — {p.availability}</span>
+        <p class="eyebrow rv">Product</p>
+        <h1 class="rv">Every capability, in one connected system.</h1>
+        <p class="lede rv">
+          Portal is the foundation everyone gets. Autopilot and Intelligence layer on top as you grow.
+          Horizon runs underneath both, always on.
+        </p>
+      </div>
+      <Mockup screen="dashboard" />
+    </div>
+  </PhotoHero>
+
+  <div class="sec-tight wrap">
+    <div class="ladder rv">
+      {
+        PRODUCTS.map((p) => (
+          <a class="lrow" href={`/${p.slug}`}>
+            <div class="lrow-n">
+              {p.n} &mdash; {p.availability}
+            </div>
+            <div>
               <h3>{p.label}</h3>
               <p>{p.summary}</p>
-              <a class="v-pill-d" href={`/${p.slug}`}>Read more</a>
             </div>
-          ))
-        }
-      </div>
+            <span class="plink">Read more &rarr;</span>
+          </a>
+        ))
+      }
     </div>
-  </section>
-
-  <CtaBand
-    before="Four jobs used to mean four tools."
-    after="Now four layers write to one record."
-  />
+  </div>
 </Base>

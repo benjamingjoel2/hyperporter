@@ -3,46 +3,41 @@
     WhatsApp left for /integrations when that menu was added (Sep 2026). */
 import Base from '../../layouts/Base.astro';
 import Mockup from '../../components/Mockup.astro';
-import V2Hero from '../../components/V2Hero.astro';
-import CtaBand from '../../components/CtaBand.astro';
-import { photoFor } from '../../lib/photos';
+import PhotoHero from '../../components/PhotoHero.astro';
 import { TOOLS } from '../../lib/content/detail';
-import '../../styles/v2.css';
 ---
 
 <Base
   title="Tools"
   description="Twelve tools across Portal, Autopilot and Intelligence — the CRM, the inquiry form, the Quotation Board, the Vault, Atlas and the rest — each on a page of its own."
   currentNav="product"
-  v2
 >
-  <V2Hero
-    eyebrow="Tools"
-    title="Every tool, on its own page."
-    lede="Twelve tools across Portal, Autopilot and Intelligence. Each page says what the tool does, how it works, and which tier it lands on."
-    photo={photoFor('tools')}
-  >
-    <Fragment slot="aside"><Mockup screen="dashboard" /></Fragment>
-  </V2Hero>
-
-  <section class="v-light v-band">
-    <div class="v-wrap">
-      <div class="v-grid3" style="margin-top:0">
-        {
-          TOOLS.map((t) => (
-            <a class="v-pcard" href={`/tools/${t.slug}`}>
-              <div class="v-cat">{t.tier === t.layer ? t.layer : `${t.layer} · ${t.tier}`}</div>
-              <h3>{t.name}</h3>
-              <p>{t.title}</p>
-            </a>
-          ))
-        }
+  <PhotoHero photo="tools">
+    <div class="sec wrap page-hero">
+      <div class="page-hero-copy">
+        <p class="eyebrow rv">Tools</p>
+        <h1 class="rv">Every tool, on its own page.</h1>
+        <p class="lede rv">
+          Twelve tools across Portal, Autopilot and Intelligence. Each page says what the tool does,
+          how it works, and which tier it lands on.
+        </p>
       </div>
+      <Mockup screen="dashboard" />
     </div>
-  </section>
+  </PhotoHero>
 
-  <CtaBand
-    before="Six tools used to never speak to each other."
-    after="Now every one of them works off one record."
-  />
+  <div class="sec-tight wrap">
+    <div class="rel-grid rv">
+      {
+        TOOLS.map((t) => (
+          <a class="rel" href={`/tools/${t.slug}`}>
+            <span class="rel-k">{t.tier === t.layer ? t.layer : `${t.layer} · ${t.tier}`}</span>
+            <b>{t.name}</b>
+            <p>{t.title}</p>
+            <span class="plink">Open &rarr;</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
 </Base>

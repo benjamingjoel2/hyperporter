@@ -9,9 +9,7 @@
  * they read as one family; the copy is each page's own, in
  * lib/content/detail.ts.
  */
-import V2Hero from './V2Hero.astro';
-import { photoFor } from '../lib/photos';
-import '../styles/v2.css';
+import PhotoHero from './PhotoHero.astro';
 import Points from './Points.astro';
 import CtaBand from './CtaBand.astro';
 import StepScreen from './StepScreen.astro';
@@ -35,55 +33,66 @@ if (steps.length !== page.how.length) {
 }
 ---
 
-<V2Hero eyebrow={eyebrow} title={page.title} lede={page.lede} photo={photoFor(page.slug)} />
+<PhotoHero photo={page.slug}>
+  <div class="sec wrap page-hero hero-solo">
+    <div class="page-hero-copy">
+      <p class="eyebrow rv">{eyebrow}</p>
+      <h1 class="rv">{page.title}</h1>
+      <p class="lede rv">{page.lede}</p>
+      <div class="rv" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
+        <a class="btn" href="https://portal.hyperporter.com">Get started free</a>
+        <a class="btn-o" href="/pricing">See pricing</a>
+      </div>
+    </div>
+  </div>
+
+  {/* The overview, under the hero on the same photograph: a lead beside the
+      page's own screen, which works. */}
+</PhotoHero>
 
 <Points title={`${page.name} overview`} points={page.what} />
 
 {/* How it works: the reference's accordion — the steps on hairlines,
     the open one with its body, the screen beside. */}
-<section class="v-dark v-band acc-dark" data-chrome="dark">
-  <div class="v-wrap">
-    <div class="v-lead">
-      <h2 class="v-disp"><b>{page.howTitle}</b></h2>
-    </div>
-<div class="lg-acc">
-  <div class="lg-acc-list">
-    {
-      page.how.map((s, i) => (
-        <div class:list={['lg-acc-item', { on: i === 0 }]}>
-          <button
-            type="button"
-            class="lg-acc-btn"
-            id={`${id}-how-tab-${i}`}
-            aria-expanded={i === 0 ? 'true' : 'false'}
-            aria-controls={`${id}-how-body-${i}`}
-          >
-            {s.name}
-          </button>
-          <div class="lg-acc-body" id={`${id}-how-body-${i}`} inert={i !== 0}>
-            <div>
-              <p>{s.body}</p>
+<section class="sec wrap">
+  <h2 class="rv" style="margin-bottom:clamp(30px,3.6vw,52px)">{page.howTitle}</h2>
+  <div class="lg-acc">
+    <div class="lg-acc-list">
+      {
+        page.how.map((s, i) => (
+          <div class:list={['lg-acc-item', { on: i === 0 }]}>
+            <button
+              type="button"
+              class="lg-acc-btn"
+              id={`${id}-how-tab-${i}`}
+              aria-expanded={i === 0 ? 'true' : 'false'}
+              aria-controls={`${id}-how-body-${i}`}
+            >
+              {s.name}
+            </button>
+            <div class="lg-acc-body" id={`${id}-how-body-${i}`} inert={i !== 0}>
+              <div>
+                <p>{s.body}</p>
+              </div>
             </div>
           </div>
-        </div>
-      ))
-    }
-  </div>
-  <div class="lg-acc-shot lg-acc-ipad">
-    {
-      steps.map((sc, i) => (
-        <div class:list={{ on: i === 0 }} inert={i !== 0}>
-          <StepScreen
-            screen={sc}
-            ground="warm"
-            app={page.name}
-            alt={`${page.name}: ${page.how[i].name}`}
-          />
-        </div>
-      ))
-    }
-  </div>
-</div>
+        ))
+      }
+    </div>
+    <div class="lg-acc-shot lg-acc-ipad">
+      {
+        steps.map((sc, i) => (
+          <div class:list={{ on: i === 0 }} inert={i !== 0}>
+            <StepScreen
+              screen={sc}
+              ground="warm"
+              app={page.name}
+              alt={`${page.name}: ${page.how[i].name}`}
+            />
+          </div>
+        ))
+      }
+    </div>
   </div>
 </section>
 
@@ -91,14 +100,12 @@ if (steps.length !== page.how.length) {
   /* Amber is the site's mark for a human / manual state, and this is the
      one place on an automation page it belongs. */
   page.human && (
-    <section class="v-light v-band v-band-tight">
-      <div class="v-wrap">
-        <div class="human-note">
-          <p class="v-eyebrow">Where a person steps in</p>
-          <p>{page.human}</p>
-        </div>
+    <div class="sec-tight wrap">
+      <div class="human-note rv">
+        <p class="eyebrow">Where a person steps in</p>
+        <p>{page.human}</p>
       </div>
-    </section>
+    </div>
   )
 }
 

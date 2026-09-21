@@ -14,9 +14,10 @@ const photo = photoFor('portal-overview');
   title="Portal"
   description="CRM, quote builder, itinerary tool — a clean, modern interface replacing spreadsheets and email threads. Free, forever, on every tier."
   currentNav="product"
-  v2
 >
-  <ProductPage product={product} photo={photo}>
+  <ProductPage product={product} photoHero>
+    <img slot="hero-bg" class:list={["p-photo-bg", { "p-photo-true": photo.own }]} src={photo.src} alt="" />
+    {photo.own && <div slot="hero-bg" class="p-photo-veil" aria-hidden="true" />}
     <Fragment slot="hero-aside">
       <Mockup screen="crm" />
     </Fragment>
