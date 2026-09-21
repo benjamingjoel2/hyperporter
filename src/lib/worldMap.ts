@@ -34,7 +34,7 @@ export const MAP_H = 820;
  */
 const ALIASES: Record<string, string> = {
   'Dominican Republic': 'Dominican Rep.',
-  'Ivory Coast': "Côte d'Ivoire",
+  'Ivory Coast': "Côte d’Ivoire",
   'Republic of Congo': 'Congo',
   Türkiye: 'Turkey',
   'United States': 'United States of America',

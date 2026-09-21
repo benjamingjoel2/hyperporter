@@ -74,7 +74,7 @@ A.flame=(r,C)=>{                                     /* Azerbaijan — Flame Tow
     o+=D(`M${x-40} ${G} q6 ${-h*.55} 34 ${-h*.9} q28 ${h*.35} 34 ${h*.9} Z`,C.acc,.14);
     for(let k=1;k<9;k++)o+=R(x-38+k*2,G-h*.94+k*(h*.1),72-k*4,3,C.acc,.1);});
   return o+R(0,G,W,H-G,C.near);};
-A.cliffmonastery=(r,C)=>{                            /* Bhutan — Tiger's Nest */
+A.cliffmonastery=(r,C)=>{                            /* Bhutan — Tiger’s Nest */
   let o=P(`-60,${G} 180,140 420,${G}`,C.far)+P(`820,${G} 1060,120 1300,${G}`,C.far);
   o+=P(`180,140 250,250 216,242 180,286 142,238 110,246`,C.acc,.5);
   o+=D(`M300 ${G} L390 260 L450 168 L560 120 L700 190 L790 300 L860 ${G} Z`,C.mid);

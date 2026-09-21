@@ -5,6 +5,7 @@ import Base from '../../layouts/Base.astro';
 import Mockup from '../../components/Mockup.astro';
 import PhotoHero from '../../components/PhotoHero.astro';
 import { TOOLS } from '../../lib/content/detail';
+import CtaBand from '../../components/CtaBand.astro';
 ---
 
 <Base
@@ -40,4 +41,9 @@ import { TOOLS } from '../../lib/content/detail';
       }
     </div>
   </div>
+
+  <CtaBand
+    before="Six tools used to never speak to each other."
+    after="Now every one of them works off one record."
+  />
 </Base>

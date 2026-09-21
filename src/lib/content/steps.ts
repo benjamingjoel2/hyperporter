@@ -783,6 +783,37 @@ export const STEP_SCREENS: Record<string, StepScreen[]> = {
   ],
 
 
+  conversion: [
+    { head: ['It arrives', 'Rift Valley GS'],
+      blocks: [
+        { k: 'files', files: [
+          ['Rift Valley GS — confirmation.pdf', 'Their letterhead, their logo', 'Received'],
+        ] },
+        { k: 'note', text: 'By email, or uploaded on the supplier’s side of the link.' },
+      ] },
+    { head: ['Read', 'KE-2291'],
+      rows: [
+        { b: 'Reference · RVG-88412', s: 'Lifted onto the trip', state: 'done' },
+        { b: 'Dates · 3–12 Mar', s: 'Matches the accepted quote', state: 'done' },
+        { b: 'Pickup · 09:10, Wilson', s: 'Ground contact attached', state: 'done' },
+      ],
+      blocks: [{ k: 'note', text: 'Only the details that matter are taken; the rest stays in the original.' }] },
+    { head: ['Reissued', 'Meridian Travel Co.'],
+      blocks: [
+        { k: 'cols', cols: [
+          { name: 'Theirs — filed', cards: [['Rift Valley GS', 'Kept on your side']] },
+          { name: 'Yours — sent', cards: [['Meridian Travel Co.', 'Your letterhead']] },
+        ] },
+        { k: 'note', text: 'The supplier’s branding never reaches the traveller.' },
+      ] },
+    { head: ['On their link', '2 travellers'],
+      rows: [
+        { b: 'Voucher — Meridian Travel Co.', s: 'Shared on the traveller’s link', state: 'done' },
+        { b: 'Inclusion unclear on the original', s: 'Both versions side by side', tag: 'Needs you', amber: true },
+      ],
+      blocks: [{ k: 'note', text: 'Anything that cannot be read cleanly is flagged, not reissued on a guess.' }] },
+  ],
+
   payment: [
     { head: ['Deposit · €1,480', 'From the accepted proposal'],
       blocks: [

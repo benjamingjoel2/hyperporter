@@ -65,7 +65,7 @@ export const NAV: NavItem[] = [
           { label: 'CRM workflow', desc: 'The client and supplier database, connected to trip staging.', href: '/tools/crm-workflow' },
           { label: 'Inquiry form', desc: 'Your public lead-capture link — every submission lands in the CRM.', href: '/tools/inquiry-form' },
           { label: 'Quotation Board', desc: 'Organises supplier quotes side by side, and adds your margin.', href: '/tools/quotation-board' },
-          { label: 'Proposal Share', desc: 'Share itineraries and quotes as a link, a PDF, or a text message.', href: '/tools/proposal-share' },
+          { label: 'Proposal Share', desc: 'Share branded itineraries.', href: '/tools/proposal-share' },
           { label: 'Client + Supplier Dashboard', desc: 'Each side gets their own view to manage the trip.', href: '/tools/client-supplier-dashboard' },
           { label: '3-way inbox', desc: 'Client-side and supplier-side conversation, managed in one place.', href: '/tools/three-way-inbox' },
         ],
@@ -100,6 +100,7 @@ export const NAV: NavItem[] = [
         heading: '',
         items: [
           { label: 'Automated Collection', desc: 'Gathers traveller documents and supplier booking confirmations.', href: '/automations/collection' },
+          { label: 'Automated Conversion', desc: 'Turns a supplier’s booking confirmation or voucher into your own branded documents.', href: '/automations/conversion' },
           { label: 'Automated Payment', desc: 'Sends deposit and balance requests on schedule — marking money received stays yours.', href: '/automations/payment' },
           { label: 'Automated Follow-up', desc: 'Reminds clients, sends nudges, wins back leads gone quiet.', href: '/automations/follow-up' },
         ],

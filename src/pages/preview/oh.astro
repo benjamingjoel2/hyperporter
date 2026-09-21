@@ -223,6 +223,9 @@ const NAV = ['Autopilot', 'Horizon', 'Destinations', 'How It Works', 'Blog', 'Ab
   .pills {
     display: flex;
     gap: 8px;
+    /* Six nav pills do not fit 390px in one row; let them wrap rather than
+       push the page 21px sideways. */
+    flex-wrap: wrap;
   }
   .pills a {
     border: 1px solid var(--line);

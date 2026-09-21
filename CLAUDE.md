@@ -138,7 +138,10 @@ the closing band. The pricing ladder they used to end on is /pricing. The layer 
 3. **Thin content risk.** 137 destination pages currently share near-identical copy apart from
    the country name. Google penalises this. Each page needs genuinely unique material before
    the SEO play is worth anything.
-4. **About page** has three `Name pending` placeholder bios.
+4. **About page team section** — the three `Name pending` placeholder bios are
+   no longer rendered. `src/pages/about.astro` holds a `TEAM` array, empty; fill
+   in the three real people and the section returns, heading and all. The page
+   ends on the mission statement until then.
 5. **Footer** Terms / Privacy / FAQ buttons have no handlers.
 6. **Country count** — site says "130+ countries", the dataset holds 137, and a founder brief
    said "100+". Unresolved. Confirm the real number before publishing.
@@ -147,6 +150,73 @@ the closing band. The pricing ladder they used to end on is /pricing. The layer 
 
 
 ## Design direction (current)
+
+### What "v2" means — and that the site is not on it
+Two design files, both the founder's, both kept in the repo (Sep 2026):
+`public/preview/v2.html` — the dark serif design — and
+`public/preview/v2-figma.html` — the Figma-style study. When the founder says
+"v2", it is these two, not one of them. **They are reference files, not the
+site.** The site is v1, the design described below, and that is what the live
+build serves.
+
+A v2 rebuild — the two designs carried across every page, then restyled on
+Shopify's design system from awesome-design-md — was built and then reverted
+at the founder's instruction (Sep 2026): "back to our main main site, that's
+the v1". It is whole in git history at `ee24deb`, with its own `v2.css`,
+`V2Hero.astro`, `lib/v2.js` and `DESIGN.md`, if it is ever wanted back. Do not
+reintroduce any of it piecemeal.
+
+### Closing bands — the before/after rule
+Every closing band states the same comparison and nothing else (founder,
+Sep 2026): **how the work was done traditionally, then how it is done here.**
+No tier, no price, no "free", no "Start on Showcase" — the close sells the
+feature, never the plan. `components/CtaBand.astro` takes `before` and
+`after`; the before clause sits back in grey and the after clause carries the
+white on its own line under it. Keep each clause under about 40 characters so
+it holds one line on the band's 34ch measure. The copy is each page's own:
+`close: { before, after }` on every entry in `lib/content/detail.ts` and
+`lib/content/customers.ts`; the six index pages (`/tools`, `/automations`,
+`/integrations`, `/solutions`, `/customers`, `/product`) carry theirs inline.
+Every one of those pages ends on the band. The layer pages keep their "Up
+next" bands, which are navigation to the next layer, not closes.
+
+
+**Palette — cool graphite and an electric accent** (Sep 2026, founder's
+choice). The warm paper and the teal are gone: ground `--void #F5F7F8`,
+ink `--paper #0A0C0E`, body grey `--muted #5E666E`, label grey
+`--dim #5F666F`. Amber `#9E5308` still means a human / manual state and
+nothing else.
+
+The accent is split, and the split is not optional:
+
+- `--signal #0A63F0` is the FILL blue. White on it measures 5.16:1, so a
+  button label clears the floor. The #0A6CFF first tried measured 4.49:1.
+- `--signal-ink #0B57D0` is the TEXT blue. The fill blue on the light
+  ground is 4.16:1 — under the floor — so every `color:var(--signal)` on
+  the site was repointed to this. Putting the bright one back on small
+  text reintroduces a measured failure.
+- Inside `[data-chrome="dark"]` the greys and the accent invert
+  (`--dim #9BA4AE`, `--muted #B9C0C8`, `--signal-ink #6FA8FF`), because the
+  light-ground values measured 2.3-3.7:1 there. A mock-up inside a dark
+  band is a LIGHT window on that ground, so it resets back — but a
+  `.mk.dark` screen keeps mockup.css's own inverted set, which is why the
+  reset is written `.mk:not(.dark)`.
+
+**Liquid, not merely frosted** (Sep 2026, founder's ask). Two things beyond
+the frost, and they are costed separately:
+
+- The SPECULAR EDGE — light landing on the top-left corner of a raised
+  sheet. One gradient, no filter, no layer, so it goes on every surface
+  that carries the material, cards included.
+- The EDGE LENS — a ring of extra blur just inside the border, masked out
+  of the middle, which is what the eye reads as thickness. It is a second
+  `backdrop-filter`, so it goes ONLY on surfaces that already pay for one:
+  the bar, the menus, the drawer, the mock-up panels. Never the cards.
+
+Both are pseudo-elements wired in `global.css` rather than classes in the
+templates. Do not add the surfaces to a blanket `position:relative` list:
+`.mega` is absolute, `.drawer` is fixed and `.mk-panel` is absolute, and
+declaring `relative` over them tore the mega panel off its anchor.
 
 Light base with teal as the accent. Reverted (Aug 2026) to the pre-Harvey
 direction at commit `28d708a` at the founder's instruction — the harvey.ai /
@@ -195,19 +265,110 @@ wanted back.
   the account's own Vault, the supplier receiving their full quoted rate,
   SOC 2 / GDPR shown as targeted. The line-drawn `pageArt.ts` and
   `legoraArt.ts` families they replaced are at `1848a30`.
-- An Apple / Liquid Glass restyle was tried and rejected (`039fad9`,
-  reverted at `1848a30`). Do not bring it back.
+- **Apple Liquid Glass, from Portal's own stylesheet** (Sep 2026, founder's
+  instruction: "we used apple metal glass"). The materials are ported value
+  for value out of the Portal app so the site and the product are made of
+  the same thing rather than two interpretations of it — see the MATERIALS
+  block at the top of `global.css`. An earlier Apple restyle was tried and
+  rejected (`039fad9`, reverted at `1848a30`); this is not that one. That
+  was a restyle of the whole site's look. This is a material layer under an
+  unchanged design: Instrument Serif, Archivo, teal and amber all stay
+  exactly as they were, because the HIG's own rule is that a house style
+  beats Apple defaults. No SF Pro, no system blue.
+
+  **The metal is the rim, not the blur.** `--lg-rim` is three inset
+  shadows — a hairline, a bright top edge, a dark bottom edge — and that is
+  what makes a panel read as a machined surface catching light rather than
+  as frosted plastic. `--lg-blur` carries `saturate(180%)`: blur on its own
+  desaturates what is behind it and the panel goes grey and dead.
+
+  **Where the material goes**: everywhere the site has a surface — the bar,
+  the mega panels, the drawer, the ticker's label, `.mk-panel`, and the
+  card families (`.rel .tier .side .ccard .zcard .svc article .panel`,
+  Sep 2026, founder's ask). Not on section grounds.
+
+  **Where the *blur* goes is a separate question, and the answer is: only
+  where there is something to refract.** The bar, the menus and the
+  mock-up panels sit over photographs and live content, so they blur. The
+  cards sit on `--wash`, a smooth gradient — and blurring a smooth
+  gradient returns the same gradient. Measured on one card, blur on
+  against blur off: at most 4/255 on any channel, 0.7% of pixels differing
+  by more than 2. Invisible, and not free: best of three runs, same page,
+  blur toggled, /tools 43→51fps, /pricing 39→48, /customers 39→56. So the
+  cards carry the sheen and the rim and no `backdrop-filter`. Add one only
+  after checking there is something behind it worth blurring.
+
+  **The legibility comes from the scrim, not the opacity.** A menu opening
+  over a 70px display headline leaves that headline readable through
+  anything translucent enough to still look like glass. `.mega-scrim` dims
+  and blurs the page instead, which is what lets the panel stay properly
+  translucent. Measured off the composited pixels, not computed: the
+  panel's 13.5px secondary text sits at 4.96–5.38:1.
+
+  **`.mega-scrim` must stay outside `<header>`.** An ancestor with a
+  `backdrop-filter` becomes the containing block for its `position:fixed`
+  descendants — inside the glass header the scrim collapsed from the
+  viewport to the 72px bar and silently stopped dimming anything. The flag
+  is toggled on `<html>` so a selector can still reach it.
+
+  Every glass surface ships all three fallbacks: `@supports not
+  (backdrop-filter)`, `prefers-reduced-transparency`, and
+  `prefers-contrast:more`, which flattens the wash and gives every surface
+  a real edge. Reduce Transparency is a first-class accessibility setting —
+  for some readers translucency makes text unreadable.
+
+  `--wash` is the canvas under the light bands, lifted from Portal too. A
+  glass panel over one flat tone refracts nothing and reads as a
+  translucent white box; it needs variation behind it. It is
+  `background-attachment:fixed`, because a 700px wash stretched down a
+  14,000px page is a smear.
+
+  **`--dim` is a label grey, not a body grey.** Set as body copy on a card
+  it measures about 3.1:1, under the 4.5:1 floor. `--muted` measures 5.5:1
+  in the same place. Eyebrows, column heads and captions keep `--dim`;
+  anything read as a sentence takes `--muted`.
+
+- **The screens read as current software, not as a 2005 data grid** (Sep
+  2026, founder: "showcase a modern screenshot please, this is 2000"). The
+  changes are all in `styles/mockup.css`, on the shared primitives, so all
+  38 screens moved together: tabs are a segmented control on a tertiary
+  fill rather than an underlined rail; table rows are separated by space
+  and a faint inset rule, not a hairline under every row; column heads are
+  sentence case with no tracking; statuses are tinted pills (the dot stays
+  — colour alone never carries a state); buttons, panes, metrics and form
+  fields sit on `--fill` with pill or soft-radius shapes instead of 1px
+  boxes; the window itself takes `--lg-rim` and a 1.1em corner.
+
+  The two homepage sides screens are a pair and must stay one size. They
+  are not the same height on their own — the reseller's is a trip record
+  with two panes and a log, the supplier's a single request list — and the
+  40px difference read as one card being bigger. `.lg-side-shot` stretches
+  both to the frame; keep the stage's inset padding, or the window covers
+  the photograph it is meant to float on.
 - Removed with the earlier revert: `AppShot.astro` and `lib/counts.ts`, both
   recoverable from `d05cc73`.
 
-### Font licence — resolved in the markup, outstanding in git
+### Font licence — resolved in the build, outstanding in git history
 Hyperlocal ROM was supplied under a **desktop** licence, whose terms forbid
-"storing on publicly available servers". The v2 type system (Sep 2026) drops
-it: nothing on the site requests it any more, so the live site no longer
-serves it. Two things remain. `public/fonts/hyperlocal-rom-regular.woff2` is
-still committed, and the repository is public — and deleting the file now
-would not remove it from git history. Settle it with Dinamo, make the
-repository private, or rewrite the history.
+"storing on publicly available servers".
+
+This note used to say the problem was resolved. It was — in v2. **The revert
+to v1 brought it straight back**, and it went unnoticed until the Sep 2026
+audit: `global.css` still carried the `@font-face`, all three family tokens
+still led with `'Hyperlocal ROM'`, and every build was copying the `.woff2`
+into `dist/fonts/` and serving it. The file is deleted and the `@font-face`
+is gone, so no build serves it any more.
+
+That also fixed a second thing hiding behind it: `--display`, `--body` and
+`--mono` all held the *same* stack, so the site had no display / body / mono
+distinction at all — one face was doing all three jobs. They are now
+Instrument Serif, Archivo and IBM Plex Mono, Google-hosted, which is the
+type system this file has described all along.
+
+**Still outstanding**: the `.woff2` remains in git history and the
+repository is public, so deleting it from the working tree does not remove
+it. Settle it with Dinamo, make the repository private, or rewrite the
+history.
 
 ## Migration target
 

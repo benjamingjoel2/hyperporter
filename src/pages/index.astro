@@ -38,9 +38,9 @@ const CARD_SCREEN: Record<string, string> = { portal: 'crm', autopilot: 'pipelin
    connects. Integration is not a fifth layer and has no page of its own,
    so it carries no "Learn more". */
 /* Everything in one place, as a carousel: every tool and every automation
-   as a card — its layer, its name, the menu's one line, and its own screen.
+   as a card — its layer, its name, the menu’s one line, and its own screen.
    Names and lines come from nav.ts so the section cannot drift from the
-   menu; the screen comes from detail.ts, matched on the page's slug. The
+   menu; the screen comes from detail.ts, matched on the page’s slug. The
    Automations "Overview" row points at /autopilot, a layer page rather
    than an automation, so it is not a card. */
 const DETAIL_BY_SLUG = new Map([...TOOLS, ...AUTOMATIONS].map((d) => [d.slug, d]));
@@ -223,7 +223,7 @@ const SIDES = [
           <h2>Business in the palm of your hand.</h2>
           <p class="dek">Four toolkits. One platform. End-to-end.</p>
         </div>
-        {/* The reference's layout for this: a hairline list of the layers on
+        {/* The reference’s layout for this: a hairline list of the layers on
             the left, one open with its description and link, and the matching
             product snippet large on the right. All four snippets are rendered
             and stacked in one cell, so a switch is a cross-fade rather than a
@@ -319,7 +319,7 @@ const SIDES = [
                     {r.variant === 'photo' ? (
                       /* The automation's own page photograph, graded down so
                          white type reads over it, with the name as the label
-                         and the card's claim set large above it. */
+                         and the card’s claim set large above it. */
                       <>
                         <span class="lg-card-bg" style={`background-image:url(${c.photo})`} />
                         <span class="lg-card-kind">{c.label}</span>
@@ -328,9 +328,9 @@ const SIDES = [
                       </>
                     ) : (
                       /* The tool's own line icon, in the bottom corner
-                         (founder's ask, Sep 2026) — the screen that used to
+                         (founder’s ask, Sep 2026) — the screen that used to
                          fill the foot was clipped by the card and is better
-                         seen full size on the tool's own page. */
+                         seen full size on the tool’s own page. */
                       <>
                         <span class="lg-card-kind">{c.kind}</span>
                         <b>{c.label}</b>
@@ -352,7 +352,7 @@ const SIDES = [
       ))
     }
 
-    {/* Integrations (founder's ask, Sep 2026): three cards, all visible,
+    {/* Integrations (founder’s ask, Sep 2026): three cards, all visible,
         as a grid rather than a rail — and inside the .wrap, so the cards
         line up with the heading above them and with the rest of the page.
         It keeps .lg-cat, which is what tightens the gap before the closing

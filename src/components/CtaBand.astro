@@ -1,22 +1,26 @@
 ---
 /**
- * The closing band: a dark ground, one statement in two tones — the claim
- * in white, the continuation in grey — and the one button. The reference
- * ends its product and solutions pages this way.
+ * The closing band: a dark ground, one comparison in two tones, and the
+ * one button. The comparison is always the same shape (Sep 2026,
+ * founder's instruction) — how the work was done traditionally, sitting
+ * back in grey, then how it is done here, in white under it. No tier, no
+ * price, no "free": the close sells the feature, never the plan.
  */
 interface Props {
-  lead: string;
-  rest: string;
+  /** The old way, past tense. Sits back. */
+  before: string;
+  /** The way it works now, present tense. Carries the line. */
+  after: string;
   cta?: string;
   href?: string;
 }
 
-const { lead, rest, cta = 'Get started free', href = 'https://portal.hyperporter.com' } = Astro.props;
+const { before, after, cta = 'Get started', href = 'https://portal.hyperporter.com' } = Astro.props;
 ---
 
 <section class="cta-band" data-chrome="dark">
   <div class="wrap">
-    <p class="cta-band-t rv"><b>{lead}</b> {rest}</p>
+    <p class="cta-band-t rv">{before} <b>{after}</b></p>
     <a class="btn btn-lg rv" href={href}>{cta} <i aria-hidden="true">&rarr;</i></a>
   </div>
 </section>

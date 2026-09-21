@@ -10,6 +10,7 @@ import Base from '../layouts/Base.astro';
 import { PRODUCTS } from '../lib/content/products';
 import Mockup from '../components/Mockup.astro';
 import PhotoHero from '../components/PhotoHero.astro';
+import CtaBand from '../components/CtaBand.astro';
 ---
 
 <Base
@@ -50,4 +51,9 @@ import PhotoHero from '../components/PhotoHero.astro';
       }
     </div>
   </div>
+
+  <CtaBand
+    before="Four jobs used to mean four tools."
+    after="Now four layers write to one record."
+  />
 </Base>

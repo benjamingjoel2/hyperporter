@@ -62,6 +62,7 @@ for path in sorted(glob.glob(os.path.join(DIST, '_astro', '*.css'))):
 chromes, chrome_ix = [], {}
 scripts, script_ix = [], {}
 routes = []
+webfonts = set()
 foot = None
 
 SCRIPT_RE = re.compile(r'<script type="module">(.*?)</script>', re.S)
@@ -132,6 +133,12 @@ for path in sorted(glob.glob(os.path.join(DIST, '**', 'index.html'), recursive=T
     head = html[:html.index('</head>')]
     cids = [css_index[h] for h in re.findall(r'<link rel="stylesheet" href="([^"]+)"', head)
             if h in css_index]
+    # The site's webfonts come from an absolute URL, which is not in
+    # css_index and so was being dropped — every preview rendered in
+    # fallback faces and the type could not be reviewed at all. Collect
+    # them here and put them in the shell's head.
+    for u in re.findall(r'<link[^>]+href="(https://fonts\.googleapis\.com/[^"]+)"', head):
+        webfonts.add(u.replace('&amp;', '&'))
 
     url = '/' + rel[:-len('index.html')].rstrip('/')
     title = re.search(r'<title>(.*?)</title>', head, re.S)
@@ -165,7 +172,10 @@ except Exception:
     sha = 'unknown'
 stamp = '%s &middot; %s' % (sha, __import__('datetime').datetime.now().strftime('%-d %b %H:%M'))
 
-out = SHELL.replace('/*__PAYLOAD__*/', payload).replace('__STAMP__', stamp)
+fontlinks = '\n'.join('<link rel="stylesheet" href="%s">' % u for u in sorted(webfonts))
+out = (SHELL.replace('/*__PAYLOAD__*/', payload)
+            .replace('__STAMP__', stamp)
+            .replace('<!--__WEBFONTS__-->', fontlinks))
 with open(OUT, 'w', encoding='utf-8') as fh:
     fh.write(out)
 

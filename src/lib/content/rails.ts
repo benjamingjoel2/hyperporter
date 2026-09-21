@@ -15,5 +15,6 @@ export const AUTOMATION_HEADLINE: Record<string, string> = {
   'follow-up': 'The quiet ones get a nudge.',
   confirmation: 'Both sides confirm, in writing.',
   collection: 'Documents come in without chasing.',
+  conversion: 'Their voucher, in your documents.',
   payment: 'Deposits and balances, on schedule.',
 };
