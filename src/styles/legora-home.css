@@ -117,7 +117,7 @@
      lands on the dots at every step of the clamp. */
   --lg-num-h:clamp(52px,6.4vw,88px);
   --lg-num-gap:26px;
-  --lg-lit:#3FA9B4}
+  --lg-lit:#5B9BFF}
 /* Wide enough for the two-line heading to hold its own breaks. */
 .lg-pipe-lead{max-width:none;margin-bottom:clamp(46px,5.4vw,78px)}
 .lg-pipe-lead h2 br{display:inline}
@@ -180,7 +180,7 @@ section.lg-sec{padding-block:var(--sec-gap);background:var(--steel)}
 /* The accordion (.lg-acc) lives in global.css: the tool, automation and
    solutions pages carry it too. */
 .lg-read{display:inline-flex;gap:7px;align-items:center;margin-top:20px;font-size:14px;color:var(--paper)}
-.lg-read:hover{color:var(--signal)}
+.lg-read:hover{color:var(--signal-ink)}
 .lg-read span:first-child{color:var(--dim)}
 .lg-avail{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);
   display:block;margin-bottom:8px}
@@ -361,7 +361,7 @@ section.lg-cat ~ section.lg-close{padding-top:clamp(44px,4.8vw,70px)}
   filter:brightness(.78) saturate(.92);transition:transform .5s ease}
 .lg-cat-photo .lg-card > a:hover .lg-card-bg{transform:scale(1.03)}
 .lg-card-bg::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(6,10,13,.62),rgba(6,10,13,.24) 44%,rgba(6,10,13,.52))}
+  background:linear-gradient(180deg,rgba(6,10,13,.62),rgba(6,10,13,.34) 44%,rgba(6,10,13,.52))}
 .lg-cat-photo .lg-card-kind{position:relative;color:rgba(255,255,255,.78);margin-bottom:10px}
 .lg-cat-photo .lg-card b{position:relative;margin:0;color:#fff;font-size:clamp(20px,1.7vw,24px);
   line-height:1.18;text-shadow:0 1px 14px rgba(6,10,13,.35)}

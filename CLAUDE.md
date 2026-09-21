@@ -178,6 +178,43 @@ Every one of those pages ends on the band. The layer pages keep their "Up
 next" bands, which are navigation to the next layer, not closes.
 
 
+**Palette — cool graphite and an electric accent** (Sep 2026, founder's
+choice). The warm paper and the teal are gone: ground `--void #F5F7F8`,
+ink `--paper #0A0C0E`, body grey `--muted #5E666E`, label grey
+`--dim #5F666F`. Amber `#9E5308` still means a human / manual state and
+nothing else.
+
+The accent is split, and the split is not optional:
+
+- `--signal #0A63F0` is the FILL blue. White on it measures 5.16:1, so a
+  button label clears the floor. The #0A6CFF first tried measured 4.49:1.
+- `--signal-ink #0B57D0` is the TEXT blue. The fill blue on the light
+  ground is 4.16:1 — under the floor — so every `color:var(--signal)` on
+  the site was repointed to this. Putting the bright one back on small
+  text reintroduces a measured failure.
+- Inside `[data-chrome="dark"]` the greys and the accent invert
+  (`--dim #9BA4AE`, `--muted #B9C0C8`, `--signal-ink #6FA8FF`), because the
+  light-ground values measured 2.3-3.7:1 there. A mock-up inside a dark
+  band is a LIGHT window on that ground, so it resets back — but a
+  `.mk.dark` screen keeps mockup.css's own inverted set, which is why the
+  reset is written `.mk:not(.dark)`.
+
+**Liquid, not merely frosted** (Sep 2026, founder's ask). Two things beyond
+the frost, and they are costed separately:
+
+- The SPECULAR EDGE — light landing on the top-left corner of a raised
+  sheet. One gradient, no filter, no layer, so it goes on every surface
+  that carries the material, cards included.
+- The EDGE LENS — a ring of extra blur just inside the border, masked out
+  of the middle, which is what the eye reads as thickness. It is a second
+  `backdrop-filter`, so it goes ONLY on surfaces that already pay for one:
+  the bar, the menus, the drawer, the mock-up panels. Never the cards.
+
+Both are pseudo-elements wired in `global.css` rather than classes in the
+templates. Do not add the surfaces to a blanket `position:relative` list:
+`.mega` is absolute, `.drawer` is fixed and `.mk-panel` is absolute, and
+declaring `relative` over them tore the mega panel off its anchor.
+
 Light base with teal as the accent. Reverted (Aug 2026) to the pre-Harvey
 direction at commit `28d708a` at the founder's instruction — the harvey.ai /
 starlink.com rebuild is preserved in git history at `d05cc73` if it is ever
