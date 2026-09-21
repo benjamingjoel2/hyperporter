@@ -148,6 +148,25 @@ the closing band. The pricing ladder they used to end on is /pricing. The layer 
 
 ## Design direction (current)
 
+### What "v2" means
+Two design files, both the founder's, both kept in the repo (Sep 2026):
+`public/preview/v2.html` — the dark serif design the live site's composition
+comes from — and `public/preview/v2-figma.html` — the Figma-style study. When
+the founder says "v2", it is these two, not one of them.
+
+### Closing bands — the before/after rule
+Every page's closing band states the same comparison and nothing else
+(founder, Sep 2026): **how the work was done traditionally, then how it is
+done here.** No tier, no price, no "free", no "Start on Showcase" — the close
+sells the feature, never the plan. `components/CtaBand.astro` takes `before`
+and `after`; the before line sits back in the dim tone, the after line carries
+the ink under it. Keep each clause under about 46 characters so it holds one
+line at full width. The copy is each page's own: `close: { before, after }` on
+every entry in `lib/content/detail.ts` and `lib/content/customers.ts`, and
+inline in the index pages. The layer pages' "Up next" bands are a different
+device — navigation, not a close — and stay as they are.
+
+
 Light base with teal as the accent. Reverted (Aug 2026) to the pre-Harvey
 direction at commit `28d708a` at the founder's instruction — the harvey.ai /
 starlink.com rebuild is preserved in git history at `d05cc73` if it is ever

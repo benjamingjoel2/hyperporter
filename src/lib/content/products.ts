@@ -241,10 +241,10 @@ export const PRODUCTS: Product[] = [
     cases: [],
     next: {
       eyebrow: 'Up next',
-      title: 'All of this, directly inside Portal — even on Showcase.',
-      desc: 'No separate app, no upgrade required to search the network. See what each tier actually costs.',
-      cta: 'See pricing',
-      href: '/pricing',
+      title: 'And the trip it turns into runs on Portal.',
+      desc: 'Finding a supplier used to end with a business card and a fresh email. Search Horizon and the inquiry becomes a trip record on the platform underneath everything — same window, nothing retyped.',
+      cta: 'See Portal',
+      href: '/portal',
     },
   },
 ];

@@ -57,6 +57,8 @@ const features = page.features;
 const asWho = (name: string): string => (/^[A-Z]{2}/.test(name) ? name : name.toLowerCase());
 const who = segment ? asWho(segment.name) : overview!.side === 'reseller' ? 'resellers' : 'suppliers';
 const howTitle = overview ? overview.sectionTitle : `How ${who} use Hyperporter`;
+/** The closing comparison is the page's own — see content/customers.ts. */
+const close = (segment ?? overview!).close;
 
 /* One screen per step. These pages used to show a single screen beside the
    whole accordion, so three of every four steps sat next to a picture of
@@ -143,10 +145,7 @@ if (steps.length !== features.length) {
     </div>
   </section>
 
-  <CtaBand
-    lead="One platform for the whole trip."
-    rest={`Everything ${who} need, from the first inquiry to getting paid.`}
-  />
+  <CtaBand before={close.before} after={close.after} />
 </Base>
 
 <script>

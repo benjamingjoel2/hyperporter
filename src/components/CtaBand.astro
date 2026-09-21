@@ -1,24 +1,29 @@
 ---
 /**
  * The closing band, in the v2 design: a dark ground, one statement in two
- * tones — the claim, then the continuation sitting back — and one pill.
- * Every product, tool, automation and solutions page ends on it.
+ * tones and one pill. The statement is always the same comparison (Sep
+ * 2026, founder's instruction) — the way the work was done before sitting
+ * back in the dimmer tone, and the way it is done here in full ink under
+ * it. No tier, no price, no "free": the close sells the feature, not the
+ * plan. Every product, tool, automation and solutions page ends on it.
  */
 import '../styles/v2.css';
 
 interface Props {
-  lead: string;
-  rest: string;
+  /** The old way, past tense. Sits back. */
+  before: string;
+  /** The way it works now, present tense. Carries the line. */
+  after: string;
   cta?: string;
   href?: string;
 }
 
-const { lead, rest, cta = 'Get started free', href = 'https://portal.hyperporter.com' } = Astro.props;
+const { before, after, cta = 'Get started', href = 'https://portal.hyperporter.com' } = Astro.props;
 ---
 
 <div class="v-bigcta" data-chrome="dark">
   <div class="v-wrap">
-    <h2 class="v-disp"><b>{lead}</b><i>{rest}</i></h2>
+    <h2 class="v-disp"><i>{before}</i><b>{after}</b></h2>
     <a class="v-pill" href={href}>{cta} &rarr;</a>
   </div>
 </div>
