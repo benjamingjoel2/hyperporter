@@ -202,6 +202,33 @@ The accent is split, and the split is not optional:
   `.mk.dark` screen keeps mockup.css's own inverted set, which is why the
   reset is written `.mk:not(.dark)`.
 
+**Compositing: this page is close to Safari's limit, so spend layers
+carefully** (Sep 2026, after the live hero went blank). The homepage stacks
+a full-screen hero image running a 34-second infinite transform animation,
+a sticky glass header sitting directly on top of it, several
+`backdrop-filter` surfaces, and a fixed full-viewport grain overlay. Each of
+those is a permanent compositing layer. Safari drops layers under that load:
+the hero rendered as its `#0B0F12` fallback and repainted seconds later.
+
+Three things were removed to get back under the limit, and none of them
+should come back:
+
+- `background-attachment:fixed` on `body`. It re-rasterises a
+  viewport-sized gradient every scroll frame. `--wash` is now sized to one
+  viewport height and pinned to the top instead, which looks the same
+  where it is visible at all.
+- `mix-blend-mode` on the specular sheens. A blend mode couples an
+  element's paint to its backdrop, and the bar's backdrop is the animating
+  hero. Plain alpha gets within a few percent.
+- `mix-blend-mode:multiply` on the grain overlay (`body::after`). At 5%
+  opacity it is indistinguishable from plain alpha, and it was making the
+  browser recomposite a fixed full-viewport layer against the whole page
+  every frame.
+
+The build should contain **zero** `mix-blend-mode` and **zero**
+`background-attachment:fixed`. Check with a grep over `dist/_astro/*.css`
+before shipping anything that adds a layer.
+
 **Liquid, not merely frosted** (Sep 2026, founder's ask). Two things beyond
 the frost, and they are costed separately:
 
