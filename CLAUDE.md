@@ -225,8 +225,54 @@ wanted back.
   the account's own Vault, the supplier receiving their full quoted rate,
   SOC 2 / GDPR shown as targeted. The line-drawn `pageArt.ts` and
   `legoraArt.ts` families they replaced are at `1848a30`.
-- An Apple / Liquid Glass restyle was tried and rejected (`039fad9`,
-  reverted at `1848a30`). Do not bring it back.
+- **Apple Liquid Glass, from Portal's own stylesheet** (Sep 2026, founder's
+  instruction: "we used apple metal glass"). The materials are ported value
+  for value out of the Portal app so the site and the product are made of
+  the same thing rather than two interpretations of it — see the MATERIALS
+  block at the top of `global.css`. An earlier Apple restyle was tried and
+  rejected (`039fad9`, reverted at `1848a30`); this is not that one. That
+  was a restyle of the whole site's look. This is a material layer under an
+  unchanged design: Instrument Serif, Archivo, teal and amber all stay
+  exactly as they were, because the HIG's own rule is that a house style
+  beats Apple defaults. No SF Pro, no system blue.
+
+  **The metal is the rim, not the blur.** `--lg-rim` is three inset
+  shadows — a hairline, a bright top edge, a dark bottom edge — and that is
+  what makes a panel read as a machined surface catching light rather than
+  as frosted plastic. `--lg-blur` carries `saturate(180%)`: blur on its own
+  desaturates what is behind it and the panel goes grey and dead.
+
+  **Where glass is allowed**: the functional layer only — the bar, the mega
+  panels, the drawer, the ticker's label — plus `.mk-panel`, because the
+  mock-ups are pictures of Portal and wear Portal's material by right. Not
+  on body cards, not on section grounds. "Overuse dilutes emphasis until
+  nothing reads as elevated" (HIG, Liquid Glass), and each backdrop-filter
+  is its own compositing layer, so a page of them stutters.
+
+  **The legibility comes from the scrim, not the opacity.** A menu opening
+  over a 70px display headline leaves that headline readable through
+  anything translucent enough to still look like glass. `.mega-scrim` dims
+  and blurs the page instead, which is what lets the panel stay properly
+  translucent. Measured off the composited pixels, not computed: the
+  panel's 13.5px secondary text sits at 4.96–5.38:1.
+
+  **`.mega-scrim` must stay outside `<header>`.** An ancestor with a
+  `backdrop-filter` becomes the containing block for its `position:fixed`
+  descendants — inside the glass header the scrim collapsed from the
+  viewport to the 72px bar and silently stopped dimming anything. The flag
+  is toggled on `<html>` so a selector can still reach it.
+
+  Every glass surface ships all three fallbacks: `@supports not
+  (backdrop-filter)`, `prefers-reduced-transparency`, and
+  `prefers-contrast:more`, which flattens the wash and gives every surface
+  a real edge. Reduce Transparency is a first-class accessibility setting —
+  for some readers translucency makes text unreadable.
+
+  `--wash` is the canvas under the light bands, lifted from Portal too. A
+  glass panel over one flat tone refracts nothing and reads as a
+  translucent white box; it needs variation behind it. It is
+  `background-attachment:fixed`, because a 700px wash stretched down a
+  14,000px page is a smear.
 - Removed with the earlier revert: `AppShot.astro` and `lib/counts.ts`, both
   recoverable from `d05cc73`.
 

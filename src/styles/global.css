@@ -70,11 +70,107 @@
   --max:1320px;
   --bar-max:1680px;
   --photo:url("/hero.jpg");
+
+  /* ============ MATERIALS — Apple Liquid Glass ============
+     Ported from Portal's own stylesheet (Sep 2026, founder's instruction:
+     "we used apple metal glass"), value for value, so the marketing site
+     and the product are made of the same material rather than two
+     interpretations of it.
+
+     The metal is the rim, not the blur. A frosted panel with a single
+     hairline reads as paper behind glass; the three inset shadows — a
+     hairline, a bright top edge, a dark bottom edge — are what make it
+     read as a machined surface catching light. The saturate() matters as
+     much: blur alone desaturates what is behind it and the panel goes
+     grey and dead (HIG, Materials).
+
+     Where it is allowed: the functional layer only — the bar, the mega
+     panels, the drawer, the ticker — plus the mock-up panels, which are
+     pictures of Portal and so wear Portal's material by right. Not on
+     body cards, not on section grounds. "Overuse dilutes emphasis until
+     nothing reads as elevated" (HIG, Liquid Glass), and every
+     backdrop-filter is its own compositing layer, so a page of them
+     stutters. */
+
+  /* The sheen and the rim, on light grounds. */
+  --lg-bg:linear-gradient(135deg,rgba(255,255,255,.82) 0%,rgba(255,255,255,.46) 50%,rgba(255,255,255,.66) 100%);
+  --lg-blur:blur(30px) saturate(180%);
+  --lg-rim:inset 0 0 0 1px rgba(255,255,255,.6),inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -1px 1px rgba(0,0,0,.05);
+  /* Chrome weight, and it is deliberately heavy. The panel variant above
+     sits on Portal's quiet grey canvas; a full-width menu opens over a
+     70px display headline, where .86 in the middle stop leaves the
+     headline plainly legible through the menu and the two sets of words
+     collide. These stops dissolve it. The sheen is only three points
+     across now — the rim and the saturate() are what carry the material,
+     not the transparency. Paired with a wider blur so background detail
+     smears instead of ghosting, and with the scrim below, which is what
+     actually guarantees the legibility. */
+  --lg-bg-chrome:linear-gradient(135deg,rgba(255,255,255,.95) 0%,rgba(255,255,255,.905) 50%,rgba(255,255,255,.935) 100%);
+  --lg-blur-chrome:blur(40px) saturate(180%);
+
+  /* The same material on the dark bands — Portal's Atlas window and brief
+     card, which are the dark-ground version of the identical surface. */
+  --lg-bg-d:linear-gradient(135deg,rgba(34,34,40,.88) 0%,rgba(16,16,20,.76) 50%,rgba(30,30,36,.84) 100%);
+  --lg-rim-d:inset 0 0 0 1px rgba(255,255,255,.10),inset 0 1.5px 1px rgba(255,255,255,.24),inset 0 -1px 1px rgba(0,0,0,.30);
+
+  /* Regular glass, for a bar that only needs to stay legible. */
+  --glass-bg:rgba(255,255,255,.72);
+  --glass-blur:blur(30px) saturate(1.4);
+
+  /* Apple's tertiary fill: a borderless control tone that holds on both a
+     white group and the grey canvas, because it is a grey at 12% rather
+     than an opaque tint. */
+  --fill:rgba(120,120,128,.12);
+  --fill-hi:rgba(120,120,128,.18);
+  --shadow-elevated:0 2px 8px rgba(0,0,0,.06),0 12px 32px rgba(0,0,0,.10);
+
+  /* The canvas the app sits on: light pooling at the top left, weight
+     falling to the bottom right. A flat fill under a glass panel gives it
+     nothing to refract, and the glass disappears. */
+  --wash:
+    radial-gradient(ellipse 820px 420px at 6% -14%,#FFFFFF 0%,rgba(255,255,255,0) 64%),
+    radial-gradient(ellipse 760px 520px at 62% 38%,rgba(255,255,255,.75) 0%,rgba(255,255,255,0) 65%),
+    radial-gradient(ellipse 1100px 800px at 104% 108%,#E9E8E4 0%,rgba(233,232,228,0) 62%),
+    linear-gradient(155deg,#FBFBFA 0%,#F4F4F1 52%,#EDECE8 100%);
+}
+
+/* Both fallbacks, as the HIG requires. Reduce Transparency is a first-class
+   accessibility setting — for some readers translucency makes text
+   unreadable — and it is not the same condition as the browser lacking
+   backdrop-filter, so each is declared on its own. */
+.glass,.glass-chrome,.glass-d{
+  -webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur)}
+.glass{background:var(--lg-bg);box-shadow:var(--lg-rim)}
+.glass-chrome{background:var(--lg-bg-chrome);box-shadow:var(--lg-rim);
+  -webkit-backdrop-filter:var(--lg-blur-chrome);backdrop-filter:var(--lg-blur-chrome)}
+.glass-d{background:var(--lg-bg-d);box-shadow:var(--lg-rim-d);color:#fff}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .glass,.glass-chrome{background:var(--raise)}
+  .glass-d{background:#14161A}
+}
+@media (prefers-reduced-transparency:reduce){
+  .glass,.glass-chrome{background:var(--raise);-webkit-backdrop-filter:none;backdrop-filter:none}
+  .glass-d{background:#14161A;-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+/* Increase Contrast: the wash and the sheen both go, and every glass
+   surface becomes an opaque one with a real edge on it. */
+@media (prefers-contrast:more){
+  body{background:var(--void)}
+  .glass,.glass-chrome,.mega,.mk-panel,.mega .mega-feat{
+    background:var(--raise);-webkit-backdrop-filter:none;backdrop-filter:none;
+    box-shadow:none;border:1px solid var(--paper)}
+  header.top{background:var(--raise);-webkit-backdrop-filter:none;backdrop-filter:none;
+    box-shadow:none;border-bottom:1px solid var(--paper)}
 }
 *{box-sizing:border-box}
 
 html{scroll-behavior:smooth;background:var(--void)}
-body{margin:0;background:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
+/* The canvas, not a flat fill. Glass needs something behind it with
+   variation in it — a panel over one flat tone refracts nothing and reads
+   as a translucent white box. Fixed to the viewport rather than to the
+   document: a 700px wash stretched down a 14,000px page is a smear, and
+   an app canvas is viewport-sized anyway. */
+body{margin:0;background:var(--wash) fixed;background-color:var(--void);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
   /* `clip`, not `hidden`. This was `overflow-x:hidden` — a safety net against
      sideways scroll that also made body a scroll container, which silently
      broke `position:sticky` for every descendant and capped programmatic
@@ -138,9 +234,23 @@ body::after{
    through the bar and collided with the nav and the ticker. The bar only goes
    transparent over the dark photographic regions, where there is a scrim
    behind it and nothing to read through. */
+/* The bar is glass in both states now, not only over the photograph. Over
+   the light page it is the regular material: enough opacity to hold 14px
+   nav text at 4.5:1 against anything that can scroll under it, with the
+   saturate() doing the work that makes it read as glass rather than as a
+   translucent white box. */
 header.top{position:sticky;top:0;z-index:70;
-  background:var(--raise);border-bottom:1px solid var(--line);
-  transition:background .28s ease,border-color .28s ease,color .28s ease}
+  background:var(--lg-bg-chrome);
+  -webkit-backdrop-filter:var(--lg-blur-chrome);backdrop-filter:var(--lg-blur-chrome);
+  box-shadow:inset 0 -1px 0 var(--line),inset 0 1.5px 1px rgba(255,255,255,.95);
+  border-bottom:0;
+  transition:background .28s ease,box-shadow .28s ease,color .28s ease}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  header.top{background:var(--raise)}
+}
+@media (prefers-reduced-transparency:reduce){
+  header.top{background:var(--raise);-webkit-backdrop-filter:none;backdrop-filter:none}
+}
 
 /* The scrim is not decoration. White nav over the homepage hero's pale sky
    measured 2.7:1, under the 4.5:1 minimum, and 12.6:1 with it. It rides with
@@ -154,11 +264,14 @@ header.top::before{content:"";position:absolute;inset:0 0 -34px;z-index:0;pointe
 /* Translucent over the dark regions rather than fully transparent: the
    photograph reads through the bar as glass, which is the effect asked for,
    and it holds white text without needing the heavier gradient. */
-header.top.over{background:rgba(10,14,18,.42);
-  -webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);
-  border-bottom-color:rgba(255,255,255,.14)}
+header.top.over{background:var(--lg-bg-d);
+  -webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);
+  box-shadow:var(--lg-rim-d);border-bottom:0}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  header.top.over{background:rgba(10,14,18,.72)}
+  header.top.over{background:rgba(10,14,18,.86)}
+}
+@media (prefers-reduced-transparency:reduce){
+  header.top.over{background:rgba(10,14,18,.92);-webkit-backdrop-filter:none;backdrop-filter:none}
 }
 header.top.over::before{opacity:1}
 
@@ -210,7 +323,15 @@ body.drawer-open header.top .burger span{background:var(--paper)}
    its items with their line and ending on the feature card, and the two
    actions pinned to the bottom with the list fading under them. */
 .drawer{display:none;position:fixed;left:0;right:0;top:var(--chrome-h,111px);bottom:0;z-index:65;
-  background:var(--void);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  background:var(--lg-bg-chrome);
+  -webkit-backdrop-filter:var(--lg-blur-chrome);backdrop-filter:var(--lg-blur-chrome);
+  overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .drawer{background:var(--void)}
+}
+@media (prefers-reduced-transparency:reduce){
+  .drawer{background:var(--void);-webkit-backdrop-filter:none;backdrop-filter:none}
+}
 .drawer.open{display:block}
 /* The bar becomes the top edge of the same light sheet. */
 body.drawer-open header.top{background:var(--void);border-bottom-color:transparent}
@@ -258,7 +379,15 @@ body.drawer-open{overflow:hidden}
 .rail{height:34px;position:relative;z-index:5;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.22);background:transparent}
 /* The tag needs a ground of its own or the marquee scrolls visibly behind
    the label and the two sets of letters interleave. */
-.rail .tag{flex-shrink:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#fff;padding:0 18px;height:100%;display:flex;align-items:center;border-right:1px solid rgba(255,255,255,.22);background:rgba(6,10,13,.96);position:relative;z-index:1}
+.rail .tag{flex-shrink:0;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#fff;padding:0 18px;height:100%;display:flex;align-items:center;border-right:0;
+  background:var(--lg-bg-d);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);
+  box-shadow:var(--lg-rim-d);position:relative;z-index:1}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .rail .tag{background:rgba(6,10,13,.96)}
+}
+@media (prefers-reduced-transparency:reduce){
+  .rail .tag{background:rgba(6,10,13,.96);-webkit-backdrop-filter:none;backdrop-filter:none}
+}
 /* 2900s, not 58s: the strip now carries 600 entries instead of 12, and
    the duration has to scale with it or the text would blur past. */
 .rail .stream{display:flex;white-space:nowrap;animation:march 2900s linear infinite}
@@ -1494,11 +1623,24 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
    format. Positioned against `.bar` (the nearest positioned ancestor) and
    pulled out to the viewport edges. Always light, whatever the bar is doing
    over a photograph — its text is the page's ink. */
+/* The panel is the functional layer, so it is glass — the one place on a
+   marketing page where the HIG says glass belongs without argument. It runs
+   the full width, so the rim reads as the top and bottom edges of a sheet
+   catching light rather than as a box. Chrome weight, not panel weight:
+   this opens over photographs and body copy. */
 .mega{
   position:absolute;top:100%;left:calc(50% - 50vw);width:100vw;z-index:80;
-  background:var(--raise);color:var(--paper);
-  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-  box-shadow:0 30px 60px -30px rgba(12,22,34,.25);
+  color:var(--paper);
+  background:var(--lg-bg-chrome);
+  -webkit-backdrop-filter:var(--lg-blur-chrome);backdrop-filter:var(--lg-blur-chrome);
+  border-top:1px solid rgba(255,255,255,.7);border-bottom:1px solid var(--line);
+  box-shadow:var(--lg-rim),var(--shadow-elevated);
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .mega{background:var(--raise)}
+}
+@media (prefers-reduced-transparency:reduce){
+  .mega{background:var(--raise);-webkit-backdrop-filter:none;backdrop-filter:none}
 }
 .mega[hidden]{display:none}
 .mega-in{max-width:var(--max);margin:0 auto;padding:44px var(--pad) 52px;
@@ -1526,9 +1668,11 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .mega .mega-row{display:grid;grid-template-columns:36px minmax(0,1fr);gap:14px;align-items:start;padding:14px 12px;margin:0 -12px;color:var(--paper);opacity:1;text-decoration:none;max-width:calc(34ch + 74px);border-radius:10px;background:none;transition:background .15s ease}
 /* The icon in its tinted square. A shade lighter on the hover card so it
    still separates from the ground. */
-.mega-ico-box{width:36px;height:36px;border-radius:9px;background:var(--ink);display:grid;place-items:center;color:var(--paper);flex:none;transition:background .15s ease}
+/* A grey at 12%, not an opaque tint: it holds on the glass and on the
+   white drawer alike, which an opaque fill cannot do. */
+.mega-ico-box{width:36px;height:36px;border-radius:9px;background:var(--fill);display:grid;place-items:center;color:var(--paper);flex:none;transition:background .15s ease}
 .mega-ico{width:22px;height:22px;display:block}
-.mega .mega-row:hover .mega-ico-box{background:var(--raise)}
+.mega .mega-row:hover .mega-ico-box{background:rgba(255,255,255,.92);box-shadow:var(--lg-rim)}
 /* Each panel's icons wear their own box, so a glance tells the three
    apart: Tools in the tinted square, Automations in a dark square with
    the icon in white, Solutions in a circle drawn as an outline. */
@@ -1541,15 +1685,18 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 /* A short measure, so the line breaks early and each row reads as a
    name over two or three brief lines rather than one long one. */
 .mega .mega-row-t > span{display:block;font-size:13.5px;line-height:1.5;color:var(--muted);max-width:27ch}
-.mega .mega-row:hover{background:var(--ink)}
+/* Hover lifts the row onto its own pane of the same glass. */
+.mega .mega-row:hover{background:var(--lg-bg);box-shadow:var(--lg-rim)}
 .mega .mega-row:hover b{color:var(--signal)}
 .mega .mega-row:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 /* Feature card. */
 /* The feature sits in a tinted card of its own, image and caption together,
    so it reads as one object beside the columns. */
 .mega .mega-feat,.dsub .mega-feat{display:block;color:var(--paper);text-decoration:none;opacity:1;padding:14px 14px 20px;
-  background:var(--ink);border:1px solid var(--line);border-radius:16px;transition:background .2s,border-color .2s}
-.mega .mega-feat:hover,.dsub .mega-feat:hover{background:var(--steel);border-color:var(--line-2)}
+  background:var(--lg-bg);border:0;border-radius:16px;
+  box-shadow:var(--lg-rim),0 2px 8px rgba(0,0,0,.05);
+  transition:box-shadow .2s ease,transform .2s ease}
+.mega .mega-feat:hover,.dsub .mega-feat:hover{box-shadow:var(--lg-rim),var(--shadow-elevated)}
 .mega-card{position:relative;min-height:170px;border-radius:12px;background:#0B0E12;color:#EDEFF2;padding:18px 20px;overflow:hidden;
   display:flex;flex-direction:column;gap:8px;font-size:12px;line-height:1.35}
 .mc-kicker{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#7FD1C7;margin-bottom:2px}
@@ -1587,11 +1734,18 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
    that covered the width of the page; dimming the whole viewport by a third
    behind a 280px dropdown reads as heavy-handed, and the reference has no
    scrim at all — its panel's own blur does the separating. */
+/* The scrim carries the legibility, not the panel's opacity. A 70px display
+   headline sitting under an open menu stays readable through anything
+   translucent enough to still look like glass, and two sets of words in the
+   same place is the fault. Dimming and blurring the page behind turns it
+   into an indistinct field, which is what lets the panel go back to being
+   properly translucent. This is the pairing the HIG describes for a clear
+   material over bright content. */
 .mega-scrim{
-  position:fixed;inset:0;z-index:-1;
-  background:rgba(12,18,24,.14);
-  -webkit-backdrop-filter:blur(2px);
-  backdrop-filter:blur(2px);
+  position:fixed;inset:0;z-index:60;
+  background:rgba(12,18,24,.34);
+  -webkit-backdrop-filter:blur(8px) saturate(.9);
+  backdrop-filter:blur(8px) saturate(.9);
   opacity:0;pointer-events:none;
   transition:opacity .22s ease;
 }
@@ -1606,5 +1760,10 @@ header.top.mega-open .mark .glyph{color:#fff}
 header.top.mega-open .burger span{background:#fff}
 header.top.mega-open{background:var(--paper);border-bottom-color:rgba(255,255,255,.12)}
 header.top.mega-open::before{opacity:0}
-header.top.mega-open .mega-scrim{opacity:1}
+html.mega-open .mega-scrim{opacity:1}
 @media (max-width:1080px){.mega-scrim{display:none}}
+
+/* The drawer is glass, and the ticker runs directly behind its top edge —
+   a marquee scrolling under an open menu reads as a rendering fault, not as
+   depth. It goes while the menu is open. */
+body.drawer-open .rail{opacity:0;transition:opacity .2s ease}

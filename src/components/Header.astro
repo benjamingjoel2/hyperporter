@@ -60,11 +60,14 @@ const stream = row + row;
 
 ---
 
+{/* Dims and blurs the page while a panel is open. It sits OUTSIDE the
+    header, and must stay outside: the bar is glass, and an ancestor with a
+    backdrop-filter becomes the containing block for its position:fixed
+    descendants — inside the header this collapsed from the viewport to the
+    72px bar and stopped dimming anything at all. */}
+<div class="mega-scrim" aria-hidden="true"></div>
+
 <header class="top">
-  {/* Dims and blurs the page while a panel is open. Sits inside the header
-      on a negative z-index, so it paints above the page but behind the
-      header's own opaque background — the bar and the panel stay crisp. */}
-  <div class="mega-scrim" aria-hidden="true"></div>
   <div class="bar">
     <a class="mark" href="/">
       <span class="glyph"
@@ -294,8 +297,12 @@ const stream = row + row;
     panel.hidden = !open;
     wrap.classList.toggle('open', open);
     trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
-    // the scrim follows whether *any* panel is open, not just this one
-    bar?.classList.toggle('mega-open', wraps.some((w) => w.classList.contains('open')));
+    // the scrim follows whether *any* panel is open, not just this one. It
+    // lives outside the header now (see the markup), so the flag goes on the
+    // root element too, where a selector can reach both.
+    const any = wraps.some((w) => w.classList.contains('open'));
+    bar?.classList.toggle('mega-open', any);
+    document.documentElement.classList.toggle('mega-open', any);
   }
 
   const closeAll = (except?: HTMLElement) =>
