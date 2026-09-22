@@ -435,3 +435,12 @@ section.lg-close{background:var(--steel)}
   .lg-modal[open]{animation:lg-modal-in .3s cubic-bezier(.2,.7,.2,1)}
   @keyframes lg-modal-in{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
 }
+
+/* Set here rather than in global.css: this sheet loads after it, so a rule
+   there loses to these at the same specificity. Same reasoning as the
+   other mobile label sizes — 10px mono caps is a caption on a desktop and
+   a squint on a phone. */
+@media (max-width:860px){
+  .lg-card-kind{font-size:11.5px;letter-spacing:.1em}
+  .lg-avail{font-size:11.5px;letter-spacing:.06em}
+}

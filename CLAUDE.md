@@ -202,6 +202,33 @@ The accent is split, and the split is not optional:
   `.mk.dark` screen keeps mockup.css's own inverted set, which is why the
   reset is written `.mk:not(.dark)`.
 
+**Mobile is not a narrower desktop — look at it** (Sep 2026, after three
+faults shipped that a phone showed instantly). The structural audit at
+390px passed while the page was visibly wrong, because it checked overflow,
+dead links and empty sections and never looked. What a phone actually
+broke, all three caused by translucency added for the glass:
+
+- **The bar must be opaque on mobile.** `--lg-bg-chrome` is ~95% white:
+  fine behind a still page, wrong behind a moving one — text scrolling
+  under the bar ghosted through it. Below 860px the bar, its `.over` state
+  and the drawer are all flat colour with no `backdrop-filter`. Watch the
+  rule order: `header.top.over` is declared *after* the mobile block's
+  natural place, so the override has to sit below it or it silently loses.
+- **The ticker label must be opaque.** It sits on the moving stream, and
+  the dark glass let "LIVE ACTIVITY" and "QUOTATION" print over each other.
+- **Status pills stop being pills below a 380px container.** The pill is
+  wider than the dot-and-word it replaced and printed over the value
+  column beside it. The dot stays; colour never carries a state alone.
+
+Mono labels go up to ~11.5px and lose tracking below 860px: 9.5px caps is
+a caption on a desktop and a squint on a phone. Footer link rows go to
+13px padding so a thumb has 44px.
+
+The check that catches this class of fault is
+`scratchpad/mobaudit.mjs` — tap targets, text-over-text, edge gutters, tiny
+type — plus `bleed.mjs`, which samples the bar's pixels at two scroll
+positions and fails if any of them change.
+
 **Compositing: this page is close to Safari's limit, so spend layers
 carefully** (Sep 2026, after the live hero went blank). The homepage stacks
 a full-screen hero image running a 34-second infinite transform animation,
