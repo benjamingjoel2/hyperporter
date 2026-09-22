@@ -400,16 +400,42 @@ header.top.over{background:var(--lg-bg-d);
    made the ghost move (founder, Sep 2026, on a phone). Glass buys nothing
    on a 390px bar — there is no composition to see through it — and it
    costs a compositing layer this page can spare even less on mobile. */
-@media (max-width:860px){
+/* 920px, not 860px, because that is where the bar collapses to the 64px
+   burger bar. Between the two there was a 60px window running the desktop
+   glass on a phone-shaped bar. */
+@media (max-width:920px){
+  /* THE BAR IS FIXED ON A PHONE, NOT STICKY (founder, Sep 2026, second
+     report on the same bar).
+
+     Making it opaque fixed the first fault — page text ghosting THROUGH
+     the 95%-white glass. It did nothing for the second, which is text
+     appearing in a strip ABOVE the bar, because the bar itself is not
+     where it should be: iOS Safari recomputes `position:sticky` on the
+     main thread, and during compositor-driven scrolling — momentum, and
+     the URL-bar collapse — a sticky element falls behind the viewport
+     top, exposing the page in the gap, then snaps back. `position:fixed`
+     is handled by the compositor and stays pinned.
+
+     Chromium does not do this, which is why every check here passed while
+     a phone was visibly wrong: measured at four scroll positions, the
+     sticky bar sat at top=0 every time. No WebKit build is installed, so
+     this one is fixed by construction rather than by reproduction.
+
+     The bar leaves the flow, so the page needs its height back as padding,
+     and `scroll-padding-top` keeps an anchor jump from landing under it.
+     Both take --chrome-h, which the header script measures and publishes;
+     the 64px fallback is the real height of this bar, so there is nothing
+     to see before that script runs. */
+  html{scroll-padding-top:var(--chrome-h,64px)}
+  body{padding-top:var(--chrome-h,64px)}
+  header.top{position:fixed;left:0;right:0;top:0}
+
   header.top{background:var(--raise);background-image:none;
     -webkit-backdrop-filter:none;backdrop-filter:none;
     box-shadow:inset 0 -1px 0 var(--line)}
   header.top::after{display:none}
   header.top.over{background:#0B0F12;background-image:none;
     -webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none}
-  header.top.mega-open{background:var(--paper);background-image:none}
-  /* the drawer is a full-screen sheet; nothing behind it is worth showing */
-  .drawer{background:var(--void);-webkit-backdrop-filter:none;backdrop-filter:none}
 }
 header.top.over::before{opacity:1}
 
@@ -463,16 +489,21 @@ body.drawer-open header.top .burger span{background:var(--paper)}
    the top-level items in display type with a chevron, the open one listing
    its items with their line and ending on the feature card, and the two
    actions pinned to the bottom with the list fading under them. */
+/* FLAT, NOT GLASS, and not behind a media query. The drawer only ever
+   opens below 920px, where the burger is, so glass on it is glass on a
+   phone by definition — and a full-screen sheet has nothing behind it
+   worth refracting: the page just showed through the menu. It had been
+   given `background:var(--void)` in the mobile block above, which never
+   applied, because this rule is declared later at the same specificity.
+   Second time that ordering has bitten; the value belongs here.
+
+   --void is also what `body.drawer-open header.top` uses, so the bar and
+   the sheet are now exactly the same tone, which is what the comment
+   above always claimed. The @supports and reduced-transparency blocks
+   that used to restate this are gone with the blur they guarded. */
 .drawer{display:none;position:fixed;left:0;right:0;top:var(--chrome-h,111px);bottom:0;z-index:65;
-  background:var(--lg-bg-chrome);
-  -webkit-backdrop-filter:var(--lg-blur-chrome);backdrop-filter:var(--lg-blur-chrome);
+  background:var(--void);
   overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .drawer{background:var(--void)}
-}
-@media (prefers-reduced-transparency:reduce){
-  .drawer{background:var(--void);-webkit-backdrop-filter:none;backdrop-filter:none}
-}
 .drawer.open{display:block}
 /* The bar becomes the top edge of the same light sheet. */
 body.drawer-open header.top{background:var(--void);border-bottom-color:transparent}
@@ -1036,15 +1067,18 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .f-col a{display:block;color:#EDEFF2;font-family:var(--body);font-weight:400;font-size:14px;letter-spacing:-.01em;line-height:1.4;padding:6px 0;transition:color .2s}
 /* On a phone the footer is a main way round the site, and a 32px row is
    under the 44px a thumb needs. The type stays; only the row grows. */
-@media (max-width:860px){
+@media (max-width:920px){
   .f-col a{padding:13px 0}
+  /* the address block's own links are rows too: the email was an
+     18px-tall target, which is half a thumb */
+  .f-con a{display:inline-block;padding:11px 0}
+  .f-con div{margin-bottom:2px}
 }
 .f-col a:hover{color:#6FA8FF}
 /* Stacked, the copyright belongs at the bottom, not between the address and
    the links — so the brand column dissolves into the flex column and its
    pieces are ordered directly. */
 @media (max-width:900px){.f-main{display:flex;flex-direction:column;gap:40px}.f-brand{display:contents}.f-con{margin-top:0}.f-cols{grid-template-columns:1fr 1fr;gap:34px 30px}.f-copy{order:9;margin:0;padding-top:8px}}
-@media (max-width:520px){.f-cols{grid-template-columns:1fr}}
 
 /* ============ DESTINATIONS ============ */
 .d-head{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(20px,4vw,60px);align-items:end}
@@ -1650,6 +1684,11 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 }
 .ap-band-lead .eyebrow{color:rgba(255,255,255,.62);margin:0 0 14px}
 .ap-band-lead .dek{color:rgba(255,255,255,.82);margin:0;font-size:15.5px;line-height:1.6}
+/* Declared here rather than further down with the pills: the narrow
+   layout below drops this border for a top one, and a base rule sitting
+   after that media block silently put both back. */
+.ap-detail{border-left:1px solid rgba(255,255,255,.14);padding-left:clamp(24px,3vw,44px);
+  align-self:stretch}
 @media (max-width:1100px){
   /* Three columns need about 1100px. Below that the detail goes under the
      stages, where it still reads in order. */
@@ -1677,8 +1716,6 @@ footer{background:#0B0E12;color:#EDEFF2;padding-block:clamp(56px,6vw,84px) clamp
 .ap-pill em{font-style:normal;font-variant-numeric:tabular-nums;opacity:.65;font-size:13px}
 .ap-pill i{font-style:normal;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.18);
   display:grid;place-items:center;font-size:13px;line-height:1;flex:none}
-.ap-detail{border-left:1px solid rgba(255,255,255,.14);padding-left:clamp(24px,3vw,44px);
-  align-self:stretch}
 .ap-pill-body{max-width:34ch;color:#fff;font-size:clamp(17px,1.5vw,21px);line-height:1.5;
   letter-spacing:-.012em;margin:0;padding-top:4px}
 .ap-pill-body[hidden]{display:none}
@@ -1999,8 +2036,11 @@ header.top::after{
 /* the bar's sheen must not cover its own children */
 header.top::after{inset:0 0 auto;height:100%;z-index:0}
 
-/* 2 — the lens, only where a backdrop-filter is already being paid for. */
-.mega::after,.mk-panel::after,.mk-ui::after,.drawer::after{
+/* 2 — the lens, only where a backdrop-filter is already being paid for.
+   Not .drawer: it is a flat sheet now, so the ring would blur its own
+   opaque ground and return it unchanged, for the price of a second
+   backdrop-filter on the device that can afford it least. */
+.mega::after,.mk-panel::after,.mk-ui::after{
   content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
   padding:var(--liq-edge,10px);
   -webkit-backdrop-filter:blur(7px) saturate(1.7) brightness(1.04);
@@ -2020,21 +2060,21 @@ header.top.over::after,header.top.mega-open::after{
     radial-gradient(140% 90% at 4% -6%,rgba(255,255,255,.11) 0%,rgba(255,255,255,0) 58%)}
 
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .mega::after,.mk-panel::after,.mk-ui::after,.drawer::after{display:none}
+  .mega::after,.mk-panel::after,.mk-ui::after{display:none}
 }
 @media (prefers-reduced-transparency:reduce){
   .mega::before,.mk-panel::before,.mk-ui::before,.drawer::before,
   .rel::before,.tier::before,.side::before,.ccard::before,.zcard::before,
   .svc article::before,.panel::before,.dcard::before,.mega .mega-feat::before,
   header.top::after,
-  .mega::after,.mk-panel::after,.mk-ui::after,.drawer::after{display:none}
+  .mega::after,.mk-panel::after,.mk-ui::after{display:none}
 }
 @media (prefers-contrast:more){
   .mega::before,.mk-panel::before,.mk-ui::before,.drawer::before,
   .rel::before,.tier::before,.side::before,.ccard::before,.zcard::before,
   .svc article::before,.panel::before,.dcard::before,.mega .mega-feat::before,
   header.top::after,
-  .mega::after,.mk-panel::after,.mk-ui::after,.drawer::after{display:none}
+  .mega::after,.mk-panel::after,.mk-ui::after{display:none}
 }
 
 /* ---- readable labels on a phone --------------------------------------
@@ -2054,7 +2094,7 @@ header.top.over::after,header.top.mega-open::after{
   .rail .ent,
   .rail .tag{font-size:11.5px;letter-spacing:.1em}
   .pm thead th,
-  .pm .pm-group td{font-size:11px;letter-spacing:.1em}
+  .pm .pm-group td{font-size:11.5px;letter-spacing:.1em}
   .lg-card-kind{font-size:11.5px;letter-spacing:.1em}
   .lg-avail{font-size:11.5px;letter-spacing:.06em}
 }

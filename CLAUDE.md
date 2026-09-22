@@ -208,12 +208,49 @@ faults shipped that a phone showed instantly). The structural audit at
 dead links and empty sections and never looked. What a phone actually
 broke, all three caused by translucency added for the glass:
 
+- **The bar is FIXED on mobile, not sticky**, and that is the whole of the
+  second fault (founder, Sep 2026, same bar reported twice). Making it
+  opaque stopped text showing *through* the glass. It did nothing for text
+  appearing in a strip *above* the bar, because there the bar itself is in
+  the wrong place: iOS Safari recomputes `position:sticky` on the main
+  thread, so during compositor-driven scrolling — momentum, and the
+  URL-bar collapse — a sticky element falls behind the viewport top,
+  exposes the page in the gap, and snaps back. `position:fixed` is
+  composited and stays pinned. The bar leaves the flow, so `body` takes
+  `padding-top:var(--chrome-h)` and `html` takes `scroll-padding-top` (an
+  anchor now lands exactly at the bar's bottom edge instead of under it).
+  Desktop keeps sticky glass, untouched.
+
+  **Chromium cannot show you this.** Measured at four scroll positions on
+  four routes, the sticky bar sat at `top: 0` every single time. No WebKit
+  build is installed here, so the check that holds is a property
+  assertion, not a screenshot: `scripts/chrome.mjs` fails if the bar is
+  not `fixed` at `top: 0` with no `backdrop-filter` and nothing painting
+  above it, on every route, at 390/430/768/900px.
+
+- **The breakpoint is 920px, not 860px** — that is where the bar collapses
+  to the 64px burger bar. The two numbers disagreeing left a 60px window
+  running desktop glass on a phone-shaped bar.
+
+- **The drawer is a flat sheet.** It only ever opens below 920px, so glass
+  on it is glass on a phone by definition, and a full-screen sheet has
+  nothing behind it worth refracting — the page showed straight through
+  the menu. Its `::after` blur lens went with it; the free `::before`
+  sheen stays.
+
 - **The bar must be opaque on mobile.** `--lg-bg-chrome` is ~95% white:
   fine behind a still page, wrong behind a moving one — text scrolling
-  under the bar ghosted through it. Below 860px the bar, its `.over` state
-  and the drawer are all flat colour with no `backdrop-filter`. Watch the
-  rule order: `header.top.over` is declared *after* the mobile block's
-  natural place, so the override has to sit below it or it silently loses.
+  under the bar ghosted through it. Below 920px the bar, its `.over` state
+  and the drawer are all flat colour with no `backdrop-filter`.
+
+- **A mobile rule loses to a later bare rule at equal specificity.** This
+  has now cost two shipped faults: `header.top.over`, then `.drawer`,
+  both overridden in a `@media (max-width:…)` block declared *above* the
+  base rule, so neither ever applied while both read as written. The base
+  rule goes first; the responsive block goes after it. `scripts/order.py`
+  parses the stylesheet and lists every declaration this is happening to —
+  it found two more nobody had noticed, `.ap-detail`'s border on
+  /autopilot and a dead duplicate footer breakpoint.
 - **The ticker label must be opaque.** It sits on the moving stream, and
   the dark glass let "LIVE ACTIVITY" and "QUOTATION" print over each other.
 - **Status pills stop being pills below a 380px container.** The pill is
@@ -224,10 +261,18 @@ Mono labels go up to ~11.5px and lose tracking below 860px: 9.5px caps is
 a caption on a desktop and a squint on a phone. Footer link rows go to
 13px padding so a thumb has 44px.
 
-The check that catches this class of fault is
-`scratchpad/mobaudit.mjs` — tap targets, text-over-text, edge gutters, tiny
-type — plus `bleed.mjs`, which samples the bar's pixels at two scroll
-positions and fails if any of them change.
+The checks that catch this class of fault are `scripts/mobaudit.mjs`
+(tap targets, text-over-text, edge gutters, tiny type), `scripts/bleed.mjs` (samples
+the bar's pixels at two scroll positions and fails if any change),
+`scripts/chrome.mjs` (the bar-and-drawer contract above) and `scripts/order.py` (the cascade
+trap above).
+
+Two things `scripts/mobaudit.mjs` used to get wrong, both now fixed, both worth knowing
+if its numbers ever look too good: it counted *routes* rather than
+instances, so five bad cells on one page reported as "1"; and it trusted
+`getBoundingClientRect()`, which a collapsed accordion panel
+(`overflow:hidden; height:0`) still answers in full — that alone produced
+fifteen text-over-text pairs that paint nothing at all.
 
 **Compositing: this page is close to Safari's limit, so spend layers
 carefully** (Sep 2026, after the live hero went blank). The homepage stacks
