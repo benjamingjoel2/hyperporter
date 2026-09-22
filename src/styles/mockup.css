@@ -384,9 +384,19 @@
 @container (max-width: 560px){
   .mk-tbl{font-size:.82em}
   .mk-tbl th,.mk-tbl td{padding-right:.6em}
+  /* a tighter pill at this width, before it is dropped entirely below 380 */
+  .mk-st{padding:.18em .42em;gap:.28em}
   .mk-metric b{font-size:1em}
 }
 @container (max-width: 380px){
+  /* The status pill is wider than the plain dot-and-word it replaced, and
+     at this width it stopped fitting its column: the pill printed over the
+     value beside it — "Booking" across "€4,400" (founder, Sep 2026, on a
+     phone). Below 380px the pill drops back to dot-and-word, which is what
+     the column was measured for. The dot stays: colour alone never carries
+     a state. */
+  .mk-st{background:none;padding:0}
+  .mk-st.go,.mk-st.amb,.mk-st.red{background:none}
   .mk-ui{left:4%;right:4%}
   .mk-kan{gap:.35em}
   .mk-kan .kcol{flex-basis:7em}
